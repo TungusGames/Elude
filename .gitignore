@@ -1,0 +1,8 @@
+/bin
+
+*.classpath
+*.project
+classpath
+project
+/Dodge-android/*.classpath
+/Dodge-android/*.project
