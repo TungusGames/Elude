@@ -7,6 +7,8 @@ import tungus.games.dodge.game.rockets.Rocket.RocketAI;
 public class TurningRocketAI implements RocketAI {
 	
 	private static final Vector2 tempVector2 = new Vector2();
+	private static final float DEFAULT_TURNSPEED = 90;
+	private static final float DEFAULT_SPEED = 5;
 	private boolean firstTime = true;
 	
 	private Vector2 playerPos;
@@ -17,6 +19,10 @@ public class TurningRocketAI implements RocketAI {
 		this.playerPos = playerPos;
 		this.turnSpeed = turnSpeed;
 		this.speed = speed;
+	}
+	
+	public TurningRocketAI(Vector2 playerPos) {
+		this(playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
 	}
 	
 	@Override

@@ -28,9 +28,12 @@ public class WorldRenderer {
 		for(int i = 0; i < size; i++) {
 			world.vessels.get(i).draw(batch);
 		}		
-		batch.end();
 		
-		batch.begin();
+		size = world.enemies.size();
+		for(int i = 0; i < size; i++) {
+			world.enemies.get(i).draw(batch);
+		}
+		
 		size = world.rockets.size();
 		for (int i = 0; i < size; i++) {
 			world.rockets.get(i).draw(batch);

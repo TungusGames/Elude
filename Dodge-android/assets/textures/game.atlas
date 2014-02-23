@@ -1,0 +1,26 @@
+
+game-1.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+StandingEnemy
+  rotate: false
+  xy: 2, 67
+  size: 99, 163
+  orig: 99, 163
+  offset: 0, 0
+  index: -1
+rocket
+  rotate: false
+  xy: 54, 35
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+vessel
+  rotate: false
+  xy: 2, 2
+  size: 50, 63
+  orig: 50, 63
+  offset: 0, 0
+  index: -1

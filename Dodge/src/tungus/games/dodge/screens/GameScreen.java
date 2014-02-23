@@ -14,7 +14,7 @@ public class GameScreen extends BaseScreen {
 
 	public GameScreen(Game game) {
 		super(game);
-		world = new World();
+		world = World.INSTANCE = new World();
 		renderer = new WorldRenderer(world);
 	}
 	
@@ -36,5 +36,7 @@ public class GameScreen extends BaseScreen {
 	public void resume() {
 
 	}
+	
+	
 
 }

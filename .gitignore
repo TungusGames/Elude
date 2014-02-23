@@ -6,3 +6,4 @@ classpath
 project
 /Dodge-android/*.classpath
 /Dodge-android/*.project
+*.classpath
