@@ -31,7 +31,7 @@ public class StandingEnemy extends Enemy {
 		targetPos = new Vector2();
 		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
 		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
-		//targetPos.scl(MathUtils.random()*0.8f + 0.2f);
+		targetPos.lerp(pos, MathUtils.random()*0.8f + 0.2f);
 		vel.set(targetPos).sub(pos).nor().scl(SPEED);
 		setRotation(vel.angle()-90);
 	}

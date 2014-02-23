@@ -9,6 +9,7 @@ import tungus.games.dodge.game.enemies.StandingEnemy;
 import tungus.games.dodge.game.rockets.Rocket;
 import tungus.games.dodge.game.rockets.TurningRocketAI;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class World {
@@ -29,7 +30,7 @@ public class World {
 		enemies = new ArrayList<Enemy>();
 		
 		vessels.add(new Vessel());
-		enemies.add(new StandingEnemy(new Vector2(14, 7)));
+		enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
 	}
 	
 	public void update(float deltaTime) {

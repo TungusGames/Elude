@@ -8,7 +8,7 @@ public class TurningRocketAI implements RocketAI {
 	
 	private static final Vector2 tempVector2 = new Vector2();
 	private static final float DEFAULT_TURNSPEED = 90;
-	private static final float DEFAULT_SPEED = 5;
+	private static final float DEFAULT_SPEED = 4;
 	private boolean firstTime = true;
 	
 	private Vector2 playerPos;
