@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class StandingEnemy extends Enemy {
 	
+	public static final float SPAWN_RANGE = 1; 
+	
 	private static final float DRAW_WIDTH = 0.6f;
 	private static final float DRAW_HEIGHT = 1f;
 	private static final float COLLIDER_SIZE = 0.5f;
@@ -31,7 +33,14 @@ public class StandingEnemy extends Enemy {
 		targetPos = new Vector2();
 		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
 		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
-		targetPos.lerp(pos, MathUtils.random()*0.8f + 0.2f);
+		
+		float move = targetPos.x - pos.x;						// Get how much we can decrease the movement without
+		move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move); // 		getting out of the "edge" frame
+		targetPos.x -= MathUtils.random(move);					// Decrease the movement by up to this value
+		move = targetPos.y - pos.y;								// Do the same for Y
+		move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move);
+		targetPos.y -= MathUtils.random(move);
+		
 		vel.set(targetPos).sub(pos).nor().scl(SPEED);
 		setRotation(vel.angle()-90);
 	}

@@ -18,7 +18,7 @@ public class World {
 
 	public static final float WIDTH = 20f;
 	public static final float HEIGHT = 12f;
-	public static final float EDGE = 2.1f; // Width of the area at the edge not targeted for movement
+	public static final float EDGE = 2f; // Width of the area at the edge not targeted for movement
 	
 	public List<Vessel> vessels;
 	public List<Rocket> rockets;
