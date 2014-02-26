@@ -5,7 +5,6 @@ import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.rockets.Rocket;
 import tungus.games.dodge.game.rockets.TurningRocketAI;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -34,12 +33,12 @@ public class StandingEnemy extends Enemy {
 		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
 		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
 		
-		float move = targetPos.x - pos.x;						// Get how much we can decrease the movement without
-		move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move); // 		getting out of the "edge" frame
-		targetPos.x -= MathUtils.random(move);					// Decrease the movement by up to this value
-		move = targetPos.y - pos.y;								// Do the same for Y
-		move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move);
-		targetPos.y -= MathUtils.random(move);
+		float move = targetPos.x - pos.x;							// Get how much we can decrease the movement without
+		move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move); 	// 		getting out of the "edge" frame
+		targetPos.x -= MathUtils.random(move);						// Decrease the movement by up to this value
+		move = targetPos.y - pos.y;									// Do the same for Y
+		move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move);		//
+		targetPos.y -= MathUtils.random(move);						//
 		
 		vel.set(targetPos).sub(pos).nor().scl(SPEED);
 		setRotation(vel.angle()-90);

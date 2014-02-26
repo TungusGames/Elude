@@ -1,8 +1,8 @@
 package tungus.games.dodge.game.rockets;
 
-import com.badlogic.gdx.math.Vector2;
-
 import tungus.games.dodge.game.rockets.Rocket.RocketAI;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class TurningRocketAI implements RocketAI {
 	

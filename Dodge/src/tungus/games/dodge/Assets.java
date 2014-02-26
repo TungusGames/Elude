@@ -1,7 +1,6 @@
 package tungus.games.dodge;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -20,6 +19,9 @@ public class Assets {
 	public static TextureRegion standingEnemy;
 	private static final String STANDING_TEXTURE = "StandingEnemy";
 	
+	public static TextureRegion virtualDPadPerimeter;
+	private static String DPAD_PERIMETER_TEXTURE = "virtualdpadperimeter";
+	
 	
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal(TEXTURE_LOCATION + "game.atlas"));
@@ -27,6 +29,11 @@ public class Assets {
 		vessel = atlas.findRegion(VESSEL_TEXTURE);
 		rocket = atlas.findRegion(ROCKET_TEXTURE);
 		standingEnemy = atlas.findRegion(STANDING_TEXTURE);
+		virtualDPadPerimeter = atlas.findRegion(DPAD_PERIMETER_TEXTURE);
+		
+		TextureRegion a = vessel;
+		TextureRegion b = standingEnemy;
+		TextureRegion c = virtualDPadPerimeter;
 	}
 
 }

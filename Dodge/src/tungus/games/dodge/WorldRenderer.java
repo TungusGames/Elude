@@ -2,9 +2,7 @@ package tungus.games.dodge;
 
 import tungus.games.dodge.game.World;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class WorldRenderer {
@@ -23,6 +21,8 @@ public class WorldRenderer {
 	}
 	
 	public void render() {
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		int size = world.vessels.size();
 		for(int i = 0; i < size; i++) {
@@ -41,5 +41,6 @@ public class WorldRenderer {
 		batch.end();
 		
 	}
+	
 
 }

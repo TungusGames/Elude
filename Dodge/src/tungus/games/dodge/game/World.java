@@ -3,11 +3,9 @@ package tungus.games.dodge.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.enemies.Enemy;
 import tungus.games.dodge.game.enemies.StandingEnemy;
 import tungus.games.dodge.game.rockets.Rocket;
-import tungus.games.dodge.game.rockets.TurningRocketAI;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -18,7 +16,7 @@ public class World {
 
 	public static final float WIDTH = 20f;
 	public static final float HEIGHT = 12f;
-	public static final float EDGE = 2f; // Width of the area at the edge not targeted for movement
+	public static final float EDGE = 2f; 	// Width of the area at the edge not targeted for movement
 	
 	public List<Vessel> vessels;
 	public List<Rocket> rockets;
@@ -31,12 +29,13 @@ public class World {
 		
 		vessels.add(new Vessel());
 		enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
+
 	}
 	
-	public void update(float deltaTime) {
+	public void update(float deltaTime, Vector2[] dirs) {
 		int size = vessels.size();
 		for(int i = 0; i < size; i++) {
-			vessels.get(i).update(deltaTime);
+			vessels.get(i).update(deltaTime, dirs[i]);
 		}
 		
 		size = enemies.size();
@@ -59,6 +58,8 @@ public class World {
 				size--;
 			}
 		}
+		
+
 	
 	}
 
