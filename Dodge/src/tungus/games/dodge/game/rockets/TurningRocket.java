@@ -18,7 +18,7 @@ public class TurningRocket extends Rocket {
 	
 	public TurningRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, 
 							Vector2 playerPos, float turnSpeed, float speed) {
-		super(playerPos, dir, world, texture);
+		super(pos, dir, world, texture);
 		this.playerPos = playerPos;
 		this.turnSpeed = turnSpeed;
 		this.speed = speed;
