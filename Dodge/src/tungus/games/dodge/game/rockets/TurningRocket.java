@@ -1,10 +1,11 @@
 package tungus.games.dodge.game.rockets;
 
+import tungus.games.dodge.game.World;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import tungus.games.dodge.game.rockets.Rocket.RocketAI;
-
-public class TurningRocketAI implements RocketAI {
+public class TurningRocket extends Rocket {
 	
 	private static final Vector2 tempVector2 = new Vector2();
 	private static final float DEFAULT_TURNSPEED = 90;
@@ -15,18 +16,21 @@ public class TurningRocketAI implements RocketAI {
 	private final float turnSpeed;
 	private final float speed;
 	
-	public TurningRocketAI(Vector2 playerPos, float turnSpeed, float speed) {
+	public TurningRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, 
+							Vector2 playerPos, float turnSpeed, float speed) {
+		super(playerPos, dir, world, texture);
 		this.playerPos = playerPos;
 		this.turnSpeed = turnSpeed;
 		this.speed = speed;
 	}
 	
-	public TurningRocketAI(Vector2 playerPos) {
-		this(playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
+	public TurningRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
+		//this(playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
+		this(pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
 	}
 	
 	@Override
-	public void modVelocity(Vector2 pos, Vector2 vel, float deltaTime) {
+	public void aiUpdate(float deltaTime) {
 		if (firstTime) {
 			vel.nor().scl(speed);
 		}

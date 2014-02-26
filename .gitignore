@@ -1,6 +1,7 @@
 /bin
 
 /Dodge-android/bin
+/Dodge-html/war
 *.classpath
 *.project
 classpath

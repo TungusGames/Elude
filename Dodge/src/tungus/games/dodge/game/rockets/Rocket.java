@@ -6,16 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Rocket extends Sprite {
+public abstract class Rocket extends Sprite {
 	
 	public static final float ROCKET_SIZE = 0.2f; // For both collision and drawing
 	public static final float DEFAULT_DMG = 5f;
-	
-	public static interface RocketAI {
-		public void modVelocity(Vector2 pos, Vector2 vel, float deltaTime);
-	}
-	
-	private RocketAI ai;
 	
 	private World world;
 	
@@ -29,13 +23,12 @@ public class Rocket extends Sprite {
 	// TODO: particle
 
 	
-	public Rocket(RocketAI ai, Vector2 pos, Vector2 dir, World world, TextureRegion texture) {
-		this(ai, pos, dir, world, texture, DEFAULT_DMG);
+	public Rocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture) {
+		this(pos, dir, world, texture, DEFAULT_DMG);
 	}
 	
-	public Rocket(RocketAI ai, Vector2 pos, Vector2 dir, World world, TextureRegion texture, float dmg) {
+	public Rocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, float dmg) {
 		super(texture);
-		this.ai = ai;
 		this.pos = pos;
 		this.world = world;
 		setBounds(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
@@ -43,8 +36,8 @@ public class Rocket extends Sprite {
 		vel = dir;
 	}
 	
-	public boolean update(float deltaTime) {
-		ai.modVelocity(pos, vel, deltaTime);
+	public final boolean update(float deltaTime) {
+		aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		setPosition(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2);
 		int size = world.enemies.size();
@@ -71,4 +64,6 @@ public class Rocket extends Sprite {
 		}
 		return false;
 	}
+	
+	protected abstract void aiUpdate(float deltaTime);
 }

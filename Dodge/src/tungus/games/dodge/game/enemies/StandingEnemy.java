@@ -3,9 +3,8 @@ package tungus.games.dodge.game.enemies;
 import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.rockets.Rocket;
-import tungus.games.dodge.game.rockets.TurningRocketAI;
+import tungus.games.dodge.game.rockets.TurningRocket;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -59,7 +58,7 @@ public class StandingEnemy extends Enemy {
 				timeSinceShot -= RELOAD;
 				World w = World.INSTANCE;
 				Vector2 playerPos = w.vessels.get(0).pos;
-				Rocket r = new Rocket(new TurningRocketAI(playerPos), pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket);
+				Rocket r = new TurningRocket(pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos);
 				w.rockets.add(r);
 			}
 			setRotation(tempVector.set(World.INSTANCE.vessels.get(0).pos).sub(pos).angle()-90); // Turn towards player
