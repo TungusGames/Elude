@@ -16,16 +16,14 @@ public class TurningRocket extends Rocket {
 	private final float turnSpeed;
 	private final float speed;
 	
-	public TurningRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, 
-							Vector2 playerPos, float turnSpeed, float speed) {
-		super(playerPos, dir, world, texture);
+	public TurningRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos, float turnSpeed, float speed) {
+		super(pos, dir, world, texture);
 		this.playerPos = playerPos;
 		this.turnSpeed = turnSpeed;
 		this.speed = speed;
 	}
 	
 	public TurningRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
-		//this(playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
 		this(pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
 	}
 	

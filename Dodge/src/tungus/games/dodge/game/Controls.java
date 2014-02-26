@@ -37,7 +37,7 @@ public class Controls {
 		switch (Gdx.app.getType()) {
 		case Desktop:
 		case WebGL:
-			/*if (Gdx.input.isKeyPressed(keys[0])) {
+			if (Gdx.input.isKeyPressed(keys[0])) {
 				dir.add(0, 1);
 			}
 			if (Gdx.input.isKeyPressed(keys[1])) {
@@ -52,7 +52,7 @@ public class Controls {
 			dir.nor();
 			break;
 		case Android:
-		case iOS:*/
+		case iOS:
 			dir = dPad.getDirections(interfaceCamera);
 			break;
 		default:

@@ -40,11 +40,11 @@ public class GameScreen extends BaseScreen {
 		controls = new ArrayList<Controls>();
 		dirs = new Vector2[world.vessels.size()];
 		for (int i = 0; i < world.vessels.size(); i++) {
-			/*if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
+			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
 				controls.add(new Controls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
-			} else {*/
+			} else {
 				controls.add(new Controls(interfaceCamera));
-			//}				
+			}				
 			dirs[i] = new Vector2(0, 0);
 
 		}
@@ -58,9 +58,9 @@ public class GameScreen extends BaseScreen {
 		interfaceBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			dirs[i] = controls.get(i).getDirection(deltaTime);
-			//if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType() == ApplicationType.iOS) {
+			if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType() == ApplicationType.iOS) {
 				controls.get(i).renderDPad(interfaceBatch);
-			//}
+			}
 		}
 		interfaceBatch.end();
 		world.update(deltaTime, dirs);

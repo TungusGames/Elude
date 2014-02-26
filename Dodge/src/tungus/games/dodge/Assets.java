@@ -30,10 +30,6 @@ public class Assets {
 		rocket = atlas.findRegion(ROCKET_TEXTURE);
 		standingEnemy = atlas.findRegion(STANDING_TEXTURE);
 		virtualDPadPerimeter = atlas.findRegion(DPAD_PERIMETER_TEXTURE);
-		
-		TextureRegion a = vessel;
-		TextureRegion b = standingEnemy;
-		TextureRegion c = virtualDPadPerimeter;
 	}
 
 }
