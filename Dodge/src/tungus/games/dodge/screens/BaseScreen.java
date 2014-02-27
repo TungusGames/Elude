@@ -1,7 +1,7 @@
 package tungus.games.dodge.screens;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 
 public abstract class BaseScreen implements Screen {
 	

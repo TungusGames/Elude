@@ -9,6 +9,7 @@ public class Dodge extends Game {
 	
 	FPSLogger fps;
 	
+	
 	@Override
 	public void create () {
 		Assets.load();

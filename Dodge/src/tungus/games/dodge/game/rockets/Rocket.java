@@ -41,19 +41,24 @@ public abstract class Rocket extends Sprite {
 		;
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		setPosition(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2);
+		
+		if (!world.bounds.contains(getBoundingRectangle())) {
+			return true;
+		}
+		
 		int size = world.enemies.size();
+		boolean stillIn = false;
 		for (int i = 0; i < size; i++) {
 			if (world.enemies.get(i).collisionBounds.overlaps(getBoundingRectangle())) {
 				if (outOfOrigin) {
 					world.enemies.get(i).hp -= dmg;
 					return true;
-				}
-					
-			} else {
-				if (!outOfOrigin) {
-					outOfOrigin = true;
-				}					
+				} else
+					stillIn = true;
 			}
+		}
+		if (!stillIn) {
+			outOfOrigin = true;
 		}
 		
 		size = world.vessels.size();
@@ -65,6 +70,5 @@ public abstract class Rocket extends Sprite {
 		}
 		return false;
 	}
-	
 	protected abstract void aiUpdate(float deltaTime);
 }

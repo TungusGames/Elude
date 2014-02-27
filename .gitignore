@@ -10,3 +10,5 @@ project
 /Dodge-android/*.project
 *.classpath
 bin
+war
+bin

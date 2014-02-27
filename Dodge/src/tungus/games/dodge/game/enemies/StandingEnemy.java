@@ -36,21 +36,43 @@ public class StandingEnemy extends Enemy {
 		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
 		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
 		
-		float move = targetPos.x - pos.x;						// Get how much we can decrease the movement without
-		move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move); // 		getting out of the "edge" frame
-		targetPos.x -= MathUtils.random(move);					// Decrease the movement by up to this value
-		move = targetPos.y - pos.y;								// Do the same for Y
-		move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move);
-		targetPos.y -= MathUtils.random(move);
+		float move = targetPos.x - pos.x;							// Get how much we can decrease the movement without
+		if (pos.x < World.EDGE || pos.x > World.WIDTH-World.EDGE) {					 	// 		getting out of the "edge" frame
+			float minMove = 0;
+			if (pos.x < World.EDGE)
+				minMove = World.EDGE - pos.x;
+			else if (pos.x > World.WIDTH - World.EDGE) {
+				minMove = World.WIDTH - World.EDGE - pos.x;
+			}
+			move -= minMove;
+		}
+		targetPos.x -= MathUtils.random(move);						// Decrease the movement by up to this value
+		
+		move = targetPos.y - pos.y;									// Do the same for Y
+		/*if (pos.y < 0 || pos.y > World.HEIGHT) {
+			move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move);
+		}*/
+		if (pos.y < World.EDGE || pos.y > World.HEIGHT-World.EDGE) {					 	// 		getting out of the "edge" frame
+			float minMove = 0;
+			if (pos.y < World.EDGE)
+				minMove = World.EDGE - pos.y;
+			else if (pos.y > World.HEIGHT - World.EDGE) {
+				minMove = World.HEIGHT - World.EDGE - pos.y;
+			}
+			move -= minMove;
+		}
+		targetPos.y -= MathUtils.random(move);	
 		
 		vel.set(targetPos).sub(pos).nor().scl(SPEED);
-		setRotation(vel.angle()-90);
+		turnGoal = vel.angle()-90;
+		setRotation(turnGoal);
+		
 	}
 
 	@Override
 	protected void aiUpdate(float deltaTime) {
 		if (!reachedTarget) {
-			if (pos.dst2(targetPos) < SPEED*SPEED*deltaTime) {
+			if (pos.dst2(targetPos) < SPEED*SPEED*deltaTime*deltaTime) {
 				pos.set(targetPos);
 				reachedTarget = true;
 				vel.set(Vector2.Zero);
@@ -66,7 +88,7 @@ public class StandingEnemy extends Enemy {
 				rocketType = !rocketType;
 				w.rockets.add(r);
 			}
-			setRotation(tempVector.set(World.INSTANCE.vessels.get(0).pos).sub(pos).angle()-90); // Turn towards player
+			turnGoal = tempVector.set(World.INSTANCE.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
 		}
 	}
 
