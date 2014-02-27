@@ -25,9 +25,9 @@ public class GameScreen extends BaseScreen {
 	private SpriteBatch interfaceBatch;
 	private OrthographicCamera interfaceCamera;
 	
-	private static final Vector2 HEALTHBAR_BOTTOMLEFT = new Vector2(1, 10.5f);
-	private static final float HEALTHBAR_FULL_LENGTH = 18f;
-	private static final float HEALTHBAR_HEIGHT = 0.5f;
+	private final Vector2 HEALTHBAR_BOTTOMLEFT = new Vector2(1, 10.5f);
+	private final float HEALTHBAR_FULL_LENGTH;
+	private final float HEALTHBAR_HEIGHT = 0.5f;
 	
 	private final float FRUSTUM_WIDTH;
 	private final float FRUSTUM_HEIGHT;
@@ -42,7 +42,8 @@ public class GameScreen extends BaseScreen {
 		renderer = new WorldRenderer(world);
 		interfaceBatch = new SpriteBatch();
 		FRUSTUM_WIDTH = World.WIDTH;
-		FRUSTUM_HEIGHT = FRUSTUM_WIDTH * (Gdx.graphics.getHeight()/Gdx.graphics.getWidth());
+		FRUSTUM_HEIGHT = FRUSTUM_WIDTH * ((float)Gdx.graphics.getHeight()/Gdx.graphics.getWidth());
+		HEALTHBAR_FULL_LENGTH = FRUSTUM_WIDTH - 2*HEALTHBAR_BOTTOMLEFT.x;
 		interfaceCamera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		interfaceCamera.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
 		interfaceCamera.update();
