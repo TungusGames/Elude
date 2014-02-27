@@ -8,6 +8,7 @@ import tungus.games.dodge.game.enemies.StandingEnemy;
 import tungus.games.dodge.game.rockets.Rocket;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class World {
@@ -22,13 +23,16 @@ public class World {
 	public List<Rocket> rockets;
 	public List<Enemy> enemies;
 	
+	public final Rectangle bounds;
+	
 	public World() {
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
 		enemies = new ArrayList<Enemy>();
 		
 		vessels.add(new Vessel());
-		enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
+		enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
+		bounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 
 	}
 	
@@ -39,15 +43,15 @@ public class World {
 		}
 		
 		size = enemies.size();
-		if (enemies.size() == 0) {
-			enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
-		}
 		for (int i = 0; i < size; i++) {
 			Enemy e = enemies.get(i);
 			if (e.hp <= 0) {
 				enemies.remove(i);
 				i--;
 				size--;
+				enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
+				enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
+				size += 2;
 			} else {
 				e.update(deltaTime);
 			}		

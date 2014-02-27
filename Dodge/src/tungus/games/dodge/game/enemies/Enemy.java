@@ -7,12 +7,16 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Enemy extends Sprite {
 	
-	Vector2 pos;
-	Vector2 vel;
+	public static final float MAX_GRAPHIC_TURNSPEED = 540;
+	
+	public Vector2 pos;
+	public Vector2 vel;
 	
 	public final Rectangle collisionBounds;
 	
 	public float hp;
+	
+	protected float turnGoal;
 	
 	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture) {
 		super(texture);
@@ -31,6 +35,16 @@ public abstract class Enemy extends Sprite {
 		setPosition(pos.x - getWidth()/2, pos.y - getHeight()/2);
 		collisionBounds.x = pos.x - collisionBounds.width/2;
 		collisionBounds.y = pos.y - collisionBounds.height/2;
+		float current = getRotation();
+		float diff = turnGoal - current;
+		if (diff < -180)
+			diff += 360;
+		if (diff > 180)
+			diff -= 360;
+		if (Math.abs(diff) < MAX_GRAPHIC_TURNSPEED * deltaTime)
+			setRotation(turnGoal);
+		else
+			setRotation(current + Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime);
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);
