@@ -2,8 +2,8 @@ package tungus.games.dodge.game.enemies;
 
 import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
-import tungus.games.dodge.game.rockets.GravityRocket;
 import tungus.games.dodge.game.rockets.Rocket;
+import tungus.games.dodge.game.rockets.TurningGravityRocket;
 import tungus.games.dodge.game.rockets.TurningRocket;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -84,8 +84,10 @@ public class StandingEnemy extends Enemy {
 				World w = World.INSTANCE;
 				Vector2 playerPos = w.vessels.get(0).pos;
 				Rocket r = null;
-				r = new TurningRocket(pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos);
-				rocketType = !rocketType;
+				//if (MathUtils.randomBoolean())
+					r = new TurningGravityRocket(pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos);
+				//else
+				//	r = new TurningRocket(pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos);
 				w.rockets.add(r);
 			}
 			turnGoal = tempVector.set(World.INSTANCE.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player

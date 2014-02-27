@@ -31,7 +31,8 @@ public class World {
 		enemies = new ArrayList<Enemy>();
 		
 		vessels.add(new Vessel());
-		enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
+		//for (int i = 0; i < 10; i++)
+			enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
 		bounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 
 	}
