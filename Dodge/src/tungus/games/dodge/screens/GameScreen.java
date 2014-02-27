@@ -3,8 +3,10 @@ package tungus.games.dodge.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import tungus.games.dodge.Assets;
 import tungus.games.dodge.WorldRenderer;
 import tungus.games.dodge.game.Controls;
+import tungus.games.dodge.game.Vessel;
 import tungus.games.dodge.game.World;
 
 import com.badlogic.gdx.Application.ApplicationType;
@@ -22,6 +24,10 @@ public class GameScreen extends BaseScreen {
 	private WorldRenderer renderer;
 	private SpriteBatch interfaceBatch;
 	private OrthographicCamera interfaceCamera;
+	
+	private static final Vector2 HEALTHBAR_BOTTOMLEFT = new Vector2(1, 10.5f);
+	private static final float HEALTHBAR_FULL_LENGTH = 18f;
+	private static final float HEALTHBAR_HEIGHT = 0.5f;
 	
 	private List<Controls> controls;
 	
@@ -54,7 +60,11 @@ public class GameScreen extends BaseScreen {
 	@Override
 	public void render(float deltaTime) {
 		deltaTime = Math.min(deltaTime, 0.05f);
+		world.update(deltaTime, dirs);
+		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		renderer.render();
+		
 		interfaceBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			dirs[i] = controls.get(i).getDirection(deltaTime);
@@ -62,10 +72,13 @@ public class GameScreen extends BaseScreen {
 				controls.get(i).renderDPad(interfaceBatch);
 			}
 		}
+		if (world.vessels.get(0).hp > 0) {
+			float hpPerMax = world.vessels.get(0).hp / Vessel.MAX_HP;
+			interfaceBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f);
+			interfaceBatch.draw(Assets.whiteRectangle, HEALTHBAR_BOTTOMLEFT.x, HEALTHBAR_BOTTOMLEFT.y, 
+								hpPerMax * HEALTHBAR_FULL_LENGTH, HEALTHBAR_HEIGHT);
+		}
 		interfaceBatch.end();
-		world.update(deltaTime, dirs);
-		renderer.render();
-		
 	}
 
 	@Override
