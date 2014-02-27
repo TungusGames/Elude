@@ -3,30 +3,44 @@ game-1.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+Dodge_logo
+  rotate: false
+  xy: 244, 14
+  size: 228, 228
+  orig: 228, 228
+  offset: 0, 0
+  index: 1
 StandingEnemy
   rotate: false
-  xy: 2, 191
+  xy: 474, 79
   size: 99, 163
   orig: 99, 163
   offset: 0, 0
   index: -1
-rocket
+Tungus_logo
   rotate: false
   xy: 2, 2
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: 1
+rocket
+  rotate: false
+  xy: 575, 120
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 vessel
   rotate: false
-  xy: 2, 34
+  xy: 474, 14
   size: 50, 63
   orig: 50, 63
   offset: 0, 0
   index: -1
 virtualdpadperimeter
   rotate: false
-  xy: 2, 99
+  xy: 575, 152
   size: 90, 90
   orig: 90, 90
   offset: 0, 0

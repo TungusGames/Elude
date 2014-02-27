@@ -39,6 +39,9 @@ public class World {
 		}
 		
 		size = enemies.size();
+		if (enemies.size() == 0) {
+			enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
+		}
 		for (int i = 0; i < size; i++) {
 			Enemy e = enemies.get(i);
 			if (e.hp <= 0) {
