@@ -25,9 +25,9 @@ public class Controls {
 	/*
 	 * For Android and iOS only
 	 */
-	public Controls(OrthographicCamera interfaceCamera) {
+	public Controls(OrthographicCamera interfaceCamera, float frustumWidth, float frustumHeight) {
 		dir = new Vector2(0, 0);
-		dPad = new VirtualDPad();
+		dPad = new VirtualDPad(frustumWidth, frustumHeight);
 		this.interfaceCamera = interfaceCamera; 
 	}
 	

@@ -29,6 +29,9 @@ public class GameScreen extends BaseScreen {
 	private static final float HEALTHBAR_FULL_LENGTH = 18f;
 	private static final float HEALTHBAR_HEIGHT = 0.5f;
 	
+	private final float FRUSTUM_WIDTH;
+	private final float FRUSTUM_HEIGHT;
+	
 	private List<Controls> controls;
 	
 	private Vector2[] dirs;
@@ -38,8 +41,10 @@ public class GameScreen extends BaseScreen {
 		world = World.INSTANCE = new World();
 		renderer = new WorldRenderer(world);
 		interfaceBatch = new SpriteBatch();
-		interfaceCamera = new OrthographicCamera(World.WIDTH, World.HEIGHT);
-		interfaceCamera.position.set(World.WIDTH/2, World.HEIGHT/2, 0);
+		FRUSTUM_WIDTH = World.WIDTH;
+		FRUSTUM_HEIGHT = FRUSTUM_WIDTH * (Gdx.graphics.getHeight()/Gdx.graphics.getWidth());
+		interfaceCamera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+		interfaceCamera.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
 		interfaceCamera.update();
 		interfaceBatch.setProjectionMatrix(interfaceCamera.combined);
 		
@@ -49,7 +54,7 @@ public class GameScreen extends BaseScreen {
 			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
 				controls.add(new Controls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
 			} else {
-				controls.add(new Controls(interfaceCamera));
+				controls.add(new Controls(interfaceCamera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
 			}				
 			dirs[i] = new Vector2(0, 0);
 

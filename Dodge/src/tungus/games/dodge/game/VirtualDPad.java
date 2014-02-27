@@ -18,10 +18,10 @@ public class VirtualDPad extends Sprite {
 	
 	private boolean pressed = false; // Has been pressed inside the circle
 	
-	public VirtualDPad() {
+	public VirtualDPad(float frustumWidth, float frustumHeight) {
 		super(Assets.virtualDPadPerimeter);
-		circle = new Circle(World.WIDTH - SIZE/2 - DISTANCE_FROM_EDGE, DISTANCE_FROM_EDGE + SIZE/2, SIZE/2);
-		setBounds(World.WIDTH - SIZE - DISTANCE_FROM_EDGE, DISTANCE_FROM_EDGE, SIZE, SIZE);
+		circle = new Circle(frustumWidth - SIZE/2 - DISTANCE_FROM_EDGE, DISTANCE_FROM_EDGE + SIZE/2, SIZE/2);
+		setBounds(frustumWidth - SIZE - DISTANCE_FROM_EDGE, DISTANCE_FROM_EDGE, SIZE, SIZE);
 	}
 
 

@@ -21,8 +21,6 @@ public class WorldRenderer {
 	}
 	
 	public void render() {
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		int size = world.vessels.size();
 		for(int i = 0; i < size; i++) {
