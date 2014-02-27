@@ -15,6 +15,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -35,6 +37,11 @@ public class GameScreen extends BaseScreen {
 	private List<Controls> controls;
 	
 	private Vector2[] dirs;
+	
+	private ParticleEffect testParticle;
+	private Vector2 testParticleVel;
+	private Vector2 testParticlePos;
+	private ParticleEmitter testParticleEmitter;
 
 	public GameScreen(Game game) {
 		super(game);
@@ -60,12 +67,19 @@ public class GameScreen extends BaseScreen {
 			dirs[i] = new Vector2(0, 0);
 
 		}
+		
+		testParticle = new ParticleEffect();
+		testParticle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "turningrocket_1"), Assets.atlas);
+		testParticle.setPosition(0, 0);
+		testParticlePos = new Vector2();
+		testParticleVel = new Vector2(1, 1);
+		testParticleEmitter = testParticle.getEmitters().get(0);
 	}
 	
 
 	@Override
-	public void render(float deltaTime) {
-		deltaTime = Math.min(deltaTime, 0.05f);
+	public void render(float deltaTime) {		
+		deltaTime = Math.min(deltaTime, 0.05f);		
 		world.update(deltaTime, dirs);
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -84,6 +98,11 @@ public class GameScreen extends BaseScreen {
 			interfaceBatch.draw(Assets.whiteRectangle, HEALTHBAR_BOTTOMLEFT.x, HEALTHBAR_BOTTOMLEFT.y, 
 								hpPerMax * HEALTHBAR_FULL_LENGTH, HEALTHBAR_HEIGHT);
 		}
+		
+		testParticlePos.set(testParticleEmitter.getX(), testParticleEmitter.getY());
+		testParticleEmitter.setPosition(testParticlePos.x + testParticleVel.x*deltaTime, testParticlePos.y + testParticleVel.y*deltaTime);
+		
+		testParticle.draw(interfaceBatch, deltaTime);
 		interfaceBatch.end();
 	}
 

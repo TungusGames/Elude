@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 	
-	private static TextureAtlas atlas;
+	public static TextureAtlas atlas;
 	
-	private static final String TEXTURE_LOCATION = "textures/";
+	public static final String TEXTURE_LOCATION = "textures/";
+	public static final String PARTICLE_LOCATION = "particles/";
 	
 	public static TextureRegion vessel;
 	private static final String VESSEL_TEXTURE = "vessel";
@@ -25,6 +26,9 @@ public class Assets {
 	public static TextureRegion whiteRectangle;
 	private static String WHITE_RECT_TEXTURE = "whiterect";
 	
+	public static TextureRegion particle;
+	private static String PARTICLE_TEXTURE = "particle";
+	
 	
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal(TEXTURE_LOCATION + "game.atlas"));
@@ -34,6 +38,7 @@ public class Assets {
 		standingEnemy = atlas.findRegion(STANDING_TEXTURE);
 		virtualDPadPerimeter = atlas.findRegion(DPAD_PERIMETER_TEXTURE);
 		whiteRectangle = atlas.findRegion(WHITE_RECT_TEXTURE);
+		particle = atlas.findRegion(PARTICLE_TEXTURE);
 	}
 
 }
