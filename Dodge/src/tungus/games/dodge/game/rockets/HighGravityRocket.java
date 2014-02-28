@@ -5,7 +5,7 @@ import tungus.games.dodge.game.World;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class TurningGravityRocket extends Rocket {
+public class HighGravityRocket extends Rocket {
 
 	private static final float DEFAULT_TURNSPEED = 90;
 	private static final float DEFAULT_G = 15;
@@ -18,7 +18,7 @@ public class TurningGravityRocket extends Rocket {
 
 	private final Vector2 playerPos;
 
-	public TurningGravityRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos,
+	public HighGravityRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos,
 			float turnSpeed, float g) {
 		super(pos, dir, world, texture);
 		this.playerPos = playerPos;
@@ -27,7 +27,7 @@ public class TurningGravityRocket extends Rocket {
 		vel.nor().scl(MIN_SPEED);
 	}
 
-	public TurningGravityRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
+	public HighGravityRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
 		this(pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_G);
 	}
 
