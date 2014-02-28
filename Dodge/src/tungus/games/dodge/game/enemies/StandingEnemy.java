@@ -18,7 +18,7 @@ public class StandingEnemy extends Enemy {
 	
 	private static final float MAX_HP = 10f;
 	private static final float SPEED = 4f;
-	private static final float RELOAD = 4f;
+	private static final float RELOAD = 2f;
 	
 	private static Vector2 tempVector = new Vector2();
 	
