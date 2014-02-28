@@ -2,6 +2,7 @@ package tungus.games.dodge.game;
 
 import tungus.games.dodge.Assets;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -21,6 +22,9 @@ public class Vessel extends Sprite {
 	public Rectangle bounds;
 		
 	public float hp = MAX_HP;
+	
+	private ParticleEffect particle;
+
 	
 	public Vessel() {
 		super(Assets.vessel);

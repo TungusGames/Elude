@@ -1,5 +1,6 @@
 package tungus.games.dodge.game.enemies;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -17,6 +18,9 @@ public abstract class Enemy extends Sprite {
 	public float hp;
 	
 	protected float turnGoal;
+	
+	private ParticleEffect particle;
+
 	
 	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture) {
 		super(texture);

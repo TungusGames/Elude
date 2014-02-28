@@ -23,13 +23,17 @@ public class World {
 	public List<Vessel> vessels;
 	public List<Rocket> rockets;
 	public List<Enemy> enemies;
+	public List<ParticleEffect> particles;
+
 	
 	public final Rectangle bounds;
 	
 	public World() {
+		INSTANCE = this;
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
 		enemies = new ArrayList<Enemy>();
+		particles = new ArrayList<ParticleEffect>();
 		
 		vessels.add(new Vessel());
 		enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));

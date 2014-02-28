@@ -35,9 +35,8 @@ public class GameScreen extends BaseScreen {
 	private final float FRUSTUM_HEIGHT;
 	
 	private List<Controls> controls;
-	
 	private Vector2[] dirs;
-	
+		
 	private ParticleEffect testParticle;
 	private Vector2 testParticleVel;
 	private Vector2 testParticlePos;
@@ -45,7 +44,8 @@ public class GameScreen extends BaseScreen {
 
 	public GameScreen(Game game) {
 		super(game);
-		world = World.INSTANCE = new World();
+
+		world = new World();
 		renderer = new WorldRenderer(world);
 		interfaceBatch = new SpriteBatch();
 		FRUSTUM_WIDTH = World.WIDTH;
