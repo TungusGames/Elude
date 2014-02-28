@@ -9,6 +9,7 @@ public class Assets {
 	private static TextureAtlas atlas;
 	
 	private static final String TEXTURE_LOCATION = "textures/";
+	public static final String PARTICLE_LOCATION = "particles/";
 	
 	public static TextureRegion vessel;
 	private static final String VESSEL_TEXTURE = "vessel";

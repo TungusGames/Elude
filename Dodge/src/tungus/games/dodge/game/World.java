@@ -7,6 +7,7 @@ import tungus.games.dodge.game.enemies.Enemy;
 import tungus.games.dodge.game.enemies.StandingEnemy;
 import tungus.games.dodge.game.rockets.Rocket;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -22,13 +23,17 @@ public class World {
 	public List<Vessel> vessels;
 	public List<Rocket> rockets;
 	public List<Enemy> enemies;
+	public List<ParticleEffect> particles;
+
 	
 	public final Rectangle bounds;
 	
 	public World() {
+		INSTANCE = this;
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
 		enemies = new ArrayList<Enemy>();
+		particles = new ArrayList<ParticleEffect>();
 		
 		vessels.add(new Vessel());
 		//for (int i = 0; i < 10; i++)

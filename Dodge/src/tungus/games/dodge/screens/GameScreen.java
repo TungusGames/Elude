@@ -33,12 +33,12 @@ public class GameScreen extends BaseScreen {
 	private final float FRUSTUM_HEIGHT;
 	
 	private List<Controls> controls;
-	
 	private Vector2[] dirs;
 
 	public GameScreen(Game game) {
 		super(game);
-		world = World.INSTANCE = new World();
+
+		world = new World();
 		renderer = new WorldRenderer(world);
 		interfaceBatch = new SpriteBatch();
 		FRUSTUM_WIDTH = World.WIDTH;

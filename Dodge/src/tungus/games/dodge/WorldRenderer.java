@@ -1,5 +1,6 @@
 package tungus.games.dodge;
 
+import sun.security.x509.DeltaCRLIndicatorExtension;
 import tungus.games.dodge.game.World;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -35,6 +36,11 @@ public class WorldRenderer {
 		size = world.rockets.size();
 		for (int i = 0; i < size; i++) {
 			world.rockets.get(i).draw(batch);
+		}
+		
+		size = world.particles.size();
+		for (int i = 0; i < size; i++) {
+			world.particles.get(i).draw(batch, 1f/60f);
 		}
 		batch.end();
 		
