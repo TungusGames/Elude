@@ -38,6 +38,7 @@ public abstract class Rocket extends Sprite {
 	
 	public final boolean update(float deltaTime) {
 		aiUpdate(deltaTime);
+		;
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		setPosition(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2);
 		
