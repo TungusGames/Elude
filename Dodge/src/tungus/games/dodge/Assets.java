@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 	
-	private static TextureAtlas atlas;
+	public static TextureAtlas atlas;
 	
 	private static final String TEXTURE_LOCATION = "textures/";
 	public static final String PARTICLE_LOCATION = "particles/";

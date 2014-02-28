@@ -1,7 +1,10 @@
 package tungus.games.dodge.game.rockets;
 
+import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,13 +22,19 @@ public class LowGravityRocket extends Rocket {
 	private final float minSpeed;
 	private final float speedPerDist;
 	
+	private static final ParticleEffect initParticle() {
+		ParticleEffect particle = new ParticleEffect();
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "turningrocket_1"), Assets.atlas);
+		return particle;
+	}
+	
 	public LowGravityRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
 		this(pos, dir, world, texture, playerPos, DEFAULT_MIN_SPEED, DEFAULT_MAX_SPEED, DEFAULT_SPEED_PER_DIST, DEFAULT_TURNSPEED, DEFAULT_DMG);
 	}
 
 	public LowGravityRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, 
 						Vector2 playerPos, float minS, float maxS, float sPerD, float turnSpeed, float dmg) {
-		super(pos, dir, world, texture, dmg);
+		super(pos, dir, world, texture, dmg, initParticle());
 		this.playerPos = playerPos;
 		this.turnSpeed = turnSpeed;
 		this.maxSpeed = maxS;
