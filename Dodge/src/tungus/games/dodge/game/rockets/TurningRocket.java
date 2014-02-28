@@ -2,6 +2,7 @@ package tungus.games.dodge.game.rockets;
 
 import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
+import tungus.games.dodge.game.enemies.Enemy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -17,16 +18,16 @@ public class TurningRocket extends Rocket {
 	private Vector2 playerPos;
 	private final float turnSpeed;
 	
-	public TurningRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos, float turnSpeed, float speed) {
-		super(pos, dir, world, texture, DEFAULT_DMG, initParticle());
+	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos, float turnSpeed, float speed) {
+		super(origin, pos, dir, world, texture, DEFAULT_DMG, initParticle());
 		this.playerPos = playerPos;
 		this.turnSpeed = turnSpeed;
 		vel.nor().scl(speed);
 
 	}
 	
-	public TurningRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
-		this(pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
+	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
+		this(origin, pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
 	}
 	
 	@Override

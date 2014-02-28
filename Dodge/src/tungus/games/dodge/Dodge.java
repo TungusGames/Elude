@@ -1,8 +1,10 @@
 package tungus.games.dodge;
 
+import tungus.games.dodge.game.World;
 import tungus.games.dodge.screens.GameScreen;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 
 public class Dodge extends Game {

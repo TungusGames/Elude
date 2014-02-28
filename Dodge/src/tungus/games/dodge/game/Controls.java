@@ -14,7 +14,7 @@ public class Controls {
 	private VirtualDPad dPad = null;					//Android and iOS
 	private OrthographicCamera interfaceCamera = null;
 	
-	/*
+	/**
 	 * For Desktop and WebGL only
 	 */
 	public Controls(int[] keys) {
@@ -22,7 +22,7 @@ public class Controls {
 		this.keys = keys;
 	}
 	
-	/*
+	/**
 	 * For Android and iOS only
 	 */
 	public Controls(OrthographicCamera interfaceCamera, float frustumWidth, float frustumHeight) {
@@ -61,7 +61,7 @@ public class Controls {
 		return dir;
 	}
 	
-	/*
+	/**
 	 * For Android and iOS only
 	 */
 	public void renderDPad(SpriteBatch batch) {
