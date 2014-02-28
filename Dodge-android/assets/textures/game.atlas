@@ -24,16 +24,9 @@ Tungus_logo
   orig: 240, 240
   offset: 0, 0
   index: 1
-particle
-  rotate: false
-  xy: 575, 121
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
 rocket
   rotate: false
-  xy: 667, 215
+  xy: 575, 123
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
