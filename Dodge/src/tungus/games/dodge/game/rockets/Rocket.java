@@ -1,9 +1,8 @@
 package tungus.games.dodge.game.rockets;
 
-import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
+import tungus.games.dodge.game.enemies.Enemy;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,6 +15,7 @@ public abstract class Rocket extends Sprite {
 	public static final float DEFAULT_DMG = 5f;
 	
 	private World world;
+	private Enemy origin;
 	
 	public Vector2 pos;
 	public Vector2 vel;
@@ -29,12 +29,13 @@ public abstract class Rocket extends Sprite {
 	// TODO: particle
 
 	
-	public Rocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture) {
-		this(pos, dir, world, texture, DEFAULT_DMG, null);
+	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture) {
+		this(origin, pos, dir, world, texture, DEFAULT_DMG, null);
 	}
 	
-	public Rocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, float dmg, ParticleEffect particle) {
+	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, float dmg, ParticleEffect particle) {
 		super(texture);
+		this.origin = origin;
 		this.pos = pos;
 		this.world = world;
 		setBounds(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
@@ -47,7 +48,7 @@ public abstract class Rocket extends Sprite {
 	
 	public final boolean update(float deltaTime) {
 		aiUpdate(deltaTime);
-		updateParticle();
+		updateParticle(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		setPosition(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2);
 		
@@ -62,8 +63,11 @@ public abstract class Rocket extends Sprite {
 				if (outOfOrigin) {
 					world.enemies.get(i).hp -= dmg;
 					return true;
-				} else
-					stillIn = true;
+				} else {
+					if (world.enemies.get(i).equals(origin)) {
+						stillIn = true;
+					}
+				}
 			}
 		}
 		if (!stillIn) {
@@ -80,10 +84,16 @@ public abstract class Rocket extends Sprite {
 		return false;
 	}
 	
-	protected void updateParticle() {
+	protected void updateParticle(float deltaTime) {
 		ParticleEmitter particleEmitter = particle.getEmitters().get(0);
 		particleEmitter.setPosition(pos.x, pos.y);
 		particleEmitter.getRotation().setLow(vel.angle());
+		particle.update(deltaTime);
+	}
+	
+	public void kill() {
+		particle.getEmitters().get(0).setContinuous(false);
+		world.rockets.remove(this);
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);

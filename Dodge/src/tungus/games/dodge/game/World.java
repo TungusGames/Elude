@@ -66,7 +66,7 @@ public class World {
 		size = rockets.size();
 		for (int i = 0; i < size; i++) {
 			if (rockets.get(i).update(deltaTime)) {
-				rockets.remove(i);
+				rockets.get(i).kill();
 				i--;
 				size--;
 			}

@@ -2,6 +2,7 @@ package tungus.games.dodge.game.rockets;
 
 import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
+import tungus.games.dodge.game.enemies.Enemy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -27,17 +28,17 @@ public class HighGravityRocket extends Rocket {
 		return particle;
 	}
 	
-	public HighGravityRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos,
+	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos,
 			float turnSpeed, float g) {
-		super(pos, dir, world, texture, DEFAULT_DMG, initParticle());
+		super(origin, pos, dir, world, texture, DEFAULT_DMG, initParticle());
 		this.playerPos = playerPos;
 		this.turnSpeed = turnSpeed;
 		this.g = g;
 		vel.nor().scl(MIN_SPEED);
 	}
 
-	public HighGravityRocket(Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
-		this(pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_G);
+	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
+		this(origin, pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_G);
 	}
 
 	@Override
