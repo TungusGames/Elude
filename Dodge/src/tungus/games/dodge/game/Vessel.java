@@ -43,10 +43,10 @@ public class Vessel extends Sprite {
 			
 			if (pos.x + COLLIDER_SIZE/2 > World.WIDTH)				// Keep inside world bounds
 				pos.x -= (pos.x + COLLIDER_SIZE/2 - World.WIDTH);
-			else if (pos.y + COLLIDER_SIZE/2 > World.HEIGHT)
-				pos.y -= (pos.y + COLLIDER_SIZE/2 - World.HEIGHT);
-			if (pos.x - COLLIDER_SIZE/2 < 0)
+			else if (pos.x - COLLIDER_SIZE/2 < 0)
 				pos.x += (COLLIDER_SIZE/2 - pos.x);
+			if (pos.y + COLLIDER_SIZE/2 > World.HEIGHT)
+				pos.y -= (pos.y + COLLIDER_SIZE/2 - World.HEIGHT);
 			else if (pos.y - COLLIDER_SIZE/2 < 0)
 				pos.y += (COLLIDER_SIZE/2 - pos.y);
 			
