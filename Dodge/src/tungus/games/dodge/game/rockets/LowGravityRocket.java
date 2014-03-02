@@ -4,8 +4,7 @@ import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.enemies.Enemy;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -23,10 +22,8 @@ public class LowGravityRocket extends Rocket {
 	private final float minSpeed;
 	private final float speedPerDist;
 	
-	private static final ParticleEffect initParticle() {
-		ParticleEffect particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "rocket_2"), Assets.atlas);
-		return particle;
+	private static final PooledEffect initParticle() {
+		return Assets.rocket2.obtain();
 	}
 	
 	public LowGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {

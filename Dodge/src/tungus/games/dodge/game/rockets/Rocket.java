@@ -3,7 +3,7 @@ package tungus.games.dodge.game.rockets;
 import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.enemies.Enemy;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,13 +24,13 @@ public abstract class Rocket extends Sprite {
 	
 	public final float dmg;
 	
-	private ParticleEffect particle;
+	private PooledEffect particle;
 	
 	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture) {
 		this(origin, pos, dir, world, texture, DEFAULT_DMG, null);
 	}
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, float dmg, ParticleEffect particle) {
+	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, float dmg, PooledEffect particle) {
 		super(texture);
 		this.origin = origin;
 		this.pos = pos;
@@ -39,7 +39,8 @@ public abstract class Rocket extends Sprite {
 		this.dmg = dmg;
 		vel = dir;
 		this.particle = particle;
-		this.world.particles.add(this.particle);
+		world.particles.add(this.particle);
+		particle.reset();
 		particle.start();
 		
 	}

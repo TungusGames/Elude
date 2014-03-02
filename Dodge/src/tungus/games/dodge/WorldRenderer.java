@@ -40,6 +40,7 @@ public class WorldRenderer {
 		size = world.particles.size();
 		for (int i = 0; i < size; i++) {
 			if (world.particles.get(i).isComplete()) {
+				world.particles.get(i).free();
 				world.particles.remove(i);
 				i--;
 				size--;
