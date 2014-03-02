@@ -3,9 +3,16 @@ game-1.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+MovingEnemy
+  rotate: false
+  xy: 94, 44
+  size: 70, 82
+  orig: 70, 82
+  offset: 0, 0
+  index: -1
 StandingEnemy
   rotate: false
-  xy: 94, 26
+  xy: 166, 26
   size: 61, 100
   orig: 61, 100
   offset: 0, 0
@@ -19,14 +26,14 @@ particle
   index: -1
 rocket
   rotate: false
-  xy: 157, 31
+  xy: 229, 31
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 vessel
   rotate: false
-  xy: 157, 63
+  xy: 229, 63
   size: 50, 63
   orig: 50, 63
   offset: 0, 0
@@ -40,7 +47,7 @@ virtualdpadperimeter
   index: -1
 whiterect
   rotate: false
-  xy: 209, 125
+  xy: 94, 41
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

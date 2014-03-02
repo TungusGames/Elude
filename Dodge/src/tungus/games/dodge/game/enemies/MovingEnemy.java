@@ -11,14 +11,13 @@ import com.badlogic.gdx.math.Vector2;
 
 public class MovingEnemy extends Enemy {
 	
-	private static final float DRAW_WIDTH = 0.6f;
-	private static final float DRAW_HEIGHT = 1f;
+	private static final float DRAW_WIDTH = 0.8f;
+	private static final float DRAW_HEIGHT = 1.05f;
 	private static final float COLLIDER_SIZE = 0.5f;
 	
 	private static final float MAX_HP = 10f;
 	private static final float SPEED = 3f;
 	private static final float MAX_TURNSPEED = 100f;
-	private static final float HIGH_TURNSPEED = 100f;
 	private static final float RELOAD = 2f;
 	
 	private static final int STATE_ARRIVING = 0;
@@ -39,7 +38,7 @@ public class MovingEnemy extends Enemy {
 	private float timeSinceShot = 0;
 	
 	public MovingEnemy(Vector2 pos) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.standingEnemy);
+		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.movingEnemy);
 		moveBounds = new Rectangle(2*World.EDGE, 2*World.EDGE, World.WIDTH-4*World.EDGE, World.HEIGHT-4*World.EDGE);
 		arrivePos = new Vector2();
 		arrivePos.x = MathUtils.clamp(pos.x, moveBounds.x, moveBounds.width+moveBounds.x);

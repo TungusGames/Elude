@@ -5,6 +5,7 @@ import java.util.List;
 
 import tungus.games.dodge.game.enemies.Enemy;
 import tungus.games.dodge.game.enemies.MovingEnemy;
+import tungus.games.dodge.game.enemies.StandingEnemy;
 import tungus.games.dodge.game.rockets.Rocket;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
@@ -57,7 +58,7 @@ public class World {
 				enemies.remove(i);
 				i--;
 				size--;
-				enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, 13)));
+				enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
 				enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
 				size += 2;
 			} else {

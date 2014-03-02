@@ -41,6 +41,7 @@ public class Assets {
 		vessel = atlas.findRegion(VESSEL_TEXTURE);
 		rocket = atlas.findRegion(ROCKET_TEXTURE);
 		standingEnemy = atlas.findRegion(STANDING_TEXTURE);
+		movingEnemy = atlas.findRegion(MOVING_TEXTURE);
 		virtualDPadPerimeter = atlas.findRegion(DPAD_PERIMETER_TEXTURE);
 		whiteRectangle = atlas.findRegion(WHITE_RECT_TEXTURE);
 		
