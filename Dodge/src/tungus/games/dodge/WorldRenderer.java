@@ -13,7 +13,7 @@ public class WorldRenderer {
 	
 	public WorldRenderer(World world) {
 		this.world = world;
-		batch = new SpriteBatch();
+		batch = new SpriteBatch(5460);
 		camera = new OrthographicCamera(World.WIDTH, World.HEIGHT);
 		camera.position.set(World.WIDTH/2, World.HEIGHT/2, 0);
 		camera.update();
@@ -32,14 +32,14 @@ public class WorldRenderer {
 			world.enemies.get(i).draw(batch);
 		}
 		
-		size = world.rockets.size();
+		/*size = world.rockets.size();
 		for (int i = 0; i < size; i++) {
 			world.rockets.get(i).draw(batch);
-		}
+		}*/
 		
 		size = world.particles.size();
 		for (int i = 0; i < size; i++) {
-			if (!world.particles.get(i).getEmitters().get(0).isContinuous()) {
+			if (world.particles.get(i).isComplete()) {
 				world.particles.remove(i);
 				i--;
 				size--;

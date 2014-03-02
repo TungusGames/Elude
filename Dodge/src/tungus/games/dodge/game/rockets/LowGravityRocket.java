@@ -25,7 +25,7 @@ public class LowGravityRocket extends Rocket {
 	
 	private static final ParticleEffect initParticle() {
 		ParticleEffect particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "turningrocket_1"), Assets.atlas);
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "rocket_2"), Assets.atlas);
 		return particle;
 	}
 	

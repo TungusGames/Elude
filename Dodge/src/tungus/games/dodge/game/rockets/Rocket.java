@@ -25,9 +25,6 @@ public abstract class Rocket extends Sprite {
 	public final float dmg;
 	
 	private ParticleEffect particle;
-		
-	// TODO: particle
-
 	
 	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture) {
 		this(origin, pos, dir, world, texture, DEFAULT_DMG, null);
@@ -43,6 +40,7 @@ public abstract class Rocket extends Sprite {
 		vel = dir;
 		this.particle = particle;
 		this.world.particles.add(this.particle);
+		particle.start();
 		
 	}
 	
@@ -86,13 +84,13 @@ public abstract class Rocket extends Sprite {
 	
 	protected void updateParticle(float deltaTime) {
 		ParticleEmitter particleEmitter = particle.getEmitters().get(0);
-		particleEmitter.setPosition(pos.x, pos.y);
-		particleEmitter.getRotation().setLow(vel.angle());
-		particle.update(deltaTime);
+		particleEmitter.getAngle().setLow(vel.angle()-180);
+		particle.setPosition(pos.x, pos.y);
+
 	}
 	
 	public void kill() {
-		particle.getEmitters().get(0).setContinuous(false);
+		particle.allowCompletion();
 		world.rockets.remove(this);
 	}
 	

@@ -65,7 +65,10 @@ public class GameScreen extends BaseScreen {
 
 	@Override
 	public void render(float deltaTime) {
-		deltaTime = Math.min(deltaTime, 0.05f);
+		if (deltaTime > 0.05f) {
+			Gdx.app.log("LagWarn", "DeltaTime: " + deltaTime);
+			deltaTime = 0.05f;
+		}
 		world.update(deltaTime, dirs);
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
