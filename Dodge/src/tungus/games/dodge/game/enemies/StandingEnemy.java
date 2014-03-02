@@ -4,14 +4,11 @@ import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.rockets.LowGravityRocket;
 import tungus.games.dodge.game.rockets.Rocket;
-import tungus.games.dodge.game.rockets.TurningRocket;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class StandingEnemy extends Enemy {
-	
-	public static final float SPAWN_RANGE = 1; 
 	
 	private static final float DRAW_WIDTH = 0.6f;
 	private static final float DRAW_HEIGHT = 1f;
@@ -49,10 +46,7 @@ public class StandingEnemy extends Enemy {
 		targetPos.x -= MathUtils.random(move);						// Decrease the movement by up to this value
 		
 		move = targetPos.y - pos.y;									// Do the same for Y
-		/*if (pos.y < 0 || pos.y > World.HEIGHT) {
-			move -= (World.EDGE + SPAWN_RANGE) * Math.signum(move);
-		}*/
-		if (pos.y < World.EDGE || pos.y > World.HEIGHT-World.EDGE) {					 	// 		getting out of the "edge" frame
+		if (pos.y < World.EDGE || pos.y > World.HEIGHT-World.EDGE) {
 			float minMove = 0;
 			if (pos.y < World.EDGE)
 				minMove = World.EDGE - pos.y;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tungus.games.dodge.game.enemies.Enemy;
-import tungus.games.dodge.game.enemies.StandingEnemy;
+import tungus.games.dodge.game.enemies.MovingEnemy;
 import tungus.games.dodge.game.rockets.Rocket;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
@@ -26,7 +26,8 @@ public class World {
 	public List<PooledEffect> particles;
 
 	
-	public final Rectangle bounds;
+	public final Rectangle outerBounds;
+	public final Rectangle innerBounds;
 	
 	public World() {
 		INSTANCE = this;
@@ -37,8 +38,9 @@ public class World {
 		
 		vessels.add(new Vessel());
 		//for (int i = 0; i < 10; i++)
-			enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
-		bounds = new Rectangle(0, 0, WIDTH, HEIGHT);
+			enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
+		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
+		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 
 	}
 	
@@ -55,8 +57,8 @@ public class World {
 				enemies.remove(i);
 				i--;
 				size--;
-				enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
-				enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
+				enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, 13)));
+				enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
 				size += 2;
 			} else {
 				e.update(deltaTime);

@@ -51,7 +51,7 @@ public abstract class Rocket extends Sprite {
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		setPosition(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2);
 		
-		if (!world.bounds.contains(getBoundingRectangle())) {
+		if (!world.outerBounds.contains(getBoundingRectangle())) {
 			return true;
 		}
 		

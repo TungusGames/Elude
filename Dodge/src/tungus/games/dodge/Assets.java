@@ -21,6 +21,9 @@ public class Assets {
 	public static TextureRegion standingEnemy;
 	private static final String STANDING_TEXTURE = "StandingEnemy";
 	
+	public static TextureRegion movingEnemy;
+	private static final String MOVING_TEXTURE = "MovingEnemy";
+	
 	public static TextureRegion virtualDPadPerimeter;
 	private static String DPAD_PERIMETER_TEXTURE = "virtualdpadperimeter";
 	
