@@ -63,10 +63,7 @@ public class World {
 			}		
 		}
 		
-		size = particles.size();
-		for (int i = 0; i < size; i++) {
-			particles.get(i).update(deltaTime);
-		}
+		
 		
 		size = rockets.size();
 		for (int i = 0; i < size; i++) {
@@ -77,6 +74,10 @@ public class World {
 			}
 		}
 		
+		size = particles.size();
+		for (int i = 0; i < size; i++) {
+			particles.get(i).update(deltaTime);
+		}
 		
 	
 	}
