@@ -31,6 +31,13 @@ rocket
   orig: 30, 30
   offset: 0, 0
   index: -1
+sq2
+  rotate: false
+  xy: 281, 96
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
 vessel
   rotate: false
   xy: 229, 63

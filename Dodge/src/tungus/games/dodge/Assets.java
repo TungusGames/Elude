@@ -32,7 +32,10 @@ public class Assets {
 	
 	public static final String PARTICLE_LOCATION = "particles/";
 	
-	public static ParticleEffectPool rocket2;
+	public static ParticleEffectPool flameRocket;
+	public static ParticleEffectPool fastFlameRocket;
+	public static ParticleEffectPool matrixRocket;
+	public static ParticleEffectPool testRocket;
 	
 	
 	public static void load() {
@@ -46,8 +49,14 @@ public class Assets {
 		whiteRectangle = atlas.findRegion(WHITE_RECT_TEXTURE);
 		
 		ParticleEffect particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "rocket_2"), Assets.atlas);
-		rocket2 = new ParticleEffectPool(particle, 10, 100);
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "flamerocket"), Assets.atlas);
+		flameRocket = new ParticleEffectPool(particle, 10, 100);
+		particle = new ParticleEffect();
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "matrixrocket"), Assets.atlas);
+		matrixRocket = new ParticleEffectPool(particle, 10, 100);
+		particle = new ParticleEffect();
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "fastflamerocket"), Assets.atlas);
+		fastFlameRocket = new ParticleEffectPool(particle, 10, 100);
 	}
 
 }

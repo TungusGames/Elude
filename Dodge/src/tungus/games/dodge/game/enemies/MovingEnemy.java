@@ -4,6 +4,7 @@ import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.rockets.LowGravityRocket;
 import tungus.games.dodge.game.rockets.Rocket;
+import tungus.games.dodge.game.rockets.TurningRocket;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -36,6 +37,7 @@ public class MovingEnemy extends Enemy {
 	private boolean turningRight;
 	
 	private float timeSinceShot = 0;
+	private int shots = 0;
 	
 	public MovingEnemy(Vector2 pos) {
 		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.movingEnemy);
@@ -109,10 +111,15 @@ public class MovingEnemy extends Enemy {
 			turningRight = (turnSpeed < 0);
 			turnInOneDir += Math.abs(turnSpeed*deltaTime);
 			if (timeSinceShot > RELOAD) {
+				shots++;
 				timeSinceShot -= RELOAD;
 				World w = World.INSTANCE;
 				Vector2 playerPos = w.vessels.get(0).pos;
-				Rocket r = new LowGravityRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos);
+				Rocket r = null;
+				if (!(shots % 3 == 0))
+					r = new TurningRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos);
+				else
+					r = new LowGravityRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos);
 				w.rockets.add(r);
 			}
 		}

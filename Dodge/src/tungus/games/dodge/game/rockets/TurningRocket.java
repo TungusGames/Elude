@@ -14,11 +14,13 @@ public class TurningRocket extends Rocket {
 	private static final float DEFAULT_TURNSPEED = 100;
 	private static final float DEFAULT_SPEED = 4;
 	
+	private static final float FAST_SPEED = 7;
+	
 	private Vector2 playerPos;
 	private final float turnSpeed;
 	
 	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos, float turnSpeed, float speed) {
-		super(origin, pos, dir, world, texture, DEFAULT_DMG, initParticle());
+		super(origin, pos, dir, world, texture, DEFAULT_DMG, initParticle(speed > 5));
 		this.playerPos = playerPos;
 		this.turnSpeed = turnSpeed;
 		vel.nor().scl(speed);
@@ -27,6 +29,10 @@ public class TurningRocket extends Rocket {
 	
 	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
 		this(origin, pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_SPEED);
+	}
+
+	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos, boolean fast) {
+		this(origin, pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, fast ? FAST_SPEED : DEFAULT_SPEED);
 	}
 	
 	@Override
@@ -45,8 +51,8 @@ public class TurningRocket extends Rocket {
 		}
 	}
 	
-	private static final PooledEffect initParticle() {
-		return Assets.rocket2.obtain();
+	private static final PooledEffect initParticle(boolean fast) {
+		return fast ? Assets.fastFlameRocket.obtain() : Assets.flameRocket.obtain();
 	}
 
 }

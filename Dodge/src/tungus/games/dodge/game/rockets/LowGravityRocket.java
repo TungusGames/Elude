@@ -23,7 +23,7 @@ public class LowGravityRocket extends Rocket {
 	private final float speedPerDist;
 	
 	private static final PooledEffect initParticle() {
-		return Assets.rocket2.obtain();
+		return Assets.matrixRocket.obtain();
 	}
 	
 	public LowGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {

@@ -40,6 +40,7 @@ public class World {
 		vessels.add(new Vessel());
 		//for (int i = 0; i < 10; i++)
 			enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
+			enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
 		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 
@@ -58,9 +59,16 @@ public class World {
 				enemies.remove(i);
 				i--;
 				size--;
-				enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
-				enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
-				size += 2;
+				if (size < 5) {
+					enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
+					enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
+					size += 2;
+				}
+				else {
+					enemies.add(e instanceof MovingEnemy ? 
+							new StandingEnemy(new Vector2(MathUtils.random()*20, MathUtils.randomBoolean() ? 13 : -1)) :
+							new MovingEnemy(new Vector2(MathUtils.random()*20, MathUtils.randomBoolean() ? 13 : -1)));
+				}
 			} else {
 				e.update(deltaTime);
 			}		
