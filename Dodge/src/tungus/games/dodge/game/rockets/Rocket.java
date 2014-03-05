@@ -1,5 +1,6 @@
 package tungus.games.dodge.game.rockets;
 
+import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.enemies.Enemy;
 
@@ -93,6 +94,11 @@ public abstract class Rocket extends Sprite {
 	public void kill() {
 		particle.allowCompletion();
 		world.rockets.remove(this);
+		PooledEffect explosion = Assets.explosion.obtain();
+		explosion.reset();
+		explosion.setPosition(pos.x, pos.y);
+		explosion.start();
+		world.particles.add(explosion);
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);
