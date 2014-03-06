@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class GameScreen extends BaseScreen {
 	
@@ -31,6 +32,8 @@ public class GameScreen extends BaseScreen {
 	
 	private final float FRUSTUM_WIDTH;
 	private final float FRUSTUM_HEIGHT;
+	
+	private long lastTime;
 	
 	private List<Controls> controls;
 	private Vector2[] dirs;
@@ -62,6 +65,7 @@ public class GameScreen extends BaseScreen {
 			dirs[i] = new Vector2(0, 0);
 
 		}
+		lastTime = TimeUtils.millis();
 	}
 	
 
@@ -71,11 +75,23 @@ public class GameScreen extends BaseScreen {
 			Gdx.app.log("LagWarn", "DeltaTime: " + deltaTime);
 			deltaTime = 0.05f;
 		}
+		
+		long newTime = TimeUtils.millis();
+		long diff = newTime-lastTime;
+		if (diff > 50)
+			Gdx.app.log("deltaTime - outside", "" + diff);
+		lastTime = newTime;
+		
 		world.update(deltaTime, dirs);
+		
+		newTime = TimeUtils.millis();
+		diff = newTime-lastTime;
+		if (diff > 50)
+			Gdx.app.log("deltaTime - update", "" + diff);
+		lastTime = newTime;
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		renderer.render();
-		
 		interfaceBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			dirs[i] = controls.get(i).getDirection(deltaTime);
@@ -90,6 +106,12 @@ public class GameScreen extends BaseScreen {
 								hpPerMax * healthbarFullLength, healthbarWidth);
 		}
 		interfaceBatch.end();
+		
+		newTime = TimeUtils.millis();
+		diff = newTime-lastTime;
+		if (diff > 50)
+			Gdx.app.log("deltaTime - render", ""+diff);
+		lastTime = newTime;
 	}
 
 	@Override
