@@ -5,9 +5,11 @@ import java.util.List;
 
 import tungus.games.dodge.Assets;
 import tungus.games.dodge.WorldRenderer;
-import tungus.games.dodge.game.Controls;
 import tungus.games.dodge.game.Vessel;
 import tungus.games.dodge.game.World;
+import tungus.games.dodge.game.input.Controls;
+import tungus.games.dodge.game.input.KeyControls;
+import tungus.games.dodge.game.input.mobile.DynamicDPad;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -58,11 +60,11 @@ public class GameScreen extends BaseScreen {
 		dirs = new Vector2[world.vessels.size()];
 		for (int i = 0; i < world.vessels.size(); i++) {
 			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
-				controls.add(new Controls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
+				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
 			} else {
-				controls.add(new Controls(interfaceCamera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
+				controls.add(new DynamicDPad(interfaceCamera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
 			}				
-			dirs[i] = new Vector2(0, 0);
+			dirs[i] = controls.get(i).getDir();
 
 		}
 		lastTime = TimeUtils.millis();
@@ -94,10 +96,8 @@ public class GameScreen extends BaseScreen {
 		renderer.render();
 		interfaceBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
-			dirs[i] = controls.get(i).getDirection(deltaTime);
-			if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType() == ApplicationType.iOS) {
-				controls.get(i).renderDPad(interfaceBatch);
-			}
+			dirs[i] = controls.get(i).getDir();
+			controls.get(i).draw(interfaceBatch);
 		}
 		if (world.vessels.get(0).hp > 0) {
 			float hpPerMax = world.vessels.get(0).hp / Vessel.MAX_HP;
