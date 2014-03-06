@@ -2,6 +2,7 @@ package tungus.games.dodge;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
@@ -17,6 +18,8 @@ public class Main {
         settings.maxWidth = 1024;
         settings.maxHeight = 1024;
         settings.pot = true;
+        settings.filterMag = TextureFilter.Linear;
+        settings.filterMin = TextureFilter.Linear;
         TexturePacker.process(settings, "../img/done", "../Dodge-android/assets/textures", "game");
 		
 		new LwjglApplication(new Dodge(), cfg);

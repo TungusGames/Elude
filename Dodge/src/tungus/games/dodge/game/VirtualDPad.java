@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 
 public class VirtualDPad extends Sprite {
 	
-	private static final float SIZE = 4f;
-	private static final float DISTANCE_FROM_EDGE = 1f;
+	private static final float SIZE = 1.7f;
+	private static final float DISTANCE_FROM_EDGE = 0.35f;
 	
 	private final Circle circle; 
 	

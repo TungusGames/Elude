@@ -24,10 +24,10 @@ public class GameScreen extends BaseScreen {
 	private WorldRenderer renderer;
 	private SpriteBatch interfaceBatch;
 	private OrthographicCamera interfaceCamera;
-	
-	private final Vector2 HEALTHBAR_BOTTOMLEFT = new Vector2(1, 10.5f);
-	private final float HEALTHBAR_FULL_LENGTH;
-	private final float HEALTHBAR_HEIGHT = 0.5f;
+		
+	private final Vector2 healthbarFromTopleft /*= new Vector2(0.5f, 1f)*/;
+	private final float healthbarFullLength;
+	private final float healthbarWidth;
 	
 	private final float FRUSTUM_WIDTH;
 	private final float FRUSTUM_HEIGHT;
@@ -41,9 +41,11 @@ public class GameScreen extends BaseScreen {
 		world = new World();
 		renderer = new WorldRenderer(world);
 		interfaceBatch = new SpriteBatch();
-		FRUSTUM_WIDTH = World.WIDTH;
-		FRUSTUM_HEIGHT = FRUSTUM_WIDTH * ((float)Gdx.graphics.getHeight()/Gdx.graphics.getWidth());
-		HEALTHBAR_FULL_LENGTH = FRUSTUM_WIDTH - 2*HEALTHBAR_BOTTOMLEFT.x;
+		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
+		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
+		healthbarWidth = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
+		healthbarFromTopleft = new Vector2(healthbarWidth, 2*healthbarWidth);
+		healthbarFullLength = FRUSTUM_WIDTH - 2*healthbarFromTopleft.x;
 		interfaceCamera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		interfaceCamera.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
 		interfaceCamera.update();
@@ -84,8 +86,8 @@ public class GameScreen extends BaseScreen {
 		if (world.vessels.get(0).hp > 0) {
 			float hpPerMax = world.vessels.get(0).hp / Vessel.MAX_HP;
 			interfaceBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f);
-			interfaceBatch.draw(Assets.whiteRectangle, HEALTHBAR_BOTTOMLEFT.x, HEALTHBAR_BOTTOMLEFT.y, 
-								hpPerMax * HEALTHBAR_FULL_LENGTH, HEALTHBAR_HEIGHT);
+			interfaceBatch.draw(Assets.whiteRectangle, healthbarFromTopleft.x, FRUSTUM_HEIGHT-healthbarFromTopleft.y, 
+								hpPerMax * healthbarFullLength, healthbarWidth);
 		}
 		interfaceBatch.end();
 	}
