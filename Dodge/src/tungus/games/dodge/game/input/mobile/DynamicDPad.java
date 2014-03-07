@@ -16,23 +16,31 @@ public class DynamicDPad implements Controls {
 	private Vector2 v = new Vector2();
 	private Vector3 v3 = new Vector3();
 	
+	private boolean touched = false;
+	
 	public DynamicDPad(OrthographicCamera cam, float frustumWidth, float frustumHeight) {
 		this.interfaceCamera = cam;
 	}
 
 	@Override
 	public Vector2 getDir() {
-		if (Gdx.input.justTouched()) {
+		if (!touched && Gdx.input.justTouched()) {
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			interfaceCamera.unproject(v3);
 			center.set(v3.x, v3.y);
+			touched = true;
+			return v.set(0,0);
 		} else if (Gdx.input.isTouched()) {
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			interfaceCamera.unproject(v3);
 			v.set(v3.x, v3.y);
+			touched = true;
 			return v.sub(center).nor();
+		} else {
+			touched = false;
+			return v.set(0,0);
 		}
-		return v.set(0,0);		
+				
 	}
 
 	@Override

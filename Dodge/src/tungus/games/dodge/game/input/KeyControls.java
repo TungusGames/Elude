@@ -15,6 +15,7 @@ public class KeyControls implements Controls {
 
 	@Override
 	public Vector2 getDir() {
+		dir.set(0,0);
 		if (Gdx.input.isKeyPressed(keys[0])) {
 			dir.add(0, 1);
 		}
