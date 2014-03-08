@@ -80,7 +80,7 @@ public class GameScreen extends BaseScreen {
 		
 		long newTime = TimeUtils.millis();
 		long diff = newTime-lastTime;
-		if (diff > 50)
+		if (diff > 10)
 			Gdx.app.log("deltaTime - outside", "" + diff);
 		lastTime = newTime;
 		
@@ -88,7 +88,7 @@ public class GameScreen extends BaseScreen {
 		
 		newTime = TimeUtils.millis();
 		diff = newTime-lastTime;
-		if (diff > 50)
+		if (diff > 10)
 			Gdx.app.log("deltaTime - update", "" + diff);
 		lastTime = newTime;
 		
@@ -109,9 +109,10 @@ public class GameScreen extends BaseScreen {
 		
 		newTime = TimeUtils.millis();
 		diff = newTime-lastTime;
-		if (diff > 50)
+		if (diff > 10)
 			Gdx.app.log("deltaTime - render", ""+diff);
 		lastTime = newTime;
+		
 	}	
 
 }
