@@ -1,11 +1,14 @@
 package tungus.games.dodge.game.enemies;
 
 import tungus.games.dodge.Assets;
+import tungus.games.dodge.game.World;
+import tungus.games.dodge.game.rockets.Rocket;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -65,5 +68,27 @@ public abstract class Enemy extends Sprite {
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);
+	
+	public void kill(Rocket r) {
+		onDestroy.setPosition(pos.x, pos.y);
+		Array<ParticleEmitter> emitters = onDestroy.getEmitters();
+		for (int i = 0; i < emitters.size; i++) {
+			emitters.get(i).getAngle().setLow(r.vel.angle());
+		}
+		onDestroy.start();
+		World world = World.INSTANCE;
+		world.particles.add(onDestroy);
+		
+		world.enemies.remove(this);
+		if (world.enemies.size() < 5) {
+			world.enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
+			world.enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
+		}
+		else {
+			world.enemies.add(this instanceof MovingEnemy ? 
+					new StandingEnemy(new Vector2(MathUtils.random()*20, MathUtils.randomBoolean() ? 13 : -1)) :
+					new MovingEnemy(new Vector2(MathUtils.random()*20, MathUtils.randomBoolean() ? 13 : -1)));
+		}
+	}
 	
 }

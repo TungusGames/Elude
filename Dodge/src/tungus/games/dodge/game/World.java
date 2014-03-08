@@ -55,34 +55,12 @@ public class World {
 		
 		size = enemies.size();
 		for (int i = 0; i < size; i++) {
-			Enemy e = enemies.get(i);
-			if (e.hp <= 0) {
-				enemies.remove(i);
-				i--;
-				e.onDestroy.setPosition(e.pos.x, e.pos.y);
-				particles.add(e.onDestroy);
-				size--;
-				if (size < 5) {
-					enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
-					enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
-					size += 2;
-				}
-				else {
-					enemies.add(e instanceof MovingEnemy ? 
-							new StandingEnemy(new Vector2(MathUtils.random()*20, MathUtils.randomBoolean() ? 13 : -1)) :
-							new MovingEnemy(new Vector2(MathUtils.random()*20, MathUtils.randomBoolean() ? 13 : -1)));
-				}
-			} else {
-				e.update(deltaTime);
-			}		
+			enemies.get(i).update(deltaTime);
 		}
-		
-		
 		
 		size = rockets.size();
 		for (int i = 0; i < size; i++) {
 			if (rockets.get(i).update(deltaTime)) {
-				rockets.get(i).kill();
 				i--;
 				size--;
 			}

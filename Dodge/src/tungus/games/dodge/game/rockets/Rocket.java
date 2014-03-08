@@ -41,9 +41,8 @@ public abstract class Rocket extends Sprite {
 		vel = dir;
 		this.particle = particle;
 		world.particles.add(this.particle);
-		particle.reset();
+		//particle.reset();
 		particle.start();
-		
 	}
 	
 	public final boolean update(float deltaTime) {
@@ -53,6 +52,7 @@ public abstract class Rocket extends Sprite {
 		setPosition(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2);
 		
 		if (!world.outerBounds.contains(getBoundingRectangle())) {
+			kill();
 			return true;
 		}
 		
@@ -61,7 +61,9 @@ public abstract class Rocket extends Sprite {
 		for (int i = 0; i < size; i++) {
 			if (world.enemies.get(i).collisionBounds.overlaps(getBoundingRectangle())) {
 				if (outOfOrigin) {
-					world.enemies.get(i).hp -= dmg;
+					if ((world.enemies.get(i).hp -= dmg) <= 0)
+						world.enemies.get(i).kill(this);
+					kill();
 					return true;
 				} else {
 					if (world.enemies.get(i).equals(origin)) {
@@ -78,6 +80,7 @@ public abstract class Rocket extends Sprite {
 		for (int i = 0; i < size; i++) {
 			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle())) {
 				world.vessels.get(i).hp -= dmg;
+				kill();
 				return true;
 			}
 		}
