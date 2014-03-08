@@ -3,7 +3,6 @@ package tungus.games.dodge.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.enemies.Enemy;
 import tungus.games.dodge.game.enemies.MovingEnemy;
 import tungus.games.dodge.game.enemies.StandingEnemy;
@@ -70,8 +69,27 @@ public class World {
 		for (int i = 0; i < size; i++) {
 			particles.get(i).update(deltaTime);
 		}
-		
+	}
 	
+	public Vector2 randomPosOutsideEdge(Vector2 v, float dist) {
+		float longSides = 2*World.WIDTH + 4*dist;
+		float shortSides = 2*World.HEIGHT + 4*dist;
+		float f = MathUtils.random(longSides + shortSides);
+		if (f > longSides) {
+			f -= longSides;
+			float side = shortSides/2;
+			boolean leftSide = (f > side);
+			if (leftSide)
+				f -= side;
+			v.set(leftSide ? -dist : WIDTH+dist, f);
+		} else {
+			float side = longSides/2;
+			boolean bottomSide = (f > side);
+			if (bottomSide)
+				f -= side;
+			v.set(bottomSide ? -dist : HEIGHT+dist, f);
+		}
+		return v;
 	}
 
 }

@@ -15,7 +15,31 @@ import com.badlogic.gdx.utils.Array;
 
 public abstract class Enemy extends Sprite {
 	
+	public static enum EnemyType {STANDING, MOVING};
+	
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
+	
+	protected final static PooledEffect debrisFromColor(float[] color) {
+		PooledEffect p = Assets.debris.obtain();
+		Array<ParticleEmitter> emitters = p.getEmitters();
+		for (int i = 0; i < emitters.size; i++) {
+			emitters.get(i).getTint().setColors(color);
+		}
+		return p;
+	}
+	
+	public static final Enemy newEnemy(EnemyType t) {
+		Enemy e = null;
+		switch (t) {
+		case STANDING:
+			e = new StandingEnemy(World.INSTANCE.randomPosOutsideEdge(new Vector2(), 1));
+			break;
+		case MOVING:
+			e = new MovingEnemy(World.INSTANCE.randomPosOutsideEdge(new Vector2(), 1));
+			break;
+		}
+		return e;
+	}
 	
 	public Vector2 pos;
 	public Vector2 vel;
@@ -27,15 +51,6 @@ public abstract class Enemy extends Sprite {
 	protected float turnGoal;
 	
 	public final PooledEffect onDestroy;
-	
-	protected final static PooledEffect debrisFromColor(float[] color) {
-		PooledEffect p = Assets.debris.obtain();
-		Array<ParticleEmitter> emitters = p.getEmitters();
-		for (int i = 0; i < emitters.size; i++) {
-			emitters.get(i).getTint().setColors(color);
-		}
-		return p;
-	}
 	
 	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture, PooledEffect onDestroy) {
 		super(texture);
