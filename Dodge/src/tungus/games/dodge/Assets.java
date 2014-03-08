@@ -67,7 +67,7 @@ public class Assets {
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "explosion"), Assets.atlas);
 		explosion = new ParticleEffectPool(particle, 10, 100);
 		particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "debris"), Assets.atlas);
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "debris2"), Assets.atlas);
 		debris = new ParticleEffectPool(particle, 10, 100);
 	}
 
