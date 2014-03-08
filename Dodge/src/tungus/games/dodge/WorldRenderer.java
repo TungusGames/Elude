@@ -49,8 +49,12 @@ public class WorldRenderer {
 				world.particles.get(i).draw(batch);
 			}
 		}
-		batch.end();
 		
+		size = world.pickups.size();
+		for(int i = 0; i < size; i++) {
+			world.pickups.get(i).draw(batch);
+		}
+		batch.end();
 	}
 	
 
