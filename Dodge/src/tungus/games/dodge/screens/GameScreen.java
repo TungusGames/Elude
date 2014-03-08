@@ -59,11 +59,11 @@ public class GameScreen extends BaseScreen {
 		controls = new ArrayList<Controls>();
 		dirs = new Vector2[world.vessels.size()];
 		for (int i = 0; i < world.vessels.size(); i++) {
-			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
-				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
-			} else {
+			//if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
+			//	controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
+			//} else {
 				controls.add(new DynamicDPad(interfaceCamera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
-			}				
+			//}				
 			dirs[i] = controls.get(i).getDir();
 
 		}
@@ -112,18 +112,6 @@ public class GameScreen extends BaseScreen {
 		if (diff > 50)
 			Gdx.app.log("deltaTime - render", ""+diff);
 		lastTime = newTime;
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-	
-	
+	}	
 
 }

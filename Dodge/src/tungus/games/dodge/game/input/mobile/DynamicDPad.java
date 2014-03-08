@@ -1,14 +1,16 @@
 package tungus.games.dodge.game.input.mobile;
 
+import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.input.Controls;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-public class DynamicDPad implements Controls {
+public class DynamicDPad extends Sprite implements Controls {
 	
 	private final OrthographicCamera interfaceCamera;
 		
@@ -18,16 +20,21 @@ public class DynamicDPad implements Controls {
 	
 	private boolean touched = false;
 	
+	private static final float SIZE = 0.2f;
+	
 	public DynamicDPad(OrthographicCamera cam, float frustumWidth, float frustumHeight) {
+		super(Assets.smallCircle);
 		this.interfaceCamera = cam;
+		setSize(SIZE, SIZE);
 	}
 
 	@Override
 	public Vector2 getDir() {
-		if (!touched && Gdx.input.justTouched()) {
+		if (!touched && Gdx.input.isTouched()) {
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			interfaceCamera.unproject(v3);
 			center.set(v3.x, v3.y);
+			setPosition(center.x-SIZE/2, center.y-SIZE/2);
 			touched = true;
 			return v.set(0,0);
 		} else if (Gdx.input.isTouched()) {
@@ -42,10 +49,11 @@ public class DynamicDPad implements Controls {
 		}
 				
 	}
-
+	
 	@Override
 	public void draw(SpriteBatch batch) {
-		// Do nothing
+		if (touched)
+			super.draw(batch);
 	}
 
 }

@@ -30,6 +30,9 @@ public class Assets {
 	public static TextureRegion whiteRectangle;
 	private static String WHITE_RECT_TEXTURE = "whiterect";
 	
+	public static TextureRegion smallCircle;
+	private static String SMALL_CIRCLE_TEXTURE = "smallcircle";
+	
 	public static final String PARTICLE_LOCATION = "particles/";
 	
 	public static ParticleEffectPool flameRocket;
@@ -49,6 +52,7 @@ public class Assets {
 		movingEnemy = atlas.findRegion(MOVING_TEXTURE);
 		virtualDPadPerimeter = atlas.findRegion(DPAD_PERIMETER_TEXTURE);
 		whiteRectangle = atlas.findRegion(WHITE_RECT_TEXTURE);
+		smallCircle = atlas.findRegion(SMALL_CIRCLE_TEXTURE);
 		
 		ParticleEffect particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "flamerocket"), Assets.atlas);

@@ -66,6 +66,13 @@ rocket
   orig: 30, 30
   offset: 0, 0
   index: -1
+smallcircle
+  rotate: false
+  xy: 749, 46
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
 sq2
   rotate: false
   xy: 769, 96

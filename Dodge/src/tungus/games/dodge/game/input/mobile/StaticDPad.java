@@ -32,16 +32,18 @@ public class StaticDPad extends Sprite implements Controls {
 	@Override
 	public Vector2 getDir() {
 		v.set(0,0);
-		if (Gdx.input.justTouched()) {
+		boolean calculatedV = false;
+		if (!pressed && Gdx.input.isTouched()) {
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			interfaceCamera.unproject(v3);
 			v.set(v3.x, v3.y);
+			calculatedV = true;
 			if (circle.contains(v)) {
 				pressed = true;
 			}
 		}
 		if (pressed && Gdx.input.isTouched()) {
-			if (!Gdx.input.justTouched()) {
+			if (!calculatedV) {
 				v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 				interfaceCamera.unproject(v3);
 				v.set(v3.x, v3.y);
