@@ -37,6 +37,7 @@ public class Assets {
 	public static ParticleEffectPool matrixRocket;
 	public static ParticleEffectPool testRocket;
 	public static ParticleEffectPool explosion;
+	public static ParticleEffectPool debris;
 	
 	
 	public static void load() {
@@ -61,6 +62,9 @@ public class Assets {
 		particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "explosion"), Assets.atlas);
 		explosion = new ParticleEffectPool(particle, 10, 100);
+		particle = new ParticleEffect();
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "debris"), Assets.atlas);
+		debris = new ParticleEffectPool(particle, 10, 100);
 	}
 
 }

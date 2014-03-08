@@ -1,10 +1,14 @@
 package tungus.games.dodge.game.enemies;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import tungus.games.dodge.Assets;
+
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public abstract class Enemy extends Sprite {
 	
@@ -19,12 +23,21 @@ public abstract class Enemy extends Sprite {
 	
 	protected float turnGoal;
 	
-	private ParticleEffect particle;
-
+	public final PooledEffect onDestroy;
 	
-	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture) {
+	protected final static PooledEffect debrisFromColor(float[] color) {
+		PooledEffect p = Assets.debris.obtain();
+		Array<ParticleEmitter> emitters = p.getEmitters();
+		for (int i = 0; i < emitters.size; i++) {
+			emitters.get(i).getTint().setColors(color);
+		}
+		return p;
+	}
+	
+	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture, PooledEffect onDestroy) {
 		super(texture);
 		this.pos = pos;
+		this.onDestroy = onDestroy;
 		
 		vel = new Vector2(0,0);
 		this.hp = hp;

@@ -40,7 +40,7 @@ public class MovingEnemy extends Enemy {
 	private int shots = 0;
 	
 	public MovingEnemy(Vector2 pos) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.movingEnemy);
+		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.movingEnemy, debrisFromColor(new float[]{0.1f,1,1,1}));
 		moveBounds = new Rectangle(2*World.EDGE, 2*World.EDGE, World.WIDTH-4*World.EDGE, World.HEIGHT-4*World.EDGE);
 		arrivePos = new Vector2();
 		arrivePos.x = MathUtils.clamp(pos.x, moveBounds.x, moveBounds.width+moveBounds.x);

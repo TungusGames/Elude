@@ -29,7 +29,7 @@ public class StandingEnemy extends Enemy {
 	boolean rocketType = false;
 	
 	public StandingEnemy(Vector2 pos) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.standingEnemy);
+		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.standingEnemy, debrisFromColor(new float[]{0.1f,1,0.1f,1}));
 		targetPos = new Vector2();
 		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
 		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;

@@ -52,6 +52,13 @@ particle
   orig: 32, 32
   offset: 0, 0
   index: -1
+rect
+  rotate: false
+  xy: 769, 84
+  size: 23, 10
+  orig: 23, 10
+  offset: 0, 0
+  index: -1
 rocket
   rotate: false
   xy: 717, 31
@@ -64,6 +71,13 @@ sq2
   xy: 769, 96
   size: 30, 30
   orig: 30, 30
+  offset: 0, 0
+  index: -1
+triangle
+  rotate: false
+  xy: 524, 8
+  size: 30, 26
+  orig: 30, 26
   offset: 0, 0
   index: -1
 vessel

@@ -3,6 +3,7 @@ package tungus.games.dodge.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.enemies.Enemy;
 import tungus.games.dodge.game.enemies.MovingEnemy;
 import tungus.games.dodge.game.enemies.StandingEnemy;
@@ -58,6 +59,8 @@ public class World {
 			if (e.hp <= 0) {
 				enemies.remove(i);
 				i--;
+				e.onDestroy.setPosition(e.pos.x, e.pos.y);
+				particles.add(e.onDestroy);
 				size--;
 				if (size < 5) {
 					enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
