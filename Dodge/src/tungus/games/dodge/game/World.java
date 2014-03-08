@@ -116,7 +116,7 @@ public class World {
 			boolean bottomSide = (f > side);
 			if (bottomSide)
 				f -= side;
-			v.set(bottomSide ? -dist : HEIGHT+dist, f);
+			v.set(f, bottomSide ? -dist : HEIGHT+dist);
 		}
 		return v;
 	}
