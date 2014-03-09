@@ -19,6 +19,7 @@ public class LevelSelectScreen extends BaseScreen {
 	
 	private final Rectangle level1Button;
 	private final Rectangle level2Button;
+	private final Rectangle level3Button;
 	private final Rectangle survivalButton;
 	
 	private final Vector3 touch3 = new Vector3();
@@ -35,6 +36,7 @@ public class LevelSelectScreen extends BaseScreen {
 		uiBatch.setProjectionMatrix(uiCam.combined);
 		level1Button = new Rectangle(1, FRUSTUM_HEIGHT-2, 1, 1);
 		level2Button = new Rectangle(3, FRUSTUM_HEIGHT-2, 1, 1);
+		level3Button = new Rectangle(5, FRUSTUM_HEIGHT-2, 1, 1);
 		survivalButton = new Rectangle(2, FRUSTUM_HEIGHT-4, 1, 1);
 	}
 	
@@ -46,6 +48,8 @@ public class LevelSelectScreen extends BaseScreen {
 				game.setScreen(new GameScreen(game, 1));
 			else if (level2Button.contains(touch2))
 				game.setScreen(new GameScreen(game, 2));
+			else if (level3Button.contains(touch2))
+				game.setScreen(new GameScreen(game, 3));
 			else if (survivalButton.contains(touch2))
 				game.setScreen(new GameScreen(game, 50));
 		}
@@ -53,6 +57,7 @@ public class LevelSelectScreen extends BaseScreen {
 		uiBatch.begin();
 		uiBatch.draw(Assets.whiteRectangle, level1Button.x, level1Button.y, level1Button.width, level1Button.height);
 		uiBatch.draw(Assets.whiteRectangle, level2Button.x, level2Button.y, level2Button.width, level2Button.height);
+		uiBatch.draw(Assets.whiteRectangle, level3Button.x, level3Button.y, level3Button.width, level3Button.height);
 		uiBatch.draw(Assets.whiteRectangle, survivalButton.x, survivalButton.y, survivalButton.width, survivalButton.height);
 		uiBatch.end();
 	}

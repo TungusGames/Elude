@@ -15,9 +15,32 @@ import tungus.games.dodge.game.level.FiniteLevelLoader.Wave;
 public class Main {
 
 	public static Deque<Wave> waves = new ArrayDeque<Wave>();
+	private static float hpDrop = 0.1f;
+	private static float speedDrop = 0.1f;
+	private static float wipeDrop = 0.1f;
 	
 	public static void main(String[] args) {
-		/*for (int i = 0; i < 5; i++) {
+		level3();
+		
+		FileOutputStream fileOut = null;
+		Level lvl = new Level();
+		lvl.waves = waves;
+		lvl.hpDropByEnemy = hpDrop;
+		lvl.speedDropByEnemy = speedDrop;
+		lvl.rocketWipeDropByEnemy = wipeDrop;
+		try {
+			fileOut = new FileOutputStream("3.lvl");
+			ObjectOutputStream out;
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(lvl);
+			out.close();
+		} catch (IOException e11) {
+			e11.printStackTrace();
+		}
+	}
+
+	public static void level1() {
+		for (int i = 0; i < 5; i++) {
 			ArrayList<EnemyType> e = new ArrayList<EnemyType>();
 			for (int j = 0; j <= i; j++) {
 				e.add(EnemyType.STANDING);
@@ -43,7 +66,10 @@ public class Main {
 		e1.add(EnemyType.STANDING);
 		e1.add(EnemyType.MOVING);
 		Wave w1 = new Wave(-1, 2, e1);
-		waves.add(w1);*/
+		waves.add(w1);
+	}
+	
+	public static void level2() {
 		for (int i = 0; i < 5; i++) {
 			List<EnemyType> l = new ArrayList<EnemyType>();
 			l.add(EnemyType.STANDING);
@@ -67,22 +93,50 @@ public class Main {
 			l.add(EnemyType.MOVING);
 		}
 		waves.add(new Wave(-1, 0, l));
-		
-		FileOutputStream fileOut = null;
-		Level lvl = new Level();
-		lvl.waves = waves;
-		lvl.hpDropByEnemy = 0.1f;
-		lvl.speedDropByEnemy = 0.1f;
-		lvl.rocketWipeDropByEnemy = 0.1f;
-		try {
-			fileOut = new FileOutputStream("2.lvl");
-			ObjectOutputStream out;
-			out = new ObjectOutputStream(fileOut);
-			out.writeObject(lvl);
-			out.close();
-		} catch (IOException e11) {
-			e11.printStackTrace();
-		}
 	}
-
+	
+	private static void level3() {
+		ArrayList<EnemyType> e = new ArrayList<EnemyType>();
+		e.add(EnemyType.MOVING);
+		e.add(EnemyType.MOVING);
+		e.add(EnemyType.MOVING);
+		Wave w = new Wave(-1, 0, e);
+		waves.add(w);
+		
+		e = new ArrayList<EnemyType>();
+		e.add(EnemyType.STANDING);
+		e.add(EnemyType.STANDING);
+		e.add(EnemyType.MOVING);
+		e.add(EnemyType.MOVING);
+		w = new Wave(7, 0, e);
+		waves.add(w);
+		
+		e = new ArrayList<EnemyType>();
+		e.add(EnemyType.KAMIKAZE);
+		e.add(EnemyType.KAMIKAZE);
+		w = new Wave(7, 3, e);
+		waves.add(w);
+		
+		e = new ArrayList<EnemyType>();
+		for (int i = 0; i < 4; i++)
+			e.add(EnemyType.MOVING);
+		w = new Wave(3, 0, e);
+		waves.add(w);
+		
+		e = new ArrayList<EnemyType>();
+		for (int i = 0; i < 8; i++)
+			e.add(EnemyType.KAMIKAZE);
+		w = new Wave(-1, 0, e);
+		waves.add(w);
+		
+		e = new ArrayList<EnemyType>();
+		for (int i = 0; i < 5; i++) {
+			e.add(EnemyType.KAMIKAZE);
+			e.add(EnemyType.MOVING);
+			e.add(EnemyType.STANDING);
+		}
+			
+		w = new Wave(-1, 3, e);
+		waves.add(w);
+	}
 }

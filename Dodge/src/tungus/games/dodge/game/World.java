@@ -57,7 +57,10 @@ public class World {
 		
 		size = enemies.size();
 		for (int i = 0; i < size; i++) {
-			enemies.get(i).update(deltaTime);
+			if (enemies.get(i).update(deltaTime)) {
+				i--;
+				size--;
+			}
 		}
 		
 		size = rockets.size();

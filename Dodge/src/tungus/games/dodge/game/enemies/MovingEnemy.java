@@ -51,7 +51,7 @@ public class MovingEnemy extends Enemy {
 	}
 
 	@Override
-	protected void aiUpdate(float deltaTime) {
+	protected boolean aiUpdate(float deltaTime) {
 		switch (state) {
 		case STATE_ARRIVING:
 			if (arrivePos.dst2(pos) < SPEED*SPEED*deltaTime*deltaTime) {
@@ -122,6 +122,7 @@ public class MovingEnemy extends Enemy {
 				world.rockets.add(r);
 			}
 		}
+		return false;
 	}
 
 }

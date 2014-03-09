@@ -8,13 +8,14 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class Enemy extends Sprite {
 	
-	public static enum EnemyType {STANDING, MOVING};
+	public static enum EnemyType {STANDING, MOVING, KAMIKAZE};
 	
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
 	
@@ -35,6 +36,9 @@ public abstract class Enemy extends Sprite {
 			break;
 		case MOVING:
 			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
+			break;
+		case KAMIKAZE:
+			e = new Kamikaze(w.randomPosOutsideEdge(new Vector2(), 1), w);
 			break;
 		}
 		return e;
@@ -65,8 +69,8 @@ public abstract class Enemy extends Sprite {
 		collisionBounds = new Rectangle(pos.x - boundSize/2, pos.y - boundSize/2, boundSize, boundSize);
 	}
 	
-	public final void update(float deltaTime) {
-		aiUpdate(deltaTime);
+	public final boolean update(float deltaTime) {
+		boolean b = aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		setPosition(pos.x - getWidth()/2, pos.y - getHeight()/2);
 		collisionBounds.x = pos.x - collisionBounds.width/2;
@@ -81,15 +85,19 @@ public abstract class Enemy extends Sprite {
 			setRotation(turnGoal);
 		else
 			setRotation(current + Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime);
+		return b;
 	}
 	
-	protected abstract void aiUpdate(float deltaTime);
+	protected abstract boolean aiUpdate(float deltaTime);
 	
 	public void kill(Rocket r) {
 		onDestroy.setPosition(pos.x, pos.y);
 		Array<ParticleEmitter> emitters = onDestroy.getEmitters();
 		for (int i = 0; i < emitters.size; i++) {
-			emitters.get(i).getAngle().setLow(r.vel.angle());
+			if (r != null)
+				emitters.get(i).getAngle().setLow(r.vel.angle());
+			else
+				emitters.get(i).getAngle().setLow(MathUtils.random(360));
 		}
 		onDestroy.start();
 		world.particles.add(onDestroy);

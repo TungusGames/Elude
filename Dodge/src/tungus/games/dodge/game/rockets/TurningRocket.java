@@ -15,6 +15,7 @@ public class TurningRocket extends Rocket {
 	private static final float DEFAULT_SPEED = 4;
 	
 	private static final float FAST_SPEED = 7;
+	private static final float FAST_TURNSPEED = 130;
 	
 	private Vector2 playerPos;
 	private final float turnSpeed;
@@ -32,7 +33,7 @@ public class TurningRocket extends Rocket {
 	}
 
 	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos, boolean fast) {
-		this(origin, pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, fast ? FAST_SPEED : DEFAULT_SPEED);
+		this(origin, pos, dir, world, texture, playerPos, fast ? FAST_TURNSPEED : DEFAULT_TURNSPEED, fast ? FAST_SPEED : DEFAULT_SPEED);
 	}
 	
 	@Override
