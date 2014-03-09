@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 
 import tungus.games.dodge.game.enemies.Enemy.EnemyType;
-import tungus.games.dodge.game.level.FiniteLevel.Wave;
+import tungus.games.dodge.game.level.FiniteLevelLoader.Level;
+import tungus.games.dodge.game.level.FiniteLevelLoader.Wave;
 
 public class Main {
 
@@ -43,11 +44,16 @@ public class Main {
 		Wave w1 = new Wave(-1, 2, e1);
 		waves.add(w1);
 		FileOutputStream fileOut = null;
+		Level lvl = new Level();
+		lvl.waves = waves;
+		lvl.hpDropByEnemy = 0.1f;
+		lvl.speedDropByEnemy = 0.1f;
+		lvl.rocketWipeDropByEnemy = 0.1f;
 		try {
 			fileOut = new FileOutputStream("level.lvl");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
-			out.writeObject(waves);
+			out.writeObject(lvl);
 			out.close();
 		} catch (IOException e11) {
 			e11.printStackTrace();

@@ -95,6 +95,7 @@ public abstract class Enemy extends Sprite {
 		world.particles.add(onDestroy);
 		
 		world.enemies.remove(this);
+		world.waveLoader.onEnemyDead(this);
 		/*if (world.enemies.size() < 5) {
 			world.enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
 			world.enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));

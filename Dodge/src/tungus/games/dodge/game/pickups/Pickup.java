@@ -20,8 +20,8 @@ public abstract class Pickup extends Sprite {
 	public Pickup(World world, Vector2 pos, TextureRegion texture, float lifeTime) {
 		super(texture);
 		this.world = world;
-		collisionBounds = new Rectangle(pos.x, pos.y, DRAW_SIZE, DRAW_SIZE);
-		setBounds(pos.x, pos.y, DRAW_SIZE, DRAW_SIZE);
+		collisionBounds = new Rectangle(pos.x-DRAW_SIZE/2, pos.y-DRAW_SIZE/2, DRAW_SIZE, DRAW_SIZE);
+		setBounds(pos.x-DRAW_SIZE/2, pos.y-DRAW_SIZE/2, DRAW_SIZE, DRAW_SIZE);
 		this.lifeTime = lifeTime;
 	}
 	

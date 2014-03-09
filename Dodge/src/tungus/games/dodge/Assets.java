@@ -1,6 +1,7 @@
 package tungus.games.dodge;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -25,7 +26,6 @@ public class Assets {
 	public static ParticleEffectPool testRocket;
 	public static ParticleEffectPool explosion;
 	public static ParticleEffectPool debris;
-	
 	
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
@@ -53,6 +53,10 @@ public class Assets {
 		particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "debris2"), Assets.atlas);
 		debris = new ParticleEffectPool(particle, 10, 100);
+	}
+	
+	public static FileHandle levelFile(int levelNum) {
+		return Gdx.files.internal("levels/" + levelNum + ".lvl");
 	}
 
 }

@@ -12,7 +12,7 @@ public class Dodge extends Game {
 	@Override
 	public void create () {
 		Assets.load();
-		setScreen(new GameScreen(this));
+		setScreen(new GameScreen(this, 1));
 		fps = new FPSLogger();
 	}
 	

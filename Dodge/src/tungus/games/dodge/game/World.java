@@ -5,18 +5,13 @@ import java.util.List;
 
 import tungus.games.dodge.game.enemies.Enemy;
 import tungus.games.dodge.game.level.EnemyLoader;
-import tungus.games.dodge.game.level.FiniteLevel;
-import tungus.games.dodge.game.pickups.HealthPickup;
 import tungus.games.dodge.game.pickups.Pickup;
-import tungus.games.dodge.game.pickups.SpeedPickup;
 import tungus.games.dodge.game.rockets.Rocket;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-//MPeti01@bitbucket.org/tungus/dodge.git
 
 public class World {
 
@@ -36,9 +31,9 @@ public class World {
 	
 	public float pickupDeltaTime;
 	
-	private final EnemyLoader waveLoader;
+	public final EnemyLoader waveLoader;
 	
-	public World() {
+	public World(int levelNum) {
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
 		enemies = new ArrayList<Enemy>();
@@ -51,7 +46,7 @@ public class World {
 		//	enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
 		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
-		waveLoader = new FiniteLevel(Gdx.files.internal("levels/level.lvl"), this);
+		waveLoader = EnemyLoader.loaderFromLevelNum(this, levelNum);
 	}
 	
 	public void update(float deltaTime, Vector2[] dirs) {
@@ -86,7 +81,7 @@ public class World {
 			}
 		}
 		
-		pickupDeltaTime += deltaTime;
+		/*pickupDeltaTime += deltaTime;
 		if (pickupDeltaTime > PICKUP_FREQ)
 		{
 			if (MathUtils.randomBoolean())
@@ -95,7 +90,7 @@ public class World {
 			else pickups.add(new SpeedPickup(this, new Vector2(MathUtils.random(WIDTH - Pickup.DRAW_SIZE) ,
 					MathUtils.random(HEIGHT - Pickup.DRAW_SIZE))));
 			pickupDeltaTime = 0f;
-		}
+		}*/
 		
 		waveLoader.update(deltaTime);
 	}

@@ -40,10 +40,10 @@ public class GameScreen extends BaseScreen {
 	private List<Controls> controls;
 	private Vector2[] dirs;
 
-	public GameScreen(Game game) {
+	public GameScreen(Game game, int levelNum) {
 		super(game);
 
-		world = new World();
+		world = new World(levelNum);
 		renderer = new WorldRenderer(world);
 		interfaceBatch = new SpriteBatch();
 		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
