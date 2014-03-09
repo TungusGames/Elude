@@ -9,11 +9,11 @@ import com.badlogic.gdx.math.Vector2;
 public class HealthPickup extends Pickup {
 
 	public HealthPickup(World world, Vector2 pos, float lifeTime) {
-		super(world, pos, Assets.smallCircle, lifeTime); //Texture needed
+		super(world, pos, Assets.hpBonus, lifeTime);
 	}
 	
 	public HealthPickup(World world, Vector2 pos) {
-		super(world, pos, Assets.smallCircle, DEFAULT_LIFETIME); 
+		super(world, pos, Assets.hpBonus, DEFAULT_LIFETIME); 
 	}
 	
 	@Override

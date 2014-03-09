@@ -15,6 +15,8 @@ public class Assets {
 	public static TextureRegion rocket;
 	public static TextureRegion standingEnemy;
 	public static TextureRegion movingEnemy;
+	public static TextureRegion hpBonus;
+	public static TextureRegion speedBonus;
 	public static TextureRegion virtualDPadPerimeter;
 	public static TextureRegion whiteRectangle;
 	public static TextureRegion smallCircle;
@@ -37,6 +39,8 @@ public class Assets {
 		virtualDPadPerimeter = atlas.findRegion("virtualdpadperimeter");
 		whiteRectangle = atlas.findRegion("whiterect");
 		smallCircle = atlas.findRegion("smallcircle");
+		hpBonus = atlas.findRegion("hpbonus");
+		speedBonus = atlas.findRegion("speedbonus");
 		
 		ParticleEffect particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "flamerocket"), Assets.atlas);

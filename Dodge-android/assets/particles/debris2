@@ -20,8 +20,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 800.0
-highMax: 800.0
+highMin: 1300.0
+highMax: 1300.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -69,15 +69,15 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 15.0
-highMax: 10.0
+highMin: 10.0
+highMax: 7.0
 relative: false
 scalingCount: 2
 scaling0: 1.0
 scaling1: 0.0
 timelineCount: 2
 timeline0: 0.0
-timeline1: 1.0
+timeline1: 0.80136985
 - Angle - 
 active: true
 lowMin: 0.0
@@ -157,8 +157,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 800.0
-highMax: 800.0
+highMin: 1300.0
+highMax: 1300.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -206,15 +206,15 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 15.0
-highMax: 10.0
+highMin: 10.0
+highMax: 7.0
 relative: false
 scalingCount: 2
 scaling0: 1.0
 scaling1: 0.0
 timelineCount: 2
 timeline0: 0.0
-timeline1: 1.0
+timeline1: 0.8082192
 - Angle - 
 active: true
 lowMin: 0.0
@@ -294,8 +294,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 800.0
-highMax: 800.0
+highMin: 1300.0
+highMax: 1300.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -343,15 +343,15 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 15.0
-highMax: 10.0
+highMin: 10.0
+highMax: 7.0
 relative: false
 scalingCount: 2
 scaling0: 1.0
 scaling1: 0.0
 timelineCount: 2
 timeline0: 0.0
-timeline1: 1.0
+timeline1: 0.8082192
 - Angle - 
 active: true
 lowMin: 0.0
