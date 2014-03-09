@@ -52,10 +52,6 @@ public class World {
 		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 		waveLoader = new WaveLoader(Gdx.files.internal("levels/level.lvl"), this);
-		pickups.add(new HealthPickup(this, new Vector2(0f, 0f)));
-		pickups.add(new HealthPickup(this, new Vector2(WIDTH - Pickup.DRAW_SIZE ,
-				HEIGHT - Pickup.DRAW_SIZE)));
-
 	}
 	
 	public void update(float deltaTime, Vector2[] dirs) {
