@@ -11,7 +11,7 @@ public class SpeedPickup extends Pickup {
 
 	private static final float SPEED_BONUS = 1.5f;
 	private static final float SPEED_BONUS_TIME = 3f;
-	private static final TextureRegion texture = Assets.smallCircle;
+	private static final TextureRegion texture = Assets.whiteRectangle;
 	
 	public SpeedPickup(World world, Vector2 pos) {
 		super(world, pos, texture, DEFAULT_LIFETIME);
