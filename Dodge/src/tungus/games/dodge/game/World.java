@@ -2,13 +2,13 @@ package tungus.games.dodge.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import tungus.games.dodge.game.enemies.Enemy;
 import tungus.games.dodge.game.level.EnemyLoader;
 import tungus.games.dodge.game.level.FiniteLevel;
 import tungus.games.dodge.game.pickups.HealthPickup;
 import tungus.games.dodge.game.pickups.Pickup;
+import tungus.games.dodge.game.pickups.SpeedPickup;
 import tungus.games.dodge.game.rockets.Rocket;
 
 import com.badlogic.gdx.Gdx;
@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
+//MPeti01@bitbucket.org/tungus/dodge.git
 
 public class World {
 
@@ -30,8 +30,6 @@ public class World {
 	public List<Enemy> enemies;
 	public List<PooledEffect> particles;
 	public List<Pickup> pickups;
-
-	public Random rand;
 	
 	public final Rectangle outerBounds;
 	public final Rectangle innerBounds;
@@ -47,7 +45,6 @@ public class World {
 		particles = new ArrayList<PooledEffect>();
 		pickups = new ArrayList<Pickup>();
 		pickupDeltaTime = 0f;
-		rand = new Random(TimeUtils.millis());
 		vessels.add(new Vessel());
 		//for (int i = 0; i < 10; i++)
 		//	enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
@@ -55,7 +52,6 @@ public class World {
 		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 		waveLoader = new FiniteLevel(Gdx.files.internal("levels/level.lvl"), this);
-
 	}
 	
 	public void update(float deltaTime, Vector2[] dirs) {
@@ -84,13 +80,20 @@ public class World {
 		
 		size = pickups.size();
 		for (int i = 0; i < size; i++) {
-			pickups.get(i).update(deltaTime);
+			if (pickups.get(i).update(deltaTime)) {
+				i--;
+				size--;
+			}
 		}
 		
 		pickupDeltaTime += deltaTime;
 		if (pickupDeltaTime > PICKUP_FREQ)
 		{
-			pickups.add(new HealthPickup(this, new Vector2(rand.nextFloat() * WIDTH, rand.nextFloat() * HEIGHT)));
+			if (MathUtils.randomBoolean())
+				pickups.add(new HealthPickup(this, new Vector2(MathUtils.random(WIDTH - Pickup.DRAW_SIZE) ,
+								MathUtils.random(HEIGHT - Pickup.DRAW_SIZE))));
+			else pickups.add(new SpeedPickup(this, new Vector2(MathUtils.random(WIDTH - Pickup.DRAW_SIZE) ,
+					MathUtils.random(HEIGHT - Pickup.DRAW_SIZE))));
 			pickupDeltaTime = 0f;
 		}
 		
