@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Pickup extends Sprite {
 
-	private static final float DRAW_SIZE = 0.9f;
+	public static final float DRAW_SIZE = 0.9f;
 	protected static final float DEFAULT_LIFETIME = 5f;
 	
 	private World world;
@@ -29,11 +29,11 @@ public abstract class Pickup extends Sprite {
 		this(world, pos, texture, DEFAULT_LIFETIME);
 	}
 	
-	public void update(float deltaTime) {
+	public boolean update(float deltaTime) {
 		lifeTime -= deltaTime;
 		if (lifeTime <= 0f) {
 			kill();
-			return;
+			return true;
 		}
 		int size = world.vessels.size();
 		for (int i = 0; i < size; i++) {
@@ -41,9 +41,10 @@ public abstract class Pickup extends Sprite {
 			if (collisionBounds.overlaps(vessel.bounds)) {
 				produceEffect(vessel);
 				kill();
-				return;
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	protected abstract void produceEffect(Vessel vessel);
