@@ -39,6 +39,8 @@ public class GameScreen extends BaseScreen {
 	
 	private List<Controls> controls;
 	private Vector2[] dirs;
+	
+	private float timeSinceOver = 0;
 
 	public GameScreen(Game game, int levelNum) {
 		super(game);
@@ -85,6 +87,11 @@ public class GameScreen extends BaseScreen {
 		lastTime = newTime;
 		
 		world.update(deltaTime, dirs);
+		if (world.over) {
+			timeSinceOver += deltaTime;
+			if (timeSinceOver > 3)
+				game.setScreen(new LevelSelectScreen(game));
+		}
 		
 		newTime = TimeUtils.millis();
 		diff = newTime-lastTime;

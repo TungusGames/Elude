@@ -18,7 +18,8 @@ public class World {
 	public static final float WIDTH = 20f;
 	public static final float HEIGHT = 12f;
 	public static final float EDGE = 2f; 	// Width of the area at the edge not targeted for movement
-	public static final float PICKUP_FREQ = 6f; //1 pickup / PICKUP_FREQ seconds
+	//public static final float PICKUP_FREQ = 6f; //1 pickup / PICKUP_FREQ seconds
+	public static final float GAME_END_TIMEOUT = 3;
 	
 	public List<Vessel> vessels;
 	public List<Rocket> rockets;
@@ -29,9 +30,9 @@ public class World {
 	public final Rectangle outerBounds;
 	public final Rectangle innerBounds;
 	
-	public float pickupDeltaTime;
-	
 	public final EnemyLoader waveLoader;
+	
+	public boolean over = false;
 	
 	public World(int levelNum) {
 		vessels = new ArrayList<Vessel>();
@@ -39,7 +40,6 @@ public class World {
 		enemies = new ArrayList<Enemy>();
 		particles = new ArrayList<PooledEffect>();
 		pickups = new ArrayList<Pickup>();
-		pickupDeltaTime = 0f;
 		vessels.add(new Vessel());
 		//for (int i = 0; i < 10; i++)
 		//	enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
@@ -93,6 +93,9 @@ public class World {
 		}*/
 		
 		waveLoader.update(deltaTime);
+		
+		if (vessels.get(0).hp <= 0 || enemies.size() == 0 && rockets.size() == 0)
+			over = true;
 	}
 	
 	public Vector2 randomPosOutsideEdge(Vector2 v, float dist) {

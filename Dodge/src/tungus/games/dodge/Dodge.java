@@ -1,6 +1,6 @@
 package tungus.games.dodge;
 
-import tungus.games.dodge.screens.GameScreen;
+import tungus.games.dodge.screens.LevelSelectScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -12,7 +12,7 @@ public class Dodge extends Game {
 	@Override
 	public void create () {
 		Assets.load();
-		setScreen(new GameScreen(this, 1));
+		setScreen(new LevelSelectScreen(this));
 		fps = new FPSLogger();
 	}
 	

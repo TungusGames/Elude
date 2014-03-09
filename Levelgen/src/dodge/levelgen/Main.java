@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 import tungus.games.dodge.game.enemies.Enemy.EnemyType;
 import tungus.games.dodge.game.level.FiniteLevelLoader.Level;
@@ -16,7 +17,7 @@ public class Main {
 	public static Deque<Wave> waves = new ArrayDeque<Wave>();
 	
 	public static void main(String[] args) {
-		for (int i = 0; i < 5; i++) {
+		/*for (int i = 0; i < 5; i++) {
 			ArrayList<EnemyType> e = new ArrayList<EnemyType>();
 			for (int j = 0; j <= i; j++) {
 				e.add(EnemyType.STANDING);
@@ -42,7 +43,31 @@ public class Main {
 		e1.add(EnemyType.STANDING);
 		e1.add(EnemyType.MOVING);
 		Wave w1 = new Wave(-1, 2, e1);
-		waves.add(w1);
+		waves.add(w1);*/
+		for (int i = 0; i < 5; i++) {
+			List<EnemyType> l = new ArrayList<EnemyType>();
+			l.add(EnemyType.STANDING);
+			l.add(EnemyType.MOVING);
+			waves.add(new Wave(3, 0, l));
+		}
+		
+		List<EnemyType> l = new ArrayList<EnemyType>();
+		for (int i = 0; i < 8; i++)
+			l.add(EnemyType.STANDING);
+		waves.add(new Wave(-1, 0, l));
+		
+		l = new ArrayList<EnemyType>();
+		for (int i = 0; i < 8; i++)
+			l.add(EnemyType.MOVING);
+		waves.add(new Wave(-1, 0, l));
+		
+		l = new ArrayList<EnemyType>();
+		for (int i = 0; i < 8; i++) {
+			l.add(EnemyType.STANDING);
+			l.add(EnemyType.MOVING);
+		}
+		waves.add(new Wave(-1, 0, l));
+		
 		FileOutputStream fileOut = null;
 		Level lvl = new Level();
 		lvl.waves = waves;
@@ -50,7 +75,7 @@ public class Main {
 		lvl.speedDropByEnemy = 0.1f;
 		lvl.rocketWipeDropByEnemy = 0.1f;
 		try {
-			fileOut = new FileOutputStream("level.lvl");
+			fileOut = new FileOutputStream("2.lvl");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(lvl);

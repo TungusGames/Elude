@@ -17,7 +17,7 @@ public abstract class EnemyLoader {
 	protected final float wipeChance;
 	
 	public static EnemyLoader loaderFromLevelNum(World world, int n) {
-		if (n == 1)
+		if (n <= 40)
 			return new FiniteLevelLoader(Level.levelFromFile(Assets.levelFile(n)), world);
 		else
 			return new OneDeadTwoCome(world);
