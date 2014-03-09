@@ -2,13 +2,11 @@ package tungus.games.dodge.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import tungus.games.dodge.game.enemies.Enemy;
-import tungus.games.dodge.game.enemies.MovingEnemy;
-import tungus.games.dodge.game.enemies.StandingEnemy;
 import tungus.games.dodge.game.pickups.HealthPickup;
 import tungus.games.dodge.game.pickups.Pickup;
+import tungus.games.dodge.game.pickups.SpeedPickup;
 import tungus.games.dodge.game.rockets.Rocket;
 
 import com.badlogic.gdx.Gdx;
@@ -16,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public class World {
 	
@@ -96,9 +93,11 @@ public class World {
 		pickupDeltaTime += deltaTime;
 		if (pickupDeltaTime > PICKUP_FREQ)
 		{
-			pickups.add(new HealthPickup(this, 
-					new Vector2(MathUtils.random(WIDTH - Pickup.DRAW_SIZE) ,
+			if (MathUtils.randomBoolean())
+				pickups.add(new HealthPickup(this, new Vector2(MathUtils.random(WIDTH - Pickup.DRAW_SIZE) ,
 								MathUtils.random(HEIGHT - Pickup.DRAW_SIZE))));
+			else pickups.add(new SpeedPickup(this, new Vector2(MathUtils.random(WIDTH - Pickup.DRAW_SIZE) ,
+					MathUtils.random(HEIGHT - Pickup.DRAW_SIZE))));
 			pickupDeltaTime = 0f;
 		}
 		
