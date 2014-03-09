@@ -4,6 +4,7 @@ import tungus.games.dodge.Assets;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -54,6 +55,7 @@ public class LevelSelectScreen extends BaseScreen {
 				game.setScreen(new GameScreen(game, 50));
 		}
 		
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		uiBatch.begin();
 		uiBatch.draw(Assets.whiteRectangle, level1Button.x, level1Button.y, level1Button.width, level1Button.height);
 		uiBatch.draw(Assets.whiteRectangle, level2Button.x, level2Button.y, level2Button.width, level2Button.height);
