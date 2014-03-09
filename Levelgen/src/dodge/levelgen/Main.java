@@ -1,6 +1,5 @@
 package dodge.levelgen;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -8,8 +7,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 
-import tungus.games.dodge.game.WaveLoader.Wave;
 import tungus.games.dodge.game.enemies.Enemy.EnemyType;
+import tungus.games.dodge.game.level.FiniteLevel.Wave;
 
 public class Main {
 

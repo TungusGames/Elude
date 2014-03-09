@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -28,18 +27,20 @@ public abstract class Enemy extends Sprite {
 		return p;
 	}
 	
-	public static final Enemy newEnemy(EnemyType t) {
+	public static final Enemy newEnemy(World w, EnemyType t) {
 		Enemy e = null;
 		switch (t) {
 		case STANDING:
-			e = new StandingEnemy(World.INSTANCE.randomPosOutsideEdge(new Vector2(), 1));
+			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
 			break;
 		case MOVING:
-			e = new MovingEnemy(World.INSTANCE.randomPosOutsideEdge(new Vector2(), 1));
+			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
 			break;
 		}
 		return e;
 	}
+	
+	protected final World world;
 	
 	public Vector2 pos;
 	public Vector2 vel;
@@ -52,11 +53,11 @@ public abstract class Enemy extends Sprite {
 	
 	public final PooledEffect onDestroy;
 	
-	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture, PooledEffect onDestroy) {
+	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture, PooledEffect onDestroy, World w) {
 		super(texture);
 		this.pos = pos;
 		this.onDestroy = onDestroy;
-		
+		this.world = w;
 		vel = new Vector2(0,0);
 		this.hp = hp;
 		setBounds(pos.x - drawWidth/2, pos.y - drawHeight/2, drawWidth, drawHeight); //drawWidth and drawHeight are stored in the superclass
@@ -91,7 +92,6 @@ public abstract class Enemy extends Sprite {
 			emitters.get(i).getAngle().setLow(r.vel.angle());
 		}
 		onDestroy.start();
-		World world = World.INSTANCE;
 		world.particles.add(onDestroy);
 		
 		world.enemies.remove(this);

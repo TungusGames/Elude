@@ -1,0 +1,18 @@
+Enemies - rocket types
+- Sharpshooter - fast, straight laser bolts
+- Kamikaze - fast Turning
+- Satellite (orbit around player) - LowGrav?
+- Factory
+	- Normal: weak enemies with TurningRocket
+	- Med: stronger, LowGrav
+	- Hard: slow firing HighGrav, tanklike
+- Shielded (only hittable from one direction) - LowGrav?
+- Tank (slow shooter, lots of hp) - HighGrav?
+- Recolored standing and moving enemies with LowGrav and HighGrav?
+
+Bosses?
+
+Level loading
+- Wave - coming when less than X enemies present or Y time has passed
+
+LevelSelectScreen

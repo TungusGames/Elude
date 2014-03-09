@@ -9,32 +9,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Assets {
 	
 	public static TextureAtlas atlas;
-	
-	private static final String TEXTURE_LOCATION = "textures/";
-	
-	public static TextureRegion vessel;
-	private static final String VESSEL_TEXTURE = "vessel";
-	
+		
+	public static TextureRegion vessel;	
 	public static TextureRegion rocket;
-	private static final String ROCKET_TEXTURE = "rocket";
-	
 	public static TextureRegion standingEnemy;
-	private static final String STANDING_TEXTURE = "StandingEnemy";
-	
 	public static TextureRegion movingEnemy;
-	private static final String MOVING_TEXTURE = "MovingEnemy";
-	
 	public static TextureRegion virtualDPadPerimeter;
-	private static String DPAD_PERIMETER_TEXTURE = "virtualdpadperimeter";
-	
 	public static TextureRegion whiteRectangle;
-	private static String WHITE_RECT_TEXTURE = "whiterect";
-	
 	public static TextureRegion smallCircle;
-	private static String SMALL_CIRCLE_TEXTURE = "smallcircle";
 	
-	public static final String PARTICLE_LOCATION = "particles/";
-	
+	public static final String PARTICLE_LOCATION = "particles/";	
 	public static ParticleEffectPool flameRocket;
 	public static ParticleEffectPool fastFlameRocket;
 	public static ParticleEffectPool matrixRocket;
@@ -44,15 +28,15 @@ public class Assets {
 	
 	
 	public static void load() {
-		atlas = new TextureAtlas(Gdx.files.internal(TEXTURE_LOCATION + "game.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
 		
-		vessel = atlas.findRegion(VESSEL_TEXTURE);
-		rocket = atlas.findRegion(ROCKET_TEXTURE);
-		standingEnemy = atlas.findRegion(STANDING_TEXTURE);
-		movingEnemy = atlas.findRegion(MOVING_TEXTURE);
-		virtualDPadPerimeter = atlas.findRegion(DPAD_PERIMETER_TEXTURE);
-		whiteRectangle = atlas.findRegion(WHITE_RECT_TEXTURE);
-		smallCircle = atlas.findRegion(SMALL_CIRCLE_TEXTURE);
+		vessel = atlas.findRegion("vessel");
+		rocket = atlas.findRegion("rocket");
+		standingEnemy = atlas.findRegion("StandingEnemy");
+		movingEnemy = atlas.findRegion("MovingEnemy");
+		virtualDPadPerimeter = atlas.findRegion("virtualdpadperimeter");
+		whiteRectangle = atlas.findRegion("whiterect");
+		smallCircle = atlas.findRegion("smallcircle");
 		
 		ParticleEffect particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "flamerocket"), Assets.atlas);

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import tungus.games.dodge.game.enemies.Enemy;
-import tungus.games.dodge.game.enemies.MovingEnemy;
-import tungus.games.dodge.game.enemies.StandingEnemy;
+import tungus.games.dodge.game.level.EnemyLoader;
+import tungus.games.dodge.game.level.FiniteLevel;
 import tungus.games.dodge.game.pickups.HealthPickup;
 import tungus.games.dodge.game.pickups.Pickup;
 import tungus.games.dodge.game.rockets.Rocket;
@@ -19,8 +19,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class World {
-	
-	public static World INSTANCE;
 
 	public static final float WIDTH = 20f;
 	public static final float HEIGHT = 12f;
@@ -40,10 +38,9 @@ public class World {
 	
 	public float pickupDeltaTime;
 	
-	private final WaveLoader waveLoader;
+	private final EnemyLoader waveLoader;
 	
 	public World() {
-		INSTANCE = this;
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
 		enemies = new ArrayList<Enemy>();
@@ -57,7 +54,7 @@ public class World {
 		//	enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
 		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
-		waveLoader = new WaveLoader(Gdx.files.internal("levels/level.lvl"), this);
+		waveLoader = new FiniteLevel(Gdx.files.internal("levels/level.lvl"), this);
 
 	}
 	

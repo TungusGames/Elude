@@ -28,8 +28,8 @@ public class StandingEnemy extends Enemy {
 	
 	boolean rocketType = false;
 	
-	public StandingEnemy(Vector2 pos) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.standingEnemy, debrisFromColor(new float[]{0.1f,1,0.1f,1}));
+	public StandingEnemy(Vector2 pos, World w) {
+		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.standingEnemy, debrisFromColor(new float[]{0.1f,1,0.1f,1}), w);
 		targetPos = new Vector2();
 		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
 		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
@@ -78,16 +78,15 @@ public class StandingEnemy extends Enemy {
 			{
 				shots++;
 				timeSinceShot -= RELOAD;
-				World w = World.INSTANCE;
-				Vector2 playerPos = w.vessels.get(0).pos;
+				Vector2 playerPos = world.vessels.get(0).pos;
 				Rocket r = null;
 				if (!(shots % 3 == 0))
-					r = new TurningRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos, false);
+					r = new TurningRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), world, Assets.rocket, playerPos, false);
 				else
-					r = new TurningRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), w, Assets.rocket, playerPos, true);
-				w.rockets.add(r);
+					r = new TurningRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), world, Assets.rocket, playerPos, true);
+				world.rockets.add(r);
 			}
-			turnGoal = tempVector.set(World.INSTANCE.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
+			turnGoal = tempVector.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
 		}
 	}
 
