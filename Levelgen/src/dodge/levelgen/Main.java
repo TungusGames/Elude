@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import tungus.games.dodge.game.enemies.Enemy.EnemyType;
-import tungus.games.dodge.game.level.FiniteLevelLoader.Level;
-import tungus.games.dodge.game.level.FiniteLevelLoader.Wave;
+import tungus.games.elude.game.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.level.FiniteLevelLoader.Level;
+import tungus.games.elude.game.level.FiniteLevelLoader.Wave;
 
 public class Main {
 
@@ -20,8 +20,12 @@ public class Main {
 	private static float wipeDrop = 0.1f;
 	
 	public static void main(String[] args) {
+		level1();
+		level2();
 		level3();
-		
+	}
+	
+	public static void output(int num) {
 		FileOutputStream fileOut = null;
 		Level lvl = new Level();
 		lvl.waves = waves;
@@ -29,7 +33,7 @@ public class Main {
 		lvl.speedDropByEnemy = speedDrop;
 		lvl.rocketWipeDropByEnemy = wipeDrop;
 		try {
-			fileOut = new FileOutputStream("3.lvl");
+			fileOut = new FileOutputStream(num + ".lvl");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(lvl);
@@ -67,6 +71,7 @@ public class Main {
 		e1.add(EnemyType.MOVING);
 		Wave w1 = new Wave(-1, 2, e1);
 		waves.add(w1);
+		output(1);
 	}
 	
 	public static void level2() {
@@ -93,6 +98,7 @@ public class Main {
 			l.add(EnemyType.MOVING);
 		}
 		waves.add(new Wave(-1, 0, l));
+		output(2);
 	}
 	
 	private static void level3() {
@@ -138,5 +144,6 @@ public class Main {
 			
 		w = new Wave(-1, 3, e);
 		waves.add(w);
+		output(3);
 	}
 }
