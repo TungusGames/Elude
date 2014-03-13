@@ -2,6 +2,7 @@ package tungus.games.elude;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,6 +32,7 @@ public class Assets {
 	public static ParticleEffectPool debris;
 	
 	public static void load() {
+		//Texture test = new Texture("test.png");
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
 		
 		vessel = atlas.findRegion("vessel");

@@ -22,7 +22,7 @@ public class Main {
         settings.pot = true;
         settings.filterMag = TextureFilter.Linear;
         settings.filterMin = TextureFilter.Linear;
-        TexturePacker.process(settings, "../img/done", "../Dodge-android/assets/textures", "game");
+        TexturePacker.process(settings, "../img/done", "../Elude - Android/assets/textures", "game");
 		
 		new LwjglApplication(new Elude(), cfg);
 	}
