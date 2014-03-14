@@ -13,7 +13,7 @@ public abstract class Pickup extends Sprite {
 	public static final float DRAW_SIZE = 0.9f;
 	protected static final float DEFAULT_LIFETIME = 5f;
 	
-	private World world;
+	protected World world;
 	private Rectangle collisionBounds;
 	private float lifeTime;
 	

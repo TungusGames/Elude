@@ -4,7 +4,6 @@ import tungus.games.dodge.Assets;
 import tungus.games.dodge.game.Vessel;
 import tungus.games.dodge.game.World;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class SpeedPickup extends Pickup {

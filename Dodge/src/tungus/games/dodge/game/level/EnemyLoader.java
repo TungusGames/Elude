@@ -43,6 +43,6 @@ public abstract class EnemyLoader {
 		else if ((rand -= hpChance) < speedChance)
 			world.pickups.add(new SpeedPickup(world, e.pos));
 		else if ((rand -= speedChance) < wipeChance)
-			;//world.pickups.add(new RocketWipePickup(world, e.pos));
+			world.pickups.add(new RocketKillerPickup(world, e.pos));
 	}
 }
