@@ -1,6 +1,7 @@
 package tungus.games.dodge.game.enemies;
 
 import tungus.games.dodge.Assets;
+import tungus.games.dodge.game.Vessel;
 import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.rockets.LowGravityRocket;
 import tungus.games.dodge.game.rockets.Rocket;
@@ -113,12 +114,12 @@ public class MovingEnemy extends Enemy {
 			if (timeSinceShot > RELOAD) {
 				shots++;
 				timeSinceShot -= RELOAD;
-				Vector2 playerPos = world.vessels.get(0).pos;
+				Vessel target = world.vessels.get(0);
 				Rocket r = null;
 				if (!(shots % 3 == 0))
-					r = new TurningRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), world, Assets.rocket, playerPos);
+					r = new TurningRocket(this, pos.cpy(), new Vector2(target.pos).sub(pos), world, Assets.rocket, target);
 				else
-					r = new LowGravityRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), world, Assets.rocket, playerPos);
+					r = new LowGravityRocket(this, pos.cpy(), new Vector2(target.pos).sub(pos), world, Assets.rocket, target);
 				world.rockets.add(r);
 			}
 		}

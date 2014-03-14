@@ -1,6 +1,7 @@
 package tungus.games.dodge.game.rockets;
 
 import tungus.games.dodge.Assets;
+import tungus.games.dodge.game.Vessel;
 import tungus.games.dodge.game.World;
 import tungus.games.dodge.game.enemies.Enemy;
 
@@ -18,6 +19,8 @@ public abstract class Rocket extends Sprite {
 	private World world;
 	private Enemy origin;
 	
+	public Vessel target;
+	
 	public Vector2 pos;
 	public Vector2 vel;
 	
@@ -27,17 +30,18 @@ public abstract class Rocket extends Sprite {
 	
 	private PooledEffect particle;
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture) {
-		this(origin, pos, dir, world, texture, DEFAULT_DMG, null);
+	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target) {
+		this(origin, pos, dir, world, texture, target, DEFAULT_DMG, null);
 	}
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, float dmg, PooledEffect particle) {
+	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, float dmg, PooledEffect particle) {
 		super(texture);
 		this.origin = origin;
 		this.pos = pos;
 		this.world = world;
 		setBounds(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
 		this.dmg = dmg;
+		this.target = target;
 		vel = dir;
 		this.particle = particle;
 		world.particles.add(this.particle);

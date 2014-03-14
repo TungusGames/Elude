@@ -88,7 +88,7 @@ public class Kamikaze extends Enemy {
 		
 		for (int i = 0; i < ROCKETS_SHOT; i++) {
 			world.rockets.add(new TurningRocket(this, pos.cpy(), new Vector2(1,0).rotate(MathUtils.random(360)), 
-					world, Assets.rocket, world.vessels.get(0).pos, true));
+					world, Assets.rocket, world.vessels.get(0), true));
 		}
 	}
 
