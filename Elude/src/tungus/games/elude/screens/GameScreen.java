@@ -9,7 +9,7 @@ import tungus.games.elude.game.Vessel;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
-import tungus.games.elude.game.input.mobile.DynamicDPad;
+import tungus.games.elude.game.input.mobile.VirtualControl;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -64,7 +64,7 @@ public class GameScreen extends BaseScreen {
 			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
 				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
 			} else {
-				controls.add(new DynamicDPad(interfaceCamera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
+				controls.add(new VirtualControl(interfaceCamera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
 			}				
 			dirs[i] = controls.get(i).getDir();
 

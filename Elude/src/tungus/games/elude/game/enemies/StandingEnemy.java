@@ -1,6 +1,7 @@
 package tungus.games.elude.game.enemies;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.Vessel;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.rockets.Rocket;
 import tungus.games.elude.game.rockets.TurningRocket;
@@ -78,12 +79,12 @@ public class StandingEnemy extends Enemy {
 			{
 				shots++;
 				timeSinceShot -= RELOAD;
-				Vector2 playerPos = world.vessels.get(0).pos;
+				Vessel target = world.vessels.get(0);
 				Rocket r = null;
 				if (!(shots % 3 == 0))
-					r = new TurningRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), world, Assets.rocket, playerPos, false);
+					r = new TurningRocket(this, pos.cpy(), new Vector2(target.pos).sub(pos), world, Assets.rocket, target, false);
 				else
-					r = new TurningRocket(this, pos.cpy(), new Vector2(playerPos).sub(pos), world, Assets.rocket, playerPos, true);
+					r = new TurningRocket(this, pos.cpy(), new Vector2(target.pos).sub(pos), world, Assets.rocket, target, true);
 				world.rockets.add(r);
 			}
 			turnGoal = tempVector.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player

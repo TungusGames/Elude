@@ -1,6 +1,7 @@
 package tungus.games.elude.game.rockets;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.Vessel;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
 
@@ -18,29 +19,26 @@ public class HighGravityRocket extends Rocket {
 
 	private final float turnSpeed;
 	private final float g;
-
-	private final Vector2 playerPos;
 	
 	private static final PooledEffect initParticle() {
 		return Assets.matrixRocket.obtain();
 	}
 	
-	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos,
+	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target,
 			float turnSpeed, float g) {
-		super(origin, pos, dir, world, texture, DEFAULT_DMG, initParticle());
-		this.playerPos = playerPos;
+		super(origin, pos, dir, world, texture, target, DEFAULT_DMG, initParticle());
 		this.turnSpeed = turnSpeed;
 		this.g = g;
 		vel.nor().scl(MIN_SPEED);
 	}
 
-	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vector2 playerPos) {
-		this(origin, pos, dir, world, texture, playerPos, DEFAULT_TURNSPEED, DEFAULT_G);
+	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target) {
+		this(origin, pos, dir, world, texture, target, DEFAULT_TURNSPEED, DEFAULT_G);
 	}
 
 	@Override
 	protected void aiUpdate(float deltaTime) {
-		tempVector.set(playerPos).sub(pos);
+		tempVector.set(target.pos).sub(pos);
 		float angleDiff = tempVector.angle()-vel.angle();
 		if (angleDiff < -180f) 
 			angleDiff += 360;
@@ -53,7 +51,7 @@ public class HighGravityRocket extends Rocket {
 			vel.rotate(deltaTime * turnSpeed * Math.signum(angleDiff));
 		}
 		
-		tempVector.set(playerPos).sub(pos);
+		tempVector.set(target.pos).sub(pos);
 		float r = tempVector.len();
 		tempVector.scl(g / (r*r*r));	// Div by r once for normalizing, twice for the laws of gravity
 		vel.add(tempVector.scl(deltaTime));
