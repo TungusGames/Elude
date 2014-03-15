@@ -3,7 +3,7 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Elude"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="Elude/libs/gdx.jar" sourcepath="Elude/libs/gdx-sources.jar"/>
+	<classpathentry kind="lib" path="/home/toma/Programozás/Android/elude/Elude/libs/gdx.jar" sourcepath="Elude/libs/gdx-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="libs/gdx-backend-android-sources.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
