@@ -4,7 +4,7 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.game.pickups.HealthPickup;
-import tungus.games.elude.game.pickups.InvulnerabilityPickup;
+import tungus.games.elude.game.pickups.ShieldPickup;
 import tungus.games.elude.game.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
 import tungus.games.elude.levels.loader.arcade.OneDeadTwoCome;
@@ -44,6 +44,6 @@ public abstract class EnemyLoader {
 		else if ((rand -= hpChance) < speedChance)
 			world.pickups.add(new SpeedPickup(world, e.pos));
 		else if ((rand -= speedChance) < wipeChance)
-			world.pickups.add(new InvulnerabilityPickup(world, e.pos));
+			world.pickups.add(new ShieldPickup(world, e.pos));
 	}
 }

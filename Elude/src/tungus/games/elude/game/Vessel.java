@@ -6,25 +6,30 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Vessel extends Sprite {
 
 	public static final float DRAW_WIDTH = 0.75f;		//Dimensions of the sprite drawn
-	public static final float DRAW_HEIGHT = 0.8f;
-	public static final float MAX_GRAPHIC_TURNSPEED = 540;
+	public static final float DRAW_HEIGHT = 0.945f;
 	public static final float COLLIDER_SIZE = 0.6f;		//Dimensions of the bounding box for collisions
+	public static final float SHIELDED_SIZE = 1.2f;		//Both drawn and collider size
+	public static final float MAX_GRAPHIC_TURNSPEED = 540;
 	public static final float MAX_SPEED = 6f;
 	public static final float MAX_HP = 100f;
 	
 	public Vector2 pos;
 	public Vector2 vel;
 	
+	public float drawWidth = DRAW_WIDTH;
+	public float drawHeight = DRAW_HEIGHT;
 	public Rectangle bounds;
 		
 	public float hp = MAX_HP;
 	public float speedBonus = 1f;
 	public float speedBonusTime = 0f;
-	public float invulnerabilityTime = 0f;
+	public float shieldTime = 0f;
+	public boolean shielded = false;
 	
 	private ParticleEffect particle;
 
@@ -32,7 +37,6 @@ public class Vessel extends Sprite {
 	public Vessel() {
 		super(Assets.vessel);
 		setBounds(World.WIDTH / 2 - DRAW_WIDTH / 2, World.HEIGHT / 2 - DRAW_HEIGHT / 2, DRAW_WIDTH, DRAW_HEIGHT);
-		
 		pos = new Vector2(World.WIDTH / 2, World.HEIGHT / 2);
 		bounds = new Rectangle(pos.x - COLLIDER_SIZE/2, pos.y - COLLIDER_SIZE/2, COLLIDER_SIZE, COLLIDER_SIZE);
 		vel = new Vector2(0, 0);
@@ -46,8 +50,12 @@ public class Vessel extends Sprite {
 				speedBonusTime -= deltaTime;
 				vel.scl(speedBonus);
 			}
-			if (invulnerabilityTime > 0f)
-				invulnerabilityTime -= deltaTime;
+			if (shielded) {
+				if (shieldTime > 0f)
+					shieldTime -= deltaTime;
+				else
+					removeShield();
+			}
 			pos.add(vel.x * deltaTime, vel.y * deltaTime);
 			
 			if (pos.x + COLLIDER_SIZE/2 > World.WIDTH)				// Keep inside world bounds
@@ -72,10 +80,26 @@ public class Vessel extends Sprite {
 				else
 					setRotation(current + Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime);
 			}
-			setPosition(pos.x - DRAW_WIDTH / 2, pos.y - DRAW_HEIGHT / 2);	// Update the drawn sprite
-			bounds.x = pos.x - COLLIDER_SIZE/2;								// Update the bounds 
-			bounds.y = pos.y - COLLIDER_SIZE/2;
+			setPosition(pos.x - drawWidth / 2, pos.y - drawHeight / 2);	// Update the drawn sprite
+			bounds.x = pos.x - COLLIDER_SIZE / 2;								// Update the bounds 
+			bounds.y = pos.y - COLLIDER_SIZE / 2;
 		}
 	}
-
+	
+	public void addShield(float shieldTime) {
+		this.shieldTime = shieldTime;
+		shielded = true;
+		drawWidth = SHIELDED_SIZE;
+		drawHeight = SHIELDED_SIZE;
+		setBounds(pos.x - drawWidth / 2, pos.y - drawHeight / 2, drawWidth, drawHeight);
+		setRegion(Assets.shieldedVessel);
+	}
+	
+	public void removeShield() {
+		shielded = false;
+		setRegion(Assets.vessel);
+		drawWidth = DRAW_WIDTH;
+		drawHeight = DRAW_HEIGHT;
+		setBounds(pos.x - drawWidth / 2, pos.y - drawHeight / 2, drawWidth, drawHeight);
+	}
 }

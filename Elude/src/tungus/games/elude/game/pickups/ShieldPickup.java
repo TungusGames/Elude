@@ -4,23 +4,21 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.game.Vessel;
 import tungus.games.elude.game.World;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class InvulnerabilityPickup extends Pickup {
+public class ShieldPickup extends Pickup {
 
-	public InvulnerabilityPickup(World world, Vector2 pos, float lifeTime) {
+	public ShieldPickup(World world, Vector2 pos, float lifeTime) {
 		super(world, pos, Assets.whiteRectangle, lifeTime);
 	}
 
-	public InvulnerabilityPickup(World world, Vector2 pos) {
+	public ShieldPickup(World world, Vector2 pos) {
 		super(world, pos, Assets.whiteRectangle);
 	}
 
 	@Override
 	protected void produceEffect(Vessel vessel) {
-		vessel.invulnerabilityTime = 3f;
-		vessel.setTexture(Assets.whiteRectangle.getTexture());
+		vessel.addShield(3f);
 	}
 
 }
