@@ -1,6 +1,5 @@
 package tungus.games.elude;
 
-import tungus.games.elude.Elude;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
