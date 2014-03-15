@@ -9,8 +9,8 @@ import java.util.Deque;
 import java.util.List;
 
 import tungus.games.elude.game.enemies.Enemy.EnemyType;
-import tungus.games.elude.game.level.FiniteLevelLoader.Level;
-import tungus.games.elude.game.level.FiniteLevelLoader.Wave;
+import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
+import tungus.games.elude.levels.loader.FiniteLevelLoader.Wave;
 
 public class Main {
 
