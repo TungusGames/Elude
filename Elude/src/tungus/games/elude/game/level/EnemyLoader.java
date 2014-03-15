@@ -6,6 +6,7 @@ import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.game.level.FiniteLevelLoader.Level;
 import tungus.games.elude.game.level.arcade.OneDeadTwoCome;
 import tungus.games.elude.game.pickups.HealthPickup;
+import tungus.games.elude.game.pickups.RocketKillerPickup;
 import tungus.games.elude.game.pickups.SpeedPickup;
 
 import com.badlogic.gdx.math.MathUtils;

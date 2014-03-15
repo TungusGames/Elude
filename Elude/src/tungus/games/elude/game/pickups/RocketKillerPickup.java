@@ -1,10 +1,10 @@
-package tungus.games.dodge.game.enemies;
+package tungus.games.elude.game.pickups;
 
-import tungus.games.dodge.Assets;
-import tungus.games.dodge.game.Vessel;
-import tungus.games.dodge.game.World;
-import tungus.games.dodge.game.pickups.Pickup;
-import tungus.games.dodge.game.rockets.Rocket;
+import tungus.games.elude.Assets;
+import tungus.games.elude.game.Vessel;
+import tungus.games.elude.game.World;
+import tungus.games.elude.game.pickups.Pickup;
+import tungus.games.elude.game.rockets.Rocket;
 
 import com.badlogic.gdx.math.Vector2;
 

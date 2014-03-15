@@ -5,11 +5,6 @@ import tungus.games.elude.game.Vessel;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
 
-import tungus.games.dodge.Assets;
-import tungus.games.dodge.game.Vessel;
-import tungus.games.dodge.game.World;
-import tungus.games.dodge.game.enemies.Enemy;
-
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;

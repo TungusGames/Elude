@@ -1,6 +1,6 @@
-package tungus.games.dodge.game.input.mobile;
+package tungus.games.elude.game.input.mobile;
 
-import tungus.games.dodge.game.input.Controls;
+import tungus.games.elude.game.input.Controls;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
