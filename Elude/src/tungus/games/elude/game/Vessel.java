@@ -24,6 +24,7 @@ public class Vessel extends Sprite {
 	public float hp = MAX_HP;
 	public float speedBonus = 1f;
 	public float speedBonusTime = 0f;
+	public float invulnerabilityTime = 0f;
 	
 	private ParticleEffect particle;
 
@@ -41,10 +42,12 @@ public class Vessel extends Sprite {
 	public void update(float deltaTime, Vector2 dir) {
 		if (hp > 0) {
 			vel.set(dir).scl(MAX_SPEED);
-			if (speedBonusTime > 0) {
+			if (speedBonusTime > 0f) {
 				speedBonusTime -= deltaTime;
 				vel.scl(speedBonus);
 			}
+			if (invulnerabilityTime > 0f)
+				invulnerabilityTime -= deltaTime;
 			pos.add(vel.x * deltaTime, vel.y * deltaTime);
 			
 			if (pos.x + COLLIDER_SIZE/2 > World.WIDTH)				// Keep inside world bounds
