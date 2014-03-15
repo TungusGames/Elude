@@ -18,13 +18,13 @@
 		<link>
 			<name>assets</name>
 			<type>2</type>
-			<location>C:/Users/Peti/git/elude/Elude - Android/assets</location>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/Elude%20-%20Android/assets</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>
 		<variable>
 			<name>copy_PARENT</name>
-			<value>$%7BPARENT-2-ECLIPSE_HOME%7D/git/dodge</value>
+			<value>$%7BPARENT-2-ECLIPSE_HOME%7D/git/elude</value>
 		</variable>
 	</variableList>
 </projectDescription>
