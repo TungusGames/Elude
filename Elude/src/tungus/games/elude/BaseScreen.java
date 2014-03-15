@@ -1,4 +1,4 @@
-package tungus.games.elude.screens;
+package tungus.games.elude;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;

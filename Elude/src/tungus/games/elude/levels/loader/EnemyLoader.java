@@ -1,13 +1,13 @@
-package tungus.games.elude.game.level;
+package tungus.games.elude.levels.loader;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
-import tungus.games.elude.game.level.FiniteLevelLoader.Level;
-import tungus.games.elude.game.level.arcade.OneDeadTwoCome;
 import tungus.games.elude.game.pickups.HealthPickup;
 import tungus.games.elude.game.pickups.InvulnerabilityPickup;
 import tungus.games.elude.game.pickups.SpeedPickup;
+import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
+import tungus.games.elude.levels.loader.arcade.OneDeadTwoCome;
 
 import com.badlogic.gdx.math.MathUtils;
 

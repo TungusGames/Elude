@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tungus.games.elude.game.enemies.Enemy;
-import tungus.games.elude.game.level.EnemyLoader;
 import tungus.games.elude.game.pickups.Pickup;
 import tungus.games.elude.game.rockets.Rocket;
+import tungus.games.elude.levels.loader.EnemyLoader;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.MathUtils;

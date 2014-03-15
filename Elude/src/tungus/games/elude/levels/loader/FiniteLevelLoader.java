@@ -1,4 +1,4 @@
-package tungus.games.elude.game.level;
+package tungus.games.elude.levels.loader;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

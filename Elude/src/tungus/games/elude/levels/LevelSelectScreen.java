@@ -1,6 +1,8 @@
-package tungus.games.elude.screens;
+package tungus.games.elude.levels;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.BaseScreen;
+import tungus.games.elude.game.GameScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

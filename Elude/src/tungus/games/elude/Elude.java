@@ -1,6 +1,6 @@
 package tungus.games.elude;
 
-import tungus.games.elude.screens.LevelSelectScreen;
+import tungus.games.elude.levels.LevelSelectScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
