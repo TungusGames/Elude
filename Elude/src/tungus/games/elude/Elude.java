@@ -1,6 +1,6 @@
 package tungus.games.elude;
 
-import tungus.games.elude.levels.LevelSelectScreen;
+import tungus.games.elude.levels.levelselect.LevelSelectScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -12,7 +12,7 @@ public class Elude extends Game {
 	@Override
 	public void create () {
 		Assets.load();
-		setScreen(new LevelSelectScreen(this));
+		setScreen(new LevelSelectScreen(this,true));
 		fps = new FPSLogger();
 	}
 	

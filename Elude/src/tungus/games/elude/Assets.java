@@ -2,6 +2,7 @@ package tungus.games.elude;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -22,6 +23,7 @@ public class Assets {
 	public static TextureRegion whiteRectangle;
 	public static TextureRegion smallCircle;
 	public static TextureRegion shieldedVessel;
+	public static TextureRegion frame;
 	
 	public static final String PARTICLE_LOCATION = "particles/";	
 	public static ParticleEffectPool flameRocket;
@@ -46,6 +48,7 @@ public class Assets {
 		whiteRectangle = atlas.findRegion("whiterect");
 		smallCircle = atlas.findRegion("smallcircle");
 		shieldedVessel = atlas.findRegion("shieldedVessel");
+		frame = atlas.findRegion("frame");
 		
 		ParticleEffect particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "flamerocket"), Assets.atlas);

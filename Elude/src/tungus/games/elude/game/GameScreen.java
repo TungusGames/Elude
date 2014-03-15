@@ -9,7 +9,7 @@ import tungus.games.elude.WorldRenderer;
 import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
 import tungus.games.elude.game.input.mobile.VirtualControl;
-import tungus.games.elude.levels.LevelSelectScreen;
+import tungus.games.elude.levels.levelselect.LevelSelectScreen;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -90,7 +90,7 @@ public class GameScreen extends BaseScreen {
 		if (world.over) {
 			timeSinceOver += deltaTime;
 			if (timeSinceOver > 3)
-				game.setScreen(new LevelSelectScreen(game));
+				game.setScreen(new LevelSelectScreen(game, true));
 		}
 		
 		newTime = TimeUtils.millis();

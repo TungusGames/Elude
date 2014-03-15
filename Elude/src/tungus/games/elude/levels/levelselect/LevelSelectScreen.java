@@ -1,15 +1,14 @@
-package tungus.games.elude.levels;
+package tungus.games.elude.levels.levelselect;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.game.GameScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -20,15 +19,65 @@ public class LevelSelectScreen extends BaseScreen {
 	private final OrthographicCamera uiCam;
 	private final SpriteBatch uiBatch;
 	
-	private final Rectangle level1Button;
+	/*private final Rectangle level1Button;
 	private final Rectangle level2Button;
 	private final Rectangle level3Button;
-	private final Rectangle survivalButton;
+	private final Rectangle survivalButton;*/
 	
 	private final Vector3 touch3 = new Vector3();
 	private final Vector2 touch2 = new Vector2();
 	
-	public LevelSelectScreen(Game game) {
+	private final GridPanel grid = new GridPanel();
+	private final DetailsPanel details = new DetailsPanel();
+	
+	private final GestureAdapter listener = new GestureAdapter() {
+		@Override
+		public boolean tap(float x, float y, int count, int button) {
+			touch3.set(x, y, 0);
+			uiCam.unproject(touch3);
+			grid.tapped(touch3.x, touch3.y);
+			return true;
+		}
+		
+		@Override
+		public boolean pan(float x, float y, float deltaX, float deltaY) {
+			return false;
+		}
+		
+		@Override
+		public boolean panStop(float x, float y, int pointer, int button) {
+			return false;
+		}
+		
+		@Override
+		public boolean fling(float velocityX, float velocityY, int button) {
+			return false;
+		}
+	};
+	
+	public LevelSelectScreen(Game game, boolean finiteLevels) {
+		super(game);
+		FRUSTUM_WIDTH = 20;
+		FRUSTUM_HEIGHT = 12;
+		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
+		uiCam.update();
+		uiBatch = new SpriteBatch();
+		uiBatch.setProjectionMatrix(uiCam.combined);
+		Gdx.input.setInputProcessor(new GestureDetector(listener));
+	}
+	
+	@Override
+	public void render(float deltaTime) {
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		uiBatch.begin();
+		grid.render(uiBatch, deltaTime);
+		uiBatch.end();
+	}
+	
+	
+	
+	/*public LevelSelectScreen(Game game) {
 		super(game);
 		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
 		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
@@ -64,6 +113,6 @@ public class LevelSelectScreen extends BaseScreen {
 		uiBatch.draw(Assets.whiteRectangle, level3Button.x, level3Button.y, level3Button.width, level3Button.height);
 		uiBatch.draw(Assets.whiteRectangle, survivalButton.x, survivalButton.y, survivalButton.width, survivalButton.height);
 		uiBatch.end();
-	}
+	}*/
 
 }
