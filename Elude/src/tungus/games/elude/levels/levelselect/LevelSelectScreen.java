@@ -1,5 +1,6 @@
 package tungus.games.elude.levels.levelselect;
 
+import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 
 import com.badlogic.gdx.Game;
@@ -17,7 +18,9 @@ public class LevelSelectScreen extends BaseScreen {
 	private final float FRUSTUM_WIDTH;
 	private final float FRUSTUM_HEIGHT;
 	private final OrthographicCamera uiCam;
+	private final OrthographicCamera fontCam;
 	private final SpriteBatch uiBatch;
+	private final SpriteBatch fontBatch;
 	
 	private final Vector3 touch3 = new Vector3();
 	private final Vector2 touch2 = new Vector2();
@@ -69,6 +72,7 @@ public class LevelSelectScreen extends BaseScreen {
 	
 	public LevelSelectScreen(Game game, boolean finiteLevels) {
 		super(game);
+		//Assets.font.setScale(1/Assets.font.getXHeight());
 		FRUSTUM_WIDTH = 20;
 		FRUSTUM_HEIGHT = 12;
 		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
@@ -78,13 +82,22 @@ public class LevelSelectScreen extends BaseScreen {
 		uiBatch.setProjectionMatrix(uiCam.combined);
 		Gdx.input.setInputProcessor(new GestureDetector(listener));
 		grid = new GridPanel(50, finiteLevels);
+		fontCam = new OrthographicCamera(800f,480f);
+		fontCam.position.set(400f, 240f, 0);
+		fontCam.update();
+		fontBatch = new SpriteBatch();
+		fontBatch.setProjectionMatrix(fontCam.combined);
 	}
 	
 	@Override
 	public void render(float deltaTime) {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		uiBatch.begin();
-		grid.render(uiBatch, deltaTime);
+		grid.render(uiBatch, deltaTime, false);
+		
 		uiBatch.end();
+		fontBatch.begin();
+		grid.render(fontBatch, deltaTime, true);
+		fontBatch.end();
 	}
 }

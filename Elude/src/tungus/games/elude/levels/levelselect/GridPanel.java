@@ -156,7 +156,7 @@ public class GridPanel {
 		flingSpeed = 0;
 	}
 	
-	public void render(SpriteBatch batcher, float deltaTime) {
+	public void render(SpriteBatch uiBatch, float deltaTime, boolean text) {
 		time += deltaTime;
 		stateTime += deltaTime;
 		if (state == STATE_SELECTIONSWITCH && stateTime > SELECTIONSWITCH_TIME) {
@@ -190,7 +190,7 @@ public class GridPanel {
 			if (distanceFromMiddle > (ACTIVE_COL_LEN-1)/2+3) 		// Row out of view
 				continue;
 			else if (distanceFromMiddle <= (ACTIVE_COL_LEN-1)/2) 	// Row in the active area, not rotated
-				drawRow(TOP_LEFT.y-(i-middleRow+1)*BUTTON_DIST, 1, i*ROW_LEN, 1, 1, batcher);
+				drawRow(TOP_LEFT.y-(i-middleRow+1)*BUTTON_DIST, 1, i*ROW_LEN, 1, 1, uiBatch, text);
 			else {				 				// Row rotating/rotated on the edge
 				float degrees = (distanceFromMiddle-1)*30; // Degrees rotated: between 0 (facing us) and 90 (out of view)
 				float scaleY = MathUtils.cosDeg(degrees);
@@ -200,37 +200,37 @@ public class GridPanel {
 						TOP_LEFT.y - (ACTIVE_COL_LEN-1)*BUTTON_DIST - offset;	// Below the bottom row
 				float s = Math.max(INACTIVE_SAT, 1-degrees/30*(1-INACTIVE_SAT));
 				float v = Math.max(INACTIVE_V, 1-degrees/30*(1-INACTIVE_V));
-				drawRow(posY, scaleY, i*ROW_LEN, s, v, batcher);
+				drawRow(posY, scaleY, i*ROW_LEN, s, v, uiBatch, text);
 			}
 		}
 	}
 	
-	private void drawRow(float yPos, float scaleY, int level, float s, float v, SpriteBatch batcher) {
+	private void drawRow(float yPos, float scaleY, int level, float s, float v, SpriteBatch batcher, boolean text) {
 		for (int i = 0; i < ROW_LEN; i++) {
 			setColor(level/ROW_LEN + level%ROW_LEN, s, v);
-			Sprite sprite = buttons[level];
-			sprite.setPosition(sprite.getX(), yPos-BUTTON_DRAW_SIZE/2);
-			sprite.setColor(rgba[0], rgba[1], rgba[2], rgba[3]);
-			sprite.setScale(1, scaleY);
+			LevelButton button = buttons[level];
+			button.setPosition(button.getX(), yPos-BUTTON_DRAW_SIZE/2);
+			button.setColor(rgba[0], rgba[1], rgba[2], rgba[3]);
+			button.setScale(1, scaleY);
 			if (level == selected) {
 				if (state != STATE_SELECTIONSWITCH) {
-					sprite.setScale(sprite.getScaleX()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE, sprite.getScaleY()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE);
-					sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT);
+					button.setScale(button.getScaleX()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE, button.getScaleY()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE);
+					button.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT);
 				} else {
 					float complete = stateTime / SELECTIONSWITCH_TIME;
 					float size = BUTTON_DRAW_SIZE + complete*(SELECTED_DRAW_SIZE-BUTTON_DRAW_SIZE);
-					sprite.setScale(sprite.getScaleX()*size/BUTTON_DRAW_SIZE, sprite.getScaleY()*size/BUTTON_DRAW_SIZE);
-					sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
+					button.setScale(button.getScaleX()*size/BUTTON_DRAW_SIZE, button.getScaleY()*size/BUTTON_DRAW_SIZE);
+					button.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
 				}
 			} else if (level == prevSelected) {
 				float complete = 1 - stateTime / SELECTIONSWITCH_TIME;
 				float size = BUTTON_DRAW_SIZE + complete*(SELECTED_DRAW_SIZE-BUTTON_DRAW_SIZE);
-				sprite.setScale(sprite.getScaleX()*size/BUTTON_DRAW_SIZE, sprite.getScaleY()*size/BUTTON_DRAW_SIZE);
-				sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
+				button.setScale(button.getScaleX()*size/BUTTON_DRAW_SIZE, button.getScaleY()*size/BUTTON_DRAW_SIZE);
+				button.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
 			} else {
-				sprite.setRotation(0);
+				button.setRotation(0);
 			}
-			sprite.draw(batcher);
+			button.draw(batcher, text);
 			level++;
 		}
 		
