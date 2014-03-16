@@ -8,7 +8,7 @@ import tungus.games.elude.BaseScreen;
 import tungus.games.elude.WorldRenderer;
 import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
-import tungus.games.elude.game.input.mobile.SwipeDirControl;
+import tungus.games.elude.game.input.mobile.TapToTargetControls;
 import tungus.games.elude.levels.LevelSelectScreen;
 
 import com.badlogic.gdx.Application.ApplicationType;
@@ -64,7 +64,7 @@ public class GameScreen extends BaseScreen {
 			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
 				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
 			} else {
-				controls.add(new SwipeDirControl(interfaceCamera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
+				controls.add(new TapToTargetControls(renderer.camera, world.vessels.get(i).pos));
 			}				
 			dirs[i] = controls.get(i).getDir();
 

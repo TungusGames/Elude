@@ -24,7 +24,7 @@ public class SwipeDirControl implements Controls {
 	private static final float MAX_SQUARED_DIFF = 0.1f;
 	private static final float MAX_SQUARED_DIFF2 = 1f;
 	
-	public SwipeDirControl(OrthographicCamera cam, float frustumWidth, float frustumHeight) {
+	public SwipeDirControl(OrthographicCamera cam) {
 		this.interfaceCamera = cam;
 	}
 

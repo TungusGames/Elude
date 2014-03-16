@@ -10,7 +10,7 @@ public class WorldRenderer {
 
 	private World world;
 	private SpriteBatch batch;
-	private OrthographicCamera camera;
+	public OrthographicCamera camera;
 	
 	public WorldRenderer(World world) {
 		this.world = world;
