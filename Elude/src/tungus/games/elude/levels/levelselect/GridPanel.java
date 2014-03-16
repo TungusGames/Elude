@@ -2,6 +2,7 @@ package tungus.games.elude.levels.levelselect;
 
 import tungus.games.elude.Assets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -14,22 +15,33 @@ public class GridPanel {
 	public static final int STATE_SELECTIONSWITCH = 1;
 	
 	private static final int ROW_LEN = 5;
-	private static final int COL_LEN = 3;
-	private static final Vector2 TOP_LEFT = new Vector2(2,7);
+	private static final int ACTIVE_COL_LEN = 3;
+	private static final Vector2 TOP_LEFT = new Vector2(3,8);
 	private static final float BUTTON_TOUCH_SIZE = 2;
+	private static final float BUTTON_DIST = 2;
 	private static final float BUTTON_DRAW_SIZE = 1.7f;
 	private static final float SELECTED_DRAW_SIZE = 2f;
 	private static final float SELECTED_MAX_ROT = 10;
+	private static final float SELECTIONSWITCH_TIME = 0.6f;
+	private static final float ROW_SNAP_SPEED = 1.3f;
+	private static final float FLING_DECEL = 10;
 	
-	private static final float SELECTIONSWITCH_TIME = 1.5f;
+	private static final float ROT_CENTER_DIST = MathUtils.cosDeg(15) / MathUtils.sinDeg(15) / 2 * BUTTON_DIST; // Don't try to understand..	
+	private static final float INACTIVE_SAT = 0.75f;
+	private static final float INACTIVE_V = 0.25f;
 	
-	private final Rectangle[] buttons;
-	private final Sprite[] buttonSprites;
+	private final int totalLevels;
+	private final int totalRows;
+	
+	private final Rectangle[] buttonTouchAreas;
+	private final Rectangle allButtons;
+	private final LevelButton[] buttons;
 	
 	private int selected = -1;
 	private int prevSelected = -1;
 	
-	private float rowOffset = 0;
+	private float middleRow = 1f;
+	private float touchedRow = -1;
 	
 	private final float[] rgba = new float[4];
 	
@@ -37,31 +49,111 @@ public class GridPanel {
 	private float stateTime = 0;
 	
 	public int state = STATE_IDLE;
+	private boolean panning = false;
+	private boolean flinging = false;
+	private float flingSpeed = 0;
 	
-	public GridPanel() {
-		buttons = new Rectangle[ROW_LEN * COL_LEN];
-		for (int i = 0; i < buttons.length; i++) {
-			buttons[i] = new Rectangle(i%5*2 + TOP_LEFT.x, -i/5*2+TOP_LEFT.y, BUTTON_TOUCH_SIZE, BUTTON_TOUCH_SIZE);
+	
+	public GridPanel(int levels, boolean finite) {
+		totalLevels = levels;
+		totalRows = levels / ROW_LEN;
+		if (levels % ROW_LEN != 0)
+			Gdx.app.log("LevelSelect", "Bad level count - not divisible by " + ROW_LEN);
+		int visibleButtons = ROW_LEN * ACTIVE_COL_LEN;
+		buttonTouchAreas = new Rectangle[visibleButtons];
+		for (int i = 0; i < visibleButtons; i++) {
+			buttonTouchAreas[i] = new Rectangle(i%ROW_LEN*BUTTON_DIST + TOP_LEFT.x - BUTTON_TOUCH_SIZE/2, 
+												-i/ROW_LEN*BUTTON_DIST+TOP_LEFT.y  - BUTTON_TOUCH_SIZE/2, 
+												BUTTON_TOUCH_SIZE, BUTTON_TOUCH_SIZE);
 		}
-		buttonSprites = new Sprite[ROW_LEN * COL_LEN];
-		for (int i = 0; i < buttonSprites.length; i++) {
-			buttonSprites[i] = new Sprite(Assets.frame);
-			buttonSprites[i].setBounds(buttons[i].x, buttons[i].y, BUTTON_DRAW_SIZE, BUTTON_DRAW_SIZE);
-			buttonSprites[i].setOrigin(BUTTON_DRAW_SIZE/2, BUTTON_DRAW_SIZE/2);
+		buttons = new LevelButton[totalLevels];
+		allButtons = new Rectangle(TOP_LEFT.x-BUTTON_DIST/2, 0, ROW_LEN*BUTTON_DIST, 12);
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = new LevelButton(i, finite);
+			buttons[i].setBounds(buttonTouchAreas[i%visibleButtons].x, buttonTouchAreas[i%visibleButtons].y, BUTTON_DRAW_SIZE, BUTTON_DRAW_SIZE);
+			buttons[i].setOrigin(BUTTON_DRAW_SIZE/2, BUTTON_DRAW_SIZE/2);
 		}
 	}
 	
 	public void tapped(float x, float y) {
-		int s = buttons.length;
+		int s = buttonTouchAreas.length;
 		for (int i = 0; i < s; i++) {
-			if (buttons[i].contains(x, y)) {
+			if (buttonTouchAreas[i].contains(x, y)) {
 				prevSelected = selected;
-				selected = i;
+				selected = i + (Math.round(middleRow)-1)*ROW_LEN;
 				state = STATE_SELECTIONSWITCH;
 				stateTime = 0;
 				break;
 			}
 		}
+	}
+	
+	public void calcTouchedRow(float x, float y) {
+		if (allButtons.contains(x, y)) {
+			float middleRowY = TOP_LEFT.y - BUTTON_DIST;
+			float diff = Math.abs(middleRowY-y);
+			if (diff <= BUTTON_DIST) {
+				touchedRow = middleRow + (middleRowY-y)/BUTTON_DIST;
+			} else {
+				diff -= BUTTON_DIST;
+				if (diff >= ROT_CENTER_DIST) {
+					touchedRow = -1;
+					return;
+				}
+				diff /= ROT_CENTER_DIST;
+				float rot = (float)Math.asin(diff)*MathUtils.radiansToDegrees;
+				float offset = rot / 30f;
+				if (y > middleRowY)
+					touchedRow = middleRow-1-offset;
+				else
+					touchedRow = middleRow+1+offset;
+			}
+		} else
+			touchedRow = -1;
+	}
+	
+	public void pan(float x, float y) {
+		if (!panning) {
+			panning = true;
+			calcTouchedRow(x, y);
+		}
+		if (touchedRow == -1)
+			return;
+		float middleRowY = TOP_LEFT.y - BUTTON_DIST;
+		float diff = Math.abs(middleRowY-y);
+		if (diff <= BUTTON_DIST) {
+			middleRow = touchedRow + (y-middleRowY)/BUTTON_DIST;
+		} else {
+			diff -= BUTTON_DIST;
+			if (diff >= ROT_CENTER_DIST)
+				return;
+			diff /= ROT_CENTER_DIST;
+			float rot = (float)Math.asin(diff)*MathUtils.radiansToDegrees;
+			float offset = rot / 30f;
+			if (y > middleRowY)
+				middleRow = touchedRow+offset+1;
+			else
+				middleRow = touchedRow-offset-1;
+		}
+		middleRow = MathUtils.clamp(middleRow, 1, totalRows-2);
+	}
+	
+	public void panStop(float x, float y) {
+		panning = false;
+		if (allButtons.contains(x, y))
+			flinging = true;
+	}
+	
+	public void fling(float velY) {
+		if (flinging) {
+			flingSpeed = velY/4;
+			Gdx.app.log("fling", ""+velY);
+		}
+	}
+	
+	public void stopFling() {
+		flinging = false;
+		flingSpeed = 0;
 	}
 	
 	public void render(SpriteBatch batcher, float deltaTime) {
@@ -73,48 +165,94 @@ public class GridPanel {
 			prevSelected = -1;
 		}
 		
-		for (int i = 0; i < ROW_LEN; i++) {
-			for (int j = 0; j < COL_LEN; j++) {
-				setColor(i+j, 1);
-				int n = j*ROW_LEN + i;
-				Sprite sprite = buttonSprites[n];
-				sprite.setColor(rgba[0], rgba[1], rgba[2], rgba[3]);
-				if (n == selected) {
-					if (state != STATE_SELECTIONSWITCH) {
-						sprite.setScale(SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE);
-						sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT);
-					} else {
-						float complete = stateTime / SELECTIONSWITCH_TIME;
-						float size = BUTTON_DRAW_SIZE + complete*(SELECTED_DRAW_SIZE-BUTTON_DRAW_SIZE);
-						sprite.setScale(size/BUTTON_DRAW_SIZE);
-						sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
-					}
-				} else if (n == prevSelected) {
-					float complete = 1 - stateTime / SELECTIONSWITCH_TIME;
-					float size = BUTTON_DRAW_SIZE + complete*(SELECTED_DRAW_SIZE-BUTTON_DRAW_SIZE);
-					sprite.setScale(size/BUTTON_DRAW_SIZE);
-					sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
-				}
-				sprite.draw(batcher);
+		if (middleRow % 1 != 0 && !panning && !flinging) {
+			int goal = Math.round(middleRow);
+			if (Math.abs(goal-middleRow) < deltaTime*ROW_SNAP_SPEED) {
+				middleRow = goal;
+			} else {
+				middleRow += deltaTime*ROW_SNAP_SPEED* (goal > middleRow ? 1 : -1);
+			}
+		}
+		
+		if (flinging) {
+			if (deltaTime*FLING_DECEL > Math.abs(flingSpeed)) {
+				flingSpeed = 0;
+				flinging = false;
+			} else {
+				flingSpeed -= deltaTime*FLING_DECEL*Math.signum(flingSpeed);
+			}
+			middleRow += flingSpeed*deltaTime;
+			middleRow = MathUtils.clamp(middleRow, 1, totalRows-2);
+		}
+		
+		for (int i = 0; i < totalRows; i++) {
+			float distanceFromMiddle = Math.abs(middleRow-i); 
+			if (distanceFromMiddle > (ACTIVE_COL_LEN-1)/2+3) 		// Row out of view
+				continue;
+			else if (distanceFromMiddle <= (ACTIVE_COL_LEN-1)/2) 	// Row in the active area, not rotated
+				drawRow(TOP_LEFT.y-(i-middleRow+1)*BUTTON_DIST, 1, i*ROW_LEN, 1, 1, batcher);
+			else {				 				// Row rotating/rotated on the edge
+				float degrees = (distanceFromMiddle-1)*30; // Degrees rotated: between 0 (facing us) and 90 (out of view)
+				float scaleY = MathUtils.cosDeg(degrees);
+				float offset = MathUtils.sinDeg(degrees)*ROT_CENTER_DIST;
+				float posY = (i < middleRow) ? 
+						TOP_LEFT.y+offset :										// Above the top row 
+						TOP_LEFT.y - (ACTIVE_COL_LEN-1)*BUTTON_DIST - offset;	// Below the bottom row
+				float s = Math.max(INACTIVE_SAT, 1-degrees/30*(1-INACTIVE_SAT));
+				float v = Math.max(INACTIVE_V, 1-degrees/30*(1-INACTIVE_V));
+				drawRow(posY, scaleY, i*ROW_LEN, s, v, batcher);
 			}
 		}
 	}
 	
+	private void drawRow(float yPos, float scaleY, int level, float s, float v, SpriteBatch batcher) {
+		for (int i = 0; i < ROW_LEN; i++) {
+			setColor(level/ROW_LEN + level%ROW_LEN, s, v);
+			Sprite sprite = buttons[level];
+			sprite.setPosition(sprite.getX(), yPos-BUTTON_DRAW_SIZE/2);
+			sprite.setColor(rgba[0], rgba[1], rgba[2], rgba[3]);
+			sprite.setScale(1, scaleY);
+			if (level == selected) {
+				if (state != STATE_SELECTIONSWITCH) {
+					sprite.setScale(sprite.getScaleX()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE, sprite.getScaleY()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE);
+					sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT);
+				} else {
+					float complete = stateTime / SELECTIONSWITCH_TIME;
+					float size = BUTTON_DRAW_SIZE + complete*(SELECTED_DRAW_SIZE-BUTTON_DRAW_SIZE);
+					sprite.setScale(sprite.getScaleX()*size/BUTTON_DRAW_SIZE, sprite.getScaleY()*size/BUTTON_DRAW_SIZE);
+					sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
+				}
+			} else if (level == prevSelected) {
+				float complete = 1 - stateTime / SELECTIONSWITCH_TIME;
+				float size = BUTTON_DRAW_SIZE + complete*(SELECTED_DRAW_SIZE-BUTTON_DRAW_SIZE);
+				sprite.setScale(sprite.getScaleX()*size/BUTTON_DRAW_SIZE, sprite.getScaleY()*size/BUTTON_DRAW_SIZE);
+				sprite.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
+			} else {
+				sprite.setRotation(0);
+			}
+			sprite.draw(batcher);
+			level++;
+		}
+		
+	}
+	
 	private static final float COLOR_CYCLE_TIME = 8f;	
-	private float[] setColor(float i, float a) {
+	private float[] setColor(float i, float s, float v) {
 		float f = time + i/2;
-		rgba[0] = rgbComponent(f);
-		rgba[1] = rgbComponent(f + COLOR_CYCLE_TIME/3);
-		rgba[2] = rgbComponent(f - COLOR_CYCLE_TIME/3);
-		rgba[3] = a;
+		rgba[0] = rgbComponent(f, s, v);
+		rgba[1] = rgbComponent(f + COLOR_CYCLE_TIME/3, s, v);
+		rgba[2] = rgbComponent(f - COLOR_CYCLE_TIME/3, s, v);
+		rgba[3] = 1;
 		
 		return rgba;
 	}
 	
-	private float rgbComponent(float f) {
-		f = f % COLOR_CYCLE_TIME / COLOR_CYCLE_TIME * 6;
+	private float rgbComponent(float h, float s, float v) { // HSV to RGB for one component (the three components have to be offset by 120 degrees of hue)
+		float f = h % COLOR_CYCLE_TIME / COLOR_CYCLE_TIME * 6;
 		f = Math.abs(f-3);
 		f = MathUtils.clamp(f-1, 0, 1);
+		f *= v;
+		f += v*(1-s);
 		return f;
 	}
 
