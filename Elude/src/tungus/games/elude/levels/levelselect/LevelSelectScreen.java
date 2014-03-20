@@ -2,6 +2,7 @@ package tungus.games.elude.levels.levelselect;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.levels.scoredata.ScoreData;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -26,14 +27,16 @@ public class LevelSelectScreen extends BaseScreen {
 	private final Vector2 touch2 = new Vector2();
 	
 	private final GridPanel grid;
-	private final DetailsPanel details = new DetailsPanel();
+	private final DetailsPanel details;
 	
 	private final GestureAdapter listener = new GestureAdapter() {
 		@Override
 		public boolean tap(float x, float y, int count, int button) {
 			touch3.set(x, y, 0);
 			uiCam.unproject(touch3);
-			grid.tapped(touch3.x, touch3.y);
+			if (grid.tapped(touch3.x, touch3.y)) {
+				details.switchTo(grid.selected);
+			}
 			return true;
 		}
 		
@@ -81,7 +84,8 @@ public class LevelSelectScreen extends BaseScreen {
 		uiBatch = new SpriteBatch();
 		uiBatch.setProjectionMatrix(uiCam.combined);
 		Gdx.input.setInputProcessor(new GestureDetector(listener));
-		grid = new GridPanel(50, finiteLevels);
+		grid = new GridPanel(finiteLevels ? ScoreData.playerFiniteScore.size() : ScoreData.playerArcadeScore.size(), finiteLevels);
+		details = new DetailsPanel(finiteLevels);
 		fontCam = new OrthographicCamera(800f,480f);
 		fontCam.position.set(400f, 240f, 0);
 		fontCam.update();

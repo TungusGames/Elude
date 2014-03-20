@@ -1,6 +1,7 @@
 package tungus.games.elude.levels.levelselect;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.levels.scoredata.ScoreData;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -37,7 +38,7 @@ public class GridPanel {
 	private final Rectangle allButtons;
 	private final LevelButton[] buttons;
 	
-	private int selected = -1;
+	public int selected = -1;
 	private int prevSelected = -1;
 	
 	private float middleRow = 1f;
@@ -68,24 +69,35 @@ public class GridPanel {
 		}
 		buttons = new LevelButton[totalLevels];
 		allButtons = new Rectangle(TOP_LEFT.x-BUTTON_DIST/2, 0, ROW_LEN*BUTTON_DIST, 12);
+		int openLeft = 3;
 		for (int i = 0; i < buttons.length; i++) {
-			buttons[i] = new LevelButton(i, finite);
+			boolean open = finite ? ScoreData.playerFiniteScore.get(i).completed : true;
+			if (!open && openLeft > 0) {
+				openLeft--;
+				open = true;
+			}
+			buttons[i] = new LevelButton(i, finite, open);
 			buttons[i].setBounds(buttonTouchAreas[i%visibleButtons].x, buttonTouchAreas[i%visibleButtons].y, BUTTON_DRAW_SIZE, BUTTON_DRAW_SIZE);
 			buttons[i].setOrigin(BUTTON_DRAW_SIZE/2, BUTTON_DRAW_SIZE/2);
 		}
 	}
 	
-	public void tapped(float x, float y) {
+	public boolean tapped(float x, float y) {
 		int s = buttonTouchAreas.length;
 		for (int i = 0; i < s; i++) {
 			if (buttonTouchAreas[i].contains(x, y)) {
+				int newSelected = i + (Math.round(middleRow)-1)*ROW_LEN;
+				if (!buttons[newSelected].open || newSelected == selected) {
+					return false;
+				}
 				prevSelected = selected;
-				selected = i + (Math.round(middleRow)-1)*ROW_LEN;
+				selected = newSelected;
 				state = STATE_SELECTIONSWITCH;
 				stateTime = 0;
-				break;
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void calcTouchedRow(float x, float y) {
@@ -212,6 +224,7 @@ public class GridPanel {
 			button.setPosition(button.getX(), yPos-BUTTON_DRAW_SIZE/2);
 			button.setColor(rgba[0], rgba[1], rgba[2], rgba[3]);
 			button.setScale(1, scaleY);
+			button.setStarAlpha(v);
 			if (level == selected) {
 				if (state != STATE_SELECTIONSWITCH) {
 					button.setScale(button.getScaleX()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE, button.getScaleY()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE);

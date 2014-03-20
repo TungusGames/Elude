@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class ScoreData {
 	public static class FiniteLevelScore implements Serializable {
@@ -37,11 +38,16 @@ public class ScoreData {
 	public static List<FiniteLevelScore[]> finiteMedals;
 	public static List<ArcadeLevelScore[]> arcadeMedals;
 	
+	private static FileHandle medalFinite = Gdx.files.internal("medals/finite.score");
+	private static FileHandle medalArcade = Gdx.files.internal("medals/arcade.score");
+	private static FileHandle playerFinite = Gdx.files.local("scores/finite.score");
+	private static FileHandle playerArcade = Gdx.files.local("scores/arcade.score");
+	
 	@SuppressWarnings("unchecked")
-	public static void load(FileHandle playerArcade, FileHandle playerFinite, FileHandle medalsArcade, FileHandle medalsFinite) {
+	public static void load() {
 		try {
-			arcadeMedals = (List<ArcadeLevelScore[]>)(new ObjectInputStream(medalsArcade.read()).readObject());
-			finiteMedals = (List<FiniteLevelScore[]>)(new ObjectInputStream(medalsFinite.read()).readObject());
+			arcadeMedals = (List<ArcadeLevelScore[]>)(new ObjectInputStream(medalArcade.read()).readObject());
+			finiteMedals = (List<FiniteLevelScore[]>)(new ObjectInputStream(medalFinite.read()).readObject());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Badly serialized score file", e);
@@ -56,17 +62,21 @@ public class ScoreData {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			Gdx.app.log("Files", "Badly serialized player score file", e);
-			genPlayerScoreFiles(playerArcade, playerFinite);
+			genPlayerScoreFiles();
 		} catch (IOException e) {
 			e.printStackTrace();
 			Gdx.app.log("Files", "Failed to read player score file", e);
-			genPlayerScoreFiles(playerArcade, playerFinite);
+			genPlayerScoreFiles();
+		} catch (GdxRuntimeException e) {
+			e.printStackTrace();
+			Gdx.app.log("Files", "Failed to read player score file", e);
+			genPlayerScoreFiles();
 		}
 		
 		
 	}
 	
-	private static void genPlayerScoreFiles(FileHandle arcade, FileHandle finite) {
+	private static void genPlayerScoreFiles() {
 		playerArcadeScore = new ArrayList<ArcadeLevelScore>();
 		int s = arcadeMedals.size();
 		for (int i = 0; i < s; i++)
@@ -76,12 +86,13 @@ public class ScoreData {
 		s = finiteMedals.size();
 		for (int i = 0; i < s; i++)
 			playerFiniteScore.add(new FiniteLevelScore());
-		save(arcade, false);
-		save(finite, true);
+		save(false);
+		save(true);
 	}
 	
-	public static void save(FileHandle file, boolean finite) {
+	public static void save(boolean finite) {
 		Object o = finite ? playerFiniteScore : playerArcadeScore;
+		FileHandle file = finite ? playerFinite : playerArcade;
 		ObjectOutputStream out;
 		try {
 			out = new ObjectOutputStream(file.write(false));
@@ -93,10 +104,12 @@ public class ScoreData {
 		}
 	}
 	
-	public int getMedal(boolean finite, boolean time, int levelNum) { // 0: no medal, 1-3: bronze, silver, gold
+	public static int getMedal(boolean finite, boolean time, int levelNum) { // 0: no medal, 1-3: bronze, silver, gold
 		if (finite) {
 			FiniteLevelScore[] medals = finiteMedals.get(levelNum);
 			FiniteLevelScore player = playerFiniteScore.get(levelNum);
+			if (!player.completed)
+				return 0;
 			int i = 0;
 			if (time) {
 				while (player.timeTaken <= medals[i].timeTaken)
