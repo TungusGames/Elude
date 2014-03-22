@@ -89,6 +89,7 @@ public class Vessel extends Sprite {
 		drawWidth = SHIELDED_SIZE;
 		drawHeight = SHIELDED_SIZE;
 		setBounds(pos.x - drawWidth / 2, pos.y - drawHeight / 2, drawWidth, drawHeight);
+		setOrigin(drawWidth/2, drawHeight/2);
 		setRegion(Assets.shieldedVessel);
 	}
 	
@@ -97,6 +98,7 @@ public class Vessel extends Sprite {
 		setRegion(Assets.vessel);
 		drawWidth = DRAW_WIDTH;
 		drawHeight = DRAW_HEIGHT;
+		setOrigin(drawWidth/2, drawHeight/2);
 		setBounds(pos.x - drawWidth / 2, pos.y - drawHeight / 2, drawWidth, drawHeight);
 	}
 }
