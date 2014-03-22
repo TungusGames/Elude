@@ -20,6 +20,7 @@ public class Main {
 	private static float hpDrop = 0.1f;
 	private static float speedDrop = 0.1f;
 	private static float wipeDrop = 0.1f;
+	private static float shieldDrop = 0.1f;
 	
 	private static int levelOffset = 0;
 	
@@ -86,9 +87,10 @@ public class Main {
 		FileOutputStream fileOut = null;
 		Level lvl = new Level();
 		lvl.waves = waves;
-		lvl.hpDropByEnemy = hpDrop;
-		lvl.speedDropByEnemy = speedDrop;
-		lvl.rocketWipeDropByEnemy = wipeDrop;
+		lvl.hpChance = hpDrop;
+		lvl.speedChance = speedDrop;
+		lvl.rocketWipeChance = wipeDrop;
+		lvl.shieldChance = shieldDrop;
 		try {
 			fileOut = new FileOutputStream(num+levelOffset + ".lvl");
 			ObjectOutputStream out;

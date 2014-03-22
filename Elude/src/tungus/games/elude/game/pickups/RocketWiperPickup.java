@@ -8,14 +8,14 @@ import tungus.games.elude.game.rockets.Rocket;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class RocketKillerPickup extends Pickup {
+public class RocketWiperPickup extends Pickup {
 
-	public RocketKillerPickup(World world, Vector2 pos, 
+	public RocketWiperPickup(World world, Vector2 pos, 
 			float lifeTime) {
 		super(world, pos, Assets.smallCircle, lifeTime);
 	}
 
-	public RocketKillerPickup(World world, Vector2 pos) {
+	public RocketWiperPickup(World world, Vector2 pos) {
 		super(world, pos, Assets.smallCircle);
 	}
 

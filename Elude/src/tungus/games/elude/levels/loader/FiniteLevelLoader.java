@@ -33,9 +33,10 @@ public class FiniteLevelLoader extends EnemyLoader {
 
 		private static final long serialVersionUID = 3972235095607047708L;
 		public Deque<Wave> waves;
-		public float hpDropByEnemy;
-		public float speedDropByEnemy;
-		public float rocketWipeDropByEnemy;
+		public float hpChance;
+		public float speedChance;
+		public float rocketWipeChance;
+		public float shieldChance;
 		
 		public static Level levelFromFile(FileHandle file) {
 			try {
@@ -55,8 +56,9 @@ public class FiniteLevelLoader extends EnemyLoader {
 	private float timeSinceLastWave = 0;
 	public float hpLost = 0;
 	
+
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
-		super(world, level.hpDropByEnemy, level.speedDropByEnemy, level.rocketWipeDropByEnemy, levelNum);
+		super(world, level.hpChance, level.speedChance, level.rocketWipeChance, level.shieldChance, levelNum);
 		this.level = level;
 		Wave w = level.waves.removeFirst();
 		int size = w.enemies.size();
