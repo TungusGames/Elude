@@ -25,14 +25,14 @@ public class Main {
 	
 	public static void main(String[] args) {
 		for (levelOffset = 0; levelOffset < 50; levelOffset += 3) {
-			level1();
-			level2();
-			level3();
+		//	level1();
+		//	level2();
+		//	level3();
 		}
 		/*level1();
 		level2();
 		level3();*/
-		writeFiniteMedals();
+		//writeFiniteMedals();
 		writeArcadeMedals();
 	}
 	

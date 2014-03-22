@@ -29,8 +29,13 @@ public abstract class EnemyLoader {
 			if (n == 14) {
 				return new ArcadeLoaderBase(world,n) {
 					{
-						for (int i = 0; i < 30; i++)
-						world.enemies.add(Enemy.newEnemy(world, EnemyType.KAMIKAZE));
+						update(0);
+					}
+					@Override
+					public void update(float deltaTime) {
+						if (world.enemies.size() == 0)
+							for (int i = 0; i < 30; i++)
+								world.enemies.add(Enemy.newEnemy(world, EnemyType.KAMIKAZE));
 					}
 				};
 			} else {
