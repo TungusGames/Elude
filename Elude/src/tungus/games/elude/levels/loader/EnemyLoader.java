@@ -60,7 +60,9 @@ public abstract class EnemyLoader {
 		this.shieldChance = shieldChance;
 	}
 	
-	public void update(float deltaTime) { timeSinceStart += deltaTime; }
+	public void update(float deltaTime) { 
+		timeSinceStart += deltaTime; 
+	}
 	
 	public void onEnemyDead(Enemy e) {
 		float rand = MathUtils.random();

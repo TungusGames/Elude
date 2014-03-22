@@ -26,33 +26,9 @@ public class Kamikaze extends Enemy {
 	
 	public Kamikaze(Vector2 pos, World w) {
 		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.kamikaze, debrisFromColor(new float[]{0.1f,0.1f,0.6f,1}), w);
+		
 		targetPos = new Vector2();
-		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
-		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
-		
-		float move = targetPos.x - pos.x;							// Get how much we can decrease the movement without
-		if (pos.x < World.EDGE || pos.x > World.WIDTH-World.EDGE) {					 	// 		getting out of the "edge" frame
-			float minMove = 0;
-			if (pos.x < World.EDGE)
-				minMove = World.EDGE - pos.x;
-			else if (pos.x > World.WIDTH - World.EDGE) {
-				minMove = World.WIDTH - World.EDGE - pos.x;
-			}
-			move -= minMove;
-		}
-		targetPos.x -= MathUtils.random(move);						// Decrease the movement by up to this value
-		
-		move = targetPos.y - pos.y;									// Do the same for Y
-		if (pos.y < World.EDGE || pos.y > World.HEIGHT-World.EDGE) {
-			float minMove = 0;
-			if (pos.y < World.EDGE)
-				minMove = World.EDGE - pos.y;
-			else if (pos.y > World.HEIGHT - World.EDGE) {
-				minMove = World.HEIGHT - World.EDGE - pos.y;
-			}
-			move -= minMove;
-		}
-		targetPos.y -= MathUtils.random(move);	
+		getInnerTargetPos(pos, targetPos);
 		
 		vel.set(targetPos).sub(pos).nor().scl(SPEED);
 		turnGoal = vel.angle()-90;

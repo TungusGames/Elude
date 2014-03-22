@@ -1,11 +1,10 @@
 package tungus.games.elude.levels.loader.arcade;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.game.enemies.Enemy.EnemyType;
-import tungus.games.elude.levels.loader.EnemyLoader;
+
+import com.badlogic.gdx.math.MathUtils;
 
 public class OneDeadTwoCome extends ArcadeLoaderBase {
 

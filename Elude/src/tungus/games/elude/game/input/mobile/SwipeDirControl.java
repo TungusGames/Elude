@@ -21,7 +21,7 @@ public class SwipeDirControl implements Controls {
 	
 	private boolean touched = false;
 	
-	private static final float MAX_SQUARED_DIFF = 0.1f;
+	//private static final float MAX_SQUARED_DIFF = 0.1f;
 	private static final float MAX_SQUARED_DIFF2 = 1f;
 	
 	public SwipeDirControl(OrthographicCamera cam) {

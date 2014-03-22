@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public abstract class Enemy extends Sprite {
 	
@@ -28,6 +29,36 @@ public abstract class Enemy extends Sprite {
 		return p;
 	}
 	
+	protected final Vector2 getInnerTargetPos(Vector2 pos, Vector2 targetPos) {
+		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
+		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
+		
+		float move = targetPos.x - pos.x;							// Get how much we can decrease the movement without
+		if (pos.x < World.EDGE || pos.x > World.WIDTH-World.EDGE) {					 	// 		getting out of the "edge" frame
+			float minMove = 0;
+			if (pos.x < World.EDGE)
+				minMove = World.EDGE - pos.x;
+			else if (pos.x > World.WIDTH - World.EDGE) {
+				minMove = World.WIDTH - World.EDGE - pos.x;
+			}
+			move -= minMove;
+		}
+		targetPos.x -= MathUtils.random(move);						// Decrease the movement by up to this value
+		
+		move = targetPos.y - pos.y;									// Do the same for Y
+		if (pos.y < World.EDGE || pos.y > World.HEIGHT-World.EDGE) {
+			float minMove = 0;
+			if (pos.y < World.EDGE)
+				minMove = World.EDGE - pos.y;
+			else if (pos.y > World.HEIGHT - World.EDGE) {
+				minMove = World.HEIGHT - World.EDGE - pos.y;
+			}
+			move -= minMove;
+		}
+		targetPos.y -= MathUtils.random(move);
+		return targetPos;
+	}
+	
 	public static final Enemy newEnemy(World w, EnemyType t) {
 		Enemy e = null;
 		switch (t) {
@@ -40,6 +71,8 @@ public abstract class Enemy extends Sprite {
 		case KAMIKAZE:
 			e = new Kamikaze(w.randomPosOutsideEdge(new Vector2(), 1), w);
 			break;
+		default:
+			throw new GdxRuntimeException("Unknown enemy type: " + t);
 		}
 		return e;
 	}
@@ -97,22 +130,13 @@ public abstract class Enemy extends Sprite {
 			if (r != null)
 				emitters.get(i).getAngle().setLow(r.vel.angle());
 			else
-				emitters.get(i).getAngle().setLow(MathUtils.random(360));
+				emitters.get(i).getAngle().setHigh(360);
 		}
 		onDestroy.start();
 		world.particles.add(onDestroy);
 		
 		world.enemies.remove(this);
 		world.waveLoader.onEnemyDead(this);
-		/*if (world.enemies.size() < 5) {
-			world.enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, 13)));
-			world.enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
-		}
-		else {
-			world.enemies.add(this instanceof MovingEnemy ? 
-					new StandingEnemy(new Vector2(MathUtils.random()*20, MathUtils.randomBoolean() ? 13 : -1)) :
-					new MovingEnemy(new Vector2(MathUtils.random()*20, MathUtils.randomBoolean() ? 13 : -1)));
-		}*/
 	}
 	
 }

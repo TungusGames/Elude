@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import tungus.games.elude.Assets;
 import tungus.games.elude.levels.scoredata.ScoreData;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;

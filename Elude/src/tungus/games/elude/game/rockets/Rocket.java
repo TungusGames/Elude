@@ -83,11 +83,12 @@ public abstract class Rocket extends Sprite {
 		
 		size = world.vessels.size();
 		for (int i = 0; i < size; i++) {
-			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle()) 
-					&& !world.vessels.get(i).shielded) {
-				world.vessels.get(i).hp -= dmg;
-				if (world.waveLoader instanceof FiniteLevelLoader)
-					((FiniteLevelLoader)(world.waveLoader)).hpLost += dmg;
+			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle())) {
+				if (!world.vessels.get(i).shielded) {
+					world.vessels.get(i).hp -= dmg;
+					if (world.waveLoader instanceof FiniteLevelLoader)
+						((FiniteLevelLoader)(world.waveLoader)).hpLost += dmg;
+				}
 				kill();
 				return true;
 			}

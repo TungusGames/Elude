@@ -1,6 +1,5 @@
 package tungus.games.elude.levels.levelselect;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
@@ -12,7 +11,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class LevelSelectScreen extends BaseScreen {

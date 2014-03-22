@@ -85,17 +85,6 @@ public class World {
 			}
 		}
 		
-		/*pickupDeltaTime += deltaTime;
-		if (pickupDeltaTime > PICKUP_FREQ)
-		{
-			if (MathUtils.randomBoolean())
-				pickups.add(new HealthPickup(this, new Vector2(MathUtils.random(WIDTH - Pickup.DRAW_SIZE) ,
-								MathUtils.random(HEIGHT - Pickup.DRAW_SIZE))));
-			else pickups.add(new SpeedPickup(this, new Vector2(MathUtils.random(WIDTH - Pickup.DRAW_SIZE) ,
-					MathUtils.random(HEIGHT - Pickup.DRAW_SIZE))));
-			pickupDeltaTime = 0f;
-		}*/
-		
 		waveLoader.update(deltaTime);
 		
 		if (vessels.get(0).hp <= 0 || enemies.size() == 0 && rockets.size() == 0) {

@@ -41,7 +41,6 @@ public class Assets {
 	public static ParticleEffectPool debris;
 	
 	public static void load() {
-		//Texture test = new Texture("test.png");
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
 		
 		vessel = atlas.findRegion("vessel");

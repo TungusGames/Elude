@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class ScoreData {
 	public static class FiniteLevelScore implements Serializable {
+		private static final long serialVersionUID = -7484248790248208142L;
 		public float timeTaken;
 		public float hpLost;
 		public boolean completed;
@@ -22,6 +23,7 @@ public class ScoreData {
 		}
 	}
 	public static class ArcadeLevelScore implements Serializable {
+		private static final long serialVersionUID = 4906372665430662980L;
 		public float timeSurvived;
 		public int enemiesKilled;
 		public boolean tried;
@@ -38,16 +40,16 @@ public class ScoreData {
 	public static List<FiniteLevelScore[]> finiteMedals;
 	public static List<ArcadeLevelScore[]> arcadeMedals;
 	
-	private static FileHandle medalFinite = Gdx.files.internal("medals/finite.score");
-	private static FileHandle medalArcade = Gdx.files.internal("medals/arcade.score");
-	private static FileHandle playerFinite = Gdx.files.local("scores/finite.score");
-	private static FileHandle playerArcade = Gdx.files.local("scores/arcade.score");
+	private static final FileHandle medalFiniteFile = Gdx.files.internal("medals/finite.score");
+	private static final FileHandle medalArcadeFile = Gdx.files.internal("medals/arcade.score");
+	private static final FileHandle playerFiniteFile = Gdx.files.local("scores/finite.score");
+	private static final FileHandle playerArcadeFile = Gdx.files.local("scores/arcade.score");
 	
 	@SuppressWarnings("unchecked")
 	public static void load() {
 		try {
-			arcadeMedals = (List<ArcadeLevelScore[]>)(new ObjectInputStream(medalArcade.read()).readObject());
-			finiteMedals = (List<FiniteLevelScore[]>)(new ObjectInputStream(medalFinite.read()).readObject());
+			arcadeMedals = (List<ArcadeLevelScore[]>)(new ObjectInputStream(medalArcadeFile.read()).readObject());
+			finiteMedals = (List<FiniteLevelScore[]>)(new ObjectInputStream(medalFiniteFile.read()).readObject());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Badly serialized score file", e);
@@ -57,8 +59,8 @@ public class ScoreData {
 		}
 		
 		try {
-			playerArcadeScore = (List<ArcadeLevelScore>)(new ObjectInputStream(playerArcade.read()).readObject());
-			playerFiniteScore = (List<FiniteLevelScore>)(new ObjectInputStream(playerFinite.read()).readObject());
+			playerArcadeScore = (List<ArcadeLevelScore>)(new ObjectInputStream(playerArcadeFile.read()).readObject());
+			playerFiniteScore = (List<FiniteLevelScore>)(new ObjectInputStream(playerFiniteFile.read()).readObject());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			Gdx.app.log("Files", "Badly serialized player score file", e);
@@ -92,7 +94,7 @@ public class ScoreData {
 	
 	public static void save(boolean finite) {
 		Object o = finite ? playerFiniteScore : playerArcadeScore;
-		FileHandle file = finite ? playerFinite : playerArcade;
+		FileHandle file = finite ? playerFiniteFile : playerArcadeFile;
 		ObjectOutputStream out;
 		try {
 			out = new ObjectOutputStream(file.write(false));

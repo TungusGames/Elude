@@ -2,11 +2,9 @@ package tungus.games.elude.game;
 
 import tungus.games.elude.Assets;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public class Vessel extends Sprite {
 
@@ -31,8 +29,7 @@ public class Vessel extends Sprite {
 	public float shieldTime = 0f;
 	public boolean shielded = false;
 	
-	private ParticleEffect particle;
-
+	//TODO particle
 	
 	public Vessel() {
 		super(Assets.vessel);
