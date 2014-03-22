@@ -7,6 +7,7 @@ import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.game.pickups.Pickup;
 import tungus.games.elude.game.rockets.Rocket;
 import tungus.games.elude.levels.loader.EnemyLoader;
+import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.MathUtils;
@@ -34,7 +35,7 @@ public class World {
 	
 	public boolean over = false;
 	
-	public World(int levelNum) {
+	public World(int levelNum, boolean finite) {
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
 		enemies = new ArrayList<Enemy>();
@@ -46,7 +47,7 @@ public class World {
 		//	enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
 		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
-		waveLoader = EnemyLoader.loaderFromLevelNum(this, levelNum);
+		waveLoader = EnemyLoader.loaderFromLevelNum(this, levelNum, finite);
 	}
 	
 	public void update(float deltaTime, Vector2[] dirs) {
@@ -97,8 +98,11 @@ public class World {
 		
 		waveLoader.update(deltaTime);
 		
-		if (vessels.get(0).hp <= 0 || enemies.size() == 0 && rockets.size() == 0)
+		if (vessels.get(0).hp <= 0 || enemies.size() == 0 && rockets.size() == 0) {
 			over = true;
+			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
+				waveLoader.saveScore();
+		}
 	}
 	
 	public Vector2 randomPosOutsideEdge(Vector2 v, float dist) {

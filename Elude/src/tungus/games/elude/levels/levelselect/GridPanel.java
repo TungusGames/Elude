@@ -1,11 +1,10 @@
 package tungus.games.elude.levels.levelselect;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.levels.scoredata.ScoreData;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,12 +16,14 @@ public class GridPanel {
 	
 	private static final int ROW_LEN = 5;
 	private static final int ACTIVE_COL_LEN = 3;
-	private static final Vector2 TOP_LEFT = new Vector2(3,8);
+	private static final Vector2 TOP_LEFT = new Vector2(2f,8);
 	private static final float BUTTON_TOUCH_SIZE = 2;
 	private static final float BUTTON_DIST = 2;
 	private static final float BUTTON_DRAW_SIZE = 1.7f;
 	private static final float SELECTED_DRAW_SIZE = 2f;
 	private static final float SELECTED_MAX_ROT = 10;
+	private static final float SELECTED_FADEOUT_SIZE = 15f;
+	private static final float SELECTED_FADEOUT_ROT = 100f;
 	private static final float SELECTIONSWITCH_TIME = 0.6f;
 	private static final float ROW_SNAP_SPEED = 1.3f;
 	private static final float FLING_DECEL = 10;
@@ -30,6 +31,8 @@ public class GridPanel {
 	private static final float ROT_CENTER_DIST = MathUtils.cosDeg(15) / MathUtils.sinDeg(15) / 2 * BUTTON_DIST; // Don't try to understand..	
 	private static final float INACTIVE_SAT = 0.75f;
 	private static final float INACTIVE_V = 0.25f;
+	
+	private static final Interpolation interp = Interpolation.pow3Out;
 	
 	private final int totalLevels;
 	private final int totalRows;
@@ -40,6 +43,7 @@ public class GridPanel {
 	
 	public int selected = -1;
 	private int prevSelected = -1;
+	private int lastOpenLevel;
 	
 	private float middleRow = 1f;
 	private float touchedRow = -1;
@@ -54,8 +58,12 @@ public class GridPanel {
 	private boolean flinging = false;
 	private float flingSpeed = 0;
 	
+	private float selectedSize = SELECTED_DRAW_SIZE;
+	private float selectedRot = SELECTED_MAX_ROT;
+	
 	
 	public GridPanel(int levels, boolean finite) {
+		rgba[3] = 1;
 		totalLevels = levels;
 		totalRows = levels / ROW_LEN;
 		if (levels % ROW_LEN != 0)
@@ -75,11 +83,15 @@ public class GridPanel {
 			if (!open && openLeft > 0) {
 				openLeft--;
 				open = true;
+				if (openLeft == 0)
+					lastOpenLevel = i;
 			}
 			buttons[i] = new LevelButton(i, finite, open);
 			buttons[i].setBounds(buttonTouchAreas[i%visibleButtons].x, buttonTouchAreas[i%visibleButtons].y, BUTTON_DRAW_SIZE, BUTTON_DRAW_SIZE);
 			buttons[i].setOrigin(BUTTON_DRAW_SIZE/2, BUTTON_DRAW_SIZE/2);
 		}
+		if (openLeft > 0)
+			lastOpenLevel = levels-1;
 	}
 	
 	public boolean tapped(float x, float y) {
@@ -217,6 +229,20 @@ public class GridPanel {
 		}
 	}
 	
+	public void renderLoading(SpriteBatch uiBatch, float deltaTime, boolean text, float ready) {
+		float goalRow = Math.max(lastOpenLevel/5-1, 1);
+		middleRow = interp.apply(totalRows+3, goalRow, ready);
+		render(uiBatch, deltaTime, text);
+	}
+	
+	public void renderEnding(SpriteBatch uiBatch, float deltaTime, boolean text, float ready) {
+		rgba[3] = 1-ready;
+		selectedSize = SELECTED_DRAW_SIZE + ready * (SELECTED_FADEOUT_SIZE-SELECTED_DRAW_SIZE);
+		selectedRot  = SELECTED_MAX_ROT   + ready * (SELECTED_FADEOUT_ROT -SELECTED_DRAW_SIZE);
+		buttons[selected].freezeCompositeScale = true;
+		render(uiBatch, deltaTime, text);
+	}
+	
 	private void drawRow(float yPos, float scaleY, int level, float s, float v, SpriteBatch batcher, boolean text) {
 		for (int i = 0; i < ROW_LEN; i++) {
 			setColor(level/ROW_LEN + level%ROW_LEN, s, v);
@@ -224,22 +250,22 @@ public class GridPanel {
 			button.setPosition(button.getX(), yPos-BUTTON_DRAW_SIZE/2);
 			button.setColor(rgba[0], rgba[1], rgba[2], rgba[3]);
 			button.setScale(1, scaleY);
-			button.setStarAlpha(v);
+			button.setStarAlpha(v*rgba[3]);
 			if (level == selected) {
 				if (state != STATE_SELECTIONSWITCH) {
-					button.setScale(button.getScaleX()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE, button.getScaleY()*SELECTED_DRAW_SIZE/BUTTON_DRAW_SIZE);
-					button.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT);
+					button.setScale(button.getScaleX()*selectedSize/BUTTON_DRAW_SIZE, button.getScaleY()*selectedSize/BUTTON_DRAW_SIZE);
+					button.setRotation(MathUtils.sin(time)*selectedRot);
 				} else {
 					float complete = stateTime / SELECTIONSWITCH_TIME;
-					float size = BUTTON_DRAW_SIZE + complete*(SELECTED_DRAW_SIZE-BUTTON_DRAW_SIZE);
+					float size = BUTTON_DRAW_SIZE + complete*(selectedSize-BUTTON_DRAW_SIZE);
 					button.setScale(button.getScaleX()*size/BUTTON_DRAW_SIZE, button.getScaleY()*size/BUTTON_DRAW_SIZE);
-					button.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
+					button.setRotation(MathUtils.sin(time)*selectedRot * complete);
 				}
 			} else if (level == prevSelected) {
 				float complete = 1 - stateTime / SELECTIONSWITCH_TIME;
-				float size = BUTTON_DRAW_SIZE + complete*(SELECTED_DRAW_SIZE-BUTTON_DRAW_SIZE);
+				float size = BUTTON_DRAW_SIZE + complete*(selectedSize-BUTTON_DRAW_SIZE);
 				button.setScale(button.getScaleX()*size/BUTTON_DRAW_SIZE, button.getScaleY()*size/BUTTON_DRAW_SIZE);
-				button.setRotation(MathUtils.sin(time)*SELECTED_MAX_ROT * complete);
+				button.setRotation(MathUtils.sin(time)*selectedRot * complete);
 			} else {
 				button.setRotation(0);
 			}
@@ -255,7 +281,6 @@ public class GridPanel {
 		rgba[0] = rgbComponent(f, s, v);
 		rgba[1] = rgbComponent(f + COLOR_CYCLE_TIME/3, s, v);
 		rgba[2] = rgbComponent(f - COLOR_CYCLE_TIME/3, s, v);
-		rgba[3] = 1;
 		
 		return rgba;
 	}

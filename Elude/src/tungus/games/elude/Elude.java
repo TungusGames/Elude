@@ -14,9 +14,6 @@ public class Elude extends Game {
 	public void create () {
 		Assets.load();
 		ScoreData.load();
-		ScoreData.playerFiniteScore.get(0).completed = true;
-		ScoreData.playerFiniteScore.get(0).timeTaken = 90f;
-		ScoreData.playerFiniteScore.get(0).hpLost = 110;
 		setScreen(new LevelSelectScreen(this,true));
 		fps = new FPSLogger();
 	}

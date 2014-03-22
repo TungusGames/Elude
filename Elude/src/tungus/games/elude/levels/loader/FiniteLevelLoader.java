@@ -9,6 +9,8 @@ import java.util.List;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.game.enemies.Enemy.EnemyType;
+import tungus.games.elude.levels.scoredata.ScoreData;
+import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
 import com.badlogic.gdx.files.FileHandle;
 
@@ -50,10 +52,11 @@ public class FiniteLevelLoader extends EnemyLoader {
 	}
 	
 	private Level level;
-	private float time = 0;
+	private float timeSinceLastWave = 0;
+	public float hpLost = 0;
 	
-	public FiniteLevelLoader(Level level, World world) {
-		super(world, level.hpDropByEnemy, level.speedDropByEnemy, level.rocketWipeDropByEnemy);
+	public FiniteLevelLoader(Level level, World world, int levelNum) {
+		super(world, level.hpDropByEnemy, level.speedDropByEnemy, level.rocketWipeDropByEnemy, levelNum);
 		this.level = level;
 		Wave w = level.waves.removeFirst();
 		int size = w.enemies.size();
@@ -64,15 +67,25 @@ public class FiniteLevelLoader extends EnemyLoader {
 	
 	@Override
 	public void update(float deltaTime) {
-		time += deltaTime;
+		super.update(deltaTime);
+		timeSinceLastWave += deltaTime;
 		Wave w = level.waves.peek();
-		if (w != null && ((w.timeAfterLast < time && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemies.size())) {
-			time = 0;
+		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemies.size())) {
+			timeSinceLastWave = 0;
 			int size = w.enemies.size();
 			for (int i = 0; i < size; i++) {
 				world.enemies.add(Enemy.newEnemy(world, w.enemies.get(i)));
 			}
 			level.waves.removeFirst();
 		}
+	}
+	
+	@Override
+	public void saveScore() {
+		FiniteLevelScore score = ScoreData.playerFiniteScore.get(levelNum);
+		score.hpLost = score.completed ? Math.min(score.hpLost, hpLost) : hpLost;
+		score.timeTaken = score.completed ? Math.min(score.timeTaken, timeSinceStart) : timeSinceStart;
+		score.completed = true;
+		ScoreData.save(true);
 	}
 }

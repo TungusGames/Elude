@@ -3,10 +3,12 @@ package tungus.games.elude.levels.loader;
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
+import tungus.games.elude.game.enemies.Enemy.EnemyType;
 import tungus.games.elude.game.pickups.HealthPickup;
 import tungus.games.elude.game.pickups.InvulnerabilityPickup;
 import tungus.games.elude.game.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
+import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.levels.loader.arcade.OneDeadTwoCome;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -17,25 +19,40 @@ public abstract class EnemyLoader {
 	protected final float speedChance;
 	protected final float wipeChance;
 	
-	public static EnemyLoader loaderFromLevelNum(World world, int n) {
-		if (n <= 40)
-			return new FiniteLevelLoader(Level.levelFromFile(Assets.levelFile(n)), world);
-		else
-			return new OneDeadTwoCome(world);
+	protected final int levelNum;
+	protected float timeSinceStart;
+	
+	public static EnemyLoader loaderFromLevelNum(World world, int n, boolean finite) {
+		if (finite)
+			return new FiniteLevelLoader(Level.levelFromFile(Assets.levelFile(n+1)), world, n);
+		else {
+			if (n == 14) {
+				return new ArcadeLoaderBase(world,n) {
+					{
+						for (int i = 0; i < 30; i++)
+						world.enemies.add(Enemy.newEnemy(world, EnemyType.KAMIKAZE));
+					}
+				};
+			} else {
+				return new OneDeadTwoCome(world, n);
+			}
+		}
+			
 	}
 	
-	protected EnemyLoader(World w) {
-		this(w, 0, 0, 0);
+	protected EnemyLoader(World w, int levelNum) {
+		this(w, 0, 0, 0, levelNum);
 	}
 	
-	protected EnemyLoader(World w, float hpChance, float speedChance, float wipeChance) {
+	protected EnemyLoader(World w, float hpChance, float speedChance, float wipeChance, int levelNum) {
 		this.world = w;
 		this.hpChance = hpChance;
 		this.speedChance = speedChance;
 		this.wipeChance = wipeChance;
+		this.levelNum = levelNum;
 	}
 	
-	public void update(float deltaTime) {}
+	public void update(float deltaTime) { timeSinceStart += deltaTime; }
 	
 	public void onEnemyDead(Enemy e) {
 		float rand = MathUtils.random();
@@ -46,4 +63,6 @@ public abstract class EnemyLoader {
 		else if ((rand -= speedChance) < wipeChance)
 			world.pickups.add(new InvulnerabilityPickup(world, e.pos));
 	}
+	
+	public abstract void saveScore();
 }

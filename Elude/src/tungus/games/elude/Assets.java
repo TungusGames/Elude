@@ -23,8 +23,12 @@ public class Assets {
 	public static TextureRegion whiteRectangle;
 	public static TextureRegion smallCircle;
 	public static TextureRegion shieldedVessel;
+	
 	public static TextureRegion frame;
+	public static TextureRegion play;
 	public static TextureRegion[] stars = new TextureRegion[4]; // 0: empty, 1: bronze, 2: silver, 3: gold
+	public static TextureRegion[] smallStars = new TextureRegion[4];
+	public static TextureRegion lock;
 	
 	public static BitmapFont font;
 	
@@ -51,11 +55,18 @@ public class Assets {
 		whiteRectangle = atlas.findRegion("whiterect");
 		smallCircle = atlas.findRegion("smallcircle");
 		shieldedVessel = atlas.findRegion("shieldedVessel");
+		
 		frame = atlas.findRegion("frame");
+		play = atlas.findRegion("play");
 		stars[0] = atlas.findRegion("starempty");
 		stars[1] = atlas.findRegion("starbronze");
 		stars[2] = atlas.findRegion("starsilver");
 		stars[3] = atlas.findRegion("stargold");
+		smallStars[0] = atlas.findRegion("starsmallempty");
+		smallStars[1] = atlas.findRegion("starsmallbronze");
+		smallStars[2] = atlas.findRegion("starsmallsilver");
+		smallStars[3] = atlas.findRegion("starsmallgold");
+		lock = atlas.findRegion("lock");
 		
 		font = new BitmapFont(Gdx.files.internal("font/bulletproof.fnt"));
 		

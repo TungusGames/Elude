@@ -112,10 +112,10 @@ public class ScoreData {
 				return 0;
 			int i = 0;
 			if (time) {
-				while (player.timeTaken <= medals[i].timeTaken)
+				while (i < 3 && player.timeTaken <= medals[i].timeTaken)
 					i++;
 			} else {
-				while (player.hpLost <= medals[i].hpLost)
+				while (i < 3 && player.hpLost <= medals[i].hpLost)
 					i++;
 			}
 			return i;
@@ -124,10 +124,10 @@ public class ScoreData {
 			ArcadeLevelScore player = playerArcadeScore.get(levelNum);
 			int i = 0;
 			if (time) {
-				while (player.timeSurvived >= medals[i].timeSurvived)
+				while (i < 3 && player.timeSurvived >= medals[i].timeSurvived)
 					i++;
 			} else {
-				while (player.enemiesKilled <= medals[i].enemiesKilled)
+				while (i < 3 && player.enemiesKilled >= medals[i].enemiesKilled)
 					i++;
 			}
 			return i;

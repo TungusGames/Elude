@@ -21,7 +21,14 @@ public class Main {
 	private static float speedDrop = 0.1f;
 	private static float wipeDrop = 0.1f;
 	
+	private static int levelOffset = 0;
+	
 	public static void main(String[] args) {
+		for (levelOffset = 0; levelOffset < 50; levelOffset += 3) {
+			level1();
+			level2();
+			level3();
+		}
 		/*level1();
 		level2();
 		level3();*/
@@ -60,7 +67,7 @@ public class Main {
 				medals[j] = new ArcadeLevelScore();
 				medals[j].tried = true;
 				medals[j].timeSurvived = 60*j;
-				medals[j].enemiesKilled = 15*j;
+				medals[j].enemiesKilled = 15*(j+1);
 			}
 			list.add(medals);
 		}
@@ -83,7 +90,7 @@ public class Main {
 		lvl.speedDropByEnemy = speedDrop;
 		lvl.rocketWipeDropByEnemy = wipeDrop;
 		try {
-			fileOut = new FileOutputStream(num + ".lvl");
+			fileOut = new FileOutputStream(num+levelOffset + ".lvl");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(lvl);
@@ -91,6 +98,7 @@ public class Main {
 		} catch (IOException e11) {
 			e11.printStackTrace();
 		}
+		waves.clear();
 	}
 
 	public static void level1() {

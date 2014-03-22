@@ -7,10 +7,10 @@ import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.game.enemies.Enemy.EnemyType;
 import tungus.games.elude.levels.loader.EnemyLoader;
 
-public class OneDeadTwoCome extends EnemyLoader {
+public class OneDeadTwoCome extends ArcadeLoaderBase {
 
-	public OneDeadTwoCome(World w) {
-		super(w, 0.05f, 0.05f, 0.05f);
+	public OneDeadTwoCome(World w, int levelNum) {
+		super(w, 0.05f, 0.05f, 0.05f, levelNum);
 		world.enemies.add(Enemy.newEnemy(world, EnemyType.STANDING));
 	}
 	
