@@ -4,6 +4,7 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.game.Vessel;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
+import tungus.games.elude.levels.loader.FiniteLevelLoader;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
@@ -85,6 +86,8 @@ public abstract class Rocket extends Sprite {
 			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle()) 
 					&& !world.vessels.get(i).shielded) {
 				world.vessels.get(i).hp -= dmg;
+				if (world.waveLoader instanceof FiniteLevelLoader)
+					((FiniteLevelLoader)(world.waveLoader)).hpLost += dmg;
 				kill();
 				return true;
 			}

@@ -11,6 +11,8 @@ import java.util.List;
 import tungus.games.elude.game.enemies.Enemy.EnemyType;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Wave;
+import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
+import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
 public class Main {
 
@@ -19,13 +21,68 @@ public class Main {
 	private static float speedDrop = 0.1f;
 	private static float wipeDrop = 0.1f;
 	
+	private static int levelOffset = 0;
+	
 	public static void main(String[] args) {
-		level1();
+		for (levelOffset = 0; levelOffset < 50; levelOffset += 3) {
+		//	level1();
+		//	level2();
+		//	level3();
+		}
+		/*level1();
 		level2();
-		level3();
+		level3();*/
+		//writeFiniteMedals();
+		writeArcadeMedals();
 	}
 	
-	public static void output(int num) {
+	public static void writeFiniteMedals() {
+		List<FiniteLevelScore[]> list = new ArrayList<>();
+		for (int i = 0; i < 50; i++) {
+			FiniteLevelScore[] medals = new FiniteLevelScore[3];
+			for (int j = 0; j < 3; j++) {
+				medals[j] = new FiniteLevelScore();
+				medals[j].completed = true;
+				medals[j].timeTaken = 180 - 60*j;
+				medals[j].hpLost = 150 - 50*j;
+			}
+			list.add(medals);
+		}
+		try {
+			FileOutputStream fileOut = new FileOutputStream("finite.score");
+			ObjectOutputStream out;
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(list);
+			out.close();
+		} catch (IOException e11) {
+			e11.printStackTrace();
+		}
+	}
+	
+	public static void writeArcadeMedals() {
+		List<ArcadeLevelScore[]> list = new ArrayList<>();
+		for (int i = 0; i < 15; i++) {
+			ArcadeLevelScore[] medals = new ArcadeLevelScore[3];
+			for (int j = 0; j < 3; j++) {
+				medals[j] = new ArcadeLevelScore();
+				medals[j].tried = true;
+				medals[j].timeSurvived = 60*j;
+				medals[j].enemiesKilled = 15*(j+1);
+			}
+			list.add(medals);
+		}
+		try {
+			FileOutputStream fileOut = new FileOutputStream("arcade.score");
+			ObjectOutputStream out;
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(list);
+			out.close();
+		} catch (IOException e11) {
+			e11.printStackTrace();
+		}
+	}
+	
+	public static void outputLevel(int num) {
 		FileOutputStream fileOut = null;
 		Level lvl = new Level();
 		lvl.waves = waves;
@@ -33,7 +90,7 @@ public class Main {
 		lvl.speedDropByEnemy = speedDrop;
 		lvl.rocketWipeDropByEnemy = wipeDrop;
 		try {
-			fileOut = new FileOutputStream(num + ".lvl");
+			fileOut = new FileOutputStream(num+levelOffset + ".lvl");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(lvl);
@@ -41,6 +98,7 @@ public class Main {
 		} catch (IOException e11) {
 			e11.printStackTrace();
 		}
+		waves.clear();
 	}
 
 	public static void level1() {
@@ -71,7 +129,7 @@ public class Main {
 		e1.add(EnemyType.MOVING);
 		Wave w1 = new Wave(-1, 2, e1);
 		waves.add(w1);
-		output(1);
+		outputLevel(1);
 	}
 	
 	public static void level2() {
@@ -98,7 +156,7 @@ public class Main {
 			l.add(EnemyType.MOVING);
 		}
 		waves.add(new Wave(-1, 0, l));
-		output(2);
+		outputLevel(2);
 	}
 	
 	private static void level3() {
@@ -144,6 +202,6 @@ public class Main {
 			
 		w = new Wave(-1, 3, e);
 		waves.add(w);
-		output(3);
+		outputLevel(3);
 	}
 }

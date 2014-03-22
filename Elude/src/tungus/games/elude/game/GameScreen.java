@@ -9,7 +9,7 @@ import tungus.games.elude.WorldRenderer;
 import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
 import tungus.games.elude.game.input.mobile.TapToTargetControls;
-import tungus.games.elude.levels.LevelSelectScreen;
+import tungus.games.elude.levels.levelselect.LevelSelectScreen;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -41,11 +41,13 @@ public class GameScreen extends BaseScreen {
 	private Vector2[] dirs;
 	
 	private float timeSinceOver = 0;
-
-	public GameScreen(Game game, int levelNum) {
+	private final boolean finite;
+	
+	public GameScreen(Game game, int levelNum, boolean finite) {
 		super(game);
-
-		world = new World(levelNum);
+		
+		this.finite = finite;
+		world = new World(levelNum, finite);
 		renderer = new WorldRenderer(world);
 		interfaceBatch = new SpriteBatch();
 		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
@@ -90,7 +92,7 @@ public class GameScreen extends BaseScreen {
 		if (world.over) {
 			timeSinceOver += deltaTime;
 			if (timeSinceOver > 3)
-				game.setScreen(new LevelSelectScreen(game));
+				game.setScreen(new LevelSelectScreen(game, !finite));
 		}
 		
 		newTime = TimeUtils.millis();
