@@ -168,6 +168,11 @@ public class GridPanel {
 			flinging = true;
 	}
 	
+	public void scroll(int amount) {
+		middleRow += amount*0.3f;
+		middleRow = MathUtils.clamp(middleRow, 1, totalRows-2);
+	}
+	
 	public void fling(float velY) {
 		if (flinging) {
 			flingSpeed = velY/4;

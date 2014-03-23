@@ -2,9 +2,10 @@ package tungus.games.elude.game.enemies;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.World;
-import tungus.games.elude.game.rockets.TurningRocket;
+import tungus.games.elude.game.rockets.Rocket.RocketType;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -14,7 +15,7 @@ public class Kamikaze extends Enemy {
 	private static final float DRAW_HEIGHT = 0.85f;
 	private static final float COLLIDER_SIZE = 0.6f;
 	
-	private static final float MAX_HP = 10f;
+	private static final float MAX_HP = 4f;
 	private static final float SPEED = 3f;
 	private static final float STANDING_TIME = 4f;
 	private static final int ROCKETS_SHOT = 7;
@@ -25,7 +26,11 @@ public class Kamikaze extends Enemy {
 	private float timeStood = 0;
 	
 	public Kamikaze(Vector2 pos, World w) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.kamikaze, debrisFromColor(new float[]{0.1f,0.1f,0.6f,1}), w);
+		this(pos, w, Assets.kamikaze, RocketType.FAST_TURNING);
+	}
+	
+	public Kamikaze(Vector2 pos, World w, TextureRegion tex, RocketType type) {
+		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, tex, debrisFromColor(new float[]{0.1f,0.1f,0.6f,1}), w, type);
 		
 		targetPos = new Vector2();
 		getInnerTargetPos(pos, targetPos);
@@ -63,8 +68,7 @@ public class Kamikaze extends Enemy {
 		world.particles.add(explosion);
 		
 		for (int i = 0; i < ROCKETS_SHOT; i++) {
-			world.rockets.add(new TurningRocket(this, pos.cpy(), new Vector2(1,0).rotate(MathUtils.random(360)), 
-					world, Assets.rocket, world.vessels.get(0), true));
+			shootRocket(new Vector2(1,0).rotate(MathUtils.random(360)));
 		}
 	}
 

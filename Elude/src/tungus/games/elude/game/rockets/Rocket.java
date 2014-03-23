@@ -11,11 +11,33 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public abstract class Rocket extends Sprite {
 	
+	public static enum RocketType { SLOW_TURNING, FAST_TURNING, LOWGRAV };
+	
 	public static final float ROCKET_SIZE = 0.2f; // For both collision and drawing
-	public static final float DEFAULT_DMG = 5f;
+	public static final float DEFAULT_DMG = 2f;
+	public static final float DEFAULT_LIFE = 10f;
+	
+	public static final Rocket rocketFromType(RocketType t, Enemy origin, Vector2 pos, Vector2 dir, Vessel target, World w) {
+		Rocket r = null;
+		switch(t) {
+		case SLOW_TURNING:
+			r = new TurningRocket(origin, pos, dir, w, null, target);
+			break;
+		case FAST_TURNING:
+			r = new TurningRocket(origin, pos, dir, w, null, target, true);
+			break;
+		case LOWGRAV:
+			r = new LowGravityRocket(origin, pos, dir, w, null, target);
+			break;
+		default:
+			throw new GdxRuntimeException("Unknown rocket type: " + t);
+		}
+		return r;
+	}
 	
 	private World world;
 	private Enemy origin;
@@ -30,14 +52,16 @@ public abstract class Rocket extends Sprite {
 	public final float dmg;
 	
 	private PooledEffect particle;
+	private float life;
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target) {
-		this(origin, pos, dir, world, texture, target, DEFAULT_DMG, null);
+	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, PooledEffect particle) {
+		this(origin, pos, dir, world, texture, target, DEFAULT_DMG, DEFAULT_LIFE, particle);
 	}
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, float dmg, PooledEffect particle) {
-		super(texture);
+	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, float dmg, float life, PooledEffect particle) {
+		super();
 		this.origin = origin;
+		this.life = life;
 		this.pos = pos;
 		this.world = world;
 		setBounds(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
@@ -51,6 +75,11 @@ public abstract class Rocket extends Sprite {
 	}
 	
 	public final boolean update(float deltaTime) {
+		life -= deltaTime;
+		if (life <= 0) {
+			kill();
+			return true;
+		}
 		aiUpdate(deltaTime);
 		updateParticle(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);

@@ -3,6 +3,7 @@ package tungus.games.elude.game.enemies;
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.rockets.Rocket;
+import tungus.games.elude.game.rockets.Rocket.RocketType;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
@@ -16,11 +17,35 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public abstract class Enemy extends Sprite {
 	
-	public static enum EnemyType {STANDING, MOVING, KAMIKAZE};
+	public static enum EnemyType {STANDING, MOVING, KAMIKAZE, STANDING_FAST, MOVING_MATRIX};
 	
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
 	
-	protected final static PooledEffect debrisFromColor(float[] color) {
+	public static final Enemy newEnemy(World w, EnemyType t) {
+		Enemy e = null;
+		switch (t) {
+		case STANDING:
+			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
+			break;
+		case MOVING:
+			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
+			break;
+		case KAMIKAZE:
+			e = new Kamikaze(w.randomPosOutsideEdge(new Vector2(), 1), w);
+			break;
+		case STANDING_FAST:
+			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f);
+			break;
+		case MOVING_MATRIX:
+			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f);
+			break;
+		default:
+			throw new GdxRuntimeException("Unknown enemy type: " + t);
+		}
+		return e;
+	}
+	
+	protected static final PooledEffect debrisFromColor(float[] color) {
 		PooledEffect p = Assets.debris.obtain();
 		Array<ParticleEmitter> emitters = p.getEmitters();
 		for (int i = 0; i < emitters.size; i++) {
@@ -59,25 +84,18 @@ public abstract class Enemy extends Sprite {
 		return targetPos;
 	}
 	
-	public static final Enemy newEnemy(World w, EnemyType t) {
-		Enemy e = null;
-		switch (t) {
-		case STANDING:
-			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
-			break;
-		case MOVING:
-			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
-			break;
-		case KAMIKAZE:
-			e = new Kamikaze(w.randomPosOutsideEdge(new Vector2(), 1), w);
-			break;
-		default:
-			throw new GdxRuntimeException("Unknown enemy type: " + t);
-		}
-		return e;
+	protected final Rocket shootRocket(Vector2 dir) {
+		return shootRocket(rocketType, dir);
+	}
+	
+	protected final Rocket shootRocket(RocketType t, Vector2 dir) {
+		Rocket r = Rocket.rocketFromType(t, this, pos.cpy(), dir, world.vessels.get(0), world);
+		world.rockets.add(r);
+		return r;
 	}
 	
 	protected final World world;
+	protected final RocketType rocketType;
 	
 	public Vector2 pos;
 	public Vector2 vel;
@@ -90,8 +108,10 @@ public abstract class Enemy extends Sprite {
 	
 	public final PooledEffect onDestroy;
 	
-	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture, PooledEffect onDestroy, World w) {
+	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture, PooledEffect onDestroy, World w,
+				 RocketType type) {
 		super(texture);
+		this.rocketType = type;
 		this.pos = pos;
 		this.onDestroy = onDestroy;
 		this.world = w;

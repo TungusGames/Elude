@@ -1,12 +1,10 @@
 package tungus.games.elude.game.enemies;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.Vessel;
 import tungus.games.elude.game.World;
-import tungus.games.elude.game.rockets.LowGravityRocket;
-import tungus.games.elude.game.rockets.Rocket;
-import tungus.games.elude.game.rockets.TurningRocket;
+import tungus.games.elude.game.rockets.Rocket.RocketType;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,7 +15,7 @@ public class MovingEnemy extends Enemy {
 	private static final float DRAW_HEIGHT = 1.05f;
 	private static final float COLLIDER_SIZE = 0.5f;
 	
-	private static final float MAX_HP = 10f;
+	private static final float MAX_HP = 4f;
 	private static final float SPEED = 3f;
 	private static final float MAX_TURNSPEED = 100f;
 	private static final float RELOAD = 2f;
@@ -35,18 +33,26 @@ public class MovingEnemy extends Enemy {
 	private float turnAccel;
 	private float turnInOneDir = 0;
 	
+	private final float speed;
+	private final float reload;
+	
 	private boolean turningRight;
 	
 	private float timeSinceShot = 0;
-	private int shots = 0;
 	
 	public MovingEnemy(Vector2 pos, World w) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, Assets.movingEnemy, debrisFromColor(new float[]{0.1f,1,1,1}), w);
+		this(pos, w, Assets.movingEnemyBlue, RocketType.SLOW_TURNING, SPEED, RELOAD);
+	}
+	
+	public MovingEnemy(Vector2 pos, World w, TextureRegion tex, RocketType type, float speed, float reload) {
+		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, tex, debrisFromColor(new float[]{0.1f,1,1,1}), w, type);
+		this.speed = speed;
+		this.reload = reload;
 		moveBounds = new Rectangle(2*World.EDGE, 2*World.EDGE, World.WIDTH-4*World.EDGE, World.HEIGHT-4*World.EDGE);
 		arrivePos = new Vector2();
 		arrivePos.x = MathUtils.clamp(pos.x, moveBounds.x, moveBounds.width+moveBounds.x);
 		arrivePos.y = MathUtils.clamp(pos.y, moveBounds.y, moveBounds.height+moveBounds.y);
-		vel.set(arrivePos).sub(pos).nor().scl(SPEED);
+		vel.set(arrivePos).sub(pos).nor().scl(speed);
 		turnGoal = vel.angle()-90;
 		setRotation(turnGoal);
 	}
@@ -55,7 +61,7 @@ public class MovingEnemy extends Enemy {
 	protected boolean aiUpdate(float deltaTime) {
 		switch (state) {
 		case STATE_ARRIVING:
-			if (arrivePos.dst2(pos) < SPEED*SPEED*deltaTime*deltaTime) {
+			if (arrivePos.dst2(pos) < speed*speed*deltaTime*deltaTime) {
 				state = STATE_MOVING_INSIDE;
 				turnSpeed = MathUtils.random(-60f, 60f);
 				turnAccel = MathUtils.random(-60f, 60f);
@@ -111,16 +117,9 @@ public class MovingEnemy extends Enemy {
 			}
 			turningRight = (turnSpeed < 0);
 			turnInOneDir += Math.abs(turnSpeed*deltaTime);
-			if (timeSinceShot > RELOAD) {
-				shots++;
-				timeSinceShot -= RELOAD;
-				Vessel target = world.vessels.get(0);
-				Rocket r = null;
-				if (!(shots % 3 == 0))
-					r = new TurningRocket(this, pos.cpy(), new Vector2(target.pos).sub(pos), world, Assets.rocket, target);
-				else
-					r = new LowGravityRocket(this, pos.cpy(), new Vector2(target.pos).sub(pos), world, Assets.rocket, target);
-				world.rockets.add(r);
+			if (timeSinceShot > reload) {
+				timeSinceShot -= reload;
+				shootRocket(world.vessels.get(0).pos.cpy().sub(pos));
 			}
 		}
 		return false;

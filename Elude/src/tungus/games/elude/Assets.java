@@ -14,8 +14,10 @@ public class Assets {
 		
 	public static TextureRegion vessel;	
 	public static TextureRegion rocket;
-	public static TextureRegion standingEnemy;
-	public static TextureRegion movingEnemy;
+	public static TextureRegion standingEnemyGreen;
+	public static TextureRegion standingEnemyRed;
+	public static TextureRegion movingEnemyBlue;
+	public static TextureRegion movingEnemyGreen;
 	public static TextureRegion kamikaze;
 	public static TextureRegion hpBonus;
 	public static TextureRegion speedBonus;
@@ -45,8 +47,10 @@ public class Assets {
 		
 		vessel = atlas.findRegion("vessel");
 		rocket = atlas.findRegion("rocket");
-		standingEnemy = atlas.findRegion("StandingEnemy");
-		movingEnemy = atlas.findRegion("MovingEnemy");
+		standingEnemyGreen = atlas.findRegion("StandingEnemy");
+		standingEnemyRed = atlas.findRegion("StandingEnemyRed");
+		movingEnemyBlue = atlas.findRegion("MovingEnemy");
+		movingEnemyGreen = atlas.findRegion("MovingEnemyGreen");
 		kamikaze = atlas.findRegion("kamikaze");
 		hpBonus = atlas.findRegion("hpbonus");
 		speedBonus = atlas.findRegion("speedbonus");

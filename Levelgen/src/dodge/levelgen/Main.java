@@ -25,11 +25,12 @@ public class Main {
 	private static int levelOffset = 0;
 	
 	public static void main(String[] args) {
-		for (levelOffset = 0; levelOffset < 50; levelOffset += 3) {
+		/*for (levelOffset = 0; levelOffset < 50; levelOffset += 3) {
 			level1();
 			level2();
 			level3();
-		}
+		}*/
+		level4();
 		/*level1();
 		level2();
 		level3();*/
@@ -161,7 +162,7 @@ public class Main {
 		outputLevel(2);
 	}
 	
-	private static void level3() {
+	public static void level3() {
 		ArrayList<EnemyType> e = new ArrayList<EnemyType>();
 		e.add(EnemyType.MOVING);
 		e.add(EnemyType.MOVING);
@@ -205,5 +206,68 @@ public class Main {
 		w = new Wave(-1, 3, e);
 		waves.add(w);
 		outputLevel(3);
+	}
+
+	public static void level4() {
+		ArrayList<EnemyType> e = new ArrayList<>();
+		e.add(EnemyType.MOVING);
+		e.add(EnemyType.MOVING);
+		e.add(EnemyType.MOVING);
+		Wave w = new Wave(-1, 0, e);
+		waves.add(w);
+		
+		e = new ArrayList<>();
+		e.add(EnemyType.MOVING);
+		e.add(EnemyType.MOVING);
+		e.add(EnemyType.MOVING);
+		waves.add(new Wave(10, 2, e));
+		
+		e = new ArrayList<>();
+		e.add(EnemyType.STANDING_FAST);
+		waves.add(new Wave(-1, 0, e));
+		
+		e = new ArrayList<>();
+		e.add(EnemyType.STANDING_FAST);
+		e.add(EnemyType.STANDING_FAST);
+		e.add(EnemyType.STANDING_FAST);
+		waves.add(new Wave(-1, 0, e));
+		
+		e = new ArrayList<>();
+		e.add(EnemyType.MOVING_MATRIX);
+		waves.add(new Wave(-1, 0, e));
+		
+		e = new ArrayList<>();
+		e.add(EnemyType.MOVING_MATRIX);
+		e.add(EnemyType.MOVING_MATRIX);
+		e.add(EnemyType.MOVING_MATRIX);
+		waves.add(new Wave(-1, 0, e));
+		
+		e = new ArrayList<>();
+		e.add(EnemyType.MOVING_MATRIX);
+		e.add(EnemyType.MOVING_MATRIX);
+		e.add(EnemyType.STANDING_FAST);
+		e.add(EnemyType.STANDING_FAST);
+		waves.add(new Wave(-1, 0, e));
+		
+		e = new ArrayList<>();
+		e.add(EnemyType.MOVING_MATRIX);
+		e.add(EnemyType.STANDING_FAST);
+		waves.add(new Wave(8, 2, e));
+		
+		e = new ArrayList<>();
+		e.add(EnemyType.MOVING_MATRIX);
+		e.add(EnemyType.STANDING_FAST);
+		waves.add(new Wave(8, 2, e));
+		
+		e = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			e.add(EnemyType.STANDING);
+			e.add(EnemyType.STANDING_FAST);
+			e.add(EnemyType.MOVING);
+			e.add(EnemyType.MOVING_MATRIX);
+		}
+		waves.add(new Wave(-1, 0, e));
+		
+		outputLevel(4);
 	}
 }

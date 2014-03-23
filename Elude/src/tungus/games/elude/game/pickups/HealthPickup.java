@@ -7,7 +7,9 @@ import tungus.games.elude.game.World;
 import com.badlogic.gdx.math.Vector2;
 
 public class HealthPickup extends Pickup {
-
+	
+	private static final float HEALING = 8f;
+	
 	public HealthPickup(World world, Vector2 pos, float lifeTime) {
 		super(world, pos, Assets.hpBonus, lifeTime);
 	}
@@ -18,7 +20,7 @@ public class HealthPickup extends Pickup {
 	
 	@Override
 	protected void produceEffect(Vessel vessel) {
-		float newhp = vessel.hp + 20f;
+		float newhp = vessel.hp + HEALING;
 		vessel.hp = newhp < Vessel.MAX_HP ? newhp : Vessel.MAX_HP;
 	}
 

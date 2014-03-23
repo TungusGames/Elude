@@ -3,9 +3,13 @@ package tungus.games.elude.levels.levelselect;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
+import tungus.games.elude.menu.PlayMenu;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -90,12 +94,33 @@ public class LevelSelectScreen extends BaseScreen {
 			return false;
 		}
 	};
+	private final InputAdapter otherInput = new InputAdapter() {
+		@Override
+		public boolean keyDown(int keycode) {
+			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
+				game.setScreen(new PlayMenu(game));
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean scrolled(int amount) {
+			if (state == STATE_WORKING) {
+				//grid.scroll(amount);
+				grid.panStop(3, 5);
+				grid.fling(amount*20);
+			}
+			return true;
+		}
+	};
 	private final boolean finite;
 	private int state = STATE_BEGIN;
 	private float stateTime = 0;
 	
 	public LevelSelectScreen(Game game, boolean finiteLevels) {
 		super(game);
+		Gdx.input.setCatchBackKey(true);
 		finite = finiteLevels;
 		FRUSTUM_WIDTH = 20;
 		FRUSTUM_HEIGHT = 12;
@@ -104,7 +129,7 @@ public class LevelSelectScreen extends BaseScreen {
 		uiCam.update();
 		uiBatch = new SpriteBatch();
 		uiBatch.setProjectionMatrix(uiCam.combined);
-		Gdx.input.setInputProcessor(new GestureDetector(listener));
+		Gdx.input.setInputProcessor(new InputMultiplexer(new GestureDetector(listener), otherInput));
 		grid = new GridPanel(finiteLevels ? ScoreData.playerFiniteScore.size() : ScoreData.playerArcadeScore.size(), finiteLevels);
 		details = new DetailsPanel(finiteLevels);
 		fontCam = new OrthographicCamera(800f,480f);

@@ -10,11 +10,13 @@ import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
 import tungus.games.elude.game.input.mobile.TapToTargetControls;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
+import tungus.games.elude.menu.PlayMenu;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -43,8 +45,21 @@ public class GameScreen extends BaseScreen {
 	private float timeSinceOver = 0;
 	private final boolean finite;
 	
+	private InputAdapter listener = new InputAdapter() {
+		@Override
+		public boolean keyDown(int keycode) {
+			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
+				game.setScreen(new LevelSelectScreen(game, finite));
+				return true;
+			}
+			return false;
+		}
+	};
+	
 	public GameScreen(Game game, int levelNum, boolean finite) {
 		super(game);
+		
+		Gdx.input.setInputProcessor(listener);
 		
 		this.finite = finite;
 		world = new World(levelNum, finite);
@@ -92,7 +107,7 @@ public class GameScreen extends BaseScreen {
 		if (world.over) {
 			timeSinceOver += deltaTime;
 			if (timeSinceOver > 3)
-				game.setScreen(new LevelSelectScreen(game, !finite));
+				game.setScreen(new LevelSelectScreen(game, finite));
 		}
 		
 		newTime = TimeUtils.millis();
