@@ -25,7 +25,7 @@ public class MainMenu extends BaseScreen {
 	private OrthographicCamera camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 	private Sound flicker= Gdx.audio.newSound(Assets.neonFlicker);
 	private Sound sound = Gdx.audio.newSound(Assets.neonSound);
-	
+	private boolean paused = false;
 	
 	public MainMenu(Game game) {
 		super(game);
@@ -41,27 +41,29 @@ public class MainMenu extends BaseScreen {
 	}
 	@Override
 	public void render(float deltaTime) {
-		if (Gdx.input.isTouched()) {
-			Screen next = new PlayMenu(game);
-			sound.stop();
-			game.setScreen(next);
-		}
-		spriteBatch.begin();
-		if (logoOffTime <= 0f) {
-			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-			eludeOn.draw(spriteBatch);
-			if (MathUtils.randomBoolean(0.01f)) {
-				logoOffTime = 0.1f;
+		if (!paused) {
+			if (Gdx.input.isTouched()) {
+				Screen next = new PlayMenu(game);
 				sound.stop();
-				flicker.play();
+				game.setScreen(next);
 			}
-		} else {
-			eludeOff.draw(spriteBatch);
-			logoOffTime -= deltaTime;
-			if (logoOffTime <= 0f)
-				sound.loop();
+			spriteBatch.begin();
+			if (logoOffTime <= 0f) {
+				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+				eludeOn.draw(spriteBatch);
+				if (MathUtils.randomBoolean(0.01f)) {
+					logoOffTime = 0.1f;
+					sound.stop();
+					flicker.play();
+				}
+			} else {
+				eludeOff.draw(spriteBatch);
+				logoOffTime -= deltaTime;
+				if (logoOffTime <= 0f)
+					sound.loop();
+			}
+			spriteBatch.end();
 		}
-		spriteBatch.end();
 		/*if (logoOffTime <= 0f)
 			eludeOn.draw(spriteBatch);
 		else eludeOff.draw(spriteBatch);*/
@@ -70,12 +72,14 @@ public class MainMenu extends BaseScreen {
 	@Override
 	public void pause() {
 		sound.pause();
+		paused = true;
 		super.pause();
 	}
 	
 	@Override
 	public void resume() {
 		super.resume();
+		paused = false;
 		sound.resume();
 	}
 }

@@ -6,6 +6,7 @@ import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -114,6 +115,7 @@ public abstract class Rocket extends Sprite {
 		for (int i = 0; i < size; i++) {
 			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle())) {
 				if (!world.vessels.get(i).shielded) {
+					Gdx.input.vibrate(100);
 					world.vessels.get(i).hp -= dmg;
 					if (world.waveLoader instanceof FiniteLevelLoader)
 						((FiniteLevelLoader)(world.waveLoader)).hpLost += dmg;
