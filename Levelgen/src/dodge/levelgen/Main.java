@@ -1,5 +1,6 @@
 package dodge.levelgen;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -7,6 +8,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
 
 import tungus.games.elude.game.enemies.Enemy.EnemyType;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
@@ -17,26 +20,90 @@ import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 public class Main {
 
 	public static Deque<Wave> waves = new ArrayDeque<Wave>();
-	private static float hpDrop = 0.1f;
-	private static float speedDrop = 0.1f;
-	private static float wipeDrop = 0.1f;
-	private static float shieldDrop = 0.1f;
 	
-	private static int levelOffset = 0;
+	private static float hpDrop;
+	private static float speedDrop;
+	private static float wipeDrop;
+	private static float shieldDrop;
+	
+	private static int levelOffset = 1;
+	
+	private static final int NUMBER_OF_LEVELS = 1;
+	
+	private static Scanner sc;
 	
 	public static void main(String[] args) {
-		/*for (levelOffset = 0; levelOffset < 50; levelOffset += 3) {
-			level1();
-			level2();
-			level3();
-		}*/
-		level4();
-		/*level1();
-		level2();
-		level3();*/
-		//writeFiniteMedals();
+		readAndOutputLevels();
+		writeFiniteMedals();
 		writeArcadeMedals();
 	}
+	
+	
+	public static void readAndOutputLevels() {
+		for (int i = 0; i < NUMBER_OF_LEVELS; i++) {
+			try {
+				sc = new Scanner(new File((i+levelOffset) + ".tel"));
+				sc.useLocale(Locale.US);
+				hpDrop = sc.nextFloat();
+				speedDrop = sc.nextFloat();
+				wipeDrop = sc.nextFloat();
+				shieldDrop = sc.nextFloat();
+				while (sc.hasNext()) {
+					if (sc.nextLine() == "wave") {
+						int t = sc.nextInt();
+						int n = sc.nextInt();
+						ArrayList<EnemyType> e = new ArrayList<EnemyType>();
+						do {
+							switch (sc.next()) {
+							case "standing":
+								e.add(EnemyType.STANDING);
+								break;
+							case "moving":
+								e.add(EnemyType.MOVING);
+								break;
+							case "kamikaze":
+								e.add(EnemyType.KAMIKAZE);
+								break;
+							case "standing_fast":
+								e.add(EnemyType.STANDING_FAST);
+								break;
+							case "moving_matrix":
+								e.add(EnemyType.MOVING_MATRIX);
+								break;
+							default:
+								break;
+							}
+						} while (!(sc.nextLine() == "end"));
+						waves.add(new Wave(t, n, e));
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(":("); 
+			}
+			
+			FileOutputStream fileOut = null;
+			Level lvl = new Level();
+			lvl.waves = waves;
+			lvl.hpChance = hpDrop;
+			lvl.speedChance = speedDrop;
+			lvl.rocketWipeChance = wipeDrop;
+			lvl.shieldChance = shieldDrop;
+			try {
+				fileOut = new FileOutputStream(i+levelOffset + ".lvl");
+				ObjectOutputStream out;
+				out = new ObjectOutputStream(fileOut);
+				out.writeObject(lvl);
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			waves.clear();
+		}
+	}
+	
+	
+	
 	
 	public static void writeFiniteMedals() {
 		List<FiniteLevelScore[]> list = new ArrayList<>();
