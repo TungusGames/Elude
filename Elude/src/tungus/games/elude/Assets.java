@@ -12,6 +12,8 @@ public class Assets {
 	
 	public static TextureAtlas atlas;
 		
+	public static TextureRegion eludeTitleOn;
+	public static TextureRegion eludeTitleOff;
 	public static TextureRegion vessel;	
 	public static TextureRegion rocket;
 	public static TextureRegion standingEnemyGreen;
@@ -42,9 +44,14 @@ public class Assets {
 	public static ParticleEffectPool explosion;
 	public static ParticleEffectPool debris;
 	
+	public static FileHandle neonFlicker;
+	public static FileHandle neonSound;
+	
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
 		
+		eludeTitleOn = atlas.findRegion("EludeOn");
+		eludeTitleOff = atlas.findRegion("EludeOff");
 		vessel = atlas.findRegion("vessel");
 		rocket = atlas.findRegion("rocket");
 		standingEnemyGreen = atlas.findRegion("StandingEnemy");
@@ -88,6 +95,9 @@ public class Assets {
 		particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "debris2"), Assets.atlas);
 		debris = new ParticleEffectPool(particle, 10, 100);
+		
+		neonSound = Gdx.files.internal("sounds/neonSound.wav");
+		neonFlicker = Gdx.files.internal("sounds/flicker.wav");
 	}
 	
 	public static FileHandle levelFile(int levelNum) {

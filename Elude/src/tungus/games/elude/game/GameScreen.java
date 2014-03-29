@@ -10,7 +10,6 @@ import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
 import tungus.games.elude.game.input.mobile.TapToTargetControls;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
-import tungus.games.elude.menu.PlayMenu;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
