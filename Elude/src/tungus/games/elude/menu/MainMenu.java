@@ -47,9 +47,9 @@ public class MainMenu extends BaseScreen {
 				sound.stop();
 				game.setScreen(next);
 			}
-			spriteBatch.begin();
+			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			spriteBatch.begin();				
 			if (logoOffTime <= 0f) {
-				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 				eludeOn.draw(spriteBatch);
 				if (MathUtils.randomBoolean(0.01f)) {
 					logoOffTime = 0.1f;
