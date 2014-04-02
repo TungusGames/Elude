@@ -5,6 +5,7 @@ import tungus.games.elude.game.Vessel;
 import tungus.games.elude.game.World;
 import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
+import tungus.games.elude.util.CamShaker;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
@@ -116,6 +117,7 @@ public abstract class Rocket extends Sprite {
 			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle())) {
 				if (!world.vessels.get(i).shielded) {
 					Gdx.input.vibrate(100);
+					CamShaker.INSTANCE.shake(0.65f, 2.5f);
 					world.vessels.get(i).hp -= dmg;
 					if (world.waveLoader instanceof FiniteLevelLoader)
 						((FiniteLevelLoader)(world.waveLoader)).hpLost += dmg;
