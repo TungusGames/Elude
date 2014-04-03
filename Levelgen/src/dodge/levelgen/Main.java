@@ -1,6 +1,7 @@
 package dodge.levelgen;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -27,10 +28,12 @@ public class Main {
 	private static float shieldDrop;
 	
 	private static int levelOffset = 1;
+	private static int n = 0;
 	
-	private static final int NUMBER_OF_LEVELS = 1;
-	
+	private static boolean running = true;
+		
 	private static Scanner sc;
+	
 	
 	public static void main(String[] args) {
 		readAndOutputLevels();
@@ -40,9 +43,10 @@ public class Main {
 	
 	
 	public static void readAndOutputLevels() {
-		for (int i = 0; i < NUMBER_OF_LEVELS; i++) {
+		while (running) {
 			try {
-				sc = new Scanner(new File((i+levelOffset) + ".tel"));
+				System.out.print("Reading file: " + (n+levelOffset) + ".tel ");
+				sc = new Scanner(new File((n+levelOffset) + ".tel"));
 				sc.useLocale(Locale.US);
 				hpDrop = sc.nextFloat();
 				speedDrop = sc.nextFloat();
@@ -77,9 +81,14 @@ public class Main {
 						waves.add(new Wave(t, n, e));
 					}
 				}
+				System.out.println("finished");
+			} catch (FileNotFoundException e) {
+				System.out.println();
+				System.out.println("File not found: " + (n+levelOffset) + ".tel, finished at this file: " + (n+levelOffset-1)  + ".tel");
+				running = false;
+				break;
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println(":("); 
 			}
 			
 			FileOutputStream fileOut = null;
@@ -90,15 +99,18 @@ public class Main {
 			lvl.rocketWipeChance = wipeDrop;
 			lvl.shieldChance = shieldDrop;
 			try {
-				fileOut = new FileOutputStream(i+levelOffset + ".lvl");
+				System.out.print("Writing file: " + (n+levelOffset) + ".lvl ");
+				fileOut = new FileOutputStream((n+levelOffset) + ".lvl");
 				ObjectOutputStream out;
 				out = new ObjectOutputStream(fileOut);
 				out.writeObject(lvl);
 				out.close();
+				System.out.println("finished");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			waves.clear();
+			n++;
 		}
 	}
 	
@@ -151,6 +163,7 @@ public class Main {
 		}
 	}
 	
+	@Deprecated
 	public static void outputLevel(int num) {
 		FileOutputStream fileOut = null;
 		Level lvl = new Level();
@@ -171,6 +184,7 @@ public class Main {
 		waves.clear();
 	}
 
+	@Deprecated
 	public static void level1() {
 		for (int i = 0; i < 5; i++) {
 			ArrayList<EnemyType> e = new ArrayList<EnemyType>();
@@ -202,6 +216,7 @@ public class Main {
 		outputLevel(1);
 	}
 	
+	@Deprecated
 	public static void level2() {
 		for (int i = 0; i < 5; i++) {
 			List<EnemyType> l = new ArrayList<EnemyType>();
@@ -229,6 +244,7 @@ public class Main {
 		outputLevel(2);
 	}
 	
+	@Deprecated
 	public static void level3() {
 		ArrayList<EnemyType> e = new ArrayList<EnemyType>();
 		e.add(EnemyType.MOVING);
@@ -275,6 +291,7 @@ public class Main {
 		outputLevel(3);
 	}
 
+	@Deprecated
 	public static void level4() {
 		ArrayList<EnemyType> e = new ArrayList<>();
 		e.add(EnemyType.MOVING);
