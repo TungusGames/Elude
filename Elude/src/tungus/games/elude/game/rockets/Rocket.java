@@ -118,7 +118,6 @@ public abstract class Rocket extends Sprite {
 			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle())) {
 				if (!world.vessels.get(i).shielded) {
 					Gdx.input.vibrate(100);
-					//world.explosion.play();
 					CamShaker.INSTANCE.shake(0.65f, 2.5f);
 					world.vessels.get(i).hp -= dmg;
 					if (world.waveLoader instanceof FiniteLevelLoader)
@@ -146,6 +145,7 @@ public abstract class Rocket extends Sprite {
 		explosion.setPosition(pos.x, pos.y);
 		explosion.start();
 		world.particles.add(explosion);
+		Assets.explosionSound.play(0.5f);
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);

@@ -12,6 +12,7 @@ public class AndroidLauncher extends AndroidApplication {
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useGL20 = false;
+        cfg.maxSimultaneousSounds = 150;
         
         initialize(new Elude(), cfg);
     }

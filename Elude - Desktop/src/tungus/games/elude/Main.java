@@ -15,6 +15,7 @@ public class Main {
 		cfg.useGL20 = false;
 		cfg.width = 800;
 		cfg.height = 480;
+		cfg.audioDeviceSimultaneousSources = 150;
 		
 		Settings settings = new Settings();
         settings.maxWidth = 1024;

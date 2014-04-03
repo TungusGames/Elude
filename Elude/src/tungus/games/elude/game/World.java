@@ -3,15 +3,12 @@ package tungus.games.elude.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.game.enemies.Enemy;
 import tungus.games.elude.game.pickups.Pickup;
 import tungus.games.elude.game.rockets.Rocket;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -36,7 +33,6 @@ public class World {
 	
 	public final EnemyLoader waveLoader;
 	
-	public Sound explosion;
 	
 	public boolean over = false;
 	
@@ -53,7 +49,6 @@ public class World {
 		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 		waveLoader = EnemyLoader.loaderFromLevelNum(this, levelNum, finite);
-		explosion = Gdx.audio.newSound(Assets.explosionSound);
 	}
 	
 	public void update(float deltaTime, Vector2[] dirs) {
