@@ -1,5 +1,7 @@
 package dodge.levelgen;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -7,6 +9,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
 
 import tungus.games.elude.game.enemies.Enemy.EnemyType;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
@@ -17,26 +21,101 @@ import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 public class Main {
 
 	public static Deque<Wave> waves = new ArrayDeque<Wave>();
-	private static float hpDrop = 0.1f;
-	private static float speedDrop = 0.1f;
-	private static float wipeDrop = 0.1f;
-	private static float shieldDrop = 0.1f;
 	
-	private static int levelOffset = 0;
+	private static float hpDrop;
+	private static float speedDrop;
+	private static float wipeDrop;
+	private static float shieldDrop;
+	
+	private static int levelOffset = 1;
+	private static int n = 0;
+	
+	private static boolean running = true;
+		
+	private static Scanner sc;
+	
 	
 	public static void main(String[] args) {
-		/*for (levelOffset = 0; levelOffset < 50; levelOffset += 3) {
-			level1();
-			level2();
-			level3();
-		}*/
-		level4();
-		/*level1();
-		level2();
-		level3();*/
-		//writeFiniteMedals();
+		readAndOutputLevels();
+		writeFiniteMedals();
 		writeArcadeMedals();
 	}
+	
+	
+	public static void readAndOutputLevels() {
+		while (running) {
+			try {
+				System.out.print("Reading file: " + (n+levelOffset) + ".tel ");
+				sc = new Scanner(new File((n+levelOffset) + ".tel"));
+				sc.useLocale(Locale.US);
+				hpDrop = sc.nextFloat();
+				speedDrop = sc.nextFloat();
+				wipeDrop = sc.nextFloat();
+				shieldDrop = sc.nextFloat();
+				while (sc.hasNext()) {
+					if (sc.nextLine() == "wave") {
+						int t = sc.nextInt();
+						int n = sc.nextInt();
+						ArrayList<EnemyType> e = new ArrayList<EnemyType>();
+						do {
+							switch (sc.next()) {
+							case "standing":
+								e.add(EnemyType.STANDING);
+								break;
+							case "moving":
+								e.add(EnemyType.MOVING);
+								break;
+							case "kamikaze":
+								e.add(EnemyType.KAMIKAZE);
+								break;
+							case "standing_fast":
+								e.add(EnemyType.STANDING_FAST);
+								break;
+							case "moving_matrix":
+								e.add(EnemyType.MOVING_MATRIX);
+								break;
+							default:
+								break;
+							}
+						} while (!(sc.nextLine() == "end"));
+						waves.add(new Wave(t, n, e));
+					}
+				}
+				System.out.println("finished");
+			} catch (FileNotFoundException e) {
+				System.out.println();
+				System.out.println("File not found: " + (n+levelOffset) + ".tel, finished at this file: " + (n+levelOffset-1)  + ".tel");
+				running = false;
+				break;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			FileOutputStream fileOut = null;
+			Level lvl = new Level();
+			lvl.waves = waves;
+			lvl.hpChance = hpDrop;
+			lvl.speedChance = speedDrop;
+			lvl.rocketWipeChance = wipeDrop;
+			lvl.shieldChance = shieldDrop;
+			try {
+				System.out.print("Writing file: " + (n+levelOffset) + ".lvl ");
+				fileOut = new FileOutputStream((n+levelOffset) + ".lvl");
+				ObjectOutputStream out;
+				out = new ObjectOutputStream(fileOut);
+				out.writeObject(lvl);
+				out.close();
+				System.out.println("finished");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			waves.clear();
+			n++;
+		}
+	}
+	
+	
+	
 	
 	public static void writeFiniteMedals() {
 		List<FiniteLevelScore[]> list = new ArrayList<>();
@@ -84,6 +163,7 @@ public class Main {
 		}
 	}
 	
+	@Deprecated
 	public static void outputLevel(int num) {
 		FileOutputStream fileOut = null;
 		Level lvl = new Level();
@@ -104,6 +184,7 @@ public class Main {
 		waves.clear();
 	}
 
+	@Deprecated
 	public static void level1() {
 		for (int i = 0; i < 5; i++) {
 			ArrayList<EnemyType> e = new ArrayList<EnemyType>();
@@ -135,6 +216,7 @@ public class Main {
 		outputLevel(1);
 	}
 	
+	@Deprecated
 	public static void level2() {
 		for (int i = 0; i < 5; i++) {
 			List<EnemyType> l = new ArrayList<EnemyType>();
@@ -162,6 +244,7 @@ public class Main {
 		outputLevel(2);
 	}
 	
+	@Deprecated
 	public static void level3() {
 		ArrayList<EnemyType> e = new ArrayList<EnemyType>();
 		e.add(EnemyType.MOVING);
@@ -208,6 +291,7 @@ public class Main {
 		outputLevel(3);
 	}
 
+	@Deprecated
 	public static void level4() {
 		ArrayList<EnemyType> e = new ArrayList<>();
 		e.add(EnemyType.MOVING);
