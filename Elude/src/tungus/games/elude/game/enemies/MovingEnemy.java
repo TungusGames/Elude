@@ -41,11 +41,11 @@ public class MovingEnemy extends Enemy {
 	private float timeSinceShot = 0;
 	
 	public MovingEnemy(Vector2 pos, World w) {
-		this(pos, w, Assets.movingEnemyBlue, RocketType.SLOW_TURNING, SPEED, RELOAD);
+		this(pos, w, Assets.movingEnemyBlue, RocketType.SLOW_TURNING, SPEED, RELOAD, new float[]{0.1f,1,1,1});
 	}
 	
-	public MovingEnemy(Vector2 pos, World w, TextureRegion tex, RocketType type, float speed, float reload) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, tex, debrisFromColor(new float[]{0.1f,1,1,1}), w, type);
+	public MovingEnemy(Vector2 pos, World w, TextureRegion tex, RocketType type, float speed, float reload, float[] color) {
+		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, tex, debrisFromColor(color), w, type);
 		this.speed = speed;
 		this.reload = reload;
 		moveBounds = new Rectangle(2*World.EDGE, 2*World.EDGE, World.WIDTH-4*World.EDGE, World.HEIGHT-4*World.EDGE);

@@ -10,6 +10,7 @@ import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
 import tungus.games.elude.game.input.mobile.TapToTargetControls;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
+import tungus.games.elude.util.CamShaker;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -95,6 +96,7 @@ public class GameScreen extends BaseScreen {
 			Gdx.app.log("LagWarn", "DeltaTime: " + deltaTime);
 			deltaTime = 0.05f;
 		}
+		CamShaker.INSTANCE.update(deltaTime);
 		
 		long newTime = TimeUtils.millis();
 		long diff = newTime-lastTime;
@@ -116,7 +118,7 @@ public class GameScreen extends BaseScreen {
 		lastTime = newTime;
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		renderer.render();
+		renderer.render(deltaTime);
 		interfaceBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			dirs[i] = controls.get(i).getDir();

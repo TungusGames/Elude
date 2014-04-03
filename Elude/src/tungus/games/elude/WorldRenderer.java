@@ -2,6 +2,7 @@ package tungus.games.elude;
 
 
 import tungus.games.elude.game.World;
+import tungus.games.elude.util.CamShaker;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,9 +20,11 @@ public class WorldRenderer {
 		camera.position.set(World.WIDTH/2, World.HEIGHT/2, 0);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
+		CamShaker.INSTANCE = new CamShaker(camera, batch);
 	}
 	
-	public void render() {
+	public void render(float deltaTime) {
+		
 		batch.begin();
 		int size = world.vessels.size();
 		for(int i = 0; i < size; i++) {
@@ -37,6 +40,10 @@ public class WorldRenderer {
 		for (int i = 0; i < size; i++) {
 			world.rockets.get(i).draw(batch);
 		}*/
+		size = world.pickups.size();
+		for(int i = 0; i < size; i++) {
+			world.pickups.get(i).draw(batch);
+		}
 		
 		size = world.particles.size();
 		for (int i = 0; i < size; i++) {
@@ -48,11 +55,6 @@ public class WorldRenderer {
 			} else {
 				world.particles.get(i).draw(batch);
 			}
-		}
-		
-		size = world.pickups.size();
-		for(int i = 0; i < size; i++) {
-			world.pickups.get(i).draw(batch);
 		}
 		batch.end();
 	}

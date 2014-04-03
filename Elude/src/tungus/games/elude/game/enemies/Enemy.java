@@ -34,10 +34,12 @@ public abstract class Enemy extends Sprite {
 			e = new Kamikaze(w.randomPosOutsideEdge(new Vector2(), 1), w);
 			break;
 		case STANDING_FAST:
-			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f);
+			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f, 
+					new float[]{0.6f, 0.1f, 0.1f, 1f});
 			break;
 		case MOVING_MATRIX:
-			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f);
+			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f, 
+					new float[]{0.4f, 1f, 0.25f, 1f});
 			break;
 		default:
 			throw new GdxRuntimeException("Unknown enemy type: " + t);
@@ -49,7 +51,16 @@ public abstract class Enemy extends Sprite {
 		PooledEffect p = Assets.debris.obtain();
 		Array<ParticleEmitter> emitters = p.getEmitters();
 		for (int i = 0; i < emitters.size; i++) {
-			emitters.get(i).getTint().setColors(color);
+			float[] separateColor = (i == emitters.size-1) ? color : color.clone(); // Color for each emitter - last one uses up the original array
+			float mul = //(float)MathUtils.random.nextGaussian()+1;
+					MathUtils.random() + 0.5f;
+			//mul *= mul;
+			for (int j = 0; j < 3; j++) {
+				// Randomly change the color slightly
+				mul = MathUtils.random() + 0.5f;
+				color[j] = MathUtils.clamp(separateColor[j]*mul, 0f, 1f);
+			}
+			emitters.get(i).getTint().setColors(separateColor);
 		}
 		return p;
 	}
@@ -147,10 +158,13 @@ public abstract class Enemy extends Sprite {
 		onDestroy.setPosition(pos.x, pos.y);
 		Array<ParticleEmitter> emitters = onDestroy.getEmitters();
 		for (int i = 0; i < emitters.size; i++) {
-			if (r != null)
+			if (r != null) {
 				emitters.get(i).getAngle().setLow(r.vel.angle());
-			else
-				emitters.get(i).getAngle().setHigh(360);
+				emitters.get(i).getAngle().setHigh(-90, 90);
+			}
+			else {
+				emitters.get(i).getAngle().setHigh(-180, 180);
+			}
 		}
 		onDestroy.start();
 		world.particles.add(onDestroy);
