@@ -20,7 +20,7 @@ public class WorldRenderer {
 		camera.position.set(World.WIDTH/2, World.HEIGHT/2, 0);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
-		CamShaker.INSTANCE = new CamShaker(camera, batch);
+		CamShaker.INSTANCE = new CamShaker(batch);
 	}
 	
 	public void render(float deltaTime) {
