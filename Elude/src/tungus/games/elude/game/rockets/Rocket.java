@@ -98,6 +98,7 @@ public abstract class Rocket extends Sprite {
 				if (outOfOrigin) {
 					if ((world.enemies.get(i).hp -= dmg) <= 0)
 						world.enemies.get(i).kill(this);
+					//world.explosion.play();
 					kill();
 					return true;
 				} else {
@@ -116,6 +117,7 @@ public abstract class Rocket extends Sprite {
 			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle())) {
 				if (!world.vessels.get(i).shielded) {
 					Gdx.input.vibrate(100);
+					//world.explosion.play();
 					world.vessels.get(i).hp -= dmg;
 					if (world.waveLoader instanceof FiniteLevelLoader)
 						((FiniteLevelLoader)(world.waveLoader)).hpLost += dmg;

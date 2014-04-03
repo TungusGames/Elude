@@ -46,6 +46,7 @@ public class Assets {
 	
 	public static FileHandle neonFlicker;
 	public static FileHandle neonSound;
+	public static FileHandle explosionSound;
 	
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
@@ -98,6 +99,7 @@ public class Assets {
 		
 		neonSound = Gdx.files.internal("sounds/neonSound.wav");
 		neonFlicker = Gdx.files.internal("sounds/flicker.wav");
+		explosionSound = Gdx.files.internal("sounds/explosion.wav");
 	}
 	
 	public static FileHandle levelFile(int levelNum) {
