@@ -1,5 +1,6 @@
 package tungus.games.elude;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -13,7 +14,13 @@ public class AndroidLauncher extends AndroidApplication {
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useGL20 = false;
         cfg.maxSimultaneousSounds = 150;
-        
+        this.createWakeLock(cfg);
+        BluetoothConnection.app = this;
         initialize(new Elude(), cfg);
+    }
+    
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+    	BluetoothConnection.INSTANCE.processActivityResult(requestCode, resultCode);
     }
 }
