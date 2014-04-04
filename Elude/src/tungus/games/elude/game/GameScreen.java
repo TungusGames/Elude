@@ -78,11 +78,11 @@ public class GameScreen extends BaseScreen {
 		controls = new ArrayList<Controls>();
 		dirs = new Vector2[world.vessels.size()];
 		for (int i = 0; i < world.vessels.size(); i++) {
-			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
+			/*if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
 				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
-			} else {
+			} else {*/
 				controls.add(new TapToTargetControls(renderer.camera, world.vessels.get(i).pos));
-			}				
+			//}				
 			dirs[i] = controls.get(i).getDir();
 
 		}

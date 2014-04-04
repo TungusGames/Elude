@@ -3,6 +3,7 @@ package tungus.games.elude.game.input.mobile;
 import tungus.games.elude.game.input.Controls;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,8 @@ public class TapToTargetControls implements Controls {
 	
 	private static final float MIN_POS_DISTANCE = 0.2f;
 	private static final float MIN_POS_DISTANCE_SQ = MIN_POS_DISTANCE*MIN_POS_DISTANCE;
+	
+	private boolean isAndroid = false;
 	
 	private final OrthographicCamera gameCam;
 	
@@ -23,11 +26,13 @@ public class TapToTargetControls implements Controls {
 	public TapToTargetControls(OrthographicCamera cam, Vector2 playerPos) {
 		gameCam = cam;
 		this.playerPos = playerPos;
+		if (Gdx.app.getType() == ApplicationType.Android)
+			isAndroid = true;
 	}
 
 	@Override
 	public Vector2 getDir() {
-		if (Gdx.input.isTouched()) {
+		if (!isAndroid || Gdx.input.isTouched()) {
 			touch3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			gameCam.unproject(touch3);
 			if (touch2.set(touch3.x, touch3.y).sub(playerPos).len2() > MIN_POS_DISTANCE_SQ)
