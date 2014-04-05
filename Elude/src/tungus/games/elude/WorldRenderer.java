@@ -26,24 +26,20 @@ public class WorldRenderer {
 	public void render(float deltaTime) {
 		
 		batch.begin();
-		int size = world.vessels.size();
-		for(int i = 0; i < size; i++) {
-			world.vessels.get(i).draw(batch);
-		}		
-		
-		size = world.enemies.size();
+		int size = world.enemies.size();
 		for(int i = 0; i < size; i++) {
 			world.enemies.get(i).draw(batch);
 		}
 		
-		/*size = world.rockets.size();
-		for (int i = 0; i < size; i++) {
-			world.rockets.get(i).draw(batch);
-		}*/
 		size = world.pickups.size();
 		for(int i = 0; i < size; i++) {
 			world.pickups.get(i).draw(batch);
 		}
+		
+		size = world.vessels.size();
+		for(int i = 0; i < size; i++) {
+			world.vessels.get(i).draw(batch);
+		}		
 		
 		size = world.particles.size();
 		for (int i = 0; i < size; i++) {

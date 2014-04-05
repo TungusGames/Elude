@@ -27,7 +27,7 @@ public class Assets {
 	public static TextureRegion virtualDPadPerimeter;
 	public static TextureRegion whiteRectangle;
 	public static TextureRegion smallCircle;
-	public static TextureRegion shieldedVessel;
+	public static TextureRegion shield;
 	
 	public static TextureRegion frame;
 	public static TextureRegion play;
@@ -66,7 +66,7 @@ public class Assets {
 		virtualDPadPerimeter = atlas.findRegion("virtualdpadperimeter");
 		whiteRectangle = atlas.findRegion("whiterect");
 		smallCircle = atlas.findRegion("smallcircle");
-		shieldedVessel = atlas.findRegion("shieldedVessel");
+		shield = atlas.findRegion("shield");
 		
 		frame = atlas.findRegion("frame");
 		play = atlas.findRegion("play");

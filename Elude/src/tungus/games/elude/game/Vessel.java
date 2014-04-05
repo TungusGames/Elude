@@ -1,8 +1,12 @@
 package tungus.games.elude.game;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -11,10 +15,12 @@ public class Vessel extends Sprite {
 	public static final float DRAW_WIDTH = 0.75f;		//Dimensions of the sprite drawn
 	public static final float DRAW_HEIGHT = 0.945f;
 	public static final float COLLIDER_SIZE = 0.6f;		//Dimensions of the bounding box for collisions
-	public static final float SHIELDED_SIZE = 1.2f;		//Both drawn and collider size
+	public static final float SHIELD_SIZE = 1.3f;		//Both drawn and collider size
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
 	public static final float MAX_SPEED = 6f;
 	public static final float MAX_HP = 100f;
+	
+	private static final Interpolation shieldOpacity = new FadeinFlash(0.08f, 0.6f);
 	
 	public Vector2 pos;
 	public Vector2 vel;
@@ -24,20 +30,31 @@ public class Vessel extends Sprite {
 	public Rectangle bounds;
 		
 	public float hp = MAX_HP;
+	public boolean shielded = false;
+	
+	private float shieldTimeLeft = 0f;
+	private float fullShieldTime = 0f;
+	private final Sprite shield;
 	public float speedBonus = 1f;
 	public float speedBonusTime = 0f;
-	public float shieldTime = 0f;
-	public boolean shielded = false;
 	
 	//TODO particle
 	
 	public Vessel() {
 		super(Assets.vessel);
 		setBounds(World.WIDTH / 2 - DRAW_WIDTH / 2, World.HEIGHT / 2 - DRAW_HEIGHT / 2, DRAW_WIDTH, DRAW_HEIGHT);
-		pos = new Vector2(World.WIDTH / 2, World.HEIGHT / 2);
-		bounds = new Rectangle(pos.x - COLLIDER_SIZE/2, pos.y - COLLIDER_SIZE/2, COLLIDER_SIZE, COLLIDER_SIZE);
-		vel = new Vector2(0, 0);
 		setOrigin(DRAW_WIDTH / 2, DRAW_HEIGHT / 2);
+		
+		shield = new Sprite(Assets.shield);
+		shield.setBounds(World.WIDTH / 2 - SHIELD_SIZE / 2, World.HEIGHT / 2 - SHIELD_SIZE / 2, SHIELD_SIZE, SHIELD_SIZE);
+		shield.setOrigin(SHIELD_SIZE/2, SHIELD_SIZE/2);
+		Color c = shield.getColor();
+		c.a = 0;
+		shield.setColor(c);
+		
+		pos = new Vector2(World.WIDTH / 2, World.HEIGHT / 2);
+		vel = new Vector2(0, 0);
+		bounds = new Rectangle(pos.x - COLLIDER_SIZE/2, pos.y - COLLIDER_SIZE/2, COLLIDER_SIZE, COLLIDER_SIZE);
 	}
 	
 	public void update(float deltaTime, Vector2 dir) {
@@ -48,10 +65,19 @@ public class Vessel extends Sprite {
 				vel.scl(speedBonus);
 			}
 			if (shielded) {
-				if (shieldTime > 0f)
-					shieldTime -= deltaTime;
-				else
+				if (shieldTimeLeft > 0f) {
+					shieldTimeLeft -= deltaTime;
+					Color c = shield.getColor();
+					c.a = shieldOpacity.apply(1-shieldTimeLeft/fullShieldTime);
+					shield.setColor(c);
+				}
+				else {
+					Color c = shield.getColor();
+					c.a = 0;
+					shield.setColor(c);
 					removeShield();
+				}
+					
 			}
 			pos.add(vel.x * deltaTime, vel.y * deltaTime);
 			
@@ -78,27 +104,25 @@ public class Vessel extends Sprite {
 					setRotation(current + Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime);
 			}
 			setPosition(pos.x - drawWidth / 2, pos.y - drawHeight / 2);	// Update the drawn sprite
+			shield.setPosition(pos.x-SHIELD_SIZE/2, pos.y-SHIELD_SIZE/2);
 			bounds.x = pos.x - COLLIDER_SIZE / 2;								// Update the bounds 
 			bounds.y = pos.y - COLLIDER_SIZE / 2;
 		}
 	}
 	
 	public void addShield(float shieldTime) {
-		this.shieldTime = shieldTime;
+		fullShieldTime = shieldTimeLeft = shieldTime;
 		shielded = true;
-		drawWidth = SHIELDED_SIZE;
-		drawHeight = SHIELDED_SIZE;
-		setBounds(pos.x - drawWidth / 2, pos.y - drawHeight / 2, drawWidth, drawHeight);
-		setOrigin(drawWidth/2, drawHeight/2);
-		setRegion(Assets.shieldedVessel);
 	}
 	
 	public void removeShield() {
 		shielded = false;
-		setRegion(Assets.vessel);
-		drawWidth = DRAW_WIDTH;
-		drawHeight = DRAW_HEIGHT;
-		setOrigin(drawWidth/2, drawHeight/2);
-		setBounds(pos.x - drawWidth / 2, pos.y - drawHeight / 2, drawWidth, drawHeight);
+	}
+	
+	@Override
+	public void draw(SpriteBatch batch) {
+		super.draw(batch);
+		if (shielded)
+			shield.draw(batch);
 	}
 }
