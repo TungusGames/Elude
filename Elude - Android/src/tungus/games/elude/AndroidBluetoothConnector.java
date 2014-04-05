@@ -28,10 +28,6 @@ import android.content.IntentFilter;
  * - Every device can act as a server xor as a client at once
  * - Sample usage in Elude's MultiplayerConnectScreen
  * - Use INSTANCE
- * 
- * Copyright 2014 Tardos Tamás. All rights reserved.
- * 
- * @author Tardos Tamás
  */
 public class AndroidBluetoothConnector extends BluetoothConnector {
 
