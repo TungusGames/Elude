@@ -5,6 +5,7 @@ import tungus.games.elude.game.World;
 import tungus.games.elude.util.CamShaker;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class WorldRenderer {
@@ -43,13 +44,14 @@ public class WorldRenderer {
 		
 		size = world.particles.size();
 		for (int i = 0; i < size; i++) {
-			if (world.particles.get(i).isComplete()) {
-				world.particles.get(i).free();
+			PooledEffect p = world.particles.get(i);
+			if (p.isComplete()) {
+				p.free();
 				world.particles.remove(i);
 				i--;
 				size--;
 			} else {
-				world.particles.get(i).draw(batch);
+				p.draw(batch);
 			}
 		}
 		batch.end();

@@ -44,6 +44,7 @@ public class Assets {
 	public static ParticleEffectPool testRocket;
 	public static ParticleEffectPool explosion;
 	public static ParticleEffectPool debris;
+	public static ParticleEffectPool vesselTrails;
 	
 	public static Sound neonFlicker;
 	public static Sound neonSound;
@@ -97,6 +98,9 @@ public class Assets {
 		particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "debris2"), Assets.atlas);
 		debris = new ParticleEffectPool(particle, 10, 100);
+		particle = new ParticleEffect();
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "vesseltrails"), Assets.atlas);
+		vesselTrails = new ParticleEffectPool(particle, 10, 100);
 		
 		neonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/neonSound.wav"));
 		neonFlicker = Gdx.audio.newSound(Gdx.files.internal("sounds/flicker.wav"));

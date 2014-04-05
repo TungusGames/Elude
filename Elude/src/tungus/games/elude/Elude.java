@@ -15,6 +15,7 @@ public class Elude extends Game {
 		Assets.load();
 		ScoreData.load();
 		setScreen(new MainMenu(this));
+		//setScreen(new GameScreen(this, 1, true)); // for quick debugging
 		fps = new FPSLogger();
 	}
 	

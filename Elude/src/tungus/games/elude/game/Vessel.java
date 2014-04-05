@@ -3,7 +3,10 @@ package tungus.games.elude.game;
 import tungus.games.elude.Assets;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
@@ -22,6 +25,8 @@ public class Vessel extends Sprite {
 	
 	private static final Interpolation shieldOpacity = new FadeinFlash(0.08f, 0.6f);
 	
+	private final World world;
+	
 	public Vector2 pos;
 	public Vector2 vel;
 	
@@ -38,9 +43,9 @@ public class Vessel extends Sprite {
 	public float speedBonus = 1f;
 	public float speedBonusTime = 0f;
 	
-	//TODO particle
+	private PooledEffect trails;
 	
-	public Vessel() {
+	public Vessel(World world) {
 		super(Assets.vessel);
 		setBounds(World.WIDTH / 2 - DRAW_WIDTH / 2, World.HEIGHT / 2 - DRAW_HEIGHT / 2, DRAW_WIDTH, DRAW_HEIGHT);
 		setOrigin(DRAW_WIDTH / 2, DRAW_HEIGHT / 2);
@@ -52,9 +57,13 @@ public class Vessel extends Sprite {
 		c.a = 0;
 		shield.setColor(c);
 		
+		this.world = world;
 		pos = new Vector2(World.WIDTH / 2, World.HEIGHT / 2);
 		vel = new Vector2(0, 0);
 		bounds = new Rectangle(pos.x - COLLIDER_SIZE/2, pos.y - COLLIDER_SIZE/2, COLLIDER_SIZE, COLLIDER_SIZE);
+		
+		trails = Assets.vesselTrails.obtain();
+		world.particles.add(trails);
 	}
 	
 	public void update(float deltaTime, Vector2 dir) {
@@ -108,6 +117,20 @@ public class Vessel extends Sprite {
 			bounds.x = pos.x - COLLIDER_SIZE / 2;								// Update the bounds 
 			bounds.y = pos.y - COLLIDER_SIZE / 2;
 		}
+
+		ParticleEmitter particleEmitter = trails.getEmitters().get(0);
+		if (vel.equals(Vector2.Zero)) {
+			particleEmitter.getEmission().setHigh(0);
+		} else {
+			if (particleEmitter.getEmission().getHighMax() == 0) {
+				trails = Assets.vesselTrails.obtain();
+				world.particles.add(trails);
+			}
+			particleEmitter.getAngle().setLow(vel.angle()-180);
+		}
+		trails.setPosition(pos.x, pos.y);
+		Gdx.app.log("trails", trails.isComplete()+" " + trails.getEmitters().get(0).getName());
+		
 	}
 	
 	public void addShield(float shieldTime) {

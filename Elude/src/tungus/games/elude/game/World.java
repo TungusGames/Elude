@@ -42,7 +42,7 @@ public class World {
 		enemies = new ArrayList<Enemy>();
 		particles = new ArrayList<PooledEffect>();
 		pickups = new ArrayList<Pickup>();
-		vessels.add(new Vessel());
+		vessels.add(new Vessel(this));
 		//for (int i = 0; i < 10; i++)
 		//	enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
 		//	enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
