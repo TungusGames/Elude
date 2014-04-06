@@ -13,8 +13,11 @@ public class Assets {
 	
 	public static TextureAtlas atlas;
 		
+	//Title screen
 	public static TextureRegion eludeTitleOn;
 	public static TextureRegion eludeTitleOff;
+	
+	//Gameplay
 	public static TextureRegion vessel;	
 	public static TextureRegion rocket;
 	public static TextureRegion standingEnemyGreen;
@@ -29,6 +32,14 @@ public class Assets {
 	public static TextureRegion smallCircle;
 	public static TextureRegion shield;
 	
+	//Ingame menus
+	public static TextureRegion pause;
+	public static TextureRegion resume;
+	public static TextureRegion restart;
+	public static TextureRegion toMenu;
+	public static TextureRegion shadower;
+	
+	//Level select screen
 	public static TextureRegion frame;
 	public static TextureRegion play;
 	public static TextureRegion[] stars = new TextureRegion[4]; // 0: empty, 1: bronze, 2: silver, 3: gold
@@ -68,6 +79,12 @@ public class Assets {
 		whiteRectangle = atlas.findRegion("whiterect");
 		smallCircle = atlas.findRegion("smallcircle");
 		shield = atlas.findRegion("shield");
+		
+		pause = atlas.findRegion("pause");
+		resume = atlas.findRegion("ingamemenu/resume");
+		toMenu = atlas.findRegion("ingamemenu/tomenu");
+		restart = atlas.findRegion("ingamemenu/restart");
+		shadower = atlas.findRegion("ingamemenu/shadower");
 		
 		frame = atlas.findRegion("frame");
 		play = atlas.findRegion("play");
