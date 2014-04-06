@@ -12,14 +12,12 @@ public abstract class BluetoothConnector {
 	
 	public State state;
 	
-	public BluetoothConnector() {
-		
-	}
+	public BluetoothConnector() {}
 
 	public abstract void enableVisibility();
 	public abstract boolean updateVisibility(float deltaTime);
-	public abstract class AcceptThread extends Thread {
-		public abstract void cancel();
+	public class AcceptThread extends Thread {
+		public void cancel() {}
 	}
 	public abstract void enable();
 	public abstract boolean enableDiscovery();

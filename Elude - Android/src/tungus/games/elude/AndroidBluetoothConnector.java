@@ -50,7 +50,6 @@ public class AndroidBluetoothConnector extends BluetoothConnector {
 			state = State.UNSUPPORTED;
 		else {
 			state = State.DISABLED;
-			acceptThread = new AndroidAcceptThread();
 		}
 		
 	}	
@@ -88,7 +87,7 @@ public class AndroidBluetoothConnector extends BluetoothConnector {
 		return false;
 	}
 	
-	public class AndroidAcceptThread extends AcceptThread {
+	public class AcceptThread extends BluetoothConnector.AcceptThread {
 		
 	    private BluetoothServerSocket serverSocket;
 	 
@@ -115,7 +114,7 @@ public class AndroidBluetoothConnector extends BluetoothConnector {
 	                if (socket != null) {
 	                	// Do work to manage the connection (in a separate thread)
 	                	AndroidBluetoothConnector.INSTANCE.connectedThread = new ConnectedThread(socket);
-	                	AndroidBluetoothConnector.INSTANCE.connectedThread.run();
+	                	AndroidBluetoothConnector.INSTANCE.connectedThread.start();
 	                	serverSocket.close();
 		                break;
 		            }

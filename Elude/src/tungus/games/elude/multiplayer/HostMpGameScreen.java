@@ -29,15 +29,18 @@ public class HostMpGameScreen extends BaseScreen {
 				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT); //TODO loading screen
 				if (BluetoothConnector.INSTANCE.state == BluetoothConnector.State.ENABLED) {
 					state = State.WAITING; //If BT turn-on succeeded, continue to waiting state
+					//TODO not right instance
+					BluetoothConnector.INSTANCE.acceptThread = BluetoothConnector.INSTANCE.new AcceptThread();
 					BluetoothConnector.INSTANCE.acceptThread.start();
 				}
 				else if (BluetoothConnector.INSTANCE.state == BluetoothConnector.State.ERROR) {
-					/**ERROR MESSAGE NEEDED*/ 
+					// TODO ERROR MESSAGE NEEDED 
 					Screen next = new MainMenu(game);
 					game.setScreen(next);
 				}
 				break;
-		
+			case WAITING:
+				
 		}
 	}
 	
