@@ -10,6 +10,8 @@ import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
 import tungus.games.elude.game.input.mobile.TapToTargetControls;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
+import tungus.games.elude.menu.ingame.AbstractIngameMenu;
+import tungus.games.elude.menu.ingame.GameOverMenu;
 import tungus.games.elude.menu.ingame.PauseMenu;
 import tungus.games.elude.util.CamShaker;
 
@@ -45,6 +47,7 @@ public class GameScreen extends BaseScreen {
 	public static final int MENU_RESTART = -4;
 	
 	private PauseMenu pauseMenu = new PauseMenu();
+	private GameOverMenu gameOverMenu = new GameOverMenu();
 	
 	private World world;
 	private WorldRenderer renderer;
@@ -148,27 +151,20 @@ public class GameScreen extends BaseScreen {
 		switch (state) {
 		case STATE_PLAYING:
 			world.update(deltaTime, dirs);
-			if (world.over) {
-				timeSinceOver += deltaTime;
-				if (timeSinceOver > 3)
-					game.setScreen(new LevelSelectScreen(game, finite));
+			if (world.state != World.STATE_PLAYING) {
+				state = world.state == World.STATE_LOST ? STATE_GAMEOVER : STATE_WON;
 			}
 			break;
 		case STATE_PAUSED:
-			int n = pauseMenu.update(deltaTime, unhandledTap ? rawTap : null);
-			unhandledTap = false;
-			if (n >= 0) {
-				state = n;
-			} else switch (n) {
-			case MENU_RESTART:
-				game.setScreen(new GameScreen(game, levelNum, finite));
-				break;
-			case MENU_NEXTLEVEL:
-				break;
-			case MENU_QUIT:
+			updateMenu(pauseMenu, deltaTime);
+			break;
+		case STATE_GAMEOVER:
+			updateMenu(gameOverMenu, deltaTime);
+			break;
+		case STATE_WON:
+			if ((timeSinceOver += deltaTime) > 3)
 				game.setScreen(new LevelSelectScreen(game, finite));
-				break;
-			}
+			break;
 		}
 		logTime("update", 50);
 		
@@ -192,6 +188,9 @@ public class GameScreen extends BaseScreen {
 		case STATE_PAUSED:
 			pauseMenu.render();
 			break;
+		case STATE_GAMEOVER:
+			gameOverMenu.render();
+			break;
 		}
 		logTime("render", 50);
 		
@@ -203,6 +202,23 @@ public class GameScreen extends BaseScreen {
 		if (diff > minToLog)
 			Gdx.app.log("delta - " + message, "" + diff);
 		lastTime = newTime;
+	}
+	
+	private void updateMenu(AbstractIngameMenu menu, float deltaTime) {
+		int n = menu.update(deltaTime, unhandledTap ? rawTap : null);
+		unhandledTap = false;
+		if (n >= 0) {
+			state = n;
+		} else switch (n) {
+		case MENU_RESTART:
+			game.setScreen(new GameScreen(game, levelNum, finite));
+			break;
+		case MENU_NEXTLEVEL:
+			break;
+		case MENU_QUIT:
+			game.setScreen(new LevelSelectScreen(game, finite));
+			break;
+		}
 	}
 
 }

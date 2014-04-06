@@ -21,6 +21,9 @@ public class World {
 	public static final float EDGE = 2f; 	// Width of the area at the edge not targeted for movement
 	//public static final float PICKUP_FREQ = 6f; //1 pickup / PICKUP_FREQ seconds
 	public static final float GAME_END_TIMEOUT = 3;
+	public static final int STATE_PLAYING = 0;
+	public static final int STATE_LOST = 1;
+	public static final int STATE_WON = 2;
 	
 	public List<Vessel> vessels;
 	public List<Rocket> rockets;
@@ -33,8 +36,7 @@ public class World {
 	
 	public final EnemyLoader waveLoader;
 	
-	
-	public boolean over = false;
+	public int state;
 	
 	public World(int levelNum, boolean finite) {
 		vessels = new ArrayList<Vessel>();
@@ -89,7 +91,7 @@ public class World {
 		waveLoader.update(deltaTime);
 		
 		if (vessels.get(0).hp <= 0 || enemies.size() == 0 && rockets.size() == 0) {
-			over = true;
+			state = vessels.get(0).hp <= 0 ? STATE_LOST : STATE_WON;
 			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
 				waveLoader.saveScore();
 		}

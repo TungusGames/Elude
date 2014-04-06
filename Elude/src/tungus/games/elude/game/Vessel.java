@@ -129,7 +129,6 @@ public class Vessel extends Sprite {
 			particleEmitter.getAngle().setLow(vel.angle()-180);
 		}
 		trails.setPosition(pos.x, pos.y);
-		Gdx.app.log("trails", trails.isComplete()+" " + trails.getEmitters().get(0).getName());
 		
 	}
 	
