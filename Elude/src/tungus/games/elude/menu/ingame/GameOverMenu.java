@@ -8,9 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class GameOverMenu extends AbstractIngameMenu {
 
-	private static final float BUTTON_Y = 140;
-	private static final float BUTTON_SIZE = 100;
+	private static final float BUTTON_SIZE = 150;
 	private static final float BUTTON_SPACING = 60;
+	private static final float BUTTON_Y = 240-BUTTON_SIZE;
 	
 	public GameOverMenu() {
 		super(new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart)},
