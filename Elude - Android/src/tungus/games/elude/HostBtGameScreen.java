@@ -1,4 +1,4 @@
-package tungus.games.elude.multiplayer;
+package tungus.games.elude;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -8,17 +8,18 @@ import com.badlogic.gdx.graphics.GL10;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.menu.MainMenu;
 
-public class HostMpGameScreen extends BaseScreen {
+public class HostBtGameScreen extends BaseScreen {
 
 	private enum State {
 		STARTING, WAITING, CONNECTING
 	}
 	
 	private State state;
+	private BluetoothClient btc = BluetoothClient.INSTANCE;
 	
-	public HostMpGameScreen(Game game) {
+	public HostBtGameScreen(Game game) {
 		super(game);
-		BluetoothConnector.INSTANCE.enableVisibility();
+		BluetoothClient.INSTANCE.enableVisibility();
 		
 	}
 
@@ -27,13 +28,13 @@ public class HostMpGameScreen extends BaseScreen {
 		switch (state) {
 			case STARTING:
 				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT); //TODO loading screen
-				if (BluetoothConnector.INSTANCE.state == BluetoothConnector.State.ENABLED) {
+				if (btc.state == BluetoothClient.State.ENABLED) {
 					state = State.WAITING; //If BT turn-on succeeded, continue to waiting state
 					//TODO not right instance
-					BluetoothConnector.INSTANCE.acceptThread = BluetoothConnector.INSTANCE.new AcceptThread();
-					BluetoothConnector.INSTANCE.acceptThread.start();
+					btc.acceptThread = btc.new AcceptThread();
+					btc.acceptThread.start();
 				}
-				else if (BluetoothConnector.INSTANCE.state == BluetoothConnector.State.ERROR) {
+				else if (btc.state == BluetoothClient.State.ERROR) {
 					// TODO ERROR MESSAGE NEEDED 
 					Screen next = new MainMenu(game);
 					game.setScreen(next);
@@ -46,7 +47,7 @@ public class HostMpGameScreen extends BaseScreen {
 	
 	@Override
 	public void hide() {
-		if (BluetoothConnector.INSTANCE.acceptThread.isAlive())
-			BluetoothConnector.INSTANCE.acceptThread.cancel();
+		if (btc.acceptThread.isAlive())
+			btc.acceptThread.cancel();
 	}
 }

@@ -1,6 +1,5 @@
 package tungus.games.elude;
 
-import tungus.games.elude.multiplayer.BluetoothConnector;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,14 +14,13 @@ public class AndroidLauncher extends AndroidApplication {
         cfg.useGL20 = false;
         cfg.maxSimultaneousSounds = 150;
         this.createWakeLock(cfg);
-        BluetoothConnector.INSTANCE = new AndroidBluetoothConnector();
-        AndroidBluetoothConnector.INSTANCE.app = this;
+        BluetoothClient.INSTANCE.app = this;
         initialize(new Elude(), cfg);
     }
     
     @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
-    	AndroidBluetoothConnector.INSTANCE.processActivityResult(requestCode, resultCode, data);
+    	BluetoothClient.INSTANCE.processActivityResult(requestCode, resultCode, data);
     }
     
 }
