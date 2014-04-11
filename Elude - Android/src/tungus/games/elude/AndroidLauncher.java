@@ -14,13 +14,13 @@ public class AndroidLauncher extends AndroidApplication {
         cfg.useGL20 = false;
         cfg.maxSimultaneousSounds = 150;
         this.createWakeLock(cfg);
-        BluetoothClient.INSTANCE.app = this;
+        BluetoothConnector.app = this;
         initialize(new Elude(), cfg);
     }
     
     @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
-    	BluetoothClient.INSTANCE.processActivityResult(requestCode, resultCode, data);
+    	BluetoothConnector.INSTANCE.processActivityResult(requestCode, resultCode, data);
     }
     
 }
