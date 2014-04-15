@@ -12,6 +12,7 @@ import tungus.games.elude.game.input.mobile.TapToTargetControls;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
+import tungus.games.elude.menu.ingame.LevelCompleteMenu;
 import tungus.games.elude.menu.ingame.PauseMenu;
 import tungus.games.elude.util.CamShaker;
 
@@ -39,15 +40,17 @@ public class GameScreen extends BaseScreen {
 	public static final int STATE_PAUSED = 1;
 	public static final int STATE_GAMEOVER = 2;
 	public static final int STATE_WON = 3;
-	private int state = STATE_PLAYING;
+	private int state = STATE_WON;
 	
 	public static final int MENU_NOCHANGE = -1;
 	public static final int MENU_NEXTLEVEL = -2;
 	public static final int MENU_QUIT = -3;
 	public static final int MENU_RESTART = -4;
 	
-	private PauseMenu pauseMenu = new PauseMenu();
-	private GameOverMenu gameOverMenu = new GameOverMenu();
+	private final AbstractIngameMenu[] menus;
+	//private PauseMenu pauseMenu = new PauseMenu();
+	//private GameOverMenu gameOverMenu = new GameOverMenu();
+	//private LevelCompleteMenu levelCompleteMenu = new LevelCompleteMenu();
 	
 	private World world;
 	private WorldRenderer renderer;
@@ -70,7 +73,6 @@ public class GameScreen extends BaseScreen {
 	private Vector3 rawTap = new Vector3();
 	private boolean unhandledTap = false;
 	
-	private float timeSinceOver = 0;
 	private final boolean finite;
 	private final int levelNum;
 	
@@ -107,6 +109,7 @@ public class GameScreen extends BaseScreen {
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		this.finite = finite;
 		this.levelNum = levelNum;
+		menus = new AbstractIngameMenu[]{new PauseMenu(), new GameOverMenu(), new LevelCompleteMenu(levelNum, finite)};
 		world = new World(levelNum, finite);
 		renderer = new WorldRenderer(world);
 		uiBatch = new SpriteBatch();
@@ -156,14 +159,9 @@ public class GameScreen extends BaseScreen {
 			}
 			break;
 		case STATE_PAUSED:
-			updateMenu(pauseMenu, deltaTime);
-			break;
 		case STATE_GAMEOVER:
-			updateMenu(gameOverMenu, deltaTime);
-			break;
 		case STATE_WON:
-			if ((timeSinceOver += deltaTime) > 3)
-				game.setScreen(new LevelSelectScreen(game, finite));
+			updateMenu(menus[state-1], deltaTime);
 			break;
 		}
 		logTime("update", 50);
@@ -186,10 +184,9 @@ public class GameScreen extends BaseScreen {
 		uiBatch.end();
 		switch (state) {
 		case STATE_PAUSED:
-			pauseMenu.render();
-			break;
 		case STATE_GAMEOVER:
-			gameOverMenu.render();
+		case STATE_WON:
+			menus[state-1].render();
 			break;
 		}
 		logTime("render", 50);
@@ -214,6 +211,7 @@ public class GameScreen extends BaseScreen {
 			game.setScreen(new GameScreen(game, levelNum, finite));
 			break;
 		case MENU_NEXTLEVEL:
+			game.setScreen(new GameScreen(game, levelNum+1, finite));
 			break;
 		case MENU_QUIT:
 			game.setScreen(new LevelSelectScreen(game, finite));

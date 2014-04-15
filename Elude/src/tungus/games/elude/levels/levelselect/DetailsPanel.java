@@ -68,7 +68,7 @@ public class DetailsPanel {
 
 	public void switchTo(int levelNum) {
 		prevLevel = activeLevel;
-		activeLevel = new ScoreDetails(levelNum, finite);
+		activeLevel = new ScoreDetails(levelNum, finite, 12.5f, 1, false, 10f);
 		state = STATE_SWITCH;
 		stateTime = 0;
 	}
