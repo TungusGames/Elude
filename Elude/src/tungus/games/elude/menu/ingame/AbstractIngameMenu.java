@@ -18,14 +18,14 @@ public abstract class AbstractIngameMenu {
 	protected static final int STATE_IDLE = 1;
 	protected static final int STATE_DISAPPEAR = 2;
 	
-	private static final float APPEAR_TIME = 0.5f;
-	private static final float DISAPPEAR_TIME = 0.5f;
+	protected static final float APPEAR_TIME = 1.2f;
+	protected static final float DISAPPEAR_TIME = 0.5f;
 	
-	private static final Vector2 APPEAR_ORIGIN = new Vector2(400f, 400f);
-	private static final Interpolation SIZE = Interpolation.fade;
-	private static final Interpolation POSITION = Interpolation.fade;
-	private static final Interpolation OPACITY = Interpolation.fade;
-	private static final Interpolation SHADOW = Interpolation.fade;
+	protected static final Vector2 APPEAR_ORIGIN = new Vector2(400f, 400f);
+	protected static final Interpolation SIZE = Interpolation.fade;
+	protected static final Interpolation POSITION = Interpolation.fade;
+	protected static final Interpolation OPACITY = Interpolation.fade;
+	protected static final Interpolation SHADOW = Interpolation.fade;
 	
 	protected static final OrthographicCamera cam = new OrthographicCamera(800, 480);
 	protected static final SpriteBatch batch = new SpriteBatch();

@@ -55,6 +55,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	private Level level;
 	private float timeSinceLastWave = 0;
 	public float hpLost = 0;
+	private boolean completed = false;
 	
 
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
@@ -88,6 +89,15 @@ public class FiniteLevelLoader extends EnemyLoader {
 		score.hpLost = score.completed ? Math.min(score.hpLost, hpLost) : hpLost;
 		score.timeTaken = score.completed ? Math.min(score.timeTaken, timeSinceStart) : timeSinceStart;
 		score.completed = true;
+		this.completed = true;
 		ScoreData.save(true);
+	}
+	
+	public FiniteLevelScore getScore() {
+		FiniteLevelScore s = new FiniteLevelScore();
+		s.completed = this.completed;
+		s.hpLost = hpLost;
+		s.timeTaken = timeSinceStart;
+		return s;
 	}
 }

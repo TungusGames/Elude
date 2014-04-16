@@ -10,8 +10,11 @@ import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
 import tungus.games.elude.game.input.mobile.TapToTargetControls;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
+import tungus.games.elude.levels.loader.FiniteLevelLoader;
+import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
+import tungus.games.elude.menu.ingame.LevelCompleteMenu;
 import tungus.games.elude.menu.ingame.PauseMenu;
 import tungus.games.elude.util.CamShaker;
 
@@ -46,15 +49,14 @@ public class GameScreen extends BaseScreen {
 	public static final int MENU_QUIT = -3;
 	public static final int MENU_RESTART = -4;
 	
-	private PauseMenu pauseMenu = new PauseMenu();
-	private GameOverMenu gameOverMenu = new GameOverMenu();
+	private final AbstractIngameMenu[] menus;
 	
 	private World world;
 	private WorldRenderer renderer;
 	private SpriteBatch uiBatch;
 	private OrthographicCamera uiCam;
 		
-	private final Vector2 healthbarFromTopleft /*= new Vector2(0.5f, 1f)*/;
+	private final Vector2 healthbarFromTopleft;
 	private final float healthbarFullLength;
 	private final float healthbarWidth;
 	private final Rectangle pauseButton;
@@ -70,7 +72,6 @@ public class GameScreen extends BaseScreen {
 	private Vector3 rawTap = new Vector3();
 	private boolean unhandledTap = false;
 	
-	private float timeSinceOver = 0;
 	private final boolean finite;
 	private final int levelNum;
 	
@@ -107,6 +108,7 @@ public class GameScreen extends BaseScreen {
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		this.finite = finite;
 		this.levelNum = levelNum;
+		menus = new AbstractIngameMenu[]{new PauseMenu(), new GameOverMenu(), new LevelCompleteMenu(levelNum, finite)};
 		world = new World(levelNum, finite);
 		renderer = new WorldRenderer(world);
 		uiBatch = new SpriteBatch();
@@ -115,7 +117,7 @@ public class GameScreen extends BaseScreen {
 		healthbarWidth = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
 		healthbarFromTopleft = new Vector2(healthbarWidth, 2*healthbarWidth);
 		pauseButton = new Rectangle();
-		pauseButton.width = pauseButton.height = 4*healthbarWidth;
+		pauseButton.width = pauseButton.height = 2.5f*healthbarWidth;
 		pauseButton.y = FRUSTUM_HEIGHT - 0.25f - pauseButton.height;
 		pauseButton.x = FRUSTUM_WIDTH - 0.25f - pauseButton.width;
 		healthbarFullLength = FRUSTUM_WIDTH - 2*healthbarFromTopleft.x - 0.5f - pauseButton.width;
@@ -152,18 +154,19 @@ public class GameScreen extends BaseScreen {
 		case STATE_PLAYING:
 			world.update(deltaTime, dirs);
 			if (world.state != World.STATE_PLAYING) {
-				state = world.state == World.STATE_LOST ? STATE_GAMEOVER : STATE_WON;
+				state = ((world.state == World.STATE_LOST && finite) ? STATE_GAMEOVER : STATE_WON);
+				if (state == STATE_WON) {
+					if (finite)
+						((LevelCompleteMenu)menus[state-1]).setScore(((FiniteLevelLoader)world.waveLoader).getScore());
+					else
+						((LevelCompleteMenu)menus[state-1]).setScore(((ArcadeLoaderBase)world.waveLoader).getScore());
+				}
 			}
 			break;
-		case STATE_PAUSED:
-			updateMenu(pauseMenu, deltaTime);
-			break;
-		case STATE_GAMEOVER:
-			updateMenu(gameOverMenu, deltaTime);
-			break;
 		case STATE_WON:
-			if ((timeSinceOver += deltaTime) > 3)
-				game.setScreen(new LevelSelectScreen(game, finite));
+		case STATE_PAUSED:
+		case STATE_GAMEOVER:
+			updateMenu(menus[state-1], deltaTime);
 			break;
 		}
 		logTime("update", 50);
@@ -186,10 +189,9 @@ public class GameScreen extends BaseScreen {
 		uiBatch.end();
 		switch (state) {
 		case STATE_PAUSED:
-			pauseMenu.render();
-			break;
 		case STATE_GAMEOVER:
-			gameOverMenu.render();
+		case STATE_WON:
+			menus[state-1].render();
 			break;
 		}
 		logTime("render", 50);
@@ -214,6 +216,7 @@ public class GameScreen extends BaseScreen {
 			game.setScreen(new GameScreen(game, levelNum, finite));
 			break;
 		case MENU_NEXTLEVEL:
+			game.setScreen(new GameScreen(game, levelNum+1, finite));
 			break;
 		case MENU_QUIT:
 			game.setScreen(new LevelSelectScreen(game, finite));

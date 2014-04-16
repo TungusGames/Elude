@@ -37,8 +37,8 @@ public class ScoreData {
 	
 	public static List<FiniteLevelScore> playerFiniteScore;
 	public static List<ArcadeLevelScore> playerArcadeScore;
-	public static List<FiniteLevelScore[]> finiteMedals;
-	public static List<ArcadeLevelScore[]> arcadeMedals;
+	public static List<FiniteLevelScore> finiteMedals;
+	public static List<ArcadeLevelScore> arcadeMedals;
 	
 	private static final FileHandle medalFiniteFile = Gdx.files.internal("medals/finite.score");
 	private static final FileHandle medalArcadeFile = Gdx.files.internal("medals/arcade.score");
@@ -48,8 +48,8 @@ public class ScoreData {
 	@SuppressWarnings("unchecked")
 	public static void load() {
 		try {
-			arcadeMedals = (List<ArcadeLevelScore[]>)(new ObjectInputStream(medalArcadeFile.read()).readObject());
-			finiteMedals = (List<FiniteLevelScore[]>)(new ObjectInputStream(medalFiniteFile.read()).readObject());
+			arcadeMedals = (List<ArcadeLevelScore>)(new ObjectInputStream(medalArcadeFile.read()).readObject());
+			finiteMedals = (List<FiniteLevelScore>)(new ObjectInputStream(medalFiniteFile.read()).readObject());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Badly serialized score file", e);
@@ -106,33 +106,25 @@ public class ScoreData {
 		}
 	}
 	
-	public static int getMedal(boolean finite, boolean time, int levelNum) { // 0: no medal, 1-3: bronze, silver, gold
+	public static boolean hasMedal(boolean finite, boolean time, int levelNum) {
 		if (finite) {
-			FiniteLevelScore[] medals = finiteMedals.get(levelNum);
+			FiniteLevelScore medal = finiteMedals.get(levelNum);
 			FiniteLevelScore player = playerFiniteScore.get(levelNum);
 			if (!player.completed)
-				return 0;
-			int i = 0;
+				return false;
 			if (time) {
-				while (i < 3 && player.timeTaken <= medals[i].timeTaken)
-					i++;
+				return medal.timeTaken > player.timeTaken;
 			} else {
-				while (i < 3 && player.hpLost <= medals[i].hpLost)
-					i++;
+				return medal.hpLost > player.hpLost;
 			}
-			return i;
 		} else {
-			ArcadeLevelScore[] medals = arcadeMedals.get(levelNum);
+			ArcadeLevelScore medal = arcadeMedals.get(levelNum);
 			ArcadeLevelScore player = playerArcadeScore.get(levelNum);
-			int i = 0;
 			if (time) {
-				while (i < 3 && player.timeSurvived >= medals[i].timeSurvived)
-					i++;
+				return medal.timeSurvived < player.timeSurvived;
 			} else {
-				while (i < 3 && player.enemiesKilled >= medals[i].enemiesKilled)
-					i++;
+				return medal.enemiesKilled < player.enemiesKilled;
 			}
-			return i;
 		}
 	}
 }

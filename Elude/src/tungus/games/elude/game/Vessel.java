@@ -3,7 +3,6 @@ package tungus.games.elude.game;
 import tungus.games.elude.Assets;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
@@ -63,7 +62,7 @@ public class Vessel extends Sprite {
 		bounds = new Rectangle(pos.x - COLLIDER_SIZE/2, pos.y - COLLIDER_SIZE/2, COLLIDER_SIZE, COLLIDER_SIZE);
 		
 		trails = Assets.vesselTrails.obtain();
-		world.particles.add(trails);
+		trails.getEmitters().get(0).getEmission().setHigh(0);
 	}
 	
 	public void update(float deltaTime, Vector2 dir) {
