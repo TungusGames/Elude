@@ -10,6 +10,8 @@ import tungus.games.elude.game.input.Controls;
 import tungus.games.elude.game.input.KeyControls;
 import tungus.games.elude.game.input.mobile.TapToTargetControls;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
+import tungus.games.elude.levels.loader.FiniteLevelLoader;
+import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
 import tungus.games.elude.menu.ingame.LevelCompleteMenu;
@@ -40,7 +42,7 @@ public class GameScreen extends BaseScreen {
 	public static final int STATE_PAUSED = 1;
 	public static final int STATE_GAMEOVER = 2;
 	public static final int STATE_WON = 3;
-	private int state = STATE_WON;
+	private int state = STATE_STARTING;
 	
 	public static final int MENU_NOCHANGE = -1;
 	public static final int MENU_NEXTLEVEL = -2;
@@ -48,16 +50,13 @@ public class GameScreen extends BaseScreen {
 	public static final int MENU_RESTART = -4;
 	
 	private final AbstractIngameMenu[] menus;
-	//private PauseMenu pauseMenu = new PauseMenu();
-	//private GameOverMenu gameOverMenu = new GameOverMenu();
-	//private LevelCompleteMenu levelCompleteMenu = new LevelCompleteMenu();
 	
 	private World world;
 	private WorldRenderer renderer;
 	private SpriteBatch uiBatch;
 	private OrthographicCamera uiCam;
 		
-	private final Vector2 healthbarFromTopleft /*= new Vector2(0.5f, 1f)*/;
+	private final Vector2 healthbarFromTopleft;
 	private final float healthbarFullLength;
 	private final float healthbarWidth;
 	private final Rectangle pauseButton;
@@ -118,7 +117,7 @@ public class GameScreen extends BaseScreen {
 		healthbarWidth = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
 		healthbarFromTopleft = new Vector2(healthbarWidth, 2*healthbarWidth);
 		pauseButton = new Rectangle();
-		pauseButton.width = pauseButton.height = 4*healthbarWidth;
+		pauseButton.width = pauseButton.height = 2.5f*healthbarWidth;
 		pauseButton.y = FRUSTUM_HEIGHT - 0.25f - pauseButton.height;
 		pauseButton.x = FRUSTUM_WIDTH - 0.25f - pauseButton.width;
 		healthbarFullLength = FRUSTUM_WIDTH - 2*healthbarFromTopleft.x - 0.5f - pauseButton.width;
@@ -155,12 +154,18 @@ public class GameScreen extends BaseScreen {
 		case STATE_PLAYING:
 			world.update(deltaTime, dirs);
 			if (world.state != World.STATE_PLAYING) {
-				state = world.state == World.STATE_LOST ? STATE_GAMEOVER : STATE_WON;
+				state = ((world.state == World.STATE_LOST && finite) ? STATE_GAMEOVER : STATE_WON);
+				if (state == STATE_WON) {
+					if (finite)
+						((LevelCompleteMenu)menus[state-1]).setScore(((FiniteLevelLoader)world.waveLoader).getScore());
+					else
+						((LevelCompleteMenu)menus[state-1]).setScore(((ArcadeLoaderBase)world.waveLoader).getScore());
+				}
 			}
 			break;
+		case STATE_WON:
 		case STATE_PAUSED:
 		case STATE_GAMEOVER:
-		case STATE_WON:
 			updateMenu(menus[state-1], deltaTime);
 			break;
 		}

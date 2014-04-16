@@ -18,12 +18,10 @@ public class PauseMenu extends AbstractIngameMenu {
 						   new Rectangle(cam.viewportWidth/2-0.5f*BUTTON_SIZE,				  BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
 						   new Rectangle(cam.viewportWidth/2+0.5f*BUTTON_SIZE+BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)});
 	}
-	
 	@Override
 	protected void onButtonTouch(int id) {
 		state = STATE_DISAPPEAR;
 		stateTime = 0;
-		returnOnDisappear = (id == 0 ? GameScreen.MENU_QUIT : id == 1 ? GameScreen.MENU_RESTART : GameScreen.STATE_PLAYING);
+		returnOnDisappear = id == 0 ? GameScreen.MENU_QUIT : id == 1 ? GameScreen.MENU_RESTART : GameScreen.STATE_PLAYING;
 	}
-
 }

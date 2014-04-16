@@ -1,6 +1,7 @@
 package tungus.games.elude.levels.levelselect;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.levels.scoredata.ScoreData;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,7 +33,7 @@ public class DetailsPanel {
 	public DetailsPanel(boolean finiteLevels) {
 		finite = finiteLevels;
 		playButton = new Sprite(Assets.play);
-		playButton.setBounds(PLAY_X+10, 1.5f, 3f, 1.8f);
+		playButton.setBounds(PLAY_X+10, 0.5f, 3f, 1.8f);
 	}
 	
 	public void render(float deltaTime, SpriteBatch batch, boolean text, float alpha) {
@@ -59,16 +60,18 @@ public class DetailsPanel {
 		}
 
 		if (activeLevel != null) {
-			activeLevel.render(batch, text, state == STATE_SWITCH ? stateTime : SWITCH_TIME, alpha);
+			activeLevel.render(batch, text, state == STATE_SWITCH ? stateTime/SWITCH_TIME : 1, alpha);
 		}
 		if (prevLevel != null) {
-			prevLevel.render(batch, text, SWITCH_TIME, alpha*Math.max(0, 1-stateTime*2.5f));
+			prevLevel.render(batch, text, 1, alpha*Math.max(0, 1-stateTime*2.5f));
 		}
 	}
 
 	public void switchTo(int levelNum) {
 		prevLevel = activeLevel;
-		activeLevel = new ScoreDetails(levelNum, finite, 12.5f, 1, false, 10f);
+		activeLevel = finite ?
+				new ScoreDetails("LEVEL " + (levelNum+1), levelNum, 12.5f, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum)) :
+				new ScoreDetails("LEVEL " + (levelNum+1), levelNum, 12.5f, 1, false, 10f, ScoreData.playerArcadeScore.get(levelNum));
 		state = STATE_SWITCH;
 		stateTime = 0;
 	}

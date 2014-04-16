@@ -39,5 +39,13 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 		score.tried = true;
 		ScoreData.save(false);
 	}
+	
+	public ArcadeLevelScore getScore() {
+		ArcadeLevelScore s = new ArcadeLevelScore();
+		s.tried = true;
+		s.timeSurvived = timeSurvived;
+		s.enemiesKilled = enemiesKilled;
+		return s;
+	}
 
 }

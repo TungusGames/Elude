@@ -10,7 +10,7 @@ public class GameOverMenu extends AbstractIngameMenu {
 
 	private static final float BUTTON_SIZE = 150;
 	private static final float BUTTON_SPACING = 60;
-	private static final float BUTTON_Y = 240-BUTTON_SIZE;
+	private static final float BUTTON_Y = 240-BUTTON_SIZE/2;
 	
 	public GameOverMenu() {
 		super(new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart)},
@@ -24,5 +24,4 @@ public class GameOverMenu extends AbstractIngameMenu {
 		stateTime = 0;
 		returnOnDisappear = id == 0 ? GameScreen.MENU_QUIT : GameScreen.MENU_RESTART;
 	}
-
 }

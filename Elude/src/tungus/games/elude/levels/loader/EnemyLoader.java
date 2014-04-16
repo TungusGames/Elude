@@ -35,6 +35,7 @@ public abstract class EnemyLoader {
 					}
 					@Override
 					public void update(float deltaTime) {
+						super.update(deltaTime);
 						if (world.enemies.size() == 0)
 							for (int i = 0; i < 30; i++)
 								world.enemies.add(Enemy.newEnemy(world, EnemyType.KAMIKAZE));

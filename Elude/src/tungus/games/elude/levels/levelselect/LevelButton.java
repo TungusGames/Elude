@@ -32,7 +32,7 @@ public class LevelButton extends Sprite {
 				if (finite && i == 0)
 					stars[i] = new Sprite(ScoreData.playerFiniteScore.get(n).completed ? Assets.stars[3] : Assets.stars[0]);
 				else
-					stars[i] = new Sprite(Assets.smallStars[ScoreData.getMedal(finite, ((finite ? i-1 : i) % 2 == 0), n)]);
+					stars[i] = new Sprite(ScoreData.hasMedal(finite, ((finite ? i-1 : i) % 2 == 0), n) ? Assets.stars[3] : Assets.stars[0]);
 				stars[i].setSize(0.36f, 0.342f);
 				stars[i].setOrigin(stars[i].getWidth()/2, stars[i].getHeight()/2+0.43f);
 			}

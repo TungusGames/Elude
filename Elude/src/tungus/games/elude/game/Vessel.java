@@ -3,7 +3,6 @@ package tungus.games.elude.game;
 import tungus.games.elude.Assets;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
