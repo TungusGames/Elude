@@ -42,7 +42,7 @@ public class GameScreen extends BaseScreen {
 	public static final int STATE_PAUSED = 1;
 	public static final int STATE_GAMEOVER = 2;
 	public static final int STATE_WON = 3;
-	private int state = STATE_STARTING;
+	private int state = STATE_PLAYING;
 	
 	public static final int MENU_NOCHANGE = -1;
 	public static final int MENU_NEXTLEVEL = -2;

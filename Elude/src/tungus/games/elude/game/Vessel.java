@@ -62,7 +62,7 @@ public class Vessel extends Sprite {
 		bounds = new Rectangle(pos.x - COLLIDER_SIZE/2, pos.y - COLLIDER_SIZE/2, COLLIDER_SIZE, COLLIDER_SIZE);
 		
 		trails = Assets.vesselTrails.obtain();
-		world.particles.add(trails);
+		trails.getEmitters().get(0).getEmission().setHigh(0);
 	}
 	
 	public void update(float deltaTime, Vector2 dir) {
