@@ -1,0 +1,19 @@
+BluetoothTodo
+- Refer to http://developer.android.com/guide/topics/connectivity/bluetooth.html
+- 
+Features
+- Notify the user if the device doesn't support BT (not probable...)
+CLIENT FEATURES
+- Turn on BT
+- "Discovery mode" - scans for nearby visible devices
+- Show list of discovered devices
+- Show list of paired devices
+- Connect to paired and/or discovered devices (latter includes pairing)
+SERVER FEATURES
+- Turn on visibility (includes turning on BT) 
+- Count back visibility time
+- Accept incoming connections
+WHEN WE GOT THE CONNECTION (BluetoothSocket)
+- Both devices get an Input and an OutputStream
+- read thread - reads to byte[] buffer
+- write(byte[]) function
