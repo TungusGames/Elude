@@ -23,5 +23,6 @@ public class GameOverMenu extends AbstractIngameMenu {
 		state = STATE_DISAPPEAR;
 		stateTime = 0;
 		returnOnDisappear = id == 0 ? GameScreen.MENU_QUIT : GameScreen.MENU_RESTART;
+		fadeGameOut = true;
 	}
 }

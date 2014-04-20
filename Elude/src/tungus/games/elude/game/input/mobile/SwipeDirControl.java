@@ -58,6 +58,6 @@ public class SwipeDirControl implements Controls {
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, float alpha) {
 	}
 }

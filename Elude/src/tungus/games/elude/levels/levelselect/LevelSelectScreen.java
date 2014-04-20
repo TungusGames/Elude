@@ -33,10 +33,13 @@ public class LevelSelectScreen extends BaseScreen {
 	
 	private static final int STATE_BEGIN = 0;
 	private static final int STATE_WORKING = 1;
-	private static final int STATE_END = 2;
+	private static final int STATE_STARTING_LEVEL = 2;
+	private static final int STATE_EXITING = 3;
 	
 	private static final float BEGIN_DURATION = 2f;
-	private static final float END_DURATION = 2f;
+	private static final float LEVELSTART_DURATION = 2f;
+	private static final float EXIT_DURATION = 2f;
+	private float exitingFromRow = -1; //Used in exit state - the position before starting exit
 	
 	private final GestureAdapter listener = new GestureAdapter() {
 		@Override
@@ -47,7 +50,7 @@ public class LevelSelectScreen extends BaseScreen {
 				if (grid.tapped(touch3.x, touch3.y)) {
 					details.switchTo(grid.selected);
 				} else if (details.tapped(touch3.x, touch3.y)) {
-					state = STATE_END;
+					state = STATE_STARTING_LEVEL;
 					stateTime = 0;
 				}
 			}
@@ -98,7 +101,9 @@ public class LevelSelectScreen extends BaseScreen {
 		@Override
 		public boolean keyDown(int keycode) {
 			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
-				game.setScreen(new PlayMenu(game));
+				state = STATE_EXITING;
+				stateTime = 0;
+				exitingFromRow = grid.middleRow;
 				return true;
 			}
 			return false;
@@ -145,8 +150,11 @@ public class LevelSelectScreen extends BaseScreen {
 		if (state == STATE_BEGIN && stateTime > BEGIN_DURATION) {
 			state = STATE_WORKING;
 			stateTime = 0;
-		} else if (state == STATE_END && stateTime > END_DURATION) {
+		} else if (state == STATE_STARTING_LEVEL && stateTime > LEVELSTART_DURATION) {
 			game.setScreen(new GameScreen(game, grid.selected, finite));
+			return;
+		} else if (state == STATE_EXITING && stateTime > EXIT_DURATION) {
+			game.setScreen(new PlayMenu(game));
 			return;
 		}
 		
@@ -161,9 +169,13 @@ public class LevelSelectScreen extends BaseScreen {
 			grid.render(uiBatch, deltaTime, false);
 			details.render(deltaTime, uiBatch, false, 1);
 			break;
-		case STATE_END:
-			grid.renderEnding(uiBatch, deltaTime, false, stateTime/END_DURATION);
-			details.render(deltaTime, uiBatch, false, 1-stateTime/END_DURATION);
+		case STATE_STARTING_LEVEL:
+			grid.renderEnding(uiBatch, deltaTime, false, stateTime/LEVELSTART_DURATION);
+			details.render(deltaTime, uiBatch, false, 1-stateTime/LEVELSTART_DURATION);
+			break;
+		case STATE_EXITING:
+			grid.renderLoading(uiBatch, deltaTime, false, 1-stateTime/EXIT_DURATION, exitingFromRow);
+			details.render(deltaTime, uiBatch, false, 1-stateTime/EXIT_DURATION);
 			break;
 		}
 		uiBatch.end();
@@ -177,9 +189,14 @@ public class LevelSelectScreen extends BaseScreen {
 			grid.render(fontBatch, deltaTime, true);
 			details.render(deltaTime, fontBatch, true, 1);
 			break;
-		case STATE_END:
+		case STATE_STARTING_LEVEL:
 			grid.render(fontBatch, deltaTime, true);
-			details.render(deltaTime, fontBatch, true, 1-stateTime/END_DURATION);
+			details.render(deltaTime, fontBatch, true, 1-stateTime/LEVELSTART_DURATION);
+			break;
+		case STATE_EXITING:
+			grid.renderLoading(fontBatch, deltaTime, true, 1-stateTime/EXIT_DURATION, exitingFromRow);
+			details.render(deltaTime, fontBatch, true, 1-stateTime/EXIT_DURATION);
+			break;
 		}		
 		fontBatch.end();
 	}

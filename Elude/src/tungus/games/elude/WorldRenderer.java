@@ -4,6 +4,7 @@ package tungus.games.elude;
 import tungus.games.elude.game.World;
 import tungus.games.elude.util.CamShaker;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,22 +25,22 @@ public class WorldRenderer {
 		CamShaker.INSTANCE = new CamShaker(batch);
 	}
 	
-	public void render(float deltaTime) {
+	public void render(float deltaTime, float alpha) {
 		
 		batch.begin();
 		int size = world.enemies.size();
 		for(int i = 0; i < size; i++) {
-			world.enemies.get(i).draw(batch);
+			world.enemies.get(i).draw(batch, alpha);
 		}
 		
 		size = world.pickups.size();
 		for(int i = 0; i < size; i++) {
-			world.pickups.get(i).draw(batch);
+			world.pickups.get(i).draw(batch, alpha);
 		}
 		
 		size = world.vessels.size();
 		for(int i = 0; i < size; i++) {
-			world.vessels.get(i).draw(batch);
+			world.vessels.get(i).draw(batch, alpha);
 		}		
 		
 		size = world.particles.size();
@@ -51,6 +52,7 @@ public class WorldRenderer {
 				i--;
 				size--;
 			} else {
+				batch.setColor(1, 1, 1, alpha);
 				p.draw(batch);
 			}
 		}

@@ -118,16 +118,13 @@ public class Main {
 	
 	
 	public static void writeFiniteMedals() {
-		List<FiniteLevelScore[]> list = new ArrayList<>();
+		List<FiniteLevelScore> list = new ArrayList<>();
+		FiniteLevelScore medal = new FiniteLevelScore();
+		medal.completed = true;
+		medal.timeTaken = 150;
+		medal.hpLost = 50;
 		for (int i = 0; i < 50; i++) {
-			FiniteLevelScore[] medals = new FiniteLevelScore[3];
-			for (int j = 0; j < 3; j++) {
-				medals[j] = new FiniteLevelScore();
-				medals[j].completed = true;
-				medals[j].timeTaken = 180 - 60*j;
-				medals[j].hpLost = 150 - 50*j;
-			}
-			list.add(medals);
+			list.add(medal);
 		}
 		try {
 			FileOutputStream fileOut = new FileOutputStream("finite.score");
@@ -141,16 +138,13 @@ public class Main {
 	}
 	
 	public static void writeArcadeMedals() {
-		List<ArcadeLevelScore[]> list = new ArrayList<>();
+		List<ArcadeLevelScore> list = new ArrayList<>();
+		ArcadeLevelScore medal = new ArcadeLevelScore();
+		medal.tried = true;
+		medal.timeSurvived = 150;
+		medal.enemiesKilled = 40;
 		for (int i = 0; i < 15; i++) {
-			ArcadeLevelScore[] medals = new ArcadeLevelScore[3];
-			for (int j = 0; j < 3; j++) {
-				medals[j] = new ArcadeLevelScore();
-				medals[j].tried = true;
-				medals[j].timeSurvived = 60*j;
-				medals[j].enemiesKilled = 15*(j+1);
-			}
-			list.add(medals);
+			list.add(medal);
 		}
 		try {
 			FileOutputStream fileOut = new FileOutputStream("arcade.score");

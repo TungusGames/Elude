@@ -51,9 +51,9 @@ public class DynamicDPad extends Sprite implements Controls {
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, float alpha) {
 		if (touched)
-			super.draw(batch);
+			super.draw(batch, alpha);
 	}
 
 }

@@ -37,6 +37,7 @@ public class Assets {
 	public static TextureRegion resume;
 	public static TextureRegion restart;
 	public static TextureRegion toMenu;
+	public static TextureRegion nextLevel;
 	public static TextureRegion shadower;
 	
 	//Level select screen
@@ -85,6 +86,7 @@ public class Assets {
 		toMenu = atlas.findRegion("ingamemenu/tomenu");
 		restart = atlas.findRegion("ingamemenu/restart");
 		shadower = atlas.findRegion("ingamemenu/shadower");
+		nextLevel = atlas.findRegion("ingamemenu/nextlevel");
 		
 		frame = atlas.findRegion("frame");
 		play = atlas.findRegion("play");

@@ -10,8 +10,8 @@ max: 200
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 150.0
-highMax: 150.0
+highMin: 80.0
+highMax: 80.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -114,12 +114,12 @@ active: false
 active: false
 - Tint - 
 colorsCount: 6
-colors0: 0.8509804
-colors1: 0.95686275
-colors2: 0.9490196
-colors3: 0.0
-colors4: 1.0
-colors5: 0.96862745
+colors0: 0.8039216
+colors1: 0.40784314
+colors2: 0.11372549
+colors3: 0.68235296
+colors4: 0.09803922
+colors5: 0.09803922
 timelineCount: 2
 timeline0: 0.0
 timeline1: 1.0
@@ -133,13 +133,13 @@ scalingCount: 5
 scaling0: 0.0
 scaling1: 0.0
 scaling2: 0.71910113
-scaling3: 0.19298245
+scaling3: 0.56179774
 scaling4: 0.0
 timelineCount: 5
 timeline0: 0.0
 timeline1: 0.099616855
 timeline2: 0.22796935
-timeline3: 0.6232877
+timeline3: 0.8122605
 timeline4: 1.0
 - Options - 
 attached: false
@@ -148,4 +148,4 @@ aligned: false
 additive: true
 behind: false
 - Image Path -
-C:\Users\Peti\git\elude\img\done\particle.png
+C:\Users\Peti\git\elude\img\done\sq2.png

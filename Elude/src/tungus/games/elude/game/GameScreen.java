@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -42,12 +43,15 @@ public class GameScreen extends BaseScreen {
 	public static final int STATE_PAUSED = 1;
 	public static final int STATE_GAMEOVER = 2;
 	public static final int STATE_WON = 3;
-	private int state = STATE_PLAYING;
+	private int state = STATE_STARTING;
+	private float timeSinceStart = 0;
 	
 	public static final int MENU_NOCHANGE = -1;
 	public static final int MENU_NEXTLEVEL = -2;
 	public static final int MENU_QUIT = -3;
 	public static final int MENU_RESTART = -4;
+	
+	private static final float START_TIME = 2f;
 	
 	private final AbstractIngameMenu[] menus;
 	
@@ -55,6 +59,7 @@ public class GameScreen extends BaseScreen {
 	private WorldRenderer renderer;
 	private SpriteBatch uiBatch;
 	private OrthographicCamera uiCam;
+	private float gameAlpha;
 		
 	private final Vector2 healthbarFromTopleft;
 	private final float healthbarFullLength;
@@ -79,7 +84,10 @@ public class GameScreen extends BaseScreen {
 		@Override
 		public boolean keyDown(int keycode) {
 			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
-				game.setScreen(new LevelSelectScreen(game, finite));
+				if (state == STATE_PAUSED)
+					((PauseMenu)menus[STATE_PAUSED-1]).unPause();
+				else
+					state = STATE_PAUSED;
 				return true;
 			}
 			return false;
@@ -149,8 +157,16 @@ public class GameScreen extends BaseScreen {
 		}
 		CamShaker.INSTANCE.update(deltaTime);
 		logTime("outside", 50);
-		
 		switch (state) {
+		case STATE_STARTING:
+			if (timeSinceStart > START_TIME) {
+				state = STATE_PLAYING;
+				gameAlpha = 1;
+			} else {
+				gameAlpha = Interpolation.fade.apply(timeSinceStart/START_TIME);
+				timeSinceStart += deltaTime;
+			}
+			break;
 		case STATE_PLAYING:
 			world.update(deltaTime, dirs);
 			if (world.state != World.STATE_PLAYING) {
@@ -161,6 +177,7 @@ public class GameScreen extends BaseScreen {
 					else
 						((LevelCompleteMenu)menus[state-1]).setScore(((ArcadeLoaderBase)world.waveLoader).getScore());
 				}
+				updateMenu(menus[state-1], deltaTime);	//update() must be called before render()
 			}
 			break;
 		case STATE_WON:
@@ -172,26 +189,26 @@ public class GameScreen extends BaseScreen {
 		logTime("update", 50);
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		renderer.render(deltaTime);
+		renderer.render(deltaTime, gameAlpha);
 		uiBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			dirs[i] = controls.get(i).getDir();
-			controls.get(i).draw(uiBatch);
+			controls.get(i).draw(uiBatch, gameAlpha);
 		}
 		if (world.vessels.get(0).hp > 0) {
 			float hpPerMax = world.vessels.get(0).hp / Vessel.MAX_HP;
-			uiBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f);
+			uiBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f*gameAlpha);
 			uiBatch.draw(Assets.whiteRectangle, healthbarFromTopleft.x, FRUSTUM_HEIGHT-healthbarFromTopleft.y, 
 								hpPerMax * healthbarFullLength, healthbarWidth);
 		}
-		uiBatch.setColor(Color.WHITE);
+		uiBatch.setColor(1,1,1,gameAlpha);
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
 		switch (state) {
 		case STATE_PAUSED:
 		case STATE_GAMEOVER:
 		case STATE_WON:
-			menus[state-1].render();
+			renderMenu(menus[state-1]);
 			break;
 		}
 		logTime("render", 50);
@@ -207,8 +224,11 @@ public class GameScreen extends BaseScreen {
 	}
 	
 	private void updateMenu(AbstractIngameMenu menu, float deltaTime) {
-		int n = menu.update(deltaTime, unhandledTap ? rawTap : null);
+		menu.update(deltaTime, unhandledTap ? rawTap : null);
 		unhandledTap = false;
+	}
+	private void renderMenu(AbstractIngameMenu menu) {
+		int n = menu.render();
 		if (n >= 0) {
 			state = n;
 		} else switch (n) {

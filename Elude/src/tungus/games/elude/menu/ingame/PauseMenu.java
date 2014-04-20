@@ -23,5 +23,12 @@ public class PauseMenu extends AbstractIngameMenu {
 		state = STATE_DISAPPEAR;
 		stateTime = 0;
 		returnOnDisappear = id == 0 ? GameScreen.MENU_QUIT : id == 1 ? GameScreen.MENU_RESTART : GameScreen.STATE_PLAYING;
+		fadeGameOut = !(returnOnDisappear == GameScreen.STATE_PLAYING);
+	}
+	
+	//To be called when unpaused from keyboard
+	public void unPause() {
+		if (state == STATE_IDLE)
+			onButtonTouch(2);
 	}
 }

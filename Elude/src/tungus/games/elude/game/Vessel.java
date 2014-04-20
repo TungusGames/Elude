@@ -125,7 +125,8 @@ public class Vessel extends Sprite {
 				trails = Assets.vesselTrails.obtain();
 				world.particles.add(trails);
 			}
-			particleEmitter.getAngle().setLow(vel.angle()-180);
+			particleEmitter.getAngle().setLow(getRotation()-90);
+			particleEmitter.getRotation().setLow(getRotation());
 		}
 		trails.setPosition(pos.x, pos.y);
 		

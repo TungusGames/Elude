@@ -26,6 +26,7 @@ public abstract class AbstractIngameMenu {
 	protected static final Interpolation POSITION = Interpolation.fade;
 	protected static final Interpolation OPACITY = Interpolation.fade;
 	protected static final Interpolation SHADOW = Interpolation.fade;
+	protected static final float FULL_SHADOW = 0.6f;
 	
 	protected static final OrthographicCamera cam = new OrthographicCamera(800, 480);
 	protected static final SpriteBatch batch = new SpriteBatch();
@@ -39,6 +40,7 @@ public abstract class AbstractIngameMenu {
 	protected Rectangle[] goalPositions;
 	protected int state = STATE_APPEAR;
 	protected float stateTime = 0;
+	protected boolean fadeGameOut = false;
 	
 	protected int returnOnDisappear = GameScreen.STATE_PLAYING;
 	
@@ -71,8 +73,6 @@ public abstract class AbstractIngameMenu {
 			}
 		} else if (state == STATE_DISAPPEAR) {
 			if (stateTime > DISAPPEAR_TIME) {
-				stateTime = 0;
-				state = STATE_APPEAR;
 				return returnOnDisappear;
 			}
 			return GameScreen.MENU_NOCHANGE;
@@ -89,18 +89,39 @@ public abstract class AbstractIngameMenu {
 		return GameScreen.MENU_NOCHANGE;
 	}
 	
-	public void render() {
+	public float getGameAlpha() {
+		float shadow = FULL_SHADOW;
+		if (state == STATE_APPEAR)
+			shadow = SHADOW.apply(stateTime / APPEAR_TIME)*FULL_SHADOW;
+		else if (state == STATE_DISAPPEAR) {
+			if (fadeGameOut)
+				shadow = FULL_SHADOW + SHADOW.apply(stateTime / DISAPPEAR_TIME)*(1-FULL_SHADOW);
+			else
+				shadow = SHADOW.apply(1 - stateTime / DISAPPEAR_TIME)*FULL_SHADOW;
+		}
+		return 1-shadow;
+	}
+	
+	public int render() {
 		batch.begin();
-		float shadow = (state == STATE_APPEAR) ? SHADOW.apply(stateTime / APPEAR_TIME) :
-					   (state == STATE_DISAPPEAR) ? SHADOW.apply(1-stateTime/DISAPPEAR_TIME) : 1;
-		batch.setColor(1, 1, 1, shadow*0.8f);
+		float shadow = 1-getGameAlpha();
+		batch.setColor(1, 1, 1, shadow);
 		batch.draw(Assets.shadower, 0, 0, cam.viewportWidth, cam.viewportHeight);
-		batch.setColor(1, 1, 1, state == STATE_DISAPPEAR ? SHADOW.apply(1-stateTime/DISAPPEAR_TIME) : 1);
+		batch.setColor(1, 1, 1, 1);
+		float alpha = state == STATE_DISAPPEAR ? SHADOW.apply(1-stateTime/DISAPPEAR_TIME) : 1;
 		int s = buttonSprites.length;
 		for (int i = 0; i < s; i++) {
-			buttonSprites[i].draw(batch, shadow);
+			buttonSprites[i].draw(batch, alpha);
 		}
 		batch.end();
+		// Reset state - if it was done in update(), the last frame would render badly
+		if (state == STATE_DISAPPEAR && stateTime > DISAPPEAR_TIME) {
+			stateTime = 0;
+			state = STATE_APPEAR;
+			fadeGameOut = false;
+			return returnOnDisappear;
+		}
+		return GameScreen.MENU_NOCHANGE;
 	}
 	
 	protected abstract void onButtonTouch(int id);

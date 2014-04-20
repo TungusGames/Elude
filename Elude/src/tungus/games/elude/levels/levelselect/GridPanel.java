@@ -45,7 +45,7 @@ public class GridPanel {
 	private int prevSelected = -1;
 	private int lastOpenLevel;
 	
-	private float middleRow = 1f;
+	public float middleRow = 1f;
 	private float touchedRow = -1;
 	
 	private final float[] rgba = new float[4];
@@ -236,6 +236,10 @@ public class GridPanel {
 	
 	public void renderLoading(SpriteBatch uiBatch, float deltaTime, boolean text, float ready) {
 		float goalRow = Math.max(lastOpenLevel/5-1, 1);
+		renderLoading(uiBatch, deltaTime, text, ready, goalRow);
+	}
+	
+	public void renderLoading(SpriteBatch uiBatch, float deltaTime, boolean text, float ready, float goalRow) {
 		middleRow = interp.apply(totalRows+3, goalRow, ready);
 		render(uiBatch, deltaTime, text);
 	}
