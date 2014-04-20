@@ -1,7 +1,7 @@
 package tungus.games.elude.levels.loader.arcade;
 
-import tungus.games.elude.game.World;
-import tungus.games.elude.game.enemies.Enemy;
+import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;

@@ -1,7 +1,7 @@
 package tungus.games.elude.levels.levelselect;
 
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.game.GameScreen;
+import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.PlayMenu;
 

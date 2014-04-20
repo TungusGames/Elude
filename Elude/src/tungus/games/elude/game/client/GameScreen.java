@@ -1,14 +1,15 @@
-package tungus.games.elude.game;
+package tungus.games.elude.game.client;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.WorldRenderer;
-import tungus.games.elude.game.input.Controls;
-import tungus.games.elude.game.input.KeyControls;
-import tungus.games.elude.game.input.mobile.TapToTargetControls;
+import tungus.games.elude.game.client.input.Controls;
+import tungus.games.elude.game.client.input.KeyControls;
+import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
+import tungus.games.elude.game.server.Vessel;
+import tungus.games.elude.game.server.World;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;

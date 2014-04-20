@@ -1,7 +1,7 @@
-package tungus.games.elude.game.pickups;
+package tungus.games.elude.game.server.pickups;
 
-import tungus.games.elude.game.Vessel;
-import tungus.games.elude.game.World;
+import tungus.games.elude.game.server.Vessel;
+import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
 import com.badlogic.gdx.graphics.Color;
@@ -12,7 +12,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Pickup extends Sprite {
-
+	
+	public enum PickupType{HEALTH, SPEED, SHIELD, ROCKETWIPER}
+	
 	public static final float DRAW_SIZE = 0.9f;
 	protected static final float DEFAULT_LIFETIME = 5f;
 	

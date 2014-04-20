@@ -1,10 +1,9 @@
-package tungus.games.elude;
+package tungus.games.elude.game.client;
 
 
-import tungus.games.elude.game.World;
+import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CamShaker;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

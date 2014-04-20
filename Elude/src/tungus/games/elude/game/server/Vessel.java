@@ -1,4 +1,4 @@
-package tungus.games.elude.game;
+package tungus.games.elude.game.server;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;

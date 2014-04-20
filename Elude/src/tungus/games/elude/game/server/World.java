@@ -1,11 +1,11 @@
-package tungus.games.elude.game;
+package tungus.games.elude.game.server;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import tungus.games.elude.game.enemies.Enemy;
-import tungus.games.elude.game.pickups.Pickup;
-import tungus.games.elude.game.rockets.Rocket;
+import tungus.games.elude.game.server.enemies.Enemy;
+import tungus.games.elude.game.server.pickups.Pickup;
+import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 

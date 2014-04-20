@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.Deque;
 import java.util.List;
 
-import tungus.games.elude.game.World;
-import tungus.games.elude.game.enemies.Enemy;
-import tungus.games.elude.game.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.enemies.Enemy;
+import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 

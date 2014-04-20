@@ -1,6 +1,6 @@
 package tungus.games.elude;
 
-import tungus.games.elude.game.GameScreen;
+import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.menu.MainMenu;
 
 import com.badlogic.gdx.Game;

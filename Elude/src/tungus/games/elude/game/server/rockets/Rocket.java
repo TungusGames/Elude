@@ -1,9 +1,9 @@
-package tungus.games.elude.game.rockets;
+package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.Vessel;
-import tungus.games.elude.game.World;
-import tungus.games.elude.game.enemies.Enemy;
+import tungus.games.elude.game.server.Vessel;
+import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import tungus.games.elude.util.CamShaker;
 

@@ -1,4 +1,4 @@
-package tungus.games.elude.game.input;
+package tungus.games.elude.game.client.input;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;

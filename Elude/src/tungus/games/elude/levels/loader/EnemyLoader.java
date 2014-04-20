@@ -1,13 +1,13 @@
 package tungus.games.elude.levels.loader;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.World;
-import tungus.games.elude.game.enemies.Enemy;
-import tungus.games.elude.game.enemies.Enemy.EnemyType;
-import tungus.games.elude.game.pickups.HealthPickup;
-import tungus.games.elude.game.pickups.RocketWiperPickup;
-import tungus.games.elude.game.pickups.ShieldPickup;
-import tungus.games.elude.game.pickups.SpeedPickup;
+import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.enemies.Enemy;
+import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.pickups.HealthPickup;
+import tungus.games.elude.game.server.pickups.RocketWiperPickup;
+import tungus.games.elude.game.server.pickups.ShieldPickup;
+import tungus.games.elude.game.server.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.levels.loader.arcade.OneDeadTwoCome;

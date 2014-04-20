@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import tungus.games.elude.game.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Wave;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;

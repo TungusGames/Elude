@@ -1,8 +1,8 @@
-package tungus.games.elude.game.enemies;
+package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.World;
-import tungus.games.elude.game.rockets.Rocket.RocketType;
+import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;

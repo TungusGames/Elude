@@ -1,10 +1,9 @@
-package tungus.games.elude.game.pickups;
+package tungus.games.elude.game.server.pickups;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.Vessel;
-import tungus.games.elude.game.World;
-import tungus.games.elude.game.pickups.Pickup;
-import tungus.games.elude.game.rockets.Rocket;
+import tungus.games.elude.game.server.Vessel;
+import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.rockets.Rocket;
 
 import com.badlogic.gdx.math.Vector2;
 

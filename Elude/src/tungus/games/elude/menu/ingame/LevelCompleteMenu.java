@@ -1,7 +1,7 @@
 package tungus.games.elude.menu.ingame;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.GameScreen;
+import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.levels.levelselect.ScoreDetails;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;

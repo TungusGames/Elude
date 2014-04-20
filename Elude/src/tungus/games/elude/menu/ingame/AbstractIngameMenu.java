@@ -1,7 +1,7 @@
 package tungus.games.elude.menu.ingame;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.GameScreen;
+import tungus.games.elude.game.client.GameScreen;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
