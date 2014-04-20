@@ -1,47 +1,50 @@
 package tungus.games.elude;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
+import tungus.games.elude.game.multiplayer.Connection;
 import android.bluetooth.BluetoothSocket;
 
-public class BluetoothConnection extends Thread{
+public class BluetoothConnection extends Connection {
     private BluetoothSocket socket;
-    private InputStream inStream;
-    private OutputStream outStream;
-    byte[] buffer = new byte[1024];  // buffer store for the stream
-    int bytes; // bytes returned from read()
-    public ByteBuffer bytebuffer;
+    private ObjectInputStream objInStream;
+    private ObjectOutputStream objOutStream;
  
+
+    private Thread thread = new Thread() {
+    	@Override
+    	public void run() {
+    		// Keep listening to the InputStream until an exception occurs
+    		while (true) {
+    			try {
+    				// Read from the InputStream
+    				synchronized(this) {
+        				newest = objInStream.readObject();
+    				}
+    				// Send the obtained bytes to the UI activity
+    			} catch (Exception e) {
+    				break;
+    			}
+    		}
+    	}
+    };
+    
     public BluetoothConnection(BluetoothSocket socket) {
         this.socket = socket;
         try {
-        	inStream = socket.getInputStream();
-        	outStream = socket.getOutputStream();
-
+        	objInStream = new ObjectInputStream(socket.getInputStream());
+        	objOutStream = new ObjectOutputStream(socket.getOutputStream());
+        	thread.start();
         } catch (IOException e) { } //TODO error handling
     }
  
-    @Override
-    public void run() {
-        // Keep listening to the InputStream until an exception occurs
-        while (true) {
-            try {
-                // Read from the InputStream
-                bytes = inStream.read(buffer);
-                // Send the obtained bytes to the UI activity
-            } catch (IOException e) {
-                break;
-            }
-        }
-    }
- 
     /* Call this from the main activity to send data to the remote device */
-    public void write(byte[] bytes) {
+    @Override
+    public void write(Object o) {
         try {
-            outStream.write(bytes);
+            objOutStream.writeObject(o);
         } catch (IOException e) { } //TODO exception handling
     }
  
