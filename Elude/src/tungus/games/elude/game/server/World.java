@@ -34,7 +34,7 @@ public class World {
 	public final Rectangle outerBounds;
 	public final Rectangle innerBounds;
 	
-	public final EnemyLoader waveLoader;
+	public final EnemyLoader waveLoader;;
 	
 	public int state;
 	
