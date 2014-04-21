@@ -211,9 +211,11 @@ public class GameScreen extends BaseScreen {
 			controls.get(i).draw(uiBatch, gameAlpha);
 		}
 		float hpPerMax = render.hp[vesselID];
-		uiBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f*gameAlpha);
-		uiBatch.draw(Assets.whiteRectangle, healthbarFromTopleft.x, FRUSTUM_HEIGHT-healthbarFromTopleft.y, 
-							hpPerMax * healthbarFullLength, healthbarWidth);
+		if (hpPerMax > 0) {
+			uiBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f*gameAlpha);
+			uiBatch.draw(Assets.whiteRectangle, healthbarFromTopleft.x, FRUSTUM_HEIGHT-healthbarFromTopleft.y, 
+								hpPerMax * healthbarFullLength, healthbarWidth);
+		}
 		
 		uiBatch.setColor(1,1,1,gameAlpha);
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);

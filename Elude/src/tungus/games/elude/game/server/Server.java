@@ -54,6 +54,7 @@ public class Server implements Runnable {
 				Gdx.app.log("LagWarn", "Server deltaTime: " + deltaTime);
 				deltaTime = 0.05f;
 			}
+			lastTime = newTime;
 			world.update(deltaTime, dirs);
 			render.setFromWorld(world);
 			for (int i = 0; i < render.hp.length; i++) {
