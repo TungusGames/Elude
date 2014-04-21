@@ -8,16 +8,26 @@ import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import tungus.games.elude.util.CamShaker;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public abstract class Rocket extends Sprite {
+public abstract class Rocket {
 	
-	public static enum RocketType { SLOW_TURNING, FAST_TURNING, LOWGRAV };
+	public static enum RocketType { 
+		SLOW_TURNING(Assets.flameRocket), 
+		FAST_TURNING(Assets.fastFlameRocket), 
+		LOWGRAV(Assets.matrixRocket),
+		HIGHGRAV(null);
+		public ParticleEffectPool effect;
+		RocketType(ParticleEffectPool e) {
+			effect = e;
+		}
+	};
 	
 	public static final float ROCKET_SIZE = 0.2f; // For both collision and drawing
 	public static final float DEFAULT_DMG = 2f;
@@ -48,6 +58,8 @@ public abstract class Rocket extends Sprite {
 	
 	public Vector2 pos;
 	public Vector2 vel;
+	public Rectangle bounds;
+	public final RocketType type;
 	
 	private boolean outOfOrigin = false;
 	
@@ -56,17 +68,18 @@ public abstract class Rocket extends Sprite {
 	private PooledEffect particle;
 	private float life;
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, PooledEffect particle) {
-		this(origin, pos, dir, world, texture, target, DEFAULT_DMG, DEFAULT_LIFE, particle);
+	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, PooledEffect particle) {
+		this(origin, t, pos, dir, world, target, DEFAULT_DMG, DEFAULT_LIFE, particle);
 	}
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, float dmg, float life, PooledEffect particle) {
+	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life, PooledEffect particle) {
 		super();
 		this.origin = origin;
+		this.type = t;
 		this.life = life;
 		this.pos = pos;
 		this.world = world;
-		setBounds(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
+		this.bounds = new Rectangle(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
 		this.dmg = dmg;
 		this.target = target;
 		vel = dir;
@@ -85,9 +98,10 @@ public abstract class Rocket extends Sprite {
 		aiUpdate(deltaTime);
 		updateParticle(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		setPosition(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2);
+		bounds.x = pos.x - ROCKET_SIZE / 2;
+		bounds.y = pos.y - ROCKET_SIZE / 2;
 		
-		if (!world.outerBounds.contains(getBoundingRectangle())) {
+		if (!world.outerBounds.contains(bounds)) {
 			kill();
 			return true;
 		}
@@ -95,7 +109,7 @@ public abstract class Rocket extends Sprite {
 		int size = world.enemies.size();
 		boolean stillIn = false;
 		for (int i = 0; i < size; i++) {
-			if (world.enemies.get(i).collisionBounds.overlaps(getBoundingRectangle())) {
+			if (world.enemies.get(i).collisionBounds.overlaps(bounds)) {
 				if (outOfOrigin) {
 					if ((world.enemies.get(i).hp -= dmg) <= 0)
 						world.enemies.get(i).kill(this);
@@ -115,7 +129,7 @@ public abstract class Rocket extends Sprite {
 		
 		size = world.vessels.size();
 		for (int i = 0; i < size; i++) {
-			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle())) {
+			if (world.vessels.get(i).bounds.overlaps(bounds)) {
 				if (!world.vessels.get(i).shielded) {
 					Gdx.input.vibrate(100);
 					CamShaker.INSTANCE.shake(0.65f, 2.5f);

@@ -30,11 +30,11 @@ public class StandingEnemy extends Enemy {
 	boolean rocketType = false;
 	
 	public StandingEnemy(Vector2 pos, World w) {
-		this(pos, w, Assets.standingEnemyGreen, RocketType.SLOW_TURNING, SPEED, RELOAD, new float[]{0.1f,1,0.1f,1});
+		this(pos, EnemyType.STANDING, w, Assets.standingEnemyGreen, RocketType.SLOW_TURNING, SPEED, RELOAD, new float[]{0.1f,1,0.1f,1});
 	}
 	
-	public StandingEnemy(Vector2 pos, World w, TextureRegion tex, RocketType type, float speed, float reload, float[] color) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, tex, debrisFromColor(color), w, type);
+	public StandingEnemy(Vector2 pos, EnemyType t, World w, TextureRegion tex, RocketType type, float speed, float reload, float[] color) {
+		super(pos, t, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, debrisFromColor(color), w, type);
 		
 		this.speed = speed;
 		this.reload = reload;
@@ -44,7 +44,7 @@ public class StandingEnemy extends Enemy {
 		
 		vel.set(targetPos).sub(pos).nor().scl(speed);
 		turnGoal = vel.angle()-90;
-		setRotation(turnGoal);
+		rot = turnGoal;
 		
 	}
 

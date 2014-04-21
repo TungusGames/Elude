@@ -1,6 +1,5 @@
 package tungus.games.elude.game.server.pickups;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 
@@ -11,11 +10,11 @@ public class HealthPickup extends Pickup {
 	private static final float HEALING = 8f;
 	
 	public HealthPickup(World world, Vector2 pos, float lifeTime) {
-		super(world, pos, Assets.hpBonus, lifeTime);
+		super(world, pos, PickupType.HEALTH, lifeTime);
 	}
 	
 	public HealthPickup(World world, Vector2 pos) {
-		super(world, pos, Assets.hpBonus, DEFAULT_LIFETIME); 
+		super(world, pos, PickupType.HEALTH); 
 	}
 	
 	@Override

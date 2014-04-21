@@ -1,6 +1,5 @@
 package tungus.games.elude.game.server.pickups;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
@@ -11,11 +10,11 @@ public class RocketWiperPickup extends Pickup {
 
 	public RocketWiperPickup(World world, Vector2 pos, 
 			float lifeTime) {
-		super(world, pos, Assets.smallCircle, lifeTime);
+		super(world, pos, PickupType.ROCKETWIPER, lifeTime);
 	}
 
 	public RocketWiperPickup(World world, Vector2 pos) {
-		super(world, pos, Assets.smallCircle);
+		super(world, pos, PickupType.ROCKETWIPER);
 	}
 
 	@Override

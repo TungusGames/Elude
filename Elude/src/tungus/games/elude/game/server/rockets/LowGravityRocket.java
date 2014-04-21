@@ -33,7 +33,7 @@ public class LowGravityRocket extends Rocket {
 
 	public LowGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, 
 			Vessel target, float minS, float maxS, float sPerD, float turnSpeed, float dmg, float life) {
-		super(origin, pos, dir, world, texture, target, dmg, life, initParticle());
+		super(origin, RocketType.LOWGRAV, pos, dir, world, target, dmg, life, initParticle());
 		this.turnSpeed = turnSpeed;
 		this.maxSpeed = maxS;
 		this.minSpeed = minS;

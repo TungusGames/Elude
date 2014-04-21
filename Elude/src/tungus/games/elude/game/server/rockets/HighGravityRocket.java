@@ -26,7 +26,7 @@ public class HighGravityRocket extends Rocket {
 	
 	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target,
 			float turnSpeed, float g) {
-		super(origin, pos, dir, world, texture, target, initParticle());
+		super(origin, RocketType.HIGHGRAV, pos, dir, world, target, initParticle());
 		this.turnSpeed = turnSpeed;
 		this.g = g;
 		vel.nor().scl(MIN_SPEED);

@@ -18,7 +18,8 @@ public class Assets {
 	public static TextureRegion eludeTitleOff;
 	
 	//Gameplay
-	public static TextureRegion vessel;	
+	public static TextureRegion vessel;
+	public static TextureRegion vesselRed;	
 	public static TextureRegion rocket;
 	public static TextureRegion standingEnemyGreen;
 	public static TextureRegion standingEnemyRed;
@@ -68,6 +69,7 @@ public class Assets {
 		eludeTitleOn = atlas.findRegion("EludeOn");
 		eludeTitleOff = atlas.findRegion("EludeOff");
 		vessel = atlas.findRegion("vessel");
+		vesselRed = atlas.findRegion("vesselred");
 		rocket = atlas.findRegion("rocket");
 		standingEnemyGreen = atlas.findRegion("StandingEnemy");
 		standingEnemyRed = atlas.findRegion("StandingEnemyRed");

@@ -7,7 +7,6 @@ import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -15,9 +14,23 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public abstract class Enemy extends Sprite {
+public abstract class Enemy {
 	
-	public static enum EnemyType {STANDING, MOVING, KAMIKAZE, STANDING_FAST, MOVING_MATRIX};
+	public static enum EnemyType {
+		STANDING(Assets.standingEnemyGreen, 0.6f, 1), 
+		MOVING(Assets.movingEnemyBlue, 0.8f, 1.05f), 
+		KAMIKAZE(Assets.kamikaze, 0.9f, 0.85f), 
+		STANDING_FAST(Assets.standingEnemyRed, 0.6f, 1), 
+		MOVING_MATRIX(Assets.movingEnemyGreen, 0.8f, 1.05f);
+		public TextureRegion tex;
+		public float width;
+		public float halfWidth;
+		public float height;
+		public float halfHeight;
+		EnemyType(TextureRegion t, float w, float h) {
+			tex = t; width = w; height = h; halfWidth = w/2; halfHeight = h/2;
+		}
+	}
 	
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
 	
@@ -34,11 +47,11 @@ public abstract class Enemy extends Sprite {
 			e = new Kamikaze(w.randomPosOutsideEdge(new Vector2(), 1), w);
 			break;
 		case STANDING_FAST:
-			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f, 
+			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), EnemyType.STANDING_FAST, w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f, 
 					new float[]{0.6f, 0.1f, 0.1f, 1f});
 			break;
 		case MOVING_MATRIX:
-			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f, 
+			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f, 
 					new float[]{0.4f, 1f, 0.25f, 1f});
 			break;
 		default:
@@ -110,6 +123,8 @@ public abstract class Enemy extends Sprite {
 	
 	public Vector2 pos;
 	public Vector2 vel;
+	public float rot = 0;
+	public final EnemyType type;
 	
 	public final Rectangle collisionBounds;
 	
@@ -119,36 +134,32 @@ public abstract class Enemy extends Sprite {
 	
 	public final PooledEffect onDestroy;
 	
-	public Enemy(Vector2 pos, float boundSize, float drawWidth, float drawHeight, float hp, TextureRegion texture, PooledEffect onDestroy, World w,
+	public Enemy(Vector2 pos, EnemyType t, float boundSize, float drawWidth, float drawHeight, float hp, PooledEffect onDestroy, World w,
 				 RocketType type) {
-		super(texture);
 		this.rocketType = type;
+		this.type = t;
 		this.pos = pos;
 		this.onDestroy = onDestroy;
 		this.world = w;
 		vel = new Vector2(0,0);
 		this.hp = hp;
-		setBounds(pos.x - drawWidth/2, pos.y - drawHeight/2, drawWidth, drawHeight); //drawWidth and drawHeight are stored in the superclass
-		setOrigin(drawWidth/2, drawHeight/2);
 		collisionBounds = new Rectangle(pos.x - boundSize/2, pos.y - boundSize/2, boundSize, boundSize);
 	}
 	
 	public final boolean update(float deltaTime) {
 		boolean b = aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		setPosition(pos.x - getWidth()/2, pos.y - getHeight()/2);
 		collisionBounds.x = pos.x - collisionBounds.width/2;
 		collisionBounds.y = pos.y - collisionBounds.height/2;
-		float current = getRotation();
-		float diff = turnGoal - current;
+		float diff = turnGoal - rot;
 		if (diff < -180)
 			diff += 360;
 		if (diff > 180)
 			diff -= 360;
 		if (Math.abs(diff) < MAX_GRAPHIC_TURNSPEED * deltaTime)
-			setRotation(turnGoal);
+			rot = turnGoal;
 		else
-			setRotation(current + Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime);
+			rot += Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime;
 		return b;
 	}
 	

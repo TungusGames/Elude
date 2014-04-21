@@ -151,7 +151,7 @@ public class LevelSelectScreen extends BaseScreen {
 			state = STATE_WORKING;
 			stateTime = 0;
 		} else if (state == STATE_STARTING_LEVEL && stateTime > LEVELSTART_DURATION) {
-			game.setScreen(new GameScreen(game, grid.selected, finite));
+			game.setScreen(new GameScreen(game, grid.selected, finite, 0));
 			return;
 		} else if (state == STATE_EXITING && stateTime > EXIT_DURATION) {
 			game.setScreen(new PlayMenu(game));

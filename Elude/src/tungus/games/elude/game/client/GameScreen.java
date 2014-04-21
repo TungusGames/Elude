@@ -8,6 +8,7 @@ import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.input.Controls;
 import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
+import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
@@ -25,7 +26,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -56,6 +56,7 @@ public class GameScreen extends BaseScreen {
 	
 	private final AbstractIngameMenu[] menus;
 	
+	private final Connection connection;
 	private World world;
 	private WorldRenderer renderer;
 	private SpriteBatch uiBatch;
@@ -112,14 +113,15 @@ public class GameScreen extends BaseScreen {
 		}
 	};
 	
-	public GameScreen(Game game, int levelNum, boolean finite) {
+	public GameScreen(Game game, int levelNum, boolean finite, Connection connection, int clientID) {
 		super(game);
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		this.finite = finite;
 		this.levelNum = levelNum;
+		this.connection = connection;
 		menus = new AbstractIngameMenu[]{new PauseMenu(), new GameOverMenu(), new LevelCompleteMenu(levelNum, finite)};
 		world = new World(levelNum, finite);
-		renderer = new WorldRenderer(world);
+		renderer = new WorldRenderer(clientID);
 		uiBatch = new SpriteBatch();
 		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
 		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
@@ -190,7 +192,7 @@ public class GameScreen extends BaseScreen {
 		logTime("update", 50);
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		renderer.render(deltaTime, gameAlpha);
+		renderer.render(deltaTime, gameAlpha, null); //TODO give RenderInfo here
 		uiBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			dirs[i] = controls.get(i).getDir();
@@ -234,10 +236,10 @@ public class GameScreen extends BaseScreen {
 			state = n;
 		} else switch (n) {
 		case MENU_RESTART:
-			game.setScreen(new GameScreen(game, levelNum, finite));
+			//game.setScreen(new GameScreen(game, levelNum, finite, 0)); // TODO
 			break;
 		case MENU_NEXTLEVEL:
-			game.setScreen(new GameScreen(game, levelNum+1, finite));
+			//game.setScreen(new GameScreen(game, levelNum+1, finite, 0));
 			break;
 		case MENU_QUIT:
 			game.setScreen(new LevelSelectScreen(game, finite));
