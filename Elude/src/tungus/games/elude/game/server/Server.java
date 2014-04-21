@@ -63,8 +63,8 @@ public class Server implements Runnable {
 			Connection c = connections[i];
 			synchronized(c) {
 				if (c.newest != null) {
-					for (int j = 0; j < ((UpdateInfo)c.newest).positions.length; j++) {
-						Vector2 d = ((UpdateInfo)c.newest).positions[j];
+					for (int j = 0; j < ((UpdateInfo)c.newest).directions.length; j++) {
+						Vector2 d = ((UpdateInfo)c.newest).directions[j];
 						dirs[dirOffset[i]+j].set(d);
 					}
 					c.newest = null;
@@ -77,7 +77,7 @@ public class Server implements Runnable {
 		int s = 0;
 		for (Connection c : connections) {
 			synchronized(c) {
-				s += ((UpdateInfo)c.newest).positions.length;
+				s += ((UpdateInfo)c.newest).directions.length;
 			}
 		}
 		dirs = new Vector2[s];
@@ -87,7 +87,7 @@ public class Server implements Runnable {
 			Connection c = connections[i];
 			synchronized(c) {
 				dirOffset[i] = s;
-				s += ((UpdateInfo)c.newest).positions.length;				
+				s += ((UpdateInfo)c.newest).directions.length;				
 			}
 		}
 	}

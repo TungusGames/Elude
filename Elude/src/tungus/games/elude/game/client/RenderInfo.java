@@ -53,10 +53,12 @@ public class RenderInfo implements Serializable {
 			pos = p; angle = a; id = i; shieldAlpha = s;
 		}
 	}
+	
 	public ArrayList<ReducedEnemy> enemies = new ArrayList<ReducedEnemy>();
 	public ArrayList<ReducedPickup> pickups = new ArrayList<ReducedPickup>();
 	public ArrayList<ReducedRocket> rockets = new ArrayList<ReducedRocket>();
 	public ArrayList<ReducedVessel> vessels = new ArrayList<ReducedVessel>();
+	
 	public void setFromWorld(World w) {		//TODO Pool reduced entities!
 		enemies.clear();
 		int s = w.enemies.size();

@@ -10,7 +10,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 
-public class HostBtGameScreen extends BaseScreen {
+public class HostBluetoothGameScreen extends BaseScreen {
 
 	private enum State {
 		STARTING, WAITING
@@ -30,7 +30,7 @@ public class HostBtGameScreen extends BaseScreen {
 		}
 	};
 	
-	public HostBtGameScreen(Game game) {
+	public HostBluetoothGameScreen(Game game) {
 		super(game);
 	}
 

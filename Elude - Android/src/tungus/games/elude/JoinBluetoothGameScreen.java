@@ -1,19 +1,18 @@
 package tungus.games.elude;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import tungus.games.elude.BaseScreen;
-import tungus.games.elude.BluetoothConnector.Server;
 import tungus.games.elude.menu.MainMenu;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 
-public class JoinBtGameScreen extends BaseScreen {
+public class JoinBluetoothGameScreen extends BaseScreen {
 
 	private enum State {
 		STARTING, BROWSE, CONNECTING
@@ -22,7 +21,7 @@ public class JoinBtGameScreen extends BaseScreen {
 	private State state = State.STARTING;
 	
 	private BluetoothConnector.Client client;
-	private ArrayList<String> deviceList = new ArrayList<String>();
+	private List<String> deviceList = new ArrayList<String>();
 	
 	private InputAdapter listener = new InputAdapter() {
 		@Override
@@ -35,7 +34,7 @@ public class JoinBtGameScreen extends BaseScreen {
 		}
 	};
 	
-	public JoinBtGameScreen(Game game) {
+	public JoinBluetoothGameScreen(Game game) {
 		super(game);
 	}
 
