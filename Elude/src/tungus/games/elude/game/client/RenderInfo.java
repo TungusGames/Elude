@@ -3,26 +3,24 @@ package tungus.games.elude.game.client;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import tungus.games.elude.game.multiplayer.Connection.TransferData;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
-import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.game.server.pickups.Pickup;
-import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.game.server.rockets.Rocket;
-import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class RenderInfo implements Serializable {
+public class RenderInfo implements Serializable, TransferData {
 	private static final long serialVersionUID = -4315239911779247372L;
 	static class ReducedEnemy implements Serializable {
 		private static final long serialVersionUID = -7557852638993394399L;
 		public Vector2 pos;
 		public float rot;
 		public int typeOrdinal;
-		public ReducedEnemy(Vector2 p, float r, EnemyType t) {
-			pos = p; rot = r; typeOrdinal = t.ordinal();
+		public ReducedEnemy(Vector2 p, float r, int t) {
+			pos = p; rot = r; typeOrdinal = t;
 		}
 	}
 	static class ReducedPickup implements Serializable {
@@ -30,8 +28,8 @@ public class RenderInfo implements Serializable {
 		public Vector2 pos;
 		public float alpha;
 		public int typeOrdinal;
-		public ReducedPickup(Vector2 p, float a, PickupType t) {
-			pos = p; alpha = a; typeOrdinal = t.ordinal();
+		public ReducedPickup(Vector2 p, float a, int t) {
+			pos = p; alpha = a; typeOrdinal = t;
 		}
 	}
 	static class ReducedRocket implements Serializable {
@@ -39,8 +37,8 @@ public class RenderInfo implements Serializable {
 		public Vector2 pos;
 		public float angle;
 		public int typeOrdinal;
-		public ReducedRocket(Vector2 p, float a, RocketType t) {
-			pos = p; angle = a; typeOrdinal = t.ordinal();
+		public ReducedRocket(Vector2 p, float a, int t) {
+			pos = p; angle = a; typeOrdinal = t;
 		}
 	}
 	static class ReducedVessel implements Serializable {
@@ -59,27 +57,69 @@ public class RenderInfo implements Serializable {
 	public ArrayList<ReducedRocket> rockets = new ArrayList<ReducedRocket>();
 	public ArrayList<ReducedVessel> vessels = new ArrayList<ReducedVessel>();
 	
+	public float[] hp;
+	public int info;
+	public boolean handled = true;
+	
 	public void setFromWorld(World w) {		//TODO Pool reduced entities!
 		enemies.clear();
 		int s = w.enemies.size();
 		for (int i = 0; i < s; i++) {
 			Enemy e = w.enemies.get(i);
-			enemies.add(new ReducedEnemy(e.pos, e.rot, e.type));
+			enemies.add(new ReducedEnemy(e.pos, e.rot, e.type.ordinal()));
 		}
+		pickups.clear();
 		s = w.pickups.size();
 		for (int i = 0; i < s; i++) {
 			Pickup p = w.pickups.get(i);
-			pickups.add(new ReducedPickup(new Vector2(p.collisionBounds.x+Pickup.HALF_SIZE, p.collisionBounds.y+Pickup.HALF_SIZE), p.alpha, p.type));
+			pickups.add(new ReducedPickup(new Vector2(p.collisionBounds.x+Pickup.HALF_SIZE, p.collisionBounds.y+Pickup.HALF_SIZE), p.alpha, p.type.ordinal()));
 		}
+		vessels.clear();
 		s = w.vessels.size();
 		for (int i = 0; i < s; i++) {
 			Vessel v = w.vessels.get(i);
 			vessels.add(new ReducedVessel(v.pos, v.rot, i, v.shieldAlpha));
 		}
+		rockets.clear();
 		s = w.rockets.size();
 		for (int i = 0; i < s; i++) {
 			Rocket r = w.rockets.get(i);
-			rockets.add(new ReducedRocket(r.pos, r.vel.angle(), r.type));
+			rockets.add(new ReducedRocket(r.pos, r.vel.angle(), r.type.ordinal()));
 		}
+	}
+	
+	public void copyTo(TransferData otherData) {
+		RenderInfo other = (RenderInfo)otherData;
+		other.enemies.clear();
+		int s = enemies.size();
+		for (int i = 0; i < s; i++) {
+			ReducedEnemy e = enemies.get(i);
+			other.enemies.add(new ReducedEnemy(e.pos, e.rot, e.typeOrdinal));
+		}
+		other.pickups.clear();
+		s = pickups.size();
+		for (int i = 0; i < s; i++) {
+			ReducedPickup p = pickups.get(i);
+			other.pickups.add(new ReducedPickup(p.pos, p.alpha, p.typeOrdinal));
+		}
+		other.vessels.clear();
+		s = vessels.size();
+		for (int i = 0; i < s; i++) {
+			ReducedVessel v = vessels.get(i);
+			other.vessels.add(new ReducedVessel(v.pos, v.angle, i, v.shieldAlpha));
+		}
+		other.rockets.clear();
+		s = rockets.size();
+		for (int i = 0; i < s; i++) {
+			ReducedRocket r = rockets.get(i);
+			other.rockets.add(new ReducedRocket(r.pos, r.angle, r.typeOrdinal));
+		}
+		other.info = info;
+		s = hp.length;
+		if (other.hp == null || other.hp.length < hp.length)
+			other.hp = new float[hp.length];
+		for (int i = 0; i < s; i++)
+			other.hp[i] = hp[i];
+		other.handled = false;
 	}
 }

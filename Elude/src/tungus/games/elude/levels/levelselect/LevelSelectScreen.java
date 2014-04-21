@@ -3,7 +3,7 @@ package tungus.games.elude.levels.levelselect;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.game.multiplayer.Connection;
-import tungus.games.elude.game.multiplayer.LocalConnection;
+import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
 import tungus.games.elude.game.server.Server;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.PlayMenu;
@@ -153,10 +153,10 @@ public class LevelSelectScreen extends BaseScreen {
 			state = STATE_WORKING;
 			stateTime = 0;
 		} else if (state == STATE_STARTING_LEVEL && stateTime > LEVELSTART_DURATION) {
-			Connection c1 = null, c2 = null;
-			LocalConnection.createPair(c1, c2);
-			new Thread(new Server(grid.selected, finite, new Connection[] {c1})).start();
-			game.setScreen(new GameScreen(game, grid.selected, finite, c2, 0));
+			LocalConnectionPair c = new LocalConnectionPair();
+			Gdx.app.log("CONNECTION", ""+(c.c1==null) + (c.c2 == null));
+			new Thread(new Server(grid.selected, finite, new Connection[] {c.c1})).start();
+			game.setScreen(new GameScreen(game, grid.selected, finite, c.c2, 0));
 			return;
 		} else if (state == STATE_EXITING && stateTime > EXIT_DURATION) {
 			game.setScreen(new PlayMenu(game));
