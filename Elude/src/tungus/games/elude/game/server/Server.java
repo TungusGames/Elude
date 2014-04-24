@@ -64,8 +64,6 @@ public class Server implements Runnable {
 			for (Connection c : connections)
 				c.write(render);
 			Gdx.app.log("Server to client send time", TimeUtils.millis()-timeA + " ms");
-			Gdx.app.log("Vessel count:", render.vessels.size()+"");
-			Gdx.app.log("Enemy count:", render.enemies.size()+"");
 		}
 	}
 	

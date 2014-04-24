@@ -17,18 +17,19 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public abstract class Enemy {
 	
 	public static enum EnemyType {
-		STANDING(Assets.standingEnemyGreen, 0.6f, 1), 
-		MOVING(Assets.movingEnemyBlue, 0.8f, 1.05f), 
-		KAMIKAZE(Assets.kamikaze, 0.9f, 0.85f), 
-		STANDING_FAST(Assets.standingEnemyRed, 0.6f, 1), 
-		MOVING_MATRIX(Assets.movingEnemyGreen, 0.8f, 1.05f);
+		STANDING(Assets.standingEnemyGreen, 0.6f, 1, new float[]{0.1f,1,0.1f,1}), 
+		MOVING(Assets.movingEnemyBlue, 0.8f, 1.05f, new float[]{0.1f,1,1,1}), 
+		KAMIKAZE(Assets.kamikaze, 0.9f, 0.85f, new float[]{0.1f,0.1f,0.6f,1}), 
+		STANDING_FAST(Assets.standingEnemyRed, 0.6f, 1, new float[]{0.6f, 0.1f, 0.1f, 1f}), 
+		MOVING_MATRIX(Assets.movingEnemyGreen, 0.8f, 1.05f, new float[]{0.4f, 1f, 0.25f, 1f});
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
 		public float height;
 		public float halfHeight;
-		EnemyType(TextureRegion t, float w, float h) {
-			tex = t; width = w; height = h; halfWidth = w/2; halfHeight = h/2;
+		public float[] debrisColor;
+		EnemyType(TextureRegion t, float w, float h, float[] c) {
+			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2;
 		}
 	}
 	
@@ -47,12 +48,10 @@ public abstract class Enemy {
 			e = new Kamikaze(w.randomPosOutsideEdge(new Vector2(), 1), w);
 			break;
 		case STANDING_FAST:
-			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), EnemyType.STANDING_FAST, w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f, 
-					new float[]{0.6f, 0.1f, 0.1f, 1f});
+			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), EnemyType.STANDING_FAST, w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f);
 			break;
 		case MOVING_MATRIX:
-			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f, 
-					new float[]{0.4f, 1f, 0.25f, 1f});
+			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f);
 			break;
 		default:
 			throw new GdxRuntimeException("Unknown enemy type: " + t);

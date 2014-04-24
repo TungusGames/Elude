@@ -30,7 +30,7 @@ public class Kamikaze extends Enemy {
 	}
 	
 	public Kamikaze(Vector2 pos, World w, TextureRegion tex, RocketType type) {
-		super(pos, EnemyType.KAMIKAZE, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, debrisFromColor(new float[]{0.1f,0.1f,0.6f,1}), w, type);
+		super(pos, EnemyType.KAMIKAZE, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, debrisFromColor(EnemyType.KAMIKAZE.debrisColor), w, type);
 		
 		targetPos = new Vector2();
 		getInnerTargetPos(pos, targetPos);

@@ -8,6 +8,8 @@ import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.input.Controls;
 import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.multiplayer.Connection;
+import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
+import tungus.games.elude.game.server.Server;
 import tungus.games.elude.game.server.UpdateInfo;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
@@ -111,6 +113,12 @@ public class GameScreen extends BaseScreen {
 		}
 	};
 	
+	public static GameScreen newSinglePlayer(Game game, int levelNum, boolean finite) {
+		LocalConnectionPair c = new LocalConnectionPair();
+		new Thread(new Server(levelNum, finite, new Connection[] {c.c1})).start();
+		return new GameScreen(game, levelNum, finite, c.c2, 0);
+	}
+	
 	public GameScreen(Game game, int levelNum, boolean finite, Connection connection, int clientID) {
 		super(game);
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
@@ -152,6 +160,10 @@ public class GameScreen extends BaseScreen {
 		connection.newest = new RenderInfo();
 	}
 	
+	private void init() {
+		
+	}
+	
 
 	@Override
 	public void render(float deltaTime) {
@@ -184,12 +196,10 @@ public class GameScreen extends BaseScreen {
 				updateMenu(menus[state-1], deltaTime);	//update() must be called before render()
 			}*/
 			synchronized(connection) {
-				Gdx.app.log("Starting reading RenderInfo", TimeUtils.millis()+"");
 				if (!((RenderInfo)connection.newest).handled) {
 					((RenderInfo)connection.newest).copyTo(render);
 					((RenderInfo)connection.newest).handled = true;
 				}
-				Gdx.app.log("Finished reading RenderInfo", TimeUtils.millis()+"");
 			}
 			for (int i = 0; i < update.directions.length; i++) {
 				update.directions[i] = controls.get(i).getDir();

@@ -50,6 +50,8 @@ public abstract class Rocket {
 		return r;
 	}
 	
+	private static int nextID = 0;
+	
 	private World world;
 	private Enemy origin;
 	
@@ -59,6 +61,7 @@ public abstract class Rocket {
 	public Vector2 vel;
 	public Rectangle bounds;
 	public final RocketType type;
+	public final int id;
 	
 	private boolean outOfOrigin = false;
 	
@@ -81,6 +84,7 @@ public abstract class Rocket {
 		this.bounds = new Rectangle(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
 		this.dmg = dmg;
 		this.target = target;
+		this.id = nextID++;
 		vel = dir;
 		this.particle = particle;
 		world.particles.add(this.particle);

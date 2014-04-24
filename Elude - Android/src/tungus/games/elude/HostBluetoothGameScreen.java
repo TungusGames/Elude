@@ -71,7 +71,7 @@ public class HostBluetoothGameScreen extends BaseScreen {
 				if (server.updateVisibility(deltaTime)) // If visibility time is up
 					server.enableVisibility(); // Re-enable it
 				if (server.state == BluetoothConnector.ServerState.CONNECTED) {
-					Screen next = new GameScreen(game, 1, true);
+					Screen next = GameScreen.newSinglePlayer(game, 1, true);
 					game.setScreen(next);
 					// TODO Level selection, start game server
 				}

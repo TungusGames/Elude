@@ -37,8 +37,9 @@ public class RenderInfo implements Serializable, TransferData {
 		public Vector2 pos;
 		public float angle;
 		public int typeOrdinal;
-		public ReducedRocket(Vector2 p, float a, int t) {
-			pos = p; angle = a; typeOrdinal = t;
+		public int id;
+		public ReducedRocket(Vector2 p, float a, int t, int id) {
+			pos = p; angle = a; typeOrdinal = t; this.id = id;
 		}
 	}
 	static class ReducedVessel implements Serializable {
@@ -51,11 +52,26 @@ public class RenderInfo implements Serializable, TransferData {
 			pos = p; angle = a; id = i; shieldAlpha = s;
 		}
 	}
+	static class Effect implements Serializable {
+		public enum EffectType{EXPLOSION, DEBRIS, CAMSHAKE}
+		public EffectType type;
+		public Effect(EffectType t) {
+			type = t;
+		}
+	}
+	static class DebrisEffect extends Effect {
+		public float direction;
+		public DebrisEffect(float dir) {
+			super(EffectType.DEBRIS);
+			direction = dir;
+		}
+	}
 	
 	public ArrayList<ReducedEnemy> enemies = new ArrayList<ReducedEnemy>();
 	public ArrayList<ReducedPickup> pickups = new ArrayList<ReducedPickup>();
 	public ArrayList<ReducedRocket> rockets = new ArrayList<ReducedRocket>();
 	public ArrayList<ReducedVessel> vessels = new ArrayList<ReducedVessel>();
+	public ArrayList<Effect> effects = new ArrayList<Effect>();
 	
 	public float[] hp;
 	public int info;
@@ -84,8 +100,9 @@ public class RenderInfo implements Serializable, TransferData {
 		s = w.rockets.size();
 		for (int i = 0; i < s; i++) {
 			Rocket r = w.rockets.get(i);
-			rockets.add(new ReducedRocket(r.pos, r.vel.angle(), r.type.ordinal()));
+			rockets.add(new ReducedRocket(r.pos, r.vel.angle(), r.type.ordinal(), r.id));
 		}
+		effects.clear();
 	}
 	
 	public void copyTo(TransferData otherData) {
@@ -112,7 +129,13 @@ public class RenderInfo implements Serializable, TransferData {
 		s = rockets.size();
 		for (int i = 0; i < s; i++) {
 			ReducedRocket r = rockets.get(i);
-			other.rockets.add(new ReducedRocket(r.pos, r.angle, r.typeOrdinal));
+			other.rockets.add(new ReducedRocket(r.pos, r.angle, r.typeOrdinal, r.id));
+		}
+		other.effects.clear();
+		s = effects.size();
+		for (int i = 0; i < s; i++) {
+			Effect e = effects.get(i);
+			other.effects.add(e.type == Effect.EffectType.DEBRIS ? new DebrisEffect(((DebrisEffect)e).direction) : new Effect(e.type));
 		}
 		other.info = info;
 		s = hp.length;

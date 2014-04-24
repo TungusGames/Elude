@@ -2,8 +2,8 @@ Untitled
 - Delay -
 active: false
 - Duration - 
-lowMin: 1000.0
-lowMax: 1000.0
+lowMin: 10.0
+lowMax: 10.0
 - Count - 
 min: 0
 max: 100

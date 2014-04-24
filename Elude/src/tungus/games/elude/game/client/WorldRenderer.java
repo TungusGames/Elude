@@ -1,12 +1,13 @@
 package tungus.games.elude.game.client;
 
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.client.RenderInfo.ReducedEnemy;
 import tungus.games.elude.game.client.RenderInfo.ReducedPickup;
+import tungus.games.elude.game.client.RenderInfo.ReducedRocket;
 import tungus.games.elude.game.client.RenderInfo.ReducedVessel;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
@@ -16,10 +17,13 @@ import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.util.CamShaker;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.IntMap;
 
 public class WorldRenderer {
 
@@ -28,7 +32,8 @@ public class WorldRenderer {
 	private static final PickupType[] pt = PickupType.values();
 	
 	private SpriteBatch batch;
-	private List<PooledEffect> particles = new ArrayList<PooledEffect>();
+	private List<PooledEffect> particles = new LinkedList<PooledEffect>();
+	private IntMap<PooledEffect> rockets = new IntMap<PooledEffect>();
 	public OrthographicCamera camera;
 	private int vesselID;
 	
@@ -59,10 +64,50 @@ public class WorldRenderer {
 		for(int i = 0; i < size; i++) {
 			drawVessel(r.vessels.get(i));
 		}		
+		
+		size = r.rockets.size();
+		IntMap.Entries<PooledEffect> entries = rockets.entries();
+		int rocketI = 0;
+		ReducedRocket roc = null;
+		if (entries.hasNext) {
+			IntMap.Entry<PooledEffect> e = null;
+			while (entries.hasNext/* && rocketI < r.rockets.size()*/) {
+				e = entries.next();
+				Gdx.app.log("Rocket effects", "Effect id  " + e.key);
+				if (rocketI < r.rockets.size()) {
+					while(e.key > r.rockets.get(rocketI).id) {
+						Gdx.app.log("Rocket effects", "Rocket id " + r.rockets.get(rocketI).id + " skipped");
+						rocketI++;
+					}
+					if (e.key == (roc = r.rockets.get(rocketI)).id) {
+						setRocketEffect(e.value, roc);
+						Gdx.app.log("Rocket effects", "Rocket id " + r.rockets.get(rocketI).id + " updated");
+						rocketI++;
+					} else {
+						entries.remove();
+						e.value.allowCompletion();
+						Gdx.app.log("Rocket effects", "Removed " + e.key);
+					}
+				} else {
+					entries.remove();
+					e.value.allowCompletion();
+					Gdx.app.log("Rocket effects", "Removed " + e.key);
+				}
+			}
+		}
+		Gdx.app.log("Rocket effects", ""+r.rockets.size() + " rockets, " + rockets.size + " effects binded, " + particles.size() + " effects drawn");
+		for (; rocketI < r.rockets.size(); rocketI++) {
+			roc = r.rockets.get(rocketI);
+			PooledEffect e = rt[roc.typeOrdinal].effect.obtain();
+			rockets.put(roc.id, setRocketEffect(e, roc));
+			particles.add(e);
+			Gdx.app.log("Rocket effects", "Added " + roc.id);
+		}
+
 		// TODO particle effects - adding effects, modifying rockets, vessel trails, ...
 		size = particles.size();
 		for (int i = 0; i < size; i++) {
-			PooledEffect p = particles.get(i);
+			PooledEffect p = particles.get(i);//TODO iterate
 			if (p.isComplete()) {
 				p.free();
 				particles.remove(i);
@@ -70,15 +115,21 @@ public class WorldRenderer {
 				size--;
 			} else {
 				batch.setColor(1, 1, 1, alpha);
-				p.draw(batch);
+				p.draw(batch, deltaTime);
 			}
 		}
 		batch.end();
 	}
 	
+	private PooledEffect setRocketEffect(PooledEffect effect, ReducedRocket rocket) {
+		effect.getEmitters().get(0).getAngle().setLow(rocket.angle-180);
+		effect.setPosition(rocket.pos.x, rocket.pos.y);
+		return effect;
+	}
+	
 	private void drawEnemy(ReducedEnemy e) {
 		int o = e.typeOrdinal;
-		batch.draw(et[o].tex, e.pos.x-et[o].halfWidth, e.pos.y-et[o].halfWidth, et[o].halfWidth, et[o].halfHeight, et[o].width, et[o].height, 1, 1, e.rot);
+		batch.draw(et[o].tex, e.pos.x-et[o].halfWidth, e.pos.y-et[o].halfHeight, et[o].halfWidth, et[o].halfHeight, et[o].width, et[o].height, 1, 1, e.rot);
 	}
 	
 	private void drawVessel(ReducedVessel v) {
