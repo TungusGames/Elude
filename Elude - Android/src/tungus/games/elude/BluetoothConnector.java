@@ -223,7 +223,10 @@ public class BluetoothConnector {
 				app.registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
 				state = ClientState.DISCOVERING;
 				return true;
-			} else return false;
+			} else {
+				state = ClientState.ERROR;
+				return false;
+			}
 		}
 		
 		public boolean disableDiscovery() {

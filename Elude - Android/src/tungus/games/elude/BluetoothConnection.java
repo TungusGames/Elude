@@ -42,9 +42,9 @@ public class BluetoothConnection extends Connection {
  
     /* Call this from the main activity to send data to the remote device */
     @Override
-    public void write(TransferData o) {
+    public void write(TransferData data) {
         try {
-            objOutStream.writeObject(o);
+            objOutStream.writeObject(data);
         } catch (IOException e) { } //TODO exception handling
     }
  

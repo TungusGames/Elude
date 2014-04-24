@@ -55,10 +55,26 @@ public class JoinBluetoothGameScreen extends BaseScreen {
 		} else
 		switch (state) {
 			case STARTING:
-				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT); // TODO loading screen
 				if (client.state == BluetoothConnector.ClientState.ENABLED) {
-					state = State.BROWSE; //If BT turn-on succeeded, continue to running state
+					client.enableDiscovery();
+					if (client.state == BluetoothConnector.ClientState.DISCOVERING) 
+						state = State.BROWSE; // If BT turn-on succeeded, continue to running state
+					//Otherwise we'll exit in the next frame (ERROR)
 				}
+				break;
+			case BROWSE:
+				break;
+			case CONNECTING:
 		}
 	}
+	
+	@Override
+	public void hide() {
+		client.disableDiscovery();
+		if (client.connectThread.isAlive())
+			client.connectThread.cancel();
+	}
+
+
 }

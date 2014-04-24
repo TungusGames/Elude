@@ -1,6 +1,9 @@
 package tungus.games.elude;
 
 import tungus.games.elude.game.client.GameScreen;
+import tungus.games.elude.game.multiplayer.Connection;
+import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
+import tungus.games.elude.game.server.Server;
 import tungus.games.elude.menu.MainMenu;
 
 import com.badlogic.gdx.Game;
