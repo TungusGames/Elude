@@ -53,35 +53,37 @@ public class Main {
 				wipeDrop = sc.nextFloat();
 				shieldDrop = sc.nextFloat();
 				while (sc.hasNext()) {
-					if (sc.nextLine() == "wave") {
+					if (sc.nextLine().equals("wavestart")) {
 						int t = sc.nextInt();
 						int n = sc.nextInt();
 						ArrayList<EnemyType> e = new ArrayList<EnemyType>();
-						do {
-							switch (sc.next()) {
-							case "standing":
-								e.add(EnemyType.STANDING);
-								break;
-							case "moving":
-								e.add(EnemyType.MOVING);
-								break;
-							case "kamikaze":
-								e.add(EnemyType.KAMIKAZE);
-								break;
-							case "standing_fast":
-								e.add(EnemyType.STANDING_FAST);
-								break;
-							case "moving_matrix":
-								e.add(EnemyType.MOVING_MATRIX);
-								break;
-							default:
-								break;
+						outer: while (true)
+							switch (sc.nextLine()) {
+								case "standing":
+									e.add(EnemyType.STANDING);
+									break;
+								case "moving":
+									e.add(EnemyType.MOVING);
+									break;
+								case "kamikaze":
+									e.add(EnemyType.KAMIKAZE);
+									break;
+								case "standing_fast":
+									e.add(EnemyType.STANDING_FAST);
+									break;
+								case "moving_matrix":
+									e.add(EnemyType.MOVING_MATRIX);
+									break;
+								case "end":
+									break outer; //Breaks from the outer loop...
+								default:
+									break;
 							}
-						} while (!(sc.nextLine() == "end"));
 						waves.add(new Wave(t, n, e));
-					}
+					 }
 				}
 				System.out.println("finished");
+				System.out.println(waves.size() + " wave(s) found");
 			} catch (FileNotFoundException e) {
 				System.out.println();
 				System.out.println("File not found: " + (n+levelOffset) + ".tel, finished at this file: " + (n+levelOffset-1)  + ".tel");

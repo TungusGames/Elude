@@ -2,13 +2,14 @@
 0.1
 0.1
 0.1
-wave
+wavestart
 -1
 0
 standing
 moving
 kamikaze
-wave
+end
+wavestart
 -1
 0
 moving
@@ -16,3 +17,4 @@ moving
 moving
 kamikaze
 kamikaze
+end
