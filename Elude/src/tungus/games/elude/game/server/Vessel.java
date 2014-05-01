@@ -22,7 +22,7 @@ public class Vessel {
 	
 	private static final Interpolation shieldOpacity = new FadeinFlash(0.08f, 0.6f);
 	
-	private final World world;
+	//private final World world;
 	
 	public Vector2 pos;
 	public Vector2 vel;
@@ -41,16 +41,11 @@ public class Vessel {
 	public float speedBonus = 1f;
 	public float speedBonusTime = 0f;
 	
-	//private PooledEffect trails;
-	
 	public Vessel(World world) {
-		this.world = world;
+		//this.world = world;
 		pos = new Vector2(World.WIDTH / 2, World.HEIGHT / 2);
 		vel = new Vector2(0, 0);
 		bounds = new Rectangle(pos.x - COLLIDER_HALF, pos.y - COLLIDER_HALF, COLLIDER_SIZE, COLLIDER_SIZE);
-		
-		//trails = Assets.vesselTrails.obtain();
-		//trails.getEmitters().get(0).getEmission().setHigh(0);
 	}
 	
 	public void update(float deltaTime, Vector2 dir) {
@@ -95,21 +90,7 @@ public class Vessel {
 			}
 			bounds.x = pos.x - COLLIDER_HALF;								// Update the bounds 
 			bounds.y = pos.y - COLLIDER_HALF;
-		}
-
-		/*ParticleEmitter particleEmitter = trails.getEmitters().get(0);
-		if (vel.equals(Vector2.Zero)) {
-			particleEmitter.getEmission().setHigh(0);
-		} else {
-			if (particleEmitter.getEmission().getHighMax() == 0) {
-				trails = Assets.vesselTrails.obtain();
-				world.particles.add(trails);
-			}
-			particleEmitter.getAngle().setLow(rot-90);
-			particleEmitter.getRotation().setLow(rot);
-		}
-		trails.setPosition(pos.x, pos.y);*/
-		
+		}	
 	}
 	
 	public void addShield(float shieldTime) {

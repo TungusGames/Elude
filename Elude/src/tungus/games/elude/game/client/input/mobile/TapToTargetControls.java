@@ -17,21 +17,18 @@ public class TapToTargetControls implements Controls {
 	private boolean isAndroid = false;
 	
 	private final OrthographicCamera gameCam;
-	
-	private Vector2 playerPos;
-	
+		
 	private Vector2 touch2 = new Vector2();
 	private Vector3 touch3 = new Vector3();
 
-	public TapToTargetControls(OrthographicCamera cam, Vector2 playerPos) {
+	public TapToTargetControls(OrthographicCamera cam) {
 		gameCam = cam;
-		this.playerPos = playerPos;
 		if (Gdx.app.getType() == ApplicationType.Android)
 			isAndroid = true;
 	}
 
 	@Override
-	public Vector2 getDir() {
+	public Vector2 getDir(Vector2 playerPos) {
 		if (!isAndroid || Gdx.input.isTouched()) {
 			touch3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			gameCam.unproject(touch3);

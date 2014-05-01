@@ -7,6 +7,7 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.input.Controls;
 import tungus.games.elude.game.client.input.KeyControls;
+import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
 import tungus.games.elude.game.server.Server;
@@ -51,6 +52,8 @@ public class GameScreen extends BaseScreen {
 	public static final int MENU_RESTART = -4;
 	
 	private static final float START_TIME = 2f;
+	
+	private static final Vector2 tmp = new Vector2();
 	
 	private final AbstractIngameMenu[] menus;
 	
@@ -150,9 +153,9 @@ public class GameScreen extends BaseScreen {
 			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
 				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
 			} else {
-				//controls.add(new TapToTargetControls(renderer.camera, world.vessels.get(i).pos));//TODO
+				controls.add(new TapToTargetControls(renderer.camera));
 			}				
-			update.directions[i] = controls.get(i).getDir();
+			update.directions[i] = controls.get(i).getDir(tmp.set(0,0));
 		}
 		lastTime = TimeUtils.millis();
 		render = new RenderInfo(null);
@@ -193,7 +196,7 @@ public class GameScreen extends BaseScreen {
 				updateMenu(menus[state-1], deltaTime);	//update() must be called before render()
 			}*/
 			for (int i = 0; i < update.directions.length; i++) {
-				update.directions[i] = controls.get(i).getDir();
+				update.directions[i] = controls.get(i).getDir(tmp.set(render.vessels.get(i).x, render.vessels.get(i).y));
 			}
 			update.info = Server.STATE_RUNNING;
 			break;
@@ -263,13 +266,19 @@ public class GameScreen extends BaseScreen {
 			state = n;
 		} else switch (n) {
 		case MENU_RESTART:
-			//game.setScreen(new GameScreen(game, levelNum, finite, 0)); // TODO
+			game.setScreen(newSinglePlayer(game, levelNum+1, finite));
+			update.info = Server.STATE_OVER;
+			connection.write(update);
 			break;
 		case MENU_NEXTLEVEL:
-			//game.setScreen(new GameScreen(game, levelNum+1, finite, 0));
+			game.setScreen(newSinglePlayer(game, levelNum+1, finite));
+			update.info = Server.STATE_OVER;
+			connection.write(update);
 			break;
 		case MENU_QUIT:
 			game.setScreen(new LevelSelectScreen(game, finite));
+			update.info = Server.STATE_OVER;
+			connection.write(update);
 			break;
 		}
 	}

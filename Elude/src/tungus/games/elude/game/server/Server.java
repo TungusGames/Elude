@@ -49,6 +49,7 @@ public class Server implements Runnable {
 			}*/
 		}
 		setupArrays();
+		render.setFromWorld();
 		lastTime = TimeUtils.millis();
 		while (state != STATE_OVER) { //TODO: when to end?
 			fps.log();
@@ -134,6 +135,9 @@ public class Server implements Runnable {
 			}
 		}
 		render.hp = new float[s];
+		for (int i = 0; i < s; i++) {
+			world.vessels.add(new Vessel(world));
+		}
 	}
 
 	private boolean allNewData() {

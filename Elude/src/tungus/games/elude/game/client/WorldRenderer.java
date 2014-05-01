@@ -22,6 +22,7 @@ import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.util.CamShaker;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
@@ -60,7 +61,7 @@ public class WorldRenderer {
 	}
 
 	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateParticles) {
-
+		batch.setColor(1, 1, 1, alpha);
 		batch.begin();
 		int size = r.enemies.size();
 		for(int i = 0; i < size; i++) {
@@ -111,6 +112,7 @@ public class WorldRenderer {
 			}
 		}
 		batch.end();
+		batch.setColor(Color.WHITE);
 	}
 
 	private void drawEffect(Effect effect) {
@@ -184,22 +186,22 @@ public class WorldRenderer {
 			batch.draw(Assets.shield, v.x-Vessel.SHIELD_HALF_SIZE, v.y-Vessel.SHIELD_HALF_SIZE, Vessel.SHIELD_SIZE, Vessel.SHIELD_SIZE);
 		}
 		if (updateParticles) {
-			modVesselTrails(tmp.set(v.x-vesselPositions[i].x, v.y-vesselPositions[i].y), vesselTrails[i], v);
+			modVesselTrails(tmp.set(v.x-vesselPositions[i].x, v.y-vesselPositions[i].y), i, v);
 			vesselPositions[i].set(v.x, v.y);
 		}
 	}
 	
-	private void modVesselTrails(Vector2 vel, PooledEffect trails, ReducedVessel v) {
+	private void modVesselTrails(Vector2 vel, int i, ReducedVessel v) {
+		PooledEffect trails = vesselTrails[i];
 		ParticleEmitter particleEmitter = trails.getEmitters().get(0);
 		if (vel.equals(Vector2.Zero)) {
 			particleEmitter.getEmission().setHigh(0);
-			Gdx.app.log("DEBUG", "Vessel standing");
 		} else {
 			if (particleEmitter.getEmission().getHighMax() == 0) {
-				trails = Assets.vesselTrails.obtain();
+				vesselTrails[i] = trails = Assets.vesselTrails.obtain();
+				particleEmitter = trails.getEmitters().get(0);
 				particleEmitter.getEmission().setHigh(150);
 				particles.add(trails);
-				Gdx.app.log("DEBUG", "Vessel got going");
 			}
 			particleEmitter.getAngle().setLow(v.angle-90);
 			particleEmitter.getRotation().setLow(v.angle);
