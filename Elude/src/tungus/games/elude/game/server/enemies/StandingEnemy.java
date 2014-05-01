@@ -34,7 +34,7 @@ public class StandingEnemy extends Enemy {
 	}
 	
 	public StandingEnemy(Vector2 pos, EnemyType t, World w, TextureRegion tex, RocketType type, float speed, float reload) {
-		super(pos, t, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, debrisFromColor(t.debrisColor), w, type);
+		super(pos, t, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, w, type);
 		
 		this.speed = speed;
 		this.reload = reload;

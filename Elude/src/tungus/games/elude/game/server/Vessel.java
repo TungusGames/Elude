@@ -1,10 +1,7 @@
 package tungus.games.elude.game.server;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -44,7 +41,7 @@ public class Vessel {
 	public float speedBonus = 1f;
 	public float speedBonusTime = 0f;
 	
-	private PooledEffect trails;
+	//private PooledEffect trails;
 	
 	public Vessel(World world) {
 		this.world = world;
@@ -52,8 +49,8 @@ public class Vessel {
 		vel = new Vector2(0, 0);
 		bounds = new Rectangle(pos.x - COLLIDER_HALF, pos.y - COLLIDER_HALF, COLLIDER_SIZE, COLLIDER_SIZE);
 		
-		trails = Assets.vesselTrails.obtain();
-		trails.getEmitters().get(0).getEmission().setHigh(0);
+		//trails = Assets.vesselTrails.obtain();
+		//trails.getEmitters().get(0).getEmission().setHigh(0);
 	}
 	
 	public void update(float deltaTime, Vector2 dir) {
@@ -100,7 +97,7 @@ public class Vessel {
 			bounds.y = pos.y - COLLIDER_HALF;
 		}
 
-		ParticleEmitter particleEmitter = trails.getEmitters().get(0);
+		/*ParticleEmitter particleEmitter = trails.getEmitters().get(0);
 		if (vel.equals(Vector2.Zero)) {
 			particleEmitter.getEmission().setHigh(0);
 		} else {
@@ -111,7 +108,7 @@ public class Vessel {
 			particleEmitter.getAngle().setLow(rot-90);
 			particleEmitter.getRotation().setLow(rot);
 		}
-		trails.setPosition(pos.x, pos.y);
+		trails.setPosition(pos.x, pos.y);*/
 		
 	}
 	

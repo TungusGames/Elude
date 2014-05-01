@@ -6,8 +6,12 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 
 public class Assets {
 	
@@ -130,6 +134,32 @@ public class Assets {
 	
 	public static FileHandle levelFile(int levelNum) {
 		return Gdx.files.internal("levels/" + levelNum + ".lvl");
+	}
+	
+	public static PooledEffect debris(float[] color, float dir) {
+		PooledEffect p = debris.obtain();
+		Array<ParticleEmitter> emitters = p.getEmitters();
+		for (int i = 0; i < emitters.size; i++) {
+			// Mod color
+			float[] separateColor = (i == emitters.size-1) ? color : color.clone(); // Color for each emitter - last one uses up the original array
+			float mul = MathUtils.random() + 0.5f;
+			for (int j = 0; j < 3; j++) {
+				// Randomly change the color slightly
+				mul = MathUtils.random() + 0.5f;
+				color[j] = MathUtils.clamp(separateColor[j]*mul, 0f, 1f);
+			}
+			emitters.get(i).getTint().setColors(separateColor);
+			
+			// Mod angle
+			if (dir == dir) { // Dir is not NaN (NaN != NaN)
+				emitters.get(i).getAngle().setLow(dir);
+				emitters.get(i).getAngle().setHigh(-90, 90);
+			}
+			else {
+				emitters.get(i).getAngle().setHigh(-180, 180);
+			}
+		}
+		return p;
 	}
 
 }

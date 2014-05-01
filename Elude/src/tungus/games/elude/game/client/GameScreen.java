@@ -155,13 +155,9 @@ public class GameScreen extends BaseScreen {
 			update.directions[i] = controls.get(i).getDir();
 		}
 		lastTime = TimeUtils.millis();
-		render = new RenderInfo();
+		render = new RenderInfo(null);
 		render.hp = new float[update.directions.length];
-		connection.newest = new RenderInfo();
-	}
-	
-	private void init() {
-		
+		connection.newest = new RenderInfo(null);
 	}
 	
 
@@ -182,6 +178,7 @@ public class GameScreen extends BaseScreen {
 				gameAlpha = Interpolation.fade.apply(timeSinceStart/START_TIME);
 				timeSinceStart += deltaTime;
 			}
+			update.info = Server.STATE_WAITING;
 			break;
 		case STATE_PLAYING:
 			/*world.update(deltaTime, dirs);
@@ -195,27 +192,34 @@ public class GameScreen extends BaseScreen {
 				}
 				updateMenu(menus[state-1], deltaTime);	//update() must be called before render()
 			}*/
-			synchronized(connection) {
-				if (!((RenderInfo)connection.newest).handled) {
-					((RenderInfo)connection.newest).copyTo(render);
-					((RenderInfo)connection.newest).handled = true;
-				}
-			}
 			for (int i = 0; i < update.directions.length; i++) {
 				update.directions[i] = controls.get(i).getDir();
 			}
-			connection.write(update);
+			update.info = Server.STATE_RUNNING;
+			break;
+		case STATE_PAUSED:
+			updateMenu(menus[state-1], deltaTime);
+			update.info = Server.STATE_WAITING;
 			break;
 		case STATE_WON:
-		case STATE_PAUSED:
 		case STATE_GAMEOVER:
 			updateMenu(menus[state-1], deltaTime);
+			update.info = Server.STATE_OVER;
 			break;
 		}
+		synchronized(connection) {
+			if (!((RenderInfo)connection.newest).handled) {
+				((RenderInfo)connection.newest).copyTo(render);
+				((RenderInfo)connection.newest).handled = true;
+			}
+		}
+		connection.write(update);
 		logTime("update", 50);
 		
+		// RENDER
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		renderer.render(deltaTime, gameAlpha, render);
+		renderer.render(deltaTime, gameAlpha, render, state == STATE_PLAYING);
+		
 		uiBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			controls.get(i).draw(uiBatch, gameAlpha);

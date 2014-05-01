@@ -1,17 +1,15 @@
 package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.RenderInfo.DebrisEffect;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public abstract class Enemy {
@@ -57,24 +55,6 @@ public abstract class Enemy {
 			throw new GdxRuntimeException("Unknown enemy type: " + t);
 		}
 		return e;
-	}
-	
-	protected static final PooledEffect debrisFromColor(float[] color) {
-		PooledEffect p = Assets.debris.obtain();
-		Array<ParticleEmitter> emitters = p.getEmitters();
-		for (int i = 0; i < emitters.size; i++) {
-			float[] separateColor = (i == emitters.size-1) ? color : color.clone(); // Color for each emitter - last one uses up the original array
-			float mul = //(float)MathUtils.random.nextGaussian()+1;
-					MathUtils.random() + 0.5f;
-			//mul *= mul;
-			for (int j = 0; j < 3; j++) {
-				// Randomly change the color slightly
-				mul = MathUtils.random() + 0.5f;
-				color[j] = MathUtils.clamp(separateColor[j]*mul, 0f, 1f);
-			}
-			emitters.get(i).getTint().setColors(separateColor);
-		}
-		return p;
 	}
 	
 	protected final Vector2 getInnerTargetPos(Vector2 pos, Vector2 targetPos) {
@@ -130,15 +110,12 @@ public abstract class Enemy {
 	public float hp;
 	
 	protected float turnGoal;
-	
-	public final PooledEffect onDestroy;
-	
-	public Enemy(Vector2 pos, EnemyType t, float boundSize, float drawWidth, float drawHeight, float hp, PooledEffect onDestroy, World w,
+		
+	public Enemy(Vector2 pos, EnemyType t, float boundSize, float drawWidth, float drawHeight, float hp, World w,
 				 RocketType type) {
 		this.rocketType = type;
 		this.type = t;
 		this.pos = pos;
-		this.onDestroy = onDestroy;
 		this.world = w;
 		vel = new Vector2(0,0);
 		this.hp = hp;
@@ -165,20 +142,7 @@ public abstract class Enemy {
 	protected abstract boolean aiUpdate(float deltaTime);
 	
 	public void kill(Rocket r) {
-		onDestroy.setPosition(pos.x, pos.y);
-		Array<ParticleEmitter> emitters = onDestroy.getEmitters();
-		for (int i = 0; i < emitters.size; i++) {
-			if (r != null) {
-				emitters.get(i).getAngle().setLow(r.vel.angle());
-				emitters.get(i).getAngle().setHigh(-90, 90);
-			}
-			else {
-				emitters.get(i).getAngle().setHigh(-180, 180);
-			}
-		}
-		onDestroy.start();
-		world.particles.add(onDestroy);
-		
+		world.effects.add(new DebrisEffect(pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN, type.ordinal()));
 		world.enemies.remove(this);
 		world.waveLoader.onEnemyDead(this);
 	}
