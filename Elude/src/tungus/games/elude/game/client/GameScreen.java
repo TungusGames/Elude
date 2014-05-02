@@ -252,6 +252,7 @@ public class GameScreen extends BaseScreen {
 		switch (state) {
 		case STATE_PAUSED:
 		case STATE_LOST:
+		case STATE_WON:
 			renderMenu(menus[state-1]);
 			break;
 		}

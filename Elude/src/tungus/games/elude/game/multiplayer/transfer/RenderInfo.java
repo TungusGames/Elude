@@ -144,9 +144,14 @@ public class RenderInfo extends TransferData {
 	}
 	
 	@Override
-	public void copyTo(TransferData otherData) {
-		super.copyTo(otherData);
-		RenderInfo other = (RenderInfo)otherData;
+	public TransferData copyTo(TransferData otherData) {
+		RenderInfo other = null;
+		if (otherData instanceof RenderInfo) {
+			other = (RenderInfo)otherData;
+		} else {
+			other = new RenderInfo(null);
+		}
+		super.copyTo(other);
 		other.enemies.clear();
 		int s = enemies.size();
 		for (int i = 0; i < s; i++) {
@@ -184,5 +189,6 @@ public class RenderInfo extends TransferData {
 			other.hp = new float[hp.length];
 		for (int i = 0; i < s; i++)
 			other.hp[i] = hp[i];
+		return other;
 	}
 }

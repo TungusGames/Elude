@@ -9,9 +9,14 @@ public class UpdateInfo extends TransferData {
 	public Vector2[] directions;
 	
 	@Override
-	public void copyTo(TransferData otherData) {
-		super.copyTo(otherData);
-		UpdateInfo other = (UpdateInfo)otherData;
+	public TransferData copyTo(TransferData otherData) {
+		UpdateInfo other = null;
+		if (otherData instanceof UpdateInfo) {
+			other = (UpdateInfo)otherData;
+		} else {
+			other = new UpdateInfo();
+		}
+		super.copyTo(other);
 		int s = directions.length;
 		if (other.directions == null) {
 			other.directions = new Vector2[s];
@@ -24,5 +29,6 @@ public class UpdateInfo extends TransferData {
 			for (int i = 0; i < s; i++)
 				other.directions[i].set(directions[i]);
 		}
+		return other;
 	}
 }

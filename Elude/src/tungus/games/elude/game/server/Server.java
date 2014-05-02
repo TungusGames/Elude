@@ -24,6 +24,8 @@ public class Server implements Runnable {
 	public static final int STATE_OVER = 3;
 	private int state = STATE_WAITING_START;
 	
+	private static final float END_DELAY = 2f;
+	
 	private final FPSLogger fps = new FPSLogger("FPSLogger", "Server thread FPS: ");
 	private final AverageLogger sendTime = new AverageLogger("SendLogger", "Server to client time (ms): ");
 	
@@ -35,6 +37,7 @@ public class Server implements Runnable {
 	private long lastTime;
 	private long newTime;
 	private float deltaTime;
+	private float timeSinceEnd = 0;
 	
 	private RenderInfo render;
 	private TransferData sendData;
@@ -87,15 +90,23 @@ public class Server implements Runnable {
 					render.setFromWorld();
 					break;
 				case World.STATE_LOST:
-					sendData = new TransferData(GameScreen.STATE_LOST);
-					state = STATE_OVER;
+					if ((timeSinceEnd += deltaTime) > END_DELAY) {
+						sendData = new TransferData(GameScreen.STATE_LOST);
+						state = STATE_OVER;
+					} else {
+						render.setFromWorld();
+					}
 					break;
 				case World.STATE_WON:
-					sendData = world.isFinite ? 
-						new FiniteScoreInfo(((FiniteLevelLoader)world.waveLoader).getScore()) :
-						new ArcadeScoreInfo(((ArcadeLoaderBase) world.waveLoader).getScore());
-					sendData.info = GameScreen.STATE_WON;
-					state = STATE_OVER;
+					if ((timeSinceEnd += deltaTime) > END_DELAY) {
+						sendData = world.isFinite ? 
+								new FiniteScoreInfo(((FiniteLevelLoader)world.waveLoader).getScore()) :
+								new ArcadeScoreInfo(((ArcadeLoaderBase) world.waveLoader).getScore());
+						sendData.info = GameScreen.STATE_WON;
+						state = STATE_OVER;
+					} else {
+						render.setFromWorld();
+					}
 				}
 			}
 			

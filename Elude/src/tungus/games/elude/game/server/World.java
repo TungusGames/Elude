@@ -91,7 +91,7 @@ public class World {
 		waveLoader.update(deltaTime);
 		
 		if (vessels.get(0).hp <= 0 || enemies.size() == 0 && rockets.size() == 0) {
-			state = vessels.get(0).hp <= 0 ? STATE_LOST : STATE_WON;
+			state = vessels.get(0).hp <= 0 && isFinite ? STATE_LOST : STATE_WON;
 			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
 				waveLoader.saveScore();
 		}

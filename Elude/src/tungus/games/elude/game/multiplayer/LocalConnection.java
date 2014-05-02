@@ -28,7 +28,7 @@ public class LocalConnection extends Connection {
 	@Override
 	public void write(TransferData o) {
 		synchronized(other) {
-			o.copyTo(other.newest);
+			other.newest = o.copyTo(other.newest);
 		}
 	}
 }
