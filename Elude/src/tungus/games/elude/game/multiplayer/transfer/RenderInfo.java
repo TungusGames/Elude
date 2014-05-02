@@ -1,4 +1,4 @@
-package tungus.games.elude.game.client;
+package tungus.games.elude.game.multiplayer.transfer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ import tungus.games.elude.game.server.rockets.Rocket;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class RenderInfo implements Serializable, TransferData {
+public class RenderInfo extends TransferData {
 	private static final long serialVersionUID = -4315239911779247372L;
-	static class ReducedEnemy implements Serializable {
+	public static class ReducedEnemy implements Serializable {
 		private static final long serialVersionUID = -7557852638993394399L;
 		public float x, y;
 		public float rot;
@@ -27,7 +27,7 @@ public class RenderInfo implements Serializable, TransferData {
 			this.x = x; this.y = y; rot = r; typeOrdinal = t;
 		}
 	}
-	static class ReducedPickup implements Serializable {
+	public static class ReducedPickup implements Serializable {
 		private static final long serialVersionUID = 9072429402777178805L;
 		public float x, y;
 		public float alpha;
@@ -39,7 +39,7 @@ public class RenderInfo implements Serializable, TransferData {
 			this.x = x; this.y = y; alpha = a; typeOrdinal = t;
 		}
 	}
-	static class ReducedRocket implements Serializable {
+	public static class ReducedRocket implements Serializable {
 		private static final long serialVersionUID = 4227518796828753878L;
 		public float x, y;
 		public float angle;
@@ -52,7 +52,7 @@ public class RenderInfo implements Serializable, TransferData {
 			this.x = x; this.y = y; angle = a; typeOrdinal = t; this.id = id;
 		}
 	}
-	static class ReducedVessel implements Serializable {
+	public static class ReducedVessel implements Serializable {
 		private static final long serialVersionUID = 4956172612818466522L;
 		public float x, y;
 		public float angle;
@@ -100,8 +100,6 @@ public class RenderInfo implements Serializable, TransferData {
 	public List<Effect> effects;
 	
 	public float[] hp;
-	public int info;
-	public boolean handled = true;
 	
 	private final World w;
 	
@@ -140,9 +138,14 @@ public class RenderInfo implements Serializable, TransferData {
 			Rocket r = w.rockets.get(i);
 			rockets.add(new ReducedRocket(r.pos, r.vel.angle(), r.type.ordinal(), r.id));
 		}
+		for (int i = 0; i < hp.length; i++) {
+			hp[i] = w.vessels.get(i).hp / Vessel.MAX_HP;
+		}
 	}
 	
+	@Override
 	public void copyTo(TransferData otherData) {
+		super.copyTo(otherData);
 		RenderInfo other = (RenderInfo)otherData;
 		other.enemies.clear();
 		int s = enemies.size();
@@ -176,12 +179,10 @@ public class RenderInfo implements Serializable, TransferData {
 								new DebrisEffect(e.x, e.y, ((DebrisEffect)e).direction, ((DebrisEffect)e).enemy) : 
 								new Effect(e.x, e.y, e.typeOrdinal));
 		}
-		other.info = info;
 		s = hp.length;
 		if (other.hp == null || other.hp.length < hp.length)
 			other.hp = new float[hp.length];
 		for (int i = 0; i < s; i++)
 			other.hp[i] = hp[i];
-		other.handled = false;
 	}
 }

@@ -10,8 +10,11 @@ import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
+import tungus.games.elude.game.multiplayer.transfer.ArcadeScoreInfo;
+import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
+import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
 import tungus.games.elude.game.server.Server;
-import tungus.games.elude.game.server.UpdateInfo;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
@@ -41,7 +44,7 @@ public class GameScreen extends BaseScreen {
 	public static final int STATE_STARTING = 4;
 	public static final int STATE_PLAYING = 0;
 	public static final int STATE_PAUSED = 1;
-	public static final int STATE_GAMEOVER = 2;
+	public static final int STATE_LOST = 2;
 	public static final int STATE_WON = 3;
 	private int state = STATE_STARTING;
 	private float timeSinceStart = 0;
@@ -172,6 +175,31 @@ public class GameScreen extends BaseScreen {
 		}
 		CamShaker.INSTANCE.update(deltaTime);
 		logTime("outside", 50);
+		
+		synchronized(connection) {
+			if (!connection.newest.handled) {
+				switch(connection.newest.info) {
+				case STATE_PLAYING:
+					connection.newest.copyTo(render);
+					break;
+				case STATE_WON:
+					state = STATE_WON;
+					if (connection.newest instanceof FiniteScoreInfo) {
+						((LevelCompleteMenu)menus[state-1]).setScore(((FiniteScoreInfo)connection.newest).score);
+					} else {
+						((LevelCompleteMenu)menus[state-1]).setScore(((ArcadeScoreInfo)connection.newest).score);
+					}
+					break;
+				case STATE_LOST:
+					state = STATE_LOST;
+					break;
+				default:
+					throw new IllegalArgumentException("Unexpected transferdata info value: " + connection.newest.info);
+				}
+				connection.newest.handled = true;
+			}
+		}
+		
 		switch (state) {
 		case STATE_STARTING:
 			if (timeSinceStart > START_TIME) {
@@ -181,20 +209,9 @@ public class GameScreen extends BaseScreen {
 				gameAlpha = Interpolation.fade.apply(timeSinceStart/START_TIME);
 				timeSinceStart += deltaTime;
 			}
-			update.info = Server.STATE_WAITING;
+			update.info = Server.STATE_WAITING_START;
 			break;
 		case STATE_PLAYING:
-			/*world.update(deltaTime, dirs);
-			if (world.state != World.STATE_PLAYING) {
-				state = ((world.state == World.STATE_LOST && finite) ? STATE_GAMEOVER : STATE_WON);
-				if (state == STATE_WON) {
-					if (finite)
-						((LevelCompleteMenu)menus[state-1]).setScore(((FiniteLevelLoader)world.waveLoader).getScore());
-					else
-						((LevelCompleteMenu)menus[state-1]).setScore(((ArcadeLoaderBase)world.waveLoader).getScore());
-				}
-				updateMenu(menus[state-1], deltaTime);	//update() must be called before render()
-			}*/
 			for (int i = 0; i < update.directions.length; i++) {
 				update.directions[i] = controls.get(i).getDir(tmp.set(render.vessels.get(i).x, render.vessels.get(i).y));
 			}
@@ -202,20 +219,15 @@ public class GameScreen extends BaseScreen {
 			break;
 		case STATE_PAUSED:
 			updateMenu(menus[state-1], deltaTime);
-			update.info = Server.STATE_WAITING;
+			update.info = Server.STATE_PAUSED;
 			break;
 		case STATE_WON:
-		case STATE_GAMEOVER:
+		case STATE_LOST:
 			updateMenu(menus[state-1], deltaTime);
 			update.info = Server.STATE_OVER;
 			break;
 		}
-		synchronized(connection) {
-			if (!((RenderInfo)connection.newest).handled) {
-				((RenderInfo)connection.newest).copyTo(render);
-				((RenderInfo)connection.newest).handled = true;
-			}
-		}
+		
 		connection.write(update);
 		logTime("update", 50);
 		
@@ -239,8 +251,7 @@ public class GameScreen extends BaseScreen {
 		uiBatch.end();
 		switch (state) {
 		case STATE_PAUSED:
-		case STATE_GAMEOVER:
-		case STATE_WON:
+		case STATE_LOST:
 			renderMenu(menus[state-1]);
 			break;
 		}
@@ -266,12 +277,12 @@ public class GameScreen extends BaseScreen {
 			state = n;
 		} else switch (n) {
 		case MENU_RESTART:
-			game.setScreen(newSinglePlayer(game, levelNum+1, finite));
+			game.setScreen(newSinglePlayer(game, levelNum, finite));
 			update.info = Server.STATE_OVER;
 			connection.write(update);
 			break;
 		case MENU_NEXTLEVEL:
-			game.setScreen(newSinglePlayer(game, levelNum+1, finite));
+			game.setScreen(newSinglePlayer(game, levelNum, finite));
 			update.info = Server.STATE_OVER;
 			connection.write(update);
 			break;

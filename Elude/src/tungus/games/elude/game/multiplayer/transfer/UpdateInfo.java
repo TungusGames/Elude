@@ -1,18 +1,16 @@
-package tungus.games.elude.game.server;
-
-import java.io.Serializable;
+package tungus.games.elude.game.multiplayer.transfer;
 
 import tungus.games.elude.game.multiplayer.Connection.TransferData;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class UpdateInfo implements Serializable, TransferData {
+public class UpdateInfo extends TransferData {
 	private static final long serialVersionUID = 3306977025518046441L;
 	public Vector2[] directions;
-	public int info;
-	public boolean handled = true;
+	
 	@Override
 	public void copyTo(TransferData otherData) {
+		super.copyTo(otherData);
 		UpdateInfo other = (UpdateInfo)otherData;
 		int s = directions.length;
 		if (other.directions == null) {
@@ -23,10 +21,8 @@ public class UpdateInfo implements Serializable, TransferData {
 			if (other.directions.length < s) {
 				other.directions = new Vector2[s];
 			}
-			other.info = info;
 			for (int i = 0; i < s; i++)
 				other.directions[i].set(directions[i]);
 		}
-		other.handled = false;
 	}
 }

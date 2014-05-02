@@ -3,7 +3,7 @@ package tungus.games.elude.game.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import tungus.games.elude.game.client.RenderInfo.Effect;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.rockets.Rocket;
@@ -37,12 +37,17 @@ public class World {
 	
 	public int state;
 	
+	public int levelNum;
+	public boolean isFinite;
+	
 	public World(int levelNum, boolean finite) {
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
 		enemies = new ArrayList<Enemy>();
 		effects = new ArrayList<Effect>();
 		pickups = new ArrayList<Pickup>();
+		this.levelNum = levelNum;
+		this.isFinite = finite;
 		//vessels.add(new Vessel(this));
 		//for (int i = 0; i < 10; i++)
 		//	enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));

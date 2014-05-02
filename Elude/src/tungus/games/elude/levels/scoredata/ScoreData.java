@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import tungus.games.elude.game.multiplayer.Connection.TransferData;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -21,6 +23,11 @@ public class ScoreData {
 			timeTaken = hpLost = -1;
 			completed = false;
 		}
+		public void copyTo(FiniteLevelScore other) {
+			other.timeTaken = timeTaken;
+			other.hpLost = hpLost;
+			other.completed = completed;
+		}
 	}
 	public static class ArcadeLevelScore implements Serializable {
 		private static final long serialVersionUID = 4906372665430662980L;
@@ -31,10 +38,13 @@ public class ScoreData {
 			timeSurvived = enemiesKilled = -1;
 			tried = false;
 		}
+		public void copyTo(ArcadeLevelScore other) {
+			other.timeSurvived = timeSurvived;
+			other.enemiesKilled = enemiesKilled;
+			other.tried = tried;
+		}
 	}
-	
-	//private ScoreData() {} // Enforce non-instantiability
-	
+		
 	public static List<FiniteLevelScore> playerFiniteScore;
 	public static List<ArcadeLevelScore> playerArcadeScore;
 	public static List<FiniteLevelScore> finiteMedals;

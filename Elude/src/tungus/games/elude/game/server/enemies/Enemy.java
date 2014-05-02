@@ -1,7 +1,7 @@
 package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.client.RenderInfo.DebrisEffect;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.DebrisEffect;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;

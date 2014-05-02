@@ -1,7 +1,14 @@
 package tungus.games.elude.game.server;
 
-import tungus.games.elude.game.client.RenderInfo;
+import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.game.multiplayer.Connection;
+import tungus.games.elude.game.multiplayer.Connection.TransferData;
+import tungus.games.elude.game.multiplayer.transfer.ArcadeScoreInfo;
+import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
+import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
+import tungus.games.elude.levels.loader.FiniteLevelLoader;
+import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.util.log.AverageLogger;
 import tungus.games.elude.util.log.FPSLogger;
 
@@ -11,10 +18,11 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class Server implements Runnable {
 	
-	public static final int STATE_WAITING = 0;
+	public static final int STATE_WAITING_START = 0;
 	public static final int STATE_RUNNING = 1;
-	public static final int STATE_OVER = 2;
-	private int state = STATE_WAITING;
+	public static final int STATE_PAUSED = 2;
+	public static final int STATE_OVER = 3;
+	private int state = STATE_WAITING_START;
 	
 	private final FPSLogger fps = new FPSLogger("FPSLogger", "Server thread FPS: ");
 	private final AverageLogger sendTime = new AverageLogger("SendLogger", "Server to client time (ms): ");
@@ -29,6 +37,7 @@ public class Server implements Runnable {
 	private float deltaTime;
 	
 	private RenderInfo render;
+	private TransferData sendData;
 	
 	public Server(int levelNum, boolean isFinite, Connection[] connections) {
 		this.connections = connections;
@@ -36,7 +45,8 @@ public class Server implements Runnable {
 			c.newest = new UpdateInfo();
 		}
 		this.world = new World(levelNum, isFinite);
-		render = new RenderInfo(world);
+		sendData = render = new RenderInfo(world);
+		sendData.info = GameScreen.STATE_PLAYING;
 	}
 	
 	@Override
@@ -51,7 +61,7 @@ public class Server implements Runnable {
 		setupArrays();
 		render.setFromWorld();
 		lastTime = TimeUtils.millis();
-		while (state != STATE_OVER) { //TODO: when to end?
+		while (state != STATE_OVER) {
 			fps.log();
 			while(!hasNewData()) {
 				/*try {
@@ -61,27 +71,37 @@ public class Server implements Runnable {
 				}*/
 			}			
 			readInput();
+			
 			newTime = TimeUtils.millis();
-			switch (state) {
-			case STATE_RUNNING:
-				deltaTime = (newTime-lastTime) / 1000f;
+			deltaTime = (newTime-lastTime) / 1000f;
+			lastTime = newTime;
+			
+			if (state == Server.STATE_RUNNING) {
 				if (deltaTime > 0.05f) {
 					Gdx.app.log("LagWarn", "Server deltaTime: " + deltaTime);
 					deltaTime = 0.05f;
 				}
-				
 				world.update(deltaTime, dirs);
-				render.setFromWorld();
-				break;
+				switch (world.state) {
+				case World.STATE_PLAYING:
+					render.setFromWorld();
+					break;
+				case World.STATE_LOST:
+					sendData = new TransferData(GameScreen.STATE_LOST);
+					state = STATE_OVER;
+					break;
+				case World.STATE_WON:
+					sendData = world.isFinite ? 
+						new FiniteScoreInfo(((FiniteLevelLoader)world.waveLoader).getScore()) :
+						new ArcadeScoreInfo(((ArcadeLoaderBase) world.waveLoader).getScore());
+					sendData.info = GameScreen.STATE_WON;
+					state = STATE_OVER;
+				}
 			}
-			lastTime = newTime;
 			
-			for (int i = 0; i < render.hp.length; i++) {
-				render.hp[i] = world.vessels.get(i).hp / Vessel.MAX_HP;
-			}
 			long sendStart = TimeUtils.millis();
 			for (Connection c : connections)
-				c.write(render);
+				c.write(sendData);
 			sendTime.log(TimeUtils.millis()-sendStart);
 		}
 		Gdx.app.log("Server", "Server stopped!");
@@ -94,11 +114,11 @@ public class Server implements Runnable {
 			UpdateInfo u = (UpdateInfo)c.newest;
 			synchronized(c) {
 				switch (u.info) {
-				case STATE_WAITING:
-					state = STATE_WAITING;
+				case STATE_WAITING_START:
+					state = STATE_WAITING_START;
 					break;
 				case STATE_RUNNING:
-					if (state == STATE_OVER) {
+					if (state != STATE_WAITING_START) {
 						state = STATE_RUNNING;
 					}
 					if (!u.handled) {
@@ -106,6 +126,11 @@ public class Server implements Runnable {
 							Vector2 d = u.directions[j];
 							dirs[dirOffset[i]+j].set(d);
 						}						
+					}
+					break;
+				case STATE_PAUSED:
+					if (state == STATE_OVER) {
+						state = STATE_PAUSED;
 					}
 					break;
 				case STATE_OVER:
@@ -142,7 +167,7 @@ public class Server implements Runnable {
 
 	private boolean allNewData() {
 		for(Connection c : connections) {
-			if (((UpdateInfo)c.newest).handled)
+			if (c.newest.handled)
 				return false;
 		}
 		return true;
@@ -150,7 +175,7 @@ public class Server implements Runnable {
 	
 	private boolean hasNewData() {
 		for(Connection c : connections) {
-			if (!((UpdateInfo)c.newest).handled)
+			if (!c.newest.handled)
 				return true;
 		}
 		return false;

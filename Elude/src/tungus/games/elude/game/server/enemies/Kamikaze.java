@@ -1,8 +1,8 @@
 package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.client.RenderInfo.Effect;
-import tungus.games.elude.game.client.RenderInfo.Effect.EffectType;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
