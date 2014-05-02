@@ -2,9 +2,9 @@ package tungus.games.elude;
 
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.MainMenu;
+import tungus.games.elude.util.log.FPSLogger;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.FPSLogger;
 
 public class Elude extends Game {
 	
@@ -16,7 +16,7 @@ public class Elude extends Game {
 		ScoreData.load();
 		setScreen(new MainMenu(this));
 		//setScreen(new GameScreen(this, 0, true)); // for quick debugging
-		fps = new FPSLogger();
+		fps = new FPSLogger("FPSLogger", "Render thread FPS: ");
 	}
 	
 	@Override

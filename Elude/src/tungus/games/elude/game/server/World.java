@@ -3,13 +3,13 @@ package tungus.games.elude.game.server;
 import java.util.ArrayList;
 import java.util.List;
 
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -18,8 +18,7 @@ public class World {
 
 	public static final float WIDTH = 20f;
 	public static final float HEIGHT = 12f;
-	public static final float EDGE = 2f; 	// Width of the area at the edge not targeted for movement
-	//public static final float PICKUP_FREQ = 6f; //1 pickup / PICKUP_FREQ seconds
+	public static final float EDGE = 2.5f; 	// Width of the area at the edge not targeted for movement
 	public static final float GAME_END_TIMEOUT = 3;
 	public static final int STATE_PLAYING = 0;
 	public static final int STATE_LOST = 1;
@@ -28,7 +27,7 @@ public class World {
 	public List<Vessel> vessels;
 	public List<Rocket> rockets;
 	public List<Enemy> enemies;
-	public List<PooledEffect> particles;
+	public List<Effect> effects;
 	public List<Pickup> pickups;
 	
 	public final Rectangle outerBounds;
@@ -38,13 +37,18 @@ public class World {
 	
 	public int state;
 	
+	public int levelNum;
+	public boolean isFinite;
+	
 	public World(int levelNum, boolean finite) {
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
 		enemies = new ArrayList<Enemy>();
-		particles = new ArrayList<PooledEffect>();
+		effects = new ArrayList<Effect>();
 		pickups = new ArrayList<Pickup>();
-		vessels.add(new Vessel(this));
+		this.levelNum = levelNum;
+		this.isFinite = finite;
+		//vessels.add(new Vessel(this));
 		//for (int i = 0; i < 10; i++)
 		//	enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
 		//	enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
@@ -54,6 +58,7 @@ public class World {
 	}
 	
 	public void update(float deltaTime, Vector2[] dirs) {
+		effects.clear(); //TODO pool / trash?
 		int size = vessels.size();
 		for(int i = 0; i < size; i++) {
 			vessels.get(i).update(deltaTime, dirs[i]);
@@ -75,11 +80,6 @@ public class World {
 			}
 		}
 		
-		size = particles.size();
-		for (int i = 0; i < size; i++) {
-			particles.get(i).update(deltaTime);
-		}
-		
 		size = pickups.size();
 		for (int i = 0; i < size; i++) {
 			if (pickups.get(i).update(deltaTime)) {
@@ -91,7 +91,7 @@ public class World {
 		waveLoader.update(deltaTime);
 		
 		if (vessels.get(0).hp <= 0 || enemies.size() == 0 && rockets.size() == 0) {
-			state = vessels.get(0).hp <= 0 ? STATE_LOST : STATE_WON;
+			state = vessels.get(0).hp <= 0 && isFinite ? STATE_LOST : STATE_WON;
 			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
 				waveLoader.saveScore();
 		}

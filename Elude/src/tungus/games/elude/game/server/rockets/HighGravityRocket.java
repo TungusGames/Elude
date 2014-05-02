@@ -1,11 +1,9 @@
 package tungus.games.elude.game.server.rockets;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -20,13 +18,9 @@ public class HighGravityRocket extends Rocket {
 	private final float turnSpeed;
 	private final float g;
 	
-	private static final PooledEffect initParticle() {
-		return Assets.matrixRocket.obtain();
-	}
-	
 	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target,
 			float turnSpeed, float g) {
-		super(origin, pos, dir, world, texture, target, initParticle());
+		super(origin, RocketType.HIGHGRAV, pos, dir, world, target);
 		this.turnSpeed = turnSpeed;
 		this.g = g;
 		vel.nor().scl(MIN_SPEED);

@@ -1,23 +1,30 @@
 package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
-import tungus.games.elude.util.CamShaker;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public abstract class Rocket extends Sprite {
+public abstract class Rocket {
 	
-	public static enum RocketType { SLOW_TURNING, FAST_TURNING, LOWGRAV };
+	public static enum RocketType { 
+		SLOW_TURNING(Assets.flameRocket), 
+		FAST_TURNING(Assets.fastFlameRocket), 
+		LOWGRAV(Assets.matrixRocket),
+		HIGHGRAV(null);
+		public ParticleEffectPool effect;
+		RocketType(ParticleEffectPool e) {
+			effect = e;
+		}
+	};
 	
 	public static final float ROCKET_SIZE = 0.2f; // For both collision and drawing
 	public static final float DEFAULT_DMG = 2f;
@@ -41,6 +48,8 @@ public abstract class Rocket extends Sprite {
 		return r;
 	}
 	
+	private static int nextID = 0;
+	
 	private World world;
 	private Enemy origin;
 	
@@ -48,32 +57,32 @@ public abstract class Rocket extends Sprite {
 	
 	public Vector2 pos;
 	public Vector2 vel;
+	public Rectangle bounds;
+	public final RocketType type;
+	public final int id;
 	
 	private boolean outOfOrigin = false;
 	
 	public final float dmg;
 	
-	private PooledEffect particle;
 	private float life;
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, PooledEffect particle) {
-		this(origin, pos, dir, world, texture, target, DEFAULT_DMG, DEFAULT_LIFE, particle);
+	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target) {
+		this(origin, t, pos, dir, world, target, DEFAULT_DMG, DEFAULT_LIFE);
 	}
 	
-	public Rocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, float dmg, float life, PooledEffect particle) {
+	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life) {
 		super();
 		this.origin = origin;
+		this.type = t;
 		this.life = life;
 		this.pos = pos;
 		this.world = world;
-		setBounds(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
+		this.bounds = new Rectangle(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
 		this.dmg = dmg;
 		this.target = target;
+		this.id = nextID++;
 		vel = dir;
-		this.particle = particle;
-		world.particles.add(this.particle);
-		//particle.reset();
-		particle.start();
 	}
 	
 	public final boolean update(float deltaTime) {
@@ -83,11 +92,11 @@ public abstract class Rocket extends Sprite {
 			return true;
 		}
 		aiUpdate(deltaTime);
-		updateParticle(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		setPosition(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2);
+		bounds.x = pos.x - ROCKET_SIZE / 2;
+		bounds.y = pos.y - ROCKET_SIZE / 2;
 		
-		if (!world.outerBounds.contains(getBoundingRectangle())) {
+		if (!world.outerBounds.contains(bounds)) {
 			kill();
 			return true;
 		}
@@ -95,7 +104,7 @@ public abstract class Rocket extends Sprite {
 		int size = world.enemies.size();
 		boolean stillIn = false;
 		for (int i = 0; i < size; i++) {
-			if (world.enemies.get(i).collisionBounds.overlaps(getBoundingRectangle())) {
+			if (world.enemies.get(i).collisionBounds.overlaps(bounds)) {
 				if (outOfOrigin) {
 					if ((world.enemies.get(i).hp -= dmg) <= 0)
 						world.enemies.get(i).kill(this);
@@ -115,10 +124,9 @@ public abstract class Rocket extends Sprite {
 		
 		size = world.vessels.size();
 		for (int i = 0; i < size; i++) {
-			if (world.vessels.get(i).bounds.overlaps(getBoundingRectangle())) {
+			if (world.vessels.get(i).bounds.overlaps(bounds)) {
 				if (!world.vessels.get(i).shielded) {
-					Gdx.input.vibrate(100);
-					CamShaker.INSTANCE.shake(0.65f, 2.5f);
+					world.effects.add(new Effect(0f, 0f, EffectType.CAMSHAKE.ordinal())); //TODO pool
 					world.vessels.get(i).hp -= dmg;
 					if (world.waveLoader instanceof FiniteLevelLoader)
 						((FiniteLevelLoader)(world.waveLoader)).hpLost += dmg;
@@ -130,22 +138,9 @@ public abstract class Rocket extends Sprite {
 		return false;
 	}
 	
-	protected void updateParticle(float deltaTime) {
-		ParticleEmitter particleEmitter = particle.getEmitters().get(0);
-		particleEmitter.getAngle().setLow(vel.angle()-180);
-		particle.setPosition(pos.x, pos.y);
-
-	}
-	
 	public void kill() {
-		particle.allowCompletion();
 		world.rockets.remove(this);
-		PooledEffect explosion = Assets.explosion.obtain();
-		explosion.reset();
-		explosion.setPosition(pos.x, pos.y);
-		explosion.start();
-		world.particles.add(explosion);
-		Assets.explosionSound.play(0.5f);
+		world.effects.add(new Effect(pos.x, pos.y, EffectType.EXPLOSION.ordinal())); // TODO pool
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);

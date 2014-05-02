@@ -29,7 +29,7 @@ public class SwipeDirControl implements Controls {
 	}
 
 	@Override
-	public Vector2 getDir() {
+	public Vector2 getDir(Vector2 vessel) {
 		if (!touched && Gdx.input.isTouched()) {
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			interfaceCamera.unproject(v3);

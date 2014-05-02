@@ -1,6 +1,9 @@
 package tungus.games.elude;
 
 import tungus.games.elude.game.client.GameScreen;
+import tungus.games.elude.game.multiplayer.Connection;
+import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
+import tungus.games.elude.game.server.Server;
 import tungus.games.elude.menu.MainMenu;
 
 import com.badlogic.gdx.Game;
@@ -10,7 +13,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 
-public class HostBtGameScreen extends BaseScreen {
+public class HostBluetoothGameScreen extends BaseScreen {
 
 	private enum State {
 		STARTING, WAITING
@@ -30,7 +33,7 @@ public class HostBtGameScreen extends BaseScreen {
 		}
 	};
 	
-	public HostBtGameScreen(Game game) {
+	public HostBluetoothGameScreen(Game game) {
 		super(game);
 	}
 
@@ -71,7 +74,7 @@ public class HostBtGameScreen extends BaseScreen {
 				if (server.updateVisibility(deltaTime)) // If visibility time is up
 					server.enableVisibility(); // Re-enable it
 				if (server.state == BluetoothConnector.ServerState.CONNECTED) {
-					Screen next = new GameScreen(game, 1, true);
+					Screen next = GameScreen.newSinglePlayer(game, 1, true);
 					game.setScreen(next);
 					// TODO Level selection, start game server
 				}

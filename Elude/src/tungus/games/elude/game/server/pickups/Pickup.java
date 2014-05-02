@@ -1,21 +1,30 @@
 package tungus.games.elude.game.server.pickups;
 
+import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class Pickup extends Sprite {
+public abstract class Pickup {
 	
-	public enum PickupType{HEALTH, SPEED, SHIELD, ROCKETWIPER}
+	public enum PickupType{
+		HEALTH(Assets.hpBonus), 
+		SPEED(Assets.speedBonus), 
+		SHIELD(Assets.whiteRectangle), 
+		ROCKETWIPER(Assets.smallCircle);
+		public TextureRegion tex;
+		PickupType(TextureRegion t) {
+			tex = t;
+		}
+	}
 	
 	public static final float DRAW_SIZE = 0.9f;
+	public static final float HALF_SIZE = DRAW_SIZE/2;
 	protected static final float DEFAULT_LIFETIME = 5f;
 	
 	private static final float APPEAR_TIME = 0.3f;
@@ -25,21 +34,23 @@ public abstract class Pickup extends Sprite {
 	private static final Interpolation NOT_PICKED = new FadeinFlash(APPEAR_TIME/DEFAULT_LIFETIME, 1-FLASH_TIME/DEFAULT_LIFETIME);
 	
 	protected World world;
-	private Rectangle collisionBounds;
+	public Rectangle collisionBounds;
 	private float lifeTimeLeft;
 	private float fullLifeTime;
 	private boolean pickedUp = false;
 	
-	public Pickup(World world, Vector2 pos, TextureRegion texture, float lifeTime) {
-		super(texture);
+	public float alpha = 0;
+	public PickupType type;
+	
+	public Pickup(World world, Vector2 pos, PickupType type, float lifeTime) {
 		this.world = world;
 		collisionBounds = new Rectangle(pos.x-DRAW_SIZE/2, pos.y-DRAW_SIZE/2, DRAW_SIZE, DRAW_SIZE);
-		setBounds(pos.x-DRAW_SIZE/2, pos.y-DRAW_SIZE/2, DRAW_SIZE, DRAW_SIZE);
 		fullLifeTime = lifeTimeLeft = lifeTime;
+		this.type = type;
 	}
 	
-	public Pickup(World world, Vector2 pos, TextureRegion texture) {
-		this(world, pos, texture, DEFAULT_LIFETIME);
+	public Pickup(World world, Vector2 pos, PickupType type) {
+		this(world, pos, type, DEFAULT_LIFETIME);
 	}
 	
 	public boolean update(float deltaTime) {
@@ -50,9 +61,7 @@ public abstract class Pickup extends Sprite {
 		}
 		if (!pickedUp) {
 			if (lifeTimeLeft > fullLifeTime-APPEAR_TIME || lifeTimeLeft < FLASH_TIME) {
-				Color c = getColor();
-				c.a = NOT_PICKED.apply(1-lifeTimeLeft/fullLifeTime);
-				setColor(c);
+				alpha = NOT_PICKED.apply(1-lifeTimeLeft/fullLifeTime);
 			}
 			int size = world.vessels.size();
 			for (int i = 0; i < size; i++) {
@@ -64,9 +73,7 @@ public abstract class Pickup extends Sprite {
 				}
 			}
 		} else {
-			Color c = getColor();
-			c.a = PICKED_UP.apply(1, 0, 1-lifeTimeLeft/TAKE_TIME);
-			setColor(c);
+			alpha = PICKED_UP.apply(1, 0, 1-lifeTimeLeft/TAKE_TIME);
 		}
 		return false;
 	}

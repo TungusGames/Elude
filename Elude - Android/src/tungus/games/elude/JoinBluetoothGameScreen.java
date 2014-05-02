@@ -1,19 +1,18 @@
 package tungus.games.elude;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import tungus.games.elude.BaseScreen;
-import tungus.games.elude.BluetoothConnector.Server;
 import tungus.games.elude.menu.MainMenu;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 
-public class JoinBtGameScreen extends BaseScreen {
+public class JoinBluetoothGameScreen extends BaseScreen {
 
 	private enum State {
 		STARTING, BROWSE, CONNECTING
@@ -22,7 +21,7 @@ public class JoinBtGameScreen extends BaseScreen {
 	private State state = State.STARTING;
 	
 	private BluetoothConnector.Client client;
-	private ArrayList<String> deviceList = new ArrayList<String>();
+	private List<String> deviceList = new ArrayList<String>();
 	
 	private InputAdapter listener = new InputAdapter() {
 		@Override
@@ -35,7 +34,7 @@ public class JoinBtGameScreen extends BaseScreen {
 		}
 	};
 	
-	public JoinBtGameScreen(Game game) {
+	public JoinBluetoothGameScreen(Game game) {
 		super(game);
 	}
 
@@ -56,10 +55,26 @@ public class JoinBtGameScreen extends BaseScreen {
 		} else
 		switch (state) {
 			case STARTING:
-				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT); // TODO loading screen
 				if (client.state == BluetoothConnector.ClientState.ENABLED) {
-					state = State.BROWSE; //If BT turn-on succeeded, continue to running state
+					client.enableDiscovery();
+					if (client.state == BluetoothConnector.ClientState.DISCOVERING) 
+						state = State.BROWSE; // If BT turn-on succeeded, continue to running state
+					//Otherwise we'll exit in the next frame (ERROR)
 				}
+				break;
+			case BROWSE:
+				break;
+			case CONNECTING:
 		}
 	}
+	
+	@Override
+	public void hide() {
+		client.disableDiscovery();
+		if (client.connectThread.isAlive())
+			client.connectThread.cancel();
+	}
+
+
 }

@@ -1,10 +1,11 @@
 package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -30,14 +31,14 @@ public class Kamikaze extends Enemy {
 	}
 	
 	public Kamikaze(Vector2 pos, World w, TextureRegion tex, RocketType type) {
-		super(pos, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, tex, debrisFromColor(new float[]{0.1f,0.1f,0.6f,1}), w, type);
+		super(pos, EnemyType.KAMIKAZE, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, w, type);
 		
 		targetPos = new Vector2();
 		getInnerTargetPos(pos, targetPos);
 		
 		vel.set(targetPos).sub(pos).nor().scl(SPEED);
 		turnGoal = vel.angle()-90;
-		setRotation(turnGoal);
+		rot = turnGoal;
 	}
 
 	@Override
@@ -61,11 +62,7 @@ public class Kamikaze extends Enemy {
 	private void explode() {
 		kill(null);
 		
-		PooledEffect explosion = Assets.explosion.obtain();
-		explosion.reset();
-		explosion.setPosition(pos.x, pos.y);
-		explosion.start();
-		world.particles.add(explosion);
+		world.effects.add(new Effect(pos.x, pos.y, EffectType.EXPLOSION.ordinal())); //TODO pool
 		
 		for (int i = 0; i < ROCKETS_SHOT; i++) {
 			shootRocket(new Vector2(1,0).rotate(MathUtils.random(360)));

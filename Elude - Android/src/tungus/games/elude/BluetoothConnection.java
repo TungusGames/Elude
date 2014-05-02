@@ -21,7 +21,7 @@ public class BluetoothConnection extends Connection {
     			try {
     				// Read from the InputStream
     				synchronized(this) {
-        				newest = objInStream.readObject();
+        				newest = (TransferData)objInStream.readObject();
     				}
     				// Send the obtained bytes to the UI activity
     			} catch (Exception e) {
@@ -42,9 +42,9 @@ public class BluetoothConnection extends Connection {
  
     /* Call this from the main activity to send data to the remote device */
     @Override
-    public void write(Object o) {
+    public void write(TransferData data) {
         try {
-            objOutStream.writeObject(o);
+            objOutStream.writeObject(data);
         } catch (IOException e) { } //TODO exception handling
     }
  

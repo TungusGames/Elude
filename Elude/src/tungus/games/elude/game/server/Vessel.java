@@ -1,33 +1,32 @@
 package tungus.games.elude.game.server;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Vessel extends Sprite {
+public class Vessel {
 
 	public static final float DRAW_WIDTH = 0.75f;		//Dimensions of the sprite drawn
+	public static final float HALF_WIDTH = DRAW_WIDTH / 2;
 	public static final float DRAW_HEIGHT = 0.945f;
+	public static final float HALF_HEIGHT = DRAW_HEIGHT / 2;
 	public static final float COLLIDER_SIZE = 0.6f;		//Dimensions of the bounding box for collisions
-	public static final float SHIELD_SIZE = 1.3f;		//Both drawn and collider size
+	public static final float COLLIDER_HALF = COLLIDER_SIZE / 2;
+	public static final float SHIELD_SIZE = 1.3f;		//drawn size
+	public static final float SHIELD_HALF_SIZE = SHIELD_SIZE / 2;
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
 	public static final float MAX_SPEED = 6f;
 	public static final float MAX_HP = 100f;
 	
 	private static final Interpolation shieldOpacity = new FadeinFlash(0.08f, 0.6f);
 	
-	private final World world;
+	//private final World world;
 	
 	public Vector2 pos;
 	public Vector2 vel;
+	public float rot = 0;
 	
 	public float drawWidth = DRAW_WIDTH;
 	public float drawHeight = DRAW_HEIGHT;
@@ -35,34 +34,18 @@ public class Vessel extends Sprite {
 		
 	public float hp = MAX_HP;
 	public boolean shielded = false;
+	public float shieldAlpha = 0;
 	
 	private float shieldTimeLeft = 0f;
 	private float fullShieldTime = 0f;
-	private final Sprite shield;
 	public float speedBonus = 1f;
 	public float speedBonusTime = 0f;
 	
-	private PooledEffect trails;
-	
 	public Vessel(World world) {
-		super(Assets.vessel);
-		setBounds(World.WIDTH / 2 - DRAW_WIDTH / 2, World.HEIGHT / 2 - DRAW_HEIGHT / 2, DRAW_WIDTH, DRAW_HEIGHT);
-		setOrigin(DRAW_WIDTH / 2, DRAW_HEIGHT / 2);
-		
-		shield = new Sprite(Assets.shield);
-		shield.setBounds(World.WIDTH / 2 - SHIELD_SIZE / 2, World.HEIGHT / 2 - SHIELD_SIZE / 2, SHIELD_SIZE, SHIELD_SIZE);
-		shield.setOrigin(SHIELD_SIZE/2, SHIELD_SIZE/2);
-		Color c = shield.getColor();
-		c.a = 0;
-		shield.setColor(c);
-		
-		this.world = world;
+		//this.world = world;
 		pos = new Vector2(World.WIDTH / 2, World.HEIGHT / 2);
 		vel = new Vector2(0, 0);
-		bounds = new Rectangle(pos.x - COLLIDER_SIZE/2, pos.y - COLLIDER_SIZE/2, COLLIDER_SIZE, COLLIDER_SIZE);
-		
-		trails = Assets.vesselTrails.obtain();
-		trails.getEmitters().get(0).getEmission().setHigh(0);
+		bounds = new Rectangle(pos.x - COLLIDER_HALF, pos.y - COLLIDER_HALF, COLLIDER_SIZE, COLLIDER_SIZE);
 	}
 	
 	public void update(float deltaTime, Vector2 dir) {
@@ -75,61 +58,39 @@ public class Vessel extends Sprite {
 			if (shielded) {
 				if (shieldTimeLeft > 0f) {
 					shieldTimeLeft -= deltaTime;
-					Color c = shield.getColor();
-					c.a = shieldOpacity.apply(1-shieldTimeLeft/fullShieldTime);
-					shield.setColor(c);
+					shieldAlpha = shieldOpacity.apply(1-shieldTimeLeft/fullShieldTime);
 				}
 				else {
-					Color c = shield.getColor();
-					c.a = 0;
-					shield.setColor(c);
 					removeShield();
 				}
 					
 			}
 			pos.add(vel.x * deltaTime, vel.y * deltaTime);
 			
-			if (pos.x + COLLIDER_SIZE/2 > World.WIDTH)				// Keep inside world bounds
-				pos.x -= (pos.x + COLLIDER_SIZE/2 - World.WIDTH);
-			else if (pos.x - COLLIDER_SIZE/2 < 0)
-				pos.x += (COLLIDER_SIZE/2 - pos.x);
-			if (pos.y + COLLIDER_SIZE/2 > World.HEIGHT)
-				pos.y -= (pos.y + COLLIDER_SIZE/2 - World.HEIGHT);
-			else if (pos.y - COLLIDER_SIZE/2 < 0)
-				pos.y += (COLLIDER_SIZE/2 - pos.y);
+			if (pos.x + COLLIDER_HALF > World.WIDTH)				// Keep inside world bounds
+				pos.x -= (pos.x + COLLIDER_HALF - World.WIDTH);
+			else if (pos.x - COLLIDER_HALF < 0)
+				pos.x += (COLLIDER_HALF - pos.x);
+			if (pos.y + COLLIDER_HALF > World.HEIGHT)
+				pos.y -= (pos.y + COLLIDER_HALF - World.HEIGHT);
+			else if (pos.y - COLLIDER_HALF < 0)
+				pos.y += (COLLIDER_HALF - pos.y);
 			
 			if (!vel.equals(Vector2.Zero)) {
 				float goal = vel.angle()-90;
-				float current = getRotation();
-				float diff = goal - current;
+				float diff = goal - rot;
 				if (diff < -180)
 					diff += 360;
 				if (diff > 180)
 					diff -= 360;
 				if (Math.abs(diff) < MAX_GRAPHIC_TURNSPEED * deltaTime)
-					setRotation(goal);
+					rot = goal;
 				else
-					setRotation(current + Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime);
+					rot += Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime;
 			}
-			setPosition(pos.x - drawWidth / 2, pos.y - drawHeight / 2);	// Update the drawn sprite
-			shield.setPosition(pos.x-SHIELD_SIZE/2, pos.y-SHIELD_SIZE/2);
-			bounds.x = pos.x - COLLIDER_SIZE / 2;								// Update the bounds 
-			bounds.y = pos.y - COLLIDER_SIZE / 2;
-		}
-
-		ParticleEmitter particleEmitter = trails.getEmitters().get(0);
-		if (vel.equals(Vector2.Zero)) {
-			particleEmitter.getEmission().setHigh(0);
-		} else {
-			if (particleEmitter.getEmission().getHighMax() == 0) {
-				trails = Assets.vesselTrails.obtain();
-				world.particles.add(trails);
-			}
-			particleEmitter.getAngle().setLow(getRotation()-90);
-			particleEmitter.getRotation().setLow(getRotation());
-		}
-		trails.setPosition(pos.x, pos.y);
-		
+			bounds.x = pos.x - COLLIDER_HALF;								// Update the bounds 
+			bounds.y = pos.y - COLLIDER_HALF;
+		}	
 	}
 	
 	public void addShield(float shieldTime) {
@@ -138,13 +99,7 @@ public class Vessel extends Sprite {
 	}
 	
 	public void removeShield() {
+		shieldAlpha = 0;
 		shielded = false;
-	}
-	
-	@Override
-	public void draw(SpriteBatch batch) {
-		super.draw(batch);
-		if (shielded)
-			shield.draw(batch);
 	}
 }

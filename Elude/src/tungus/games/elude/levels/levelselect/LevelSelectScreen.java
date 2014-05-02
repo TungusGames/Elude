@@ -38,7 +38,7 @@ public class LevelSelectScreen extends BaseScreen {
 	
 	private static final float BEGIN_DURATION = 2f;
 	private static final float LEVELSTART_DURATION = 2f;
-	private static final float EXIT_DURATION = 2f;
+	private static final float EXIT_DURATION = 1f;
 	private float exitingFromRow = -1; //Used in exit state - the position before starting exit
 	
 	private final GestureAdapter listener = new GestureAdapter() {
@@ -100,7 +100,7 @@ public class LevelSelectScreen extends BaseScreen {
 	private final InputAdapter otherInput = new InputAdapter() {
 		@Override
 		public boolean keyDown(int keycode) {
-			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
+			if ((keycode == Keys.BACK || keycode == Keys.ESCAPE) && (state == STATE_WORKING || state == STATE_BEGIN)) {
 				state = STATE_EXITING;
 				stateTime = 0;
 				exitingFromRow = grid.middleRow;
@@ -112,7 +112,6 @@ public class LevelSelectScreen extends BaseScreen {
 		@Override
 		public boolean scrolled(int amount) {
 			if (state == STATE_WORKING) {
-				//grid.scroll(amount);
 				grid.panStop(3, 5);
 				grid.fling(amount*20);
 			}
@@ -151,7 +150,7 @@ public class LevelSelectScreen extends BaseScreen {
 			state = STATE_WORKING;
 			stateTime = 0;
 		} else if (state == STATE_STARTING_LEVEL && stateTime > LEVELSTART_DURATION) {
-			game.setScreen(new GameScreen(game, grid.selected, finite));
+			game.setScreen(GameScreen.newSinglePlayer(game, grid.selected, finite));
 			return;
 		} else if (state == STATE_EXITING && stateTime > EXIT_DURATION) {
 			game.setScreen(new PlayMenu(game));

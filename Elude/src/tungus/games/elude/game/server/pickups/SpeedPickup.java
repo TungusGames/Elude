@@ -1,6 +1,5 @@
 package tungus.games.elude.game.server.pickups;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 
@@ -12,7 +11,7 @@ public class SpeedPickup extends Pickup {
 	private static final float SPEED_BONUS_TIME = 3f;
 	
 	public SpeedPickup(World world, Vector2 pos) {
-		super(world, pos, Assets.speedBonus, DEFAULT_LIFETIME);
+		super(world, pos, PickupType.SPEED);
 	}
 	
 	@Override

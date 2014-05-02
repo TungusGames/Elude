@@ -8,11 +8,14 @@ import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.input.Controls;
 import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
-import tungus.games.elude.game.server.Vessel;
-import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.multiplayer.Connection;
+import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
+import tungus.games.elude.game.multiplayer.transfer.ArcadeScoreInfo;
+import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
+import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
+import tungus.games.elude.game.server.Server;
 import tungus.games.elude.levels.levelselect.LevelSelectScreen;
-import tungus.games.elude.levels.loader.FiniteLevelLoader;
-import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
 import tungus.games.elude.menu.ingame.LevelCompleteMenu;
@@ -25,7 +28,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -42,7 +44,7 @@ public class GameScreen extends BaseScreen {
 	public static final int STATE_STARTING = 4;
 	public static final int STATE_PLAYING = 0;
 	public static final int STATE_PAUSED = 1;
-	public static final int STATE_GAMEOVER = 2;
+	public static final int STATE_LOST = 2;
 	public static final int STATE_WON = 3;
 	private int state = STATE_STARTING;
 	private float timeSinceStart = 0;
@@ -54,9 +56,11 @@ public class GameScreen extends BaseScreen {
 	
 	private static final float START_TIME = 2f;
 	
+	private static final Vector2 tmp = new Vector2();
+	
 	private final AbstractIngameMenu[] menus;
 	
-	private World world;
+	private final Connection connection;
 	private WorldRenderer renderer;
 	private SpriteBatch uiBatch;
 	private OrthographicCamera uiCam;
@@ -73,13 +77,16 @@ public class GameScreen extends BaseScreen {
 	private long lastTime;
 	
 	private List<Controls> controls;
-	private Vector2[] dirs;
 	
 	private Vector3 rawTap = new Vector3();
 	private boolean unhandledTap = false;
 	
 	private final boolean finite;
 	private final int levelNum;
+	
+	private final int vesselID;
+	private RenderInfo render;
+	private UpdateInfo update;
 	
 	private InputAdapter inputListener = new InputAdapter() {
 		@Override
@@ -112,14 +119,21 @@ public class GameScreen extends BaseScreen {
 		}
 	};
 	
-	public GameScreen(Game game, int levelNum, boolean finite) {
+	public static GameScreen newSinglePlayer(Game game, int levelNum, boolean finite) {
+		LocalConnectionPair c = new LocalConnectionPair();
+		new Thread(new Server(levelNum, finite, new Connection[] {c.c1})).start();
+		return new GameScreen(game, levelNum, finite, c.c2, 0);
+	}
+	
+	public GameScreen(Game game, int levelNum, boolean finite, Connection connection, int clientID) {
 		super(game);
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		this.finite = finite;
 		this.levelNum = levelNum;
+		this.connection = connection;
+		this.vesselID = clientID;
 		menus = new AbstractIngameMenu[]{new PauseMenu(), new GameOverMenu(), new LevelCompleteMenu(levelNum, finite)};
-		world = new World(levelNum, finite);
-		renderer = new WorldRenderer(world);
+		renderer = new WorldRenderer(clientID);
 		uiBatch = new SpriteBatch();
 		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
 		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
@@ -136,17 +150,20 @@ public class GameScreen extends BaseScreen {
 		uiBatch.setProjectionMatrix(uiCam.combined);
 		
 		controls = new ArrayList<Controls>();
-		dirs = new Vector2[world.vessels.size()];
-		for (int i = 0; i < world.vessels.size(); i++) {
+		update = new UpdateInfo();
+		update.directions = new Vector2[1];
+		for (int i = 0; i < update.directions.length; i++) {
 			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
 				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
 			} else {
-				controls.add(new TapToTargetControls(renderer.camera, world.vessels.get(i).pos));
+				controls.add(new TapToTargetControls(renderer.camera));
 			}				
-			dirs[i] = controls.get(i).getDir();
-
+			update.directions[i] = controls.get(i).getDir(tmp.set(0,0));
 		}
 		lastTime = TimeUtils.millis();
+		render = new RenderInfo(null);
+		render.hp = new float[update.directions.length];
+		connection.newest = new RenderInfo(null);
 	}
 	
 
@@ -158,6 +175,31 @@ public class GameScreen extends BaseScreen {
 		}
 		CamShaker.INSTANCE.update(deltaTime);
 		logTime("outside", 50);
+		
+		synchronized(connection) {
+			if (!connection.newest.handled) {
+				switch(connection.newest.info) {
+				case STATE_PLAYING:
+					connection.newest.copyTo(render);
+					break;
+				case STATE_WON:
+					state = STATE_WON;
+					if (connection.newest instanceof FiniteScoreInfo) {
+						((LevelCompleteMenu)menus[state-1]).setScore(((FiniteScoreInfo)connection.newest).score);
+					} else {
+						((LevelCompleteMenu)menus[state-1]).setScore(((ArcadeScoreInfo)connection.newest).score);
+					}
+					break;
+				case STATE_LOST:
+					state = STATE_LOST;
+					break;
+				default:
+					throw new IllegalArgumentException("Unexpected transferdata info value: " + connection.newest.info);
+				}
+				connection.newest.handled = true;
+			}
+		}
+		
 		switch (state) {
 		case STATE_STARTING:
 			if (timeSinceStart > START_TIME) {
@@ -167,47 +209,49 @@ public class GameScreen extends BaseScreen {
 				gameAlpha = Interpolation.fade.apply(timeSinceStart/START_TIME);
 				timeSinceStart += deltaTime;
 			}
+			update.info = Server.STATE_WAITING_START;
 			break;
 		case STATE_PLAYING:
-			world.update(deltaTime, dirs);
-			if (world.state != World.STATE_PLAYING) {
-				state = ((world.state == World.STATE_LOST && finite) ? STATE_GAMEOVER : STATE_WON);
-				if (state == STATE_WON) {
-					if (finite)
-						((LevelCompleteMenu)menus[state-1]).setScore(((FiniteLevelLoader)world.waveLoader).getScore());
-					else
-						((LevelCompleteMenu)menus[state-1]).setScore(((ArcadeLoaderBase)world.waveLoader).getScore());
-				}
-				updateMenu(menus[state-1], deltaTime);	//update() must be called before render()
+			for (int i = 0; i < update.directions.length; i++) {
+				update.directions[i] = controls.get(i).getDir(tmp.set(render.vessels.get(i).x, render.vessels.get(i).y));
 			}
+			update.info = Server.STATE_RUNNING;
+			break;
+		case STATE_PAUSED:
+			updateMenu(menus[state-1], deltaTime);
+			update.info = Server.STATE_PAUSED;
 			break;
 		case STATE_WON:
-		case STATE_PAUSED:
-		case STATE_GAMEOVER:
+		case STATE_LOST:
 			updateMenu(menus[state-1], deltaTime);
+			update.info = Server.STATE_OVER;
 			break;
 		}
+		
+		connection.write(update);
 		logTime("update", 50);
 		
+		// RENDER
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		renderer.render(deltaTime, gameAlpha);
+		renderer.render(deltaTime, gameAlpha, render, state == STATE_PLAYING);
+		
 		uiBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
-			dirs[i] = controls.get(i).getDir();
 			controls.get(i).draw(uiBatch, gameAlpha);
 		}
-		if (world.vessels.get(0).hp > 0) {
-			float hpPerMax = world.vessels.get(0).hp / Vessel.MAX_HP;
+		float hpPerMax = render.hp[vesselID];
+		if (hpPerMax > 0) {
 			uiBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f*gameAlpha);
 			uiBatch.draw(Assets.whiteRectangle, healthbarFromTopleft.x, FRUSTUM_HEIGHT-healthbarFromTopleft.y, 
 								hpPerMax * healthbarFullLength, healthbarWidth);
 		}
+		
 		uiBatch.setColor(1,1,1,gameAlpha);
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
 		switch (state) {
 		case STATE_PAUSED:
-		case STATE_GAMEOVER:
+		case STATE_LOST:
 		case STATE_WON:
 			renderMenu(menus[state-1]);
 			break;
@@ -234,13 +278,19 @@ public class GameScreen extends BaseScreen {
 			state = n;
 		} else switch (n) {
 		case MENU_RESTART:
-			game.setScreen(new GameScreen(game, levelNum, finite));
+			game.setScreen(newSinglePlayer(game, levelNum, finite));
+			update.info = Server.STATE_OVER;
+			connection.write(update);
 			break;
 		case MENU_NEXTLEVEL:
-			game.setScreen(new GameScreen(game, levelNum+1, finite));
+			game.setScreen(newSinglePlayer(game, levelNum, finite));
+			update.info = Server.STATE_OVER;
+			connection.write(update);
 			break;
 		case MENU_QUIT:
 			game.setScreen(new LevelSelectScreen(game, finite));
+			update.info = Server.STATE_OVER;
+			connection.write(update);
 			break;
 		}
 	}
