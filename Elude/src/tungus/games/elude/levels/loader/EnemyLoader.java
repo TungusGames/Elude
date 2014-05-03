@@ -38,7 +38,7 @@ public abstract class EnemyLoader {
 						super.update(deltaTime);
 						if (world.enemies.size() == 0)
 							for (int i = 0; i < 30; i++)
-								world.enemies.add(Enemy.newEnemy(world, EnemyType.KAMIKAZE));
+								world.enemies.add(Enemy.fromType(world, EnemyType.KAMIKAZE));
 					}
 				};
 			} else {
@@ -78,4 +78,5 @@ public abstract class EnemyLoader {
 	}
 	
 	public abstract void saveScore();
+	public abstract boolean isOver();
 }

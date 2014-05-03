@@ -1,20 +1,15 @@
-0.1
-0.1
-0.1
-0.1
+25 35
+0.1 0.1 0.1 0.1
+
 wavestart
--1
-0
-standing
+-1 0
+standing 
 moving
 kamikaze
 end
+
 wavestart
--1
-0
-moving
-moving
-moving
-kamikaze
-kamikaze
+-1 0
+moving   moving    moving
+kamikaze kamikaze
 end

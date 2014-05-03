@@ -33,26 +33,26 @@ public abstract class Enemy {
 	
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
 	
-	public static final Enemy newEnemy(World w, EnemyType t) {
+	public static final Enemy fromType(World w, EnemyType t) {
 		Enemy e = null;
 		switch (t) {
 		case STANDING:
-			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
+			e = new StandingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		case MOVING:
-			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), w);
+			e = new MovingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		case KAMIKAZE:
-			e = new Kamikaze(w.randomPosOutsideEdge(new Vector2(), 1), w);
+			e = new Kamikaze(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		case STANDING_FAST:
-			e = new StandingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), EnemyType.STANDING_FAST, w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f);
+			e = new StandingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.STANDING_FAST, w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f);
 			break;
 		case MOVING_MATRIX:
-			e = new MovingEnemy(w.randomPosOutsideEdge(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f);
+			e = new MovingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f);
 			break;
 		default:
-			throw new GdxRuntimeException("Unknown enemy type: " + t);
+			throw new IllegalArgumentException("Unknown enemy type: " + t);
 		}
 		return e;
 	}
@@ -92,7 +92,7 @@ public abstract class Enemy {
 	}
 	
 	protected final Rocket shootRocket(RocketType t, Vector2 dir) {
-		Rocket r = Rocket.rocketFromType(t, this, pos.cpy(), dir, world.vessels.get(0), world);
+		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, world.vessels.get(0), world);
 		world.rockets.add(r);
 		return r;
 	}

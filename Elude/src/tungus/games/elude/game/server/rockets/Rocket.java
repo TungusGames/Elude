@@ -30,7 +30,7 @@ public abstract class Rocket {
 	public static final float DEFAULT_DMG = 2f;
 	public static final float DEFAULT_LIFE = 10f;
 	
-	public static final Rocket rocketFromType(RocketType t, Enemy origin, Vector2 pos, Vector2 dir, Vessel target, World w) {
+	public static final Rocket fromType(RocketType t, Enemy origin, Vector2 pos, Vector2 dir, Vessel target, World w) {
 		Rocket r = null;
 		switch(t) {
 		case SLOW_TURNING:
@@ -43,7 +43,7 @@ public abstract class Rocket {
 			r = new LowGravityRocket(origin, pos, dir, w, null, target);
 			break;
 		default:
-			throw new GdxRuntimeException("Unknown rocket type: " + t);
+			throw new IllegalArgumentException("Unknown rocket type: " + t);
 		}
 		return r;
 	}

@@ -9,6 +9,8 @@ import java.util.List;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.pickups.Pickup;
+import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
@@ -22,10 +24,12 @@ public class FiniteLevelLoader extends EnemyLoader {
 		public final float timeAfterLast;	//Triggers when more than X time has passed
 		public final int enemiesAfterLast;	//Or only Y enemies remain
 		public final List<EnemyType> enemies;
-		public Wave(float time, int enemyCount, List<EnemyType> enemyList) {
+		public final List<PickupType> pickups;
+		public Wave(float time, int enemyCount, List<EnemyType> enemyList, List<PickupType> pickupList) {
 			timeAfterLast = time;
 			enemiesAfterLast = enemyCount;
 			enemies = enemyList;
+			pickups = pickupList;
 		}
 	}
 	
@@ -64,7 +68,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 		Wave w = level.waves.removeFirst();
 		int size = w.enemies.size();
 		for (int i = 0; i < size; i++) {
-			world.enemies.add(Enemy.newEnemy(world, w.enemies.get(i)));
+			world.enemies.add(Enemy.fromType(world, w.enemies.get(i)));
 		}
 	}
 	
@@ -77,7 +81,11 @@ public class FiniteLevelLoader extends EnemyLoader {
 			timeSinceLastWave = 0;
 			int size = w.enemies.size();
 			for (int i = 0; i < size; i++) {
-				world.enemies.add(Enemy.newEnemy(world, w.enemies.get(i)));
+				world.enemies.add(Enemy.fromType(world, w.enemies.get(i)));
+			}
+			size = w.pickups.size();
+			for (int i = 0; i < size; i++) {
+				world.pickups.add(Pickup.fromType(world, w.pickups.get(i)));
 			}
 			level.waves.removeFirst();
 		}
@@ -99,5 +107,10 @@ public class FiniteLevelLoader extends EnemyLoader {
 		s.hpLost = hpLost;
 		s.timeTaken = timeSinceStart;
 		return s;
+	}
+	
+	@Override
+	public boolean isOver() {
+		return level.waves.isEmpty();
 	}
 }

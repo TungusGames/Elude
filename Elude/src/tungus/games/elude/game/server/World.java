@@ -10,6 +10,7 @@ import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -60,8 +61,11 @@ public class World {
 	public void update(float deltaTime, Vector2[] dirs) {
 		effects.clear(); //TODO pool / trash?
 		int size = vessels.size();
+		boolean isVesselAlive = false;
 		for(int i = 0; i < size; i++) {
-			vessels.get(i).update(deltaTime, dirs[i]);
+			Vessel v = vessels.get(i);
+			v.update(deltaTime, dirs[i]);
+			isVesselAlive = isVesselAlive || v.hp > 0;
 		}
 		
 		size = enemies.size();
@@ -89,15 +93,20 @@ public class World {
 		}
 		
 		waveLoader.update(deltaTime);
-		
-		if (vessels.get(0).hp <= 0 || enemies.size() == 0 && rockets.size() == 0) {
+		if (!isVesselAlive || (enemies.size() == 0 && rockets.size() == 0 && waveLoader.isOver())) {
 			state = vessels.get(0).hp <= 0 && isFinite ? STATE_LOST : STATE_WON;
 			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
 				waveLoader.saveScore();
 		}
 	}
 	
-	public Vector2 randomPosOutsideEdge(Vector2 v, float dist) {
+	/**
+	 * Takes a random position from the perimeter of a rectangle outside the world's edge
+	 * @param v The vector tol store the position
+	 * @param dist How far the rectangle's sides should be outside the world
+	 * @return The random position in <b>v</b> for chaining
+	 */
+	public Vector2 randomPosOnOuterRect(Vector2 v, float dist) {
 		float longSides = 2*World.WIDTH + 4*dist;
 		float shortSides = 2*World.HEIGHT + 4*dist;
 		float f = MathUtils.random(longSides + shortSides);
@@ -116,5 +125,25 @@ public class World {
 			v.set(f, bottomSide ? -dist : HEIGHT+dist);
 		}
 		return v;
+	}
+	
+	/**
+	 * Takes a random position inside the area of a rectangle in the middle of the world
+	 * @param v The vector2 to store the position
+	 * @param dist How far the rectangle's sides should be inside the world
+	 * @return The random position in <b>v</b> for chaining
+	 */
+	public Vector2 randomPosInInnerRect(Vector2 v, float dist) {
+		v.x = dist + MathUtils.random(WIDTH -2*dist);
+		v.y = dist + MathUtils.random(HEIGHT-2*dist);
+		return v;
+	}
+	
+	/**
+	 * @param v The vector to store the position
+	 * @return {@code randomPosInInnerRect(v, World.EDGE)}
+	 */
+	public Vector2 randomPosInInnerRect(Vector2 v) {
+		return randomPosInInnerRect(v, EDGE);
 	}
 }

@@ -1,15 +1,12 @@
-0
-0
-0
-0
+40 20
+0 0 0 0
+
 wavestart
-0
-0
+0 0
 standing
 end
+
 wavestart
--1
-0
-standing
-standing
+-1 0
+standing standing
 end

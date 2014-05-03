@@ -2,7 +2,10 @@ package tungus.games.elude.util.log;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.TimeUtils;
-
+/**
+ * Logs the number of {@code log()} calls each second, 
+ * with the tag and message strings given to its constructor
+ */
 public class FPSLogger {
 	private long startTime;
 	private final String tag;

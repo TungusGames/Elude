@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Wave;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
@@ -27,8 +28,7 @@ public class Main {
 	private static float wipeDrop;
 	private static float shieldDrop;
 	
-	private static int levelOffset = 1;
-	private static int n = 0;
+	private static int levelNum = 1;
 	
 	private static boolean running = true;
 		
@@ -37,28 +37,30 @@ public class Main {
 	
 	public static void main(String[] args) {
 		readAndOutputLevels();
-		writeFiniteMedals();
 		writeArcadeMedals();
 	}
 	
 	
 	public static void readAndOutputLevels() {
+		List<FiniteLevelScore> scores = new ArrayList<>();
 		while (running) {
 			try {
-				System.out.print("Reading file: " + (n+levelOffset) + ".tel ");
-				sc = new Scanner(new File((n+levelOffset) + ".tel"));
+				System.out.print("Reading file: " + (levelNum) + ".tel ");
+				sc = new Scanner(new File((levelNum) + ".tel"));
 				sc.useLocale(Locale.US);
+				scores.add(new FiniteLevelScore(sc.nextFloat(), sc.nextFloat()));
 				hpDrop = sc.nextFloat();
 				speedDrop = sc.nextFloat();
 				wipeDrop = sc.nextFloat();
 				shieldDrop = sc.nextFloat();
 				while (sc.hasNext()) {
-					if (sc.nextLine().equals("wavestart")) {
+					if (sc.next().equals("wavestart")) {
 						int t = sc.nextInt();
 						int n = sc.nextInt();
-						ArrayList<EnemyType> e = new ArrayList<EnemyType>();
+						List<EnemyType> e = new ArrayList<>();
+						List<PickupType> p = new ArrayList<>();
 						outer: while (true)
-							switch (sc.nextLine()) {
+							switch (sc.next()) {
 								case "standing":
 									e.add(EnemyType.STANDING);
 									break;
@@ -74,19 +76,31 @@ public class Main {
 								case "moving_matrix":
 									e.add(EnemyType.MOVING_MATRIX);
 									break;
+								case "health":
+									p.add(PickupType.HEALTH);
+									break;
+								case "speed":
+									p.add(PickupType.SPEED);
+									break;
+								case "shield":
+									p.add(PickupType.SHIELD);
+									break;
+								case "rocketwipe":
+									p.add(PickupType.ROCKETWIPER);
+									break;
 								case "end":
 									break outer; //Breaks from the outer loop...
 								default:
 									break;
 							}
-						waves.add(new Wave(t, n, e));
+						waves.add(new Wave(t, n, e, p));
 					 }
 				}
 				System.out.println("finished");
 				System.out.println(waves.size() + " wave(s) found");
 			} catch (FileNotFoundException e) {
 				System.out.println();
-				System.out.println("File not found: " + (n+levelOffset) + ".tel, finished at this file: " + (n+levelOffset-1)  + ".tel");
+				System.out.println("File not found: " + (levelNum) + ".tel, finished at this file: " + (levelNum-1)  + ".tel");
 				running = false;
 				break;
 			} catch (Exception e) {
@@ -101,8 +115,8 @@ public class Main {
 			lvl.rocketWipeChance = wipeDrop;
 			lvl.shieldChance = shieldDrop;
 			try {
-				System.out.print("Writing file: " + (n+levelOffset) + ".lvl ");
-				fileOut = new FileOutputStream((n+levelOffset) + ".lvl");
+				System.out.print("Writing file: " + (levelNum) + ".lvl ");
+				fileOut = new FileOutputStream("../Elude - Android/assets/levels/" + (levelNum) + ".lvl");
 				ObjectOutputStream out;
 				out = new ObjectOutputStream(fileOut);
 				out.writeObject(lvl);
@@ -112,13 +126,26 @@ public class Main {
 				e.printStackTrace();
 			}
 			waves.clear();
-			n++;
+			levelNum++;
+		}
+		// Fill up scores to 50 levels
+		for (int i = levelNum; i <= 50; i++)
+			scores.add(new FiniteLevelScore(150, 50));
+		// Output score file
+		try {
+			FileOutputStream fileOut = new FileOutputStream("../Elude - Android/assets/medals/finite.medal");
+			ObjectOutputStream out;
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(scores);
+			out.close();
+		} catch (IOException e11) {
+			e11.printStackTrace();
 		}
 	}
 	
 	
 	
-	
+	@Deprecated
 	public static void writeFiniteMedals() {
 		List<FiniteLevelScore> list = new ArrayList<>();
 		FiniteLevelScore medal = new FiniteLevelScore();
@@ -129,7 +156,7 @@ public class Main {
 			list.add(medal);
 		}
 		try {
-			FileOutputStream fileOut = new FileOutputStream("finite.score");
+			FileOutputStream fileOut = new FileOutputStream("../Elude - Android/assets/medals/finite.medal");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(list);
@@ -149,7 +176,7 @@ public class Main {
 			list.add(medal);
 		}
 		try {
-			FileOutputStream fileOut = new FileOutputStream("arcade.score");
+			FileOutputStream fileOut = new FileOutputStream("../Elude - Android/assets/medals/arcade.medal");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(list);
@@ -159,7 +186,7 @@ public class Main {
 		}
 	}
 	
-	@Deprecated
+	/*@Deprecated
 	public static void outputLevel(int num) {
 		FileOutputStream fileOut = null;
 		Level lvl = new Level();
@@ -349,5 +376,5 @@ public class Main {
 		waves.add(new Wave(-1, 0, e));
 		
 		outputLevel(4);
-	}
+	}*/
 }

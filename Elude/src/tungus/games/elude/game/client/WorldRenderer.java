@@ -212,7 +212,9 @@ public class WorldRenderer {
 
 	private void drawPickup(ReducedPickup p) {
 		int o = p.typeOrdinal;
+		batch.setColor(1, 1, 1, batch.getColor().a*p.alpha);
 		batch.draw(pt[o].tex, p.x-Pickup.HALF_SIZE, p.y-Pickup.HALF_SIZE, Pickup.DRAW_SIZE, Pickup.DRAW_SIZE);
+		batch.setColor(1, 1, 1, batch.getColor().a/p.alpha);
 	}
 
 

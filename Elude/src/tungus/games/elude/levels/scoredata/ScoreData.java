@@ -21,6 +21,11 @@ public class ScoreData {
 			timeTaken = hpLost = -1;
 			completed = false;
 		}
+		public FiniteLevelScore(float time, float hp) {
+			timeTaken = time;
+			hpLost = hp;
+			completed = true;
+		}
 		public void copyTo(FiniteLevelScore other) {
 			other.timeTaken = timeTaken;
 			other.hpLost = hpLost;
@@ -36,6 +41,11 @@ public class ScoreData {
 			timeSurvived = enemiesKilled = -1;
 			tried = false;
 		}
+		public ArcadeLevelScore(float time, int e) {
+			timeSurvived = time;
+			enemiesKilled = e;
+			tried = true;
+		}
 		public void copyTo(ArcadeLevelScore other) {
 			other.timeSurvived = timeSurvived;
 			other.enemiesKilled = enemiesKilled;
@@ -48,8 +58,8 @@ public class ScoreData {
 	public static List<FiniteLevelScore> finiteMedals;
 	public static List<ArcadeLevelScore> arcadeMedals;
 	
-	private static final FileHandle medalFiniteFile = Gdx.files.internal("medals/finite.score");
-	private static final FileHandle medalArcadeFile = Gdx.files.internal("medals/arcade.score");
+	private static final FileHandle medalFiniteFile = Gdx.files.internal("medals/finite.medal");
+	private static final FileHandle medalArcadeFile = Gdx.files.internal("medals/arcade.medal");
 	private static final FileHandle playerFiniteFile = Gdx.files.local("scores/finite.score");
 	private static final FileHandle playerArcadeFile = Gdx.files.local("scores/arcade.score");
 	

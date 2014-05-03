@@ -1,19 +1,12 @@
-0.5
-0.5
-0.5
-0.5
+30 20
+0.5 0.5 0.5 0.5
+
 wavestart
-0
-0
-standing
-standing
-standing
+0 0
+standing standing standing
 end
+
 wavestart
--1
-1
-standing
-moving
-moving
-moving
+-1 1
+standing moving moving moving
 end

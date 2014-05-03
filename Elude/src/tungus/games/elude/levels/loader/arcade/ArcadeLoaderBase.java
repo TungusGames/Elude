@@ -47,5 +47,9 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 		s.enemiesKilled = enemiesKilled;
 		return s;
 	}
-
+	
+	@Override
+	public boolean isOver() {
+		return false;
+	}
 }

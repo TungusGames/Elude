@@ -2,8 +2,12 @@ package tungus.games.elude.util.log;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.TimeUtils;
-
+/**
+ * Logs the average of the values given to since the last log it every second, 
+ * with the tag and message strings given to its constructor
+ */
 public class AverageLogger {
+	
 	private long startTime;
 	private final String tag;
 	private final String msg;

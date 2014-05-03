@@ -33,6 +33,27 @@ public abstract class Pickup {
 	private static final Interpolation PICKED_UP = Interpolation.fade;
 	private static final Interpolation NOT_PICKED = new FadeinFlash(APPEAR_TIME/DEFAULT_LIFETIME, 1-FLASH_TIME/DEFAULT_LIFETIME);
 	
+	public static Pickup fromType(World w, PickupType t) {
+		Pickup p = null;
+		switch (t) {
+		case HEALTH:
+			p = new HealthPickup(w, w.randomPosInInnerRect(new Vector2()));
+			break;
+		case SPEED:
+			p = new SpeedPickup(w, w.randomPosInInnerRect(new Vector2()));
+			break;
+		case SHIELD:
+			p = new ShieldPickup(w, w.randomPosInInnerRect(new Vector2()));
+			break;
+		case ROCKETWIPER:
+			p = new RocketWiperPickup(w, w.randomPosInInnerRect(new Vector2()));
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown PickupType " + t);
+		}
+		return p;
+	}
+	
 	protected World world;
 	public Rectangle collisionBounds;
 	private float lifeTimeLeft;
