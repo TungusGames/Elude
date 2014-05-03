@@ -4,7 +4,6 @@ import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class LowGravityRocket extends Rocket {
@@ -20,12 +19,12 @@ public class LowGravityRocket extends Rocket {
 	private final float minSpeed;
 	private final float speedPerDist;
 	
-	public LowGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target) {
-		this(origin, pos, dir, world, texture, target, 
+	public LowGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
+		this(origin, pos, dir, world, target, 
 				DEFAULT_MIN_SPEED, DEFAULT_MAX_SPEED, DEFAULT_SPEED_PER_DIST, DEFAULT_TURNSPEED, DEFAULT_DMG, DEFAULT_LIFE);
 	}
 
-	public LowGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, 
+	public LowGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, 
 			Vessel target, float minS, float maxS, float sPerD, float turnSpeed, float dmg, float life) {
 		super(origin, RocketType.LOWGRAV, pos, dir, world, target, dmg, life);
 		this.turnSpeed = turnSpeed;

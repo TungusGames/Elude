@@ -28,8 +28,6 @@ public class Vessel {
 	public Vector2 vel;
 	public float rot = 0;
 	
-	public float drawWidth = DRAW_WIDTH;
-	public float drawHeight = DRAW_HEIGHT;
 	public Rectangle bounds;
 		
 	public float hp = MAX_HP;

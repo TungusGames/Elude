@@ -11,7 +11,6 @@ import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public abstract class Rocket {
 	
@@ -19,7 +18,8 @@ public abstract class Rocket {
 		SLOW_TURNING(Assets.flameRocket), 
 		FAST_TURNING(Assets.fastFlameRocket), 
 		LOWGRAV(Assets.matrixRocket),
-		HIGHGRAV(null);
+		HIGHGRAV(null),
+		STRAIGHT(Assets.flameRocket);	//TODO
 		public ParticleEffectPool effect;
 		RocketType(ParticleEffectPool e) {
 			effect = e;
@@ -34,13 +34,16 @@ public abstract class Rocket {
 		Rocket r = null;
 		switch(t) {
 		case SLOW_TURNING:
-			r = new TurningRocket(origin, pos, dir, w, null, target);
+			r = new TurningRocket(origin, pos, dir, w, target);
 			break;
 		case FAST_TURNING:
-			r = new TurningRocket(origin, pos, dir, w, null, target, true);
+			r = new TurningRocket(origin, pos, dir, w, target, true);
 			break;
 		case LOWGRAV:
-			r = new LowGravityRocket(origin, pos, dir, w, null, target);
+			r = new LowGravityRocket(origin, pos, dir, w, target);
+			break;
+		case STRAIGHT:
+			r = new StraightRocket(origin, pos, dir, w, target);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown rocket type: " + t);

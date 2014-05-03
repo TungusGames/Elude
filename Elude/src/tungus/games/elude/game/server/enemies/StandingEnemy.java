@@ -9,8 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class StandingEnemy extends Enemy {
 	
-	private static final float DRAW_WIDTH = 0.6f;
-	private static final float DRAW_HEIGHT = 1f;
 	private static final float COLLIDER_SIZE = 0.5f;
 	
 	private static final float MAX_HP = 4f;
@@ -34,7 +32,7 @@ public class StandingEnemy extends Enemy {
 	}
 	
 	public StandingEnemy(Vector2 pos, EnemyType t, World w, TextureRegion tex, RocketType type, float speed, float reload) {
-		super(pos, t, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, w, type);
+		super(pos, t, COLLIDER_SIZE, MAX_HP, w, type);
 		
 		this.speed = speed;
 		this.reload = reload;

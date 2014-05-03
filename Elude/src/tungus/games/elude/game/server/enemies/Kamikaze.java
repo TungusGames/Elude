@@ -12,8 +12,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Kamikaze extends Enemy {
 	
-	private static final float DRAW_WIDTH = 0.9f;
-	private static final float DRAW_HEIGHT = 0.85f;
 	private static final float COLLIDER_SIZE = 0.6f;
 	
 	private static final float MAX_HP = 4f;
@@ -31,7 +29,7 @@ public class Kamikaze extends Enemy {
 	}
 	
 	public Kamikaze(Vector2 pos, World w, TextureRegion tex, RocketType type) {
-		super(pos, EnemyType.KAMIKAZE, COLLIDER_SIZE, DRAW_WIDTH, DRAW_HEIGHT, MAX_HP, w, type);
+		super(pos, EnemyType.KAMIKAZE, COLLIDER_SIZE, MAX_HP, w, type);
 		
 		targetPos = new Vector2();
 		getInnerTargetPos(pos, targetPos);

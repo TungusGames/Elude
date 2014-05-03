@@ -4,7 +4,6 @@ import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class TurningRocket extends Rocket {
@@ -26,11 +25,11 @@ public class TurningRocket extends Rocket {
 
 	}
 	
-	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target) {
+	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		this(origin, pos, dir, world, target, DEFAULT_TURNSPEED, DEFAULT_SPEED);
 	}
 
-	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target, boolean fast) {
+	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target, boolean fast) {
 		this(origin, pos, dir, world, target, fast ? FAST_TURNSPEED : DEFAULT_TURNSPEED, fast ? FAST_SPEED : DEFAULT_SPEED);
 	}
 	

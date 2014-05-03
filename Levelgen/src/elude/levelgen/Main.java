@@ -76,6 +76,9 @@ public class Main {
 								case "moving_matrix":
 									e.add(EnemyType.MOVING_MATRIX);
 									break;
+								case "sharpshooter":
+									e.add(EnemyType.SHARPSHOOTER);
+									break;
 								case "health":
 									p.add(PickupType.HEALTH);
 									break;

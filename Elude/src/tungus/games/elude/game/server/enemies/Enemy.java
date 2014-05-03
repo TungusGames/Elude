@@ -10,16 +10,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public abstract class Enemy {
 	
 	public static enum EnemyType {
-		STANDING	 (Assets.standingEnemyGreen, 0.6f, 1, 	new float[]{0.1f,1,0.1f,1}), 
-		MOVING		 (Assets.movingEnemyBlue, 0.8f, 1.05f,	new float[]{1,1,0.2f,1}), 
-		KAMIKAZE	 (Assets.kamikaze, 0.9f, 0.85f, 		new float[]{0.25f,0.25f,0.8f,1}), 
-		STANDING_FAST(Assets.standingEnemyRed, 0.6f, 1, 	new float[]{0.6f, 0.1f, 0.1f, 1f}), 
-		MOVING_MATRIX(Assets.movingEnemyGreen, 0.8f, 1.05f, new float[]{0.4f, 1f, 0.25f, 1f});
+		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	new float[]{0.1f,1,0.1f,1}), 
+		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f,new float[]{1,1,0.2f,1}), 
+		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f,new float[]{0.25f,0.25f,0.8f,1}), 
+		STANDING_FAST(Assets.standingEnemyRed,  0.6f, 1, 	new float[]{0.6f, 0.1f, 0.1f, 1f}), 
+		MOVING_MATRIX(Assets.movingEnemyGreen,  0.8f, 1.05f,new float[]{0.4f, 1f, 0.25f, 1f}),
+		SHARPSHOOTER (Assets.movingEnemyBlue, 	0.8f, 1.05f,new float[]{0.5f, 0.5f, 0.5f, 1f}); // TODO
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -50,6 +50,9 @@ public abstract class Enemy {
 			break;
 		case MOVING_MATRIX:
 			e = new MovingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f);
+			break;
+		case SHARPSHOOTER:
+			e = new Sharpshooter(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown enemy type: " + t);
@@ -111,7 +114,7 @@ public abstract class Enemy {
 	
 	protected float turnGoal;
 		
-	public Enemy(Vector2 pos, EnemyType t, float boundSize, float drawWidth, float drawHeight, float hp, World w,
+	public Enemy(Vector2 pos, EnemyType t, float boundSize, float hp, World w,
 				 RocketType type) {
 		this.rocketType = type;
 		this.type = t;

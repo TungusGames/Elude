@@ -4,7 +4,6 @@ import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class HighGravityRocket extends Rocket {
@@ -18,7 +17,7 @@ public class HighGravityRocket extends Rocket {
 	private final float turnSpeed;
 	private final float g;
 	
-	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target,
+	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target,
 			float turnSpeed, float g) {
 		super(origin, RocketType.HIGHGRAV, pos, dir, world, target);
 		this.turnSpeed = turnSpeed;
@@ -26,8 +25,8 @@ public class HighGravityRocket extends Rocket {
 		vel.nor().scl(MIN_SPEED);
 	}
 
-	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, TextureRegion texture, Vessel target) {
-		this(origin, pos, dir, world, texture, target, DEFAULT_TURNSPEED, DEFAULT_G);
+	public HighGravityRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
+		this(origin, pos, dir, world, target, DEFAULT_TURNSPEED, DEFAULT_G);
 	}
 
 	@Override
