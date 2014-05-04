@@ -283,7 +283,7 @@ public class GameScreen extends BaseScreen {
 			connection.write(update);
 			break;
 		case MENU_NEXTLEVEL:
-			game.setScreen(newSinglePlayer(game, levelNum, finite));
+			game.setScreen(newSinglePlayer(game, levelNum + 1, finite));
 			update.info = Server.STATE_OVER;
 			connection.write(update);
 			break;

@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,6 +21,9 @@ public class Assets {
 	//Title screen
 	public static TextureRegion eludeTitleOn;
 	public static TextureRegion eludeTitleOff;
+	
+	//Menus
+	public static NinePatch frame9p;
 	
 	//Gameplay
 	public static TextureRegion vessel;
@@ -130,6 +134,8 @@ public class Assets {
 		neonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/neonSound.wav"));
 		neonFlicker = Gdx.audio.newSound(Gdx.files.internal("sounds/flicker.wav"));
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion2.wav"));
+		
+		frame9p = new NinePatch(frame, 15, 84, 15, 84);
 	}
 	
 	public static FileHandle levelFile(int levelNum) {
