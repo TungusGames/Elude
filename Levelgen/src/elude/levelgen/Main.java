@@ -53,52 +53,31 @@ public class Main {
 				speedDrop = sc.nextFloat();
 				wipeDrop = sc.nextFloat();
 				shieldDrop = sc.nextFloat();
+				while (!sc.next().equals("wavestart"))
+					;
+				int t = sc.nextInt();
+				int n = sc.nextInt();
+				List<EnemyType> e = new ArrayList<>();
+				List<PickupType> p = new ArrayList<>();
 				while (sc.hasNext()) {
-					if (sc.next().equals("wavestart")) {
-						int t = sc.nextInt();
-						int n = sc.nextInt();
-						List<EnemyType> e = new ArrayList<>();
-						List<PickupType> p = new ArrayList<>();
-						outer: while (true)
-							switch (sc.next()) {
-								case "standing":
-									e.add(EnemyType.STANDING);
-									break;
-								case "moving":
-									e.add(EnemyType.MOVING);
-									break;
-								case "kamikaze":
-									e.add(EnemyType.KAMIKAZE);
-									break;
-								case "standing_fast":
-									e.add(EnemyType.STANDING_FAST);
-									break;
-								case "moving_matrix":
-									e.add(EnemyType.MOVING_MATRIX);
-									break;
-								case "sharpshooter":
-									e.add(EnemyType.SHARPSHOOTER);
-									break;
-								case "health":
-									p.add(PickupType.HEALTH);
-									break;
-								case "speed":
-									p.add(PickupType.SPEED);
-									break;
-								case "shield":
-									p.add(PickupType.SHIELD);
-									break;
-								case "rocketwipe":
-									p.add(PickupType.ROCKETWIPER);
-									break;
-								case "end":
-									break outer; //Breaks from the outer loop...
-								default:
-									break;
+					String str = sc.next();
+					try {
+						e.add(EnemyType.valueOf(str.toUpperCase()));
+					} catch (IllegalArgumentException ex) {
+						try {
+							p.add(PickupType.valueOf(str.toUpperCase()));
+						} catch (IllegalArgumentException ex2) {
+							if (str.equals("wavestart")) {
+								waves.add(new Wave(t, n, e, p));
+								t = sc.nextInt();
+								n = sc.nextInt();
+								e = new ArrayList<>();
+								p = new ArrayList<>();
 							}
-						waves.add(new Wave(t, n, e, p));
-					 }
+						}
+					}
 				}
+				waves.add(new Wave(t, n, e, p));
 				System.out.println("finished");
 				System.out.println(waves.size() + " wave(s) found");
 			} catch (FileNotFoundException e) {

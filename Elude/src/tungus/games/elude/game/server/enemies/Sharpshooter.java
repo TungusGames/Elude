@@ -4,10 +4,7 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.game.server.rockets.StraightRocket;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Sharpshooter extends Enemy {
 	
@@ -88,12 +85,9 @@ public class Sharpshooter extends Enemy {
 			if (Math.abs(t-dx/(-x-v.x)) < 0.05)
 				return new Vector2(-x, y);
 		}
-		Gdx.app.log("Sharpshooter", "Math failed! Approximating");
-		Vector2 vec = new Vector2();
-		float a = vel.angle() - vec.set(p).sub(pos).angle() + 90;
-		float l = vec.len();
-		return vec.rotate(MathUtils.sinDeg(a)*vel.len()/s*MathUtils.radiansToDegrees);
-		//throw new GdxRuntimeException("Math failed");
+		
+		// Math sometimes fails when the target is very close (float limits messing?), approximate
+		return new Vector2(p).sub(pos);
 	}
 
 }
