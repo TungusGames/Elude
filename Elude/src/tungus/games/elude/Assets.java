@@ -27,19 +27,24 @@ public class Assets {
 	
 	//Gameplay
 	public static TextureRegion vessel;
-	public static TextureRegion vesselRed;	
+	public static TextureRegion vesselRed;
+	public static TextureRegion shield;
 	public static TextureRegion rocket;
+	
 	public static TextureRegion standingEnemyGreen;
 	public static TextureRegion standingEnemyRed;
 	public static TextureRegion movingEnemyBlue;
 	public static TextureRegion movingEnemyGreen;
 	public static TextureRegion kamikaze;
+	public static TextureRegion sharpshooter;
+	
 	public static TextureRegion hpBonus;
 	public static TextureRegion speedBonus;
-	public static TextureRegion virtualDPadPerimeter;
+	
 	public static TextureRegion whiteRectangle;
 	public static TextureRegion smallCircle;
-	public static TextureRegion shield;
+	
+	public static TextureRegion virtualDPadPerimeter;
 	
 	//Ingame menus
 	public static TextureRegion pause;
@@ -62,6 +67,7 @@ public class Assets {
 	public static ParticleEffectPool flameRocket;
 	public static ParticleEffectPool fastFlameRocket;
 	public static ParticleEffectPool matrixRocket;
+	public static ParticleEffectPool straightRocket;
 	public static ParticleEffectPool testRocket;
 	public static ParticleEffectPool explosion;
 	public static ParticleEffectPool debris;
@@ -84,6 +90,7 @@ public class Assets {
 		movingEnemyBlue = atlas.findRegion("MovingEnemy");
 		movingEnemyGreen = atlas.findRegion("MovingEnemyGreen");
 		kamikaze = atlas.findRegion("kamikaze");
+		sharpshooter = atlas.findRegion("sharpshooter");
 		hpBonus = atlas.findRegion("hpbonus");
 		speedBonus = atlas.findRegion("speedbonus");
 		virtualDPadPerimeter = atlas.findRegion("virtualdpadperimeter");
@@ -121,6 +128,9 @@ public class Assets {
 		particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "fastflamerocket"), Assets.atlas);
 		fastFlameRocket = new ParticleEffectPool(particle, 10, 100);
+		particle = new ParticleEffect();
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "straightrocket"), Assets.atlas);
+		straightRocket = new ParticleEffectPool(particle, 10, 100);
 		particle = new ParticleEffect();
 		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "explosion"), Assets.atlas);
 		explosion = new ParticleEffectPool(particle, 10, 100);

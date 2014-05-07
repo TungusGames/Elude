@@ -19,7 +19,7 @@ public abstract class Enemy {
 		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f,new float[]{0.25f,0.25f,0.8f,1}), 
 		STANDING_FAST(Assets.standingEnemyRed,  0.6f, 1, 	new float[]{0.6f, 0.1f, 0.1f, 1f}), 
 		MOVING_MATRIX(Assets.movingEnemyGreen,  0.8f, 1.05f,new float[]{0.4f, 1f, 0.25f, 1f}),
-		SHARPSHOOTER (Assets.movingEnemyBlue, 	0.8f, 1.05f,new float[]{0.5f, 0.5f, 0.5f, 1f}); // TODO
+		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f,new float[]{0.5f, 0.5f, 0.5f, 1f}); // TODO
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;

@@ -19,7 +19,7 @@ public abstract class Rocket {
 		FAST_TURNING(Assets.fastFlameRocket), 
 		LOWGRAV(Assets.matrixRocket),
 		HIGHGRAV(null),
-		STRAIGHT(Assets.flameRocket);	//TODO
+		STRAIGHT(Assets.straightRocket);	//TODO
 		public ParticleEffectPool effect;
 		RocketType(ParticleEffectPool e) {
 			effect = e;
