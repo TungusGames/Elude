@@ -154,7 +154,7 @@ public class Assets {
 		for (int i = 0; i < emitters.size; i++) {
 			// Mod color
 			float[] separateColor = (i == emitters.size-1) ? color : color.clone(); // Color for each emitter - last one uses up the original array
-			float mul = MathUtils.random() + 0.5f;
+			float mul = MathUtils.random()*0.6f + 0.7f;
 			for (int j = 0; j < 3; j++) {
 				// Randomly change the color slightly
 				mul = MathUtils.random() + 0.5f;
