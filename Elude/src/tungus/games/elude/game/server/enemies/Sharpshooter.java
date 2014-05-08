@@ -43,6 +43,9 @@ public class Sharpshooter extends Enemy {
 			if (timeSinceShot > RELOAD) 
 			{
 				timeSinceShot -= RELOAD;
+				if (world.enemies.size() == 1) {
+					rocketType = RocketType.SLOW_TURNING;
+				}
 				shootRocket(calcAngle());
 			}
 			turnGoal = temp.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player

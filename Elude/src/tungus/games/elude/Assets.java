@@ -119,33 +119,29 @@ public class Assets {
 		
 		font = new BitmapFont(Gdx.files.internal("font/bulletproof.fnt"));
 		
-		ParticleEffect particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "flamerocket"), Assets.atlas);
-		flameRocket = new ParticleEffectPool(particle, 10, 100);
-		particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "matrixrocket"), Assets.atlas);
-		matrixRocket = new ParticleEffectPool(particle, 10, 100);
-		particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "fastflamerocket"), Assets.atlas);
-		fastFlameRocket = new ParticleEffectPool(particle, 10, 100);
-		particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "straightrocket"), Assets.atlas);
-		straightRocket = new ParticleEffectPool(particle, 10, 100);
-		particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "explosion"), Assets.atlas);
-		explosion = new ParticleEffectPool(particle, 10, 100);
-		particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "debris2"), Assets.atlas);
-		debris = new ParticleEffectPool(particle, 10, 100);
-		particle = new ParticleEffect();
-		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + "vesseltrails"), Assets.atlas);
-		vesselTrails = new ParticleEffectPool(particle, 10, 100);
+		flameRocket = loadParticle("flamerocket", 40, 80);
+		matrixRocket = loadParticle("matrixrocket");
+		fastFlameRocket = loadParticle("fastflamerocket");
+		straightRocket = loadParticle("straightrocket");
+		explosion = loadParticle("explosion", 20, 40);
+		debris = loadParticle("debris2", 40, 80);
+		vesselTrails = loadParticle("vesseltrails", 2, 2);
 		
 		neonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/neonSound.wav"));
 		neonFlicker = Gdx.audio.newSound(Gdx.files.internal("sounds/flicker.wav"));
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion2.wav"));
 		
 		frame9p = new NinePatch(frame, 15, 84, 15, 84);
+	}
+	
+	private static ParticleEffectPool loadParticle(String filename) {
+		return loadParticle(filename, 10, 50);
+	}
+	
+	private static ParticleEffectPool loadParticle(String filename, int s, int m) {
+		ParticleEffect particle = new ParticleEffect();
+		particle.load(Gdx.files.internal(Assets.PARTICLE_LOCATION + filename), Assets.atlas);
+		return new ParticleEffectPool(particle, s, m);
 	}
 	
 	public static FileHandle levelFile(int levelNum) {

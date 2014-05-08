@@ -126,7 +126,7 @@ public class WorldRenderer {
 			break;
 		case CAMSHAKE:
 			Gdx.input.vibrate(100);
-			CamShaker.INSTANCE.shake(0.65f, 2.5f);
+			CamShaker.INSTANCE.shake(0.65f, 5f);
 			break;
 		case DEBRIS:
 			DebrisEffect e = (DebrisEffect)effect;
@@ -163,6 +163,9 @@ public class WorldRenderer {
 			ReducedRocket roc = rocketEntries.next().value;
 			PooledEffect effect = rt[roc.typeOrdinal].effect.obtain();
 			rockets.put(roc.id, setRocketEffect(effect, roc));
+			if (rt[roc.typeOrdinal] == RocketType.STRAIGHT) {
+				effect.getEmitters().get(0).getRotation().setLow(roc.angle-90);
+			}
 			particles.add(effect);
 		}
 		//Gdx.app.log("Rocket effects", ""+r.rockets.size() + " rockets received, " + rockets.size + " effects binded, " + particles.size() + " effects drawn");

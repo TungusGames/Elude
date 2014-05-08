@@ -101,7 +101,7 @@ public abstract class Enemy {
 	}
 	
 	protected final World world;
-	protected final RocketType rocketType;
+	protected RocketType rocketType;
 	
 	public Vector2 pos;
 	public Vector2 vel;

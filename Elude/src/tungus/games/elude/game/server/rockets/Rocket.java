@@ -90,6 +90,10 @@ public abstract class Rocket {
 	
 	public final boolean update(float deltaTime) {
 		life -= deltaTime;
+		// If there are no enemies alive, speed up the pace by dying twice as fast
+		if (world.enemies.size() == 0) { 
+			life -= deltaTime;
+		}
 		if (life <= 0) {
 			kill();
 			return true;
