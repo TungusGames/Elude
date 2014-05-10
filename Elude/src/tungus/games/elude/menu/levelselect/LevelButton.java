@@ -113,11 +113,16 @@ public class LevelButton extends Sprite {
 		}
 	}
 	
-	public void setStarAlpha(float a) {
-		if (stars == null)
-			return;
-		for (int i = 0; i < stars.length; i++) {
-			stars[i].setColor(1, 1, 1, a);
+	public void setAlpha(float a) {
+		if (stars != null) {
+			for (int i = 0; i < stars.length; i++) {
+				stars[i].setColor(1, 1, 1, a);
+			}
 		}
+		col.a = a;
+		if (lock != null) {
+			lock.setColor(col);
+		}
+		setColor(1, 1, 1, a);
 	}
 }

@@ -38,17 +38,19 @@ public class ScoreDetails {
 	private final float scale;
 	private final boolean modAlpha;
 	private final float xSource;
+	private final float yTop;
 	private final String title;
 	private final boolean hasTimeMedal;
 	private final boolean hasHitMedal;
 	private FiniteLevelScore fScore;
 	private ArcadeLevelScore aScore;
 	
-	private ScoreDetails(String title, int levelNum, boolean finite, float x, float scale, boolean modAlpha, float xSource) {
+	private ScoreDetails(String title, int levelNum, boolean finite, float x, float y, float scale, boolean modAlpha, float xSource) {
 		this.finite = finite;	
 		this.levelNum = levelNum;
 		this.title = title;
 		starX = x;
+		yTop = y;
 		textX = x*40/scale-40;
 		this.scale = scale;
 		starWidth = STAR_WIDTH*scale;
@@ -58,15 +60,17 @@ public class ScoreDetails {
 		
 		df.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
 		
-		hasTimeMedal = ScoreData.hasMedal(finite, true, levelNum);
-		hasHitMedal = ScoreData.hasMedal(finite, false, levelNum);
+		hasTimeMedal = //ScoreData.hasMedal(finite, true, levelNum);
+				false; // Always displaying the medal limits might be better
+		hasHitMedal = //ScoreData.hasMedal(finite, false, levelNum);
+				false; // Always displaying the medal limits might be better
 		playerTime = new Sprite(Assets.stars[hasTimeMedal ? 3 : 0]);
-		playerTime.setBounds(STAR_X, (7.3f+(!finite?1:0))*scale, starWidth, starHeight);
+		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.6f+(!finite?1:0))*scale, starWidth, starHeight);
 		playerHit =  new Sprite(Assets.stars[hasHitMedal ? 3 : 0]);
-		playerHit.setBounds(STAR_X, (4.3f+(!finite?1:0))*scale, starWidth, starHeight);
+		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.6f+(!finite?1:0))*scale, starWidth, starHeight);
 		if (finite && complete()) {
 			completition = new Sprite(Assets.stars[3]);
-			completition.setBounds(STAR_X, 9.3f*scale, starWidth, starHeight);
+			completition.setBounds(STAR_X, yTop*scale/40f-10.75f+8.6f*scale, starWidth, starHeight);
 		} else {
 			completition = null;
 		}
@@ -75,23 +79,23 @@ public class ScoreDetails {
 		medalTime = hasTimeMedal ? null : new Sprite(Assets.stars[3]);
 		medalHit  = hasHitMedal  ? null : new Sprite(Assets.stars[3]);
 		if (medalTime != null) {
-			medalTime.setBounds(STAR_X, (6.3f+(!finite?1:0))*scale, starWidth, starHeight);
+			medalTime.setBounds(STAR_X, yTop*scale/40f-10.75f+(5.6f+(!finite?1:0))*scale, starWidth, starHeight);
 			medalTime.setColor(1,1,1,NEXTMEDAL_OPACITY);
 		}
 		if (medalHit != null) {
 			medalHit.setColor(1,1,1,NEXTMEDAL_OPACITY);
-			medalHit.setBounds(STAR_X, (3.3f+(!finite?1:0))*scale, starWidth, starHeight);
+			medalHit.setBounds(STAR_X, yTop*scale/40f-10.75f+(2.6f+(!finite?1:0))*scale, starWidth, starHeight);
 		}	
 	}
 	
-	public ScoreDetails(String title, int levelNum, float x, float scale, boolean modAlpha, float xSource, FiniteLevelScore score) {
-		this(title, levelNum, true, x, scale, modAlpha, xSource);
+	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, FiniteLevelScore score) {
+		this(title, levelNum, true, x, y, scale, modAlpha, xSource);
 		aScore = null;
 		fScore = score;
 	}
 	
-	public ScoreDetails(String title, int levelNum, float x, float scale, boolean modAlpha, float xSource, ArcadeLevelScore score) {
-		this(title, levelNum, false, x, scale, modAlpha, xSource);
+	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, ArcadeLevelScore score) {
+		this(title, levelNum, false, x, y, scale, modAlpha, xSource);
 		aScore = score;
 		fScore = null;
 	}
@@ -127,12 +131,13 @@ public class ScoreDetails {
 				}
 			}
 		} else {
-			float y = 10f*40;
+			float y = yTop*scale;
 			if (complete()) {
 				Assets.font.setScale(1.05f);
 				offsetAlpha(stateTime, 0, alpha);
-				Assets.font.draw(batch, title, offsetXPos(textX+SCORE_INDENT*0.8f, stateTime, 0, batchingText)+100-title.length()*15, 440);
+				Assets.font.draw(batch, title, offsetXPos(textX+SCORE_INDENT*0.8f, stateTime, 0, batchingText)+100-title.length()*15, y);
 				Assets.font.setScale(1);
+				y -= 60;
 				if (finite) {
 					Assets.font.draw(batch, "COMPLETED", offsetXPos(textX+SCORE_INDENT, stateTime, 0, batchingText), y);
 					y -= 40;
@@ -151,7 +156,7 @@ public class ScoreDetails {
 												ScoreData.arcadeMedals.get(levelNum).timeSurvived;
 					offsetAlpha(stateTime, 3, alpha);
 					Assets.font.draw(batch, "(", offsetXPos(textX+30, stateTime, 3, batchingText), y);
-					Assets.font.draw(batch, formatSeconds(medalTime)+")", offsetXPos(textX+SCORE_INDENT, stateTime, 3, batchingText), y);
+					Assets.font.draw(batch, ": "+formatSeconds(medalTime)+")", offsetXPos(textX+SCORE_INDENT-10, stateTime, 3, batchingText), y);
 					Assets.font.setColor(1, 1, 1, alpha);
 				}
 				y -= 40;
@@ -168,7 +173,7 @@ public class ScoreDetails {
 											 	  ScoreData.arcadeMedals.get(levelNum).enemiesKilled);
 					offsetAlpha(stateTime, 6, alpha);
 					Assets.font.draw(batch, "(", offsetXPos(textX+30, stateTime, 6, batchingText), y);
-					Assets.font.draw(batch, medalKills+")", offsetXPos(textX+SCORE_INDENT, stateTime, 6, batchingText), y);
+					Assets.font.draw(batch, ": "+medalKills+")", offsetXPos(textX+SCORE_INDENT-10, stateTime, 6, batchingText), y);
 					Assets.font.setColor(1, 1, 1, alpha);
 				} 
 			} else {

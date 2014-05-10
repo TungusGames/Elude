@@ -32,8 +32,8 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 				   new Rectangle[]{new Rectangle(cam.viewportWidth/2-BUTTON_SIZE-0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
 					   			   new Rectangle(cam.viewportWidth/2            +0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)});
 		scoreDisplay = isFinite ?
-				new ScoreDetails(FINITE_TITLE, levelNum, 310f, 40f, true, 7.5f, ScoreData.playerFiniteScore.get(levelNum)) :
-				new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 40f, true, 7.5f, ScoreData.playerArcadeScore.get(levelNum));
+				new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerFiniteScore.get(levelNum)) :
+				new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerArcadeScore.get(levelNum));
 		this.levelNum = levelNum;
 	}
 	
@@ -64,9 +64,9 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	}
 	
 	public void setScore(FiniteLevelScore s) {
-		scoreDisplay = new ScoreDetails(FINITE_TITLE, levelNum, 310f, 40f, true, 7.5f, s);
+		scoreDisplay = new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s);
 	}
 	public void setScore(ArcadeLevelScore s) {
-		scoreDisplay = new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 40f, true, 7.5f, s);
+		scoreDisplay = new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s);
 	}
 }

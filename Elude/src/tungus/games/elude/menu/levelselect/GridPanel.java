@@ -257,7 +257,7 @@ public class GridPanel {
 			LevelButton button = buttons[level];
 			button.setPosition(button.getX(), yPos-BUTTON_DRAW_SIZE/2);
 			button.setScale(1, scaleY);
-			button.setStarAlpha(v*rgba[3]);
+			button.setAlpha(v*rgba[3]);
 			if (level == selected) {
 				if (state != STATE_SELECTIONSWITCH) {
 					button.setScale(button.getScaleX()*selectedSize/BUTTON_DRAW_SIZE, button.getScaleY()*selectedSize/BUTTON_DRAW_SIZE);
