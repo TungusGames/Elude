@@ -57,6 +57,10 @@ public class Assets {
 	
 	//Level select screen
 	public static TextureRegion frame;
+	public static TextureRegion frameRed;
+	public static TextureRegion frameBlue;
+	public static TextureRegion frameGreen;
+	public static TextureRegion frameYellow;
 	public static TextureRegion play;
 	public static TextureRegion[] stars = new TextureRegion[4]; // 0: empty, 1: bronze, 2: silver, 3: gold
 	public static TextureRegion[] smallStars = new TextureRegion[4];
@@ -108,6 +112,10 @@ public class Assets {
 		nextLevel = atlas.findRegion("ingamemenu/nextlevel");
 		
 		frame = atlas.findRegion("frame");
+		frameRed = atlas.findRegion("frame-red");
+		frameBlue = atlas.findRegion("frame-blue");
+		frameGreen = atlas.findRegion("frame-green");
+		frameYellow = atlas.findRegion("frame-yellow");
 		play = atlas.findRegion("play");
 		stars[0] = atlas.findRegion("starempty");
 		stars[1] = atlas.findRegion("starbronze");

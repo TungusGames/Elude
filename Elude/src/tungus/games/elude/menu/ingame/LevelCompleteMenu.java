@@ -2,10 +2,10 @@ package tungus.games.elude.menu.ingame;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.client.GameScreen;
-import tungus.games.elude.levels.levelselect.ScoreDetails;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
+import tungus.games.elude.menu.levelselect.ScoreDetails;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;

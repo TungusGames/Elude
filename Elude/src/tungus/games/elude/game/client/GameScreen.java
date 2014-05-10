@@ -15,11 +15,11 @@ import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
 import tungus.games.elude.game.server.Server;
-import tungus.games.elude.levels.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
 import tungus.games.elude.menu.ingame.LevelCompleteMenu;
 import tungus.games.elude.menu.ingame.PauseMenu;
+import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.util.CamShaker;
 
 import com.badlogic.gdx.Application.ApplicationType;

@@ -1,7 +1,7 @@
 package tungus.games.elude.menu;
 
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.levels.levelselect.LevelSelectScreen;
+import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
