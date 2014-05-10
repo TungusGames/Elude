@@ -15,7 +15,7 @@ public abstract class Pickup {
 	public enum PickupType{
 		HEALTH(Assets.hpBonus), 
 		SPEED(Assets.speedBonus), 
-		SHIELD(Assets.whiteRectangle), 
+		SHIELD(Assets.shieldBonus), 
 		ROCKETWIPER(Assets.smallCircle);
 		public TextureRegion tex;
 		PickupType(TextureRegion t) {

@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class ShieldPickup extends Pickup {
 
+	private static final float SHIELD_DURATION = 6f;
+	
 	public ShieldPickup(World world, Vector2 pos, float lifeTime) {
 		super(world, pos, PickupType.SHIELD, lifeTime);
 	}
@@ -17,7 +19,7 @@ public class ShieldPickup extends Pickup {
 
 	@Override
 	protected void produceEffect(Vessel vessel) {
-		vessel.addShield(3f);
+		vessel.addShield(SHIELD_DURATION);
 	}
 
 }

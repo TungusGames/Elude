@@ -126,7 +126,7 @@ public class WorldRenderer {
 			break;
 		case CAMSHAKE:
 			Gdx.input.vibrate(100);
-			CamShaker.INSTANCE.shake(0.65f, 5f);
+			CamShaker.INSTANCE.shake(0.65f, 10f);
 			break;
 		case DEBRIS:
 			DebrisEffect e = (DebrisEffect)effect;
