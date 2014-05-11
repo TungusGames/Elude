@@ -70,7 +70,7 @@ public class ScoreDetails {
 		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.6f+(!finite?1:0))*scale, starWidth, starHeight);
 		if (finite && complete()) {
 			completition = new Sprite(Assets.stars[3]);
-			completition.setBounds(STAR_X, yTop*scale/40f-10.75f+8.6f*scale, starWidth, starHeight);
+			completition.setBounds(STAR_X, (yTop*scale/40f-10.75f+8.6f)*scale, starWidth, starHeight);
 		} else {
 			completition = null;
 		}
@@ -79,12 +79,12 @@ public class ScoreDetails {
 		medalTime = hasTimeMedal ? null : new Sprite(Assets.stars[3]);
 		medalHit  = hasHitMedal  ? null : new Sprite(Assets.stars[3]);
 		if (medalTime != null) {
-			medalTime.setBounds(STAR_X, yTop*scale/40f-10.75f+(5.6f+(!finite?1:0))*scale, starWidth, starHeight);
+			medalTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+5.6f+(!finite?1:0))*scale, starWidth, starHeight);
 			medalTime.setColor(1,1,1,NEXTMEDAL_OPACITY);
 		}
 		if (medalHit != null) {
 			medalHit.setColor(1,1,1,NEXTMEDAL_OPACITY);
-			medalHit.setBounds(STAR_X, yTop*scale/40f-10.75f+(2.6f+(!finite?1:0))*scale, starWidth, starHeight);
+			medalHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+2.6f+(!finite?1:0))*scale, starWidth, starHeight);
 		}	
 	}
 	

@@ -2,6 +2,7 @@ package tungus.games.elude;
 
 import tungus.games.elude.Elude;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -16,6 +17,10 @@ public class Main {
 		cfg.width = 800;
 		cfg.height = 480;
 		cfg.audioDeviceSimultaneousSources = 150;
+		cfg.addIcon("icons/small.png", FileType.Internal);
+		cfg.addIcon("icons/medium.png", FileType.Internal);
+		cfg.addIcon("icons/large.png", FileType.Internal);
+		
 		
 		Settings settings = new Settings();
         settings.maxWidth = 1024;
