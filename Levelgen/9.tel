@@ -1,0 +1,18 @@
+35 20
+0.1 0.1 0.1 0
+
+wavestart
+-1 0
+standing_fast
+
+wavestart
+-1 0
+standing_fast standing_fast standing_fast
+
+wavestart
+-1 0
+moving_matrix
+
+wavestart
+-1 0
+moving_matrix moving_matrix moving_matrix

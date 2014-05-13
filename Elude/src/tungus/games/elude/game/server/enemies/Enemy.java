@@ -46,10 +46,10 @@ public abstract class Enemy {
 			e = new Kamikaze(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		case STANDING_FAST:
-			e = new StandingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.STANDING_FAST, w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 2.5f, 4.5f);
+			e = new StandingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.STANDING_FAST, w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 4, 1.4f);
 			break;
 		case MOVING_MATRIX:
-			e = new MovingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.2f, 4.5f);
+			e = new MovingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 4, 2);
 			break;
 		case SHARPSHOOTER:
 			e = new Sharpshooter(w.randomPosOnOuterRect(new Vector2(), 1), w);

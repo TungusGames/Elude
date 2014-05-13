@@ -9,10 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 public class LowGravityRocket extends Rocket {
 	
 	private static final Vector2 tempVector = new Vector2();
-	private static final float DEFAULT_TURNSPEED = 100;
-	private static final float DEFAULT_MAX_SPEED = 7;
+	private static final float DEFAULT_TURNSPEED = 150;
+	private static final float DEFAULT_MAX_SPEED = 10;
 	private static final float DEFAULT_MIN_SPEED = 2;
-	private static final float DEFAULT_SPEED_PER_DIST = 4f/20f;
+	private static final float DEFAULT_SPEED_PER_DIST = 6f/20f;
 	
 	private final float turnSpeed;
 	private final float maxSpeed;
