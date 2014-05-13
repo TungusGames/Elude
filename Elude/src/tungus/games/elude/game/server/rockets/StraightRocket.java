@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class StraightRocket extends Rocket {
 	
-	public static final float SPEED = 15f;
+	public static final float SPEED = 25f;
 	
 	public StraightRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		super(origin, RocketType.STRAIGHT, pos, dir, world, target);

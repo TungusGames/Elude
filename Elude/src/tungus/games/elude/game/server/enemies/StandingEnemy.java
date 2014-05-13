@@ -12,7 +12,7 @@ public class StandingEnemy extends Enemy {
 	private static final float COLLIDER_SIZE = 0.5f;
 	
 	private static final float MAX_HP = 4f;
-	private static final float SPEED = 4f;
+	private static final float SPEED = 4.5f;
 	private static final float RELOAD = 2f;
 	
 	private static Vector2 tempVector = new Vector2();

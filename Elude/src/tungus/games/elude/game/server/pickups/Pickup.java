@@ -25,13 +25,13 @@ public abstract class Pickup {
 	
 	public static final float DRAW_SIZE = 0.9f;
 	public static final float HALF_SIZE = DRAW_SIZE/2;
-	protected static final float DEFAULT_LIFETIME = 5f;
+	protected static final float DEFAULT_LIFETIME = 3f;
 	
-	private static final float APPEAR_TIME = 0.3f;
+	private static final float APPEAR_PORTION = 0.1f;
 	private static final float TAKE_TIME = 0.2f;
-	private static final float FLASH_TIME = 1.8f;
+	private static final float FLASH_PORTION = 0.35f;
 	private static final Interpolation PICKED_UP = Interpolation.fade;
-	private static final Interpolation NOT_PICKED = new FadeinFlash(APPEAR_TIME/DEFAULT_LIFETIME, 1-FLASH_TIME/DEFAULT_LIFETIME);
+	private static final Interpolation NOT_PICKED = new FadeinFlash(APPEAR_PORTION, 1-FLASH_PORTION);
 	
 	public static Pickup fromType(World w, PickupType t) {
 		Pickup p = null;
@@ -81,8 +81,9 @@ public abstract class Pickup {
 			return true;
 		}
 		if (!pickedUp) {
-			if (lifeTimeLeft > fullLifeTime-APPEAR_TIME || lifeTimeLeft < FLASH_TIME) {
-				alpha = NOT_PICKED.apply(1-lifeTimeLeft/fullLifeTime);
+			float currentPortion = 1 - lifeTimeLeft/fullLifeTime;
+			if (currentPortion < APPEAR_PORTION || currentPortion > 1-FLASH_PORTION) {
+				alpha = NOT_PICKED.apply(currentPortion);
 			}
 			int size = world.vessels.size();
 			for (int i = 0; i < size; i++) {

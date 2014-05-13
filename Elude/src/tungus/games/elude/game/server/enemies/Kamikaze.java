@@ -15,8 +15,8 @@ public class Kamikaze extends Enemy {
 	private static final float COLLIDER_SIZE = 0.6f;
 	
 	private static final float MAX_HP = 4f;
-	private static final float SPEED = 3f;
-	private static final float STANDING_TIME = 4f;
+	private static final float SPEED = 4f;
+	private static final float STANDING_TIME = 3f;
 	private static final int ROCKETS_SHOT = 7;
 	
 	private final Vector2 targetPos;

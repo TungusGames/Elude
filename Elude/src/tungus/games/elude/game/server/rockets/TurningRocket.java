@@ -9,16 +9,16 @@ import com.badlogic.gdx.math.Vector2;
 public class TurningRocket extends Rocket {
 	
 	private static final Vector2 tempVector2 = new Vector2();
-	private static final float DEFAULT_TURNSPEED = 100;
-	private static final float DEFAULT_SPEED = 4;
+	private static final float DEFAULT_TURNSPEED = 150;
+	private static final float DEFAULT_SPEED = 5.5f;
 	
-	private static final float FAST_SPEED = 7;
-	private static final float FAST_TURNSPEED = 115;
+	private static final float FAST_SPEED = 9f;
+	private static final float FAST_TURNSPEED = 172;
 
 	private final float turnSpeed;
 	
 	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target, float turnSpeed, float speed) {
-		super(origin, speed > 5 ? RocketType.FAST_TURNING : RocketType.SLOW_TURNING, pos, dir, world, target);
+		super(origin, speed > DEFAULT_SPEED ? RocketType.FAST_TURNING : RocketType.SLOW_TURNING, pos, dir, world, target);
 		this.target = target;
 		this.turnSpeed = turnSpeed;
 		vel.nor().scl(speed);

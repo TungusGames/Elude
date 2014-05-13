@@ -11,7 +11,7 @@ public class Sharpshooter extends Enemy {
 	private static final float COLLIDER_SIZE = 0.65f;
 	
 	private static final float MAX_HP = 4f;
-	private static final float SPEED = 3f;
+	private static final float SPEED = 4.5f;
 	private static final float RELOAD = 2f;
 	
 	private static final Vector2 temp = new Vector2();

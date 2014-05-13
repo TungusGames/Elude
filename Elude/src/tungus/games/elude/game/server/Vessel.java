@@ -17,7 +17,7 @@ public class Vessel {
 	public static final float SHIELD_SIZE = 1.3f;		//drawn size
 	public static final float SHIELD_HALF_SIZE = SHIELD_SIZE / 2;
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
-	public static final float MAX_SPEED = 6f;
+	public static final float MAX_SPEED = 8f;
 	public static final float MAX_HP = 100f;
 	
 	private static final Interpolation shieldOpacity = new FadeinFlash(0.08f, 0.6f);
