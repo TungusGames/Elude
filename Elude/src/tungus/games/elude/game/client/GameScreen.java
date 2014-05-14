@@ -21,6 +21,7 @@ import tungus.games.elude.menu.ingame.LevelCompleteMenu;
 import tungus.games.elude.menu.ingame.PauseMenu;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.util.CamShaker;
+import tungus.games.elude.util.CustomInterpolations;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -63,7 +64,9 @@ public class GameScreen extends BaseScreen {
 	private final Connection connection;
 	private WorldRenderer renderer;
 	private SpriteBatch uiBatch;
+	private SpriteBatch fontBatch;
 	private OrthographicCamera uiCam;
+	private OrthographicCamera fontCam;
 	private float gameAlpha;
 		
 	private final Vector2 healthbarFromTopleft;
@@ -148,6 +151,11 @@ public class GameScreen extends BaseScreen {
 		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
 		uiCam.update();
 		uiBatch.setProjectionMatrix(uiCam.combined);
+		fontCam = new OrthographicCamera(800, 480);
+		fontCam.position.set(400, 240, 0);
+		fontCam.update();
+		fontBatch = new SpriteBatch(10);
+		fontBatch.setProjectionMatrix(fontCam.combined);
 		
 		controls = new ArrayList<Controls>();
 		update = new UpdateInfo();
@@ -249,6 +257,15 @@ public class GameScreen extends BaseScreen {
 		uiBatch.setColor(1,1,1,gameAlpha);
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
+		
+		if (state == STATE_STARTING) {
+			fontBatch.begin();
+			Assets.font.setColor(1, 1, 1, 1);
+			Assets.font.draw(fontBatch, "LEVEL "+levelNum, 
+					850-1000*CustomInterpolations.FLOAT_THROUGH.apply(timeSinceStart/START_TIME), 480/2);
+			fontBatch.end();
+		}
+		
 		switch (state) {
 		case STATE_PAUSED:
 		case STATE_LOST:

@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 public class SpeedPickup extends Pickup {
 
 	private static final float SPEED_BONUS = 1.5f;
-	private static final float SPEED_BONUS_TIME = 3f;
+	private static final float SPEED_BONUS_TIME = 6f;
 	
 	public SpeedPickup(World world, Vector2 pos) {
 		super(world, pos, PickupType.SPEED);

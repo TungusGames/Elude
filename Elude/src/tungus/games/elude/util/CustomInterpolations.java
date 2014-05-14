@@ -17,6 +17,18 @@ public class CustomInterpolations {
 		}
 	};
 	
+	public static final Interpolation FLOAT_THROUGH = new Interpolation() {
+		private final Interpolation interp = Interpolation.exp5;
+		@Override
+		public float apply(float a) {
+			if (a < 0.5f) {
+				return interp.apply(2*a)/2;
+			} else {
+				return 0.5f + interp.apply(2*(a-0.5f))/2;
+			}
+		}
+	};
+	
 	public static class FadeinFlash extends Interpolation {
 		private static final Interpolation fadeIn = Interpolation.fade;
 		private final float inEnd, flashStart;

@@ -7,6 +7,7 @@ import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -64,9 +65,9 @@ public class ScoreDetails {
 				false; // Always displaying the medal limits might be better
 		hasHitMedal = //ScoreData.hasMedal(finite, false, levelNum);
 				false; // Always displaying the medal limits might be better
-		playerTime = new Sprite(Assets.stars[hasTimeMedal ? 3 : 0]);
+		playerTime = new Sprite(Assets.stars[ScoreData.hasMedal(finite, true, levelNum) ? 3 : 0]);
 		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.6f+(!finite?1:0))*scale, starWidth, starHeight);
-		playerHit =  new Sprite(Assets.stars[hasHitMedal ? 3 : 0]);
+		playerHit =  new Sprite(Assets.stars[ScoreData.hasMedal(finite, false, levelNum) ? 3 : 0]);
 		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.6f+(!finite?1:0))*scale, starWidth, starHeight);
 		if (finite && complete()) {
 			completition = new Sprite(Assets.stars[3]);
@@ -119,7 +120,7 @@ public class ScoreDetails {
 				playerHit.setX(offsetXPos(starX, stateTime, 5, batchingText));
 				playerHit.setColor(1,1,1,offsetAlpha(stateTime, 5, alpha));
 				playerHit.draw(batch);
-				if (medalTime != null) {
+				/*if (medalTime != null) {
 					medalTime.setX(offsetXPos(starX, stateTime, 3, batchingText));
 					medalTime.setColor(1,1,1,offsetAlpha(stateTime, 3, alpha)*NEXTMEDAL_OPACITY);
 					medalTime.draw(batch);
@@ -128,22 +129,26 @@ public class ScoreDetails {
 					medalHit.setX(offsetXPos(starX, stateTime, 6, batchingText));
 					medalHit.setColor(1,1,1,offsetAlpha(stateTime, 6, alpha) * NEXTMEDAL_OPACITY);
 					medalHit.draw(batch);
-				}
+				}*/
 			}
 		} else {
 			float y = yTop*scale;
 			if (complete()) {
 				Assets.font.setScale(1.05f);
+				Assets.font.setColor(1f, 1f, 0.35f, Assets.font.getColor().a);
 				offsetAlpha(stateTime, 0, alpha);
 				Assets.font.draw(batch, title, offsetXPos(textX+SCORE_INDENT*0.8f, stateTime, 0, batchingText)+100-title.length()*15, y);
 				Assets.font.setScale(1);
+				Assets.font.setColor(1, 1, 1, Assets.font.getColor().a);
 				y -= 60;
 				if (finite) {
 					Assets.font.draw(batch, "COMPLETED", offsetXPos(textX+SCORE_INDENT, stateTime, 0, batchingText), y);
 					y -= 40;
 				}
 				offsetAlpha(stateTime, 1, alpha);
+				Assets.font.setColor(1f, 1f, 0.35f, Assets.font.getColor().a);
 				Assets.font.draw(batch, finite ? "TIME TAKEN" : "TIME SURVIVED", offsetXPos(textX, stateTime, 1, batchingText), y);
+				Assets.font.setColor(1, 1, 1, Assets.font.getColor().a);
 				y -= 40;
 				float seconds = finite ? 	fScore.timeTaken :
 											aScore.timeSurvived;
@@ -155,13 +160,15 @@ public class ScoreDetails {
 					float medalTime = finite ? 	ScoreData.finiteMedals.get(levelNum).timeTaken :
 												ScoreData.arcadeMedals.get(levelNum).timeSurvived;
 					offsetAlpha(stateTime, 3, alpha);
-					Assets.font.draw(batch, "(", offsetXPos(textX+30, stateTime, 3, batchingText), y);
-					Assets.font.draw(batch, ": "+formatSeconds(medalTime)+")", offsetXPos(textX+SCORE_INDENT-10, stateTime, 3, batchingText), y);
+					//Assets.font.draw(batch, "(", offsetXPos(textX+30, stateTime, 3, batchingText), y);
+					Assets.font.draw(batch, "(GOAL: "+formatSeconds(medalTime)+")", offsetXPos(textX+SCORE_INDENT-60, stateTime, 3, batchingText), y);
 					Assets.font.setColor(1, 1, 1, alpha);
 				}
 				y -= 40;
 				offsetAlpha(stateTime, 4, alpha);
+				Assets.font.setColor(1f, 1f, 0.35f, Assets.font.getColor().a);
 				Assets.font.draw(batch, finite ? "HEALTH LOST" : "ENEMIES KILLED", offsetXPos(textX, stateTime, 4, batchingText), y);
+				Assets.font.setColor(1, 1, 1, Assets.font.getColor().a);
 				y -= 40;
 				offsetAlpha(stateTime, 5, alpha);
 				Assets.font.draw(batch, (int)((finite ? (int)fScore.hpLost :
@@ -172,8 +179,8 @@ public class ScoreDetails {
 					int medalKills = (finite ?(int)ScoreData.finiteMedals.get(levelNum).hpLost :
 											 	  ScoreData.arcadeMedals.get(levelNum).enemiesKilled);
 					offsetAlpha(stateTime, 6, alpha);
-					Assets.font.draw(batch, "(", offsetXPos(textX+30, stateTime, 6, batchingText), y);
-					Assets.font.draw(batch, ": "+medalKills+")", offsetXPos(textX+SCORE_INDENT-10, stateTime, 6, batchingText), y);
+					//Assets.font.draw(batch, "(", offsetXPos(textX+30, stateTime, 6, batchingText), y);
+					Assets.font.draw(batch, "(GOAL: "+medalKills+")", offsetXPos(textX+SCORE_INDENT-60, stateTime, 6, batchingText), y);
 					Assets.font.setColor(1, 1, 1, alpha);
 				} 
 			} else {
@@ -195,7 +202,9 @@ public class ScoreDetails {
 	
 	private float offsetAlpha(float stateTime, int offsetCount, float baseAlpha) {
 		float f = modAlpha ? 1-offset(stateTime, offsetCount)*baseAlpha : baseAlpha;
-		Assets.font.setColor(1, 1, 1, f);
+		Color c = Assets.font.getColor();
+		c.a = f;
+		Assets.font.setColor(c);
 		return f;
 	}
 	
