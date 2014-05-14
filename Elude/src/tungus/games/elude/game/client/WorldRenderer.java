@@ -134,6 +134,9 @@ public class WorldRenderer {
 			d.setPosition(e.x, e.y);
 			particles.add(d);
 			break;
+		case LASERSHOT:
+			Assets.laserShot.play(1);
+			break;
 		}
 	}
 

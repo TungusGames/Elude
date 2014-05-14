@@ -81,6 +81,7 @@ public class Assets {
 	public static Sound neonFlicker;
 	public static Sound neonSound;
 	public static Sound explosionSound;
+	public static Sound laserShot;
 	
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
@@ -140,6 +141,7 @@ public class Assets {
 		neonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/neonSound.wav"));
 		neonFlicker = Gdx.audio.newSound(Gdx.files.internal("sounds/flicker.wav"));
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion2.wav"));
+		laserShot = Gdx.audio.newSound(Gdx.files.internal("sounds/laser_shot.wav"));
 		
 		frame9p = new NinePatch(frame, 15, 84, 15, 84);
 	}
