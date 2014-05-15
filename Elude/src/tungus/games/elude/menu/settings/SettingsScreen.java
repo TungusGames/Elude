@@ -6,6 +6,7 @@ import tungus.games.elude.menu.mainmenu.MainMenu;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.InputAdapter;
 
 public class SettingsScreen extends BaseScreen {
@@ -16,6 +17,7 @@ public class SettingsScreen extends BaseScreen {
 	
 	public SettingsScreen(Game game) {
 		super(game);
+		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(new InputAdapter() {
 			@Override
 			public boolean keyDown(int keycode) {
@@ -33,5 +35,6 @@ public class SettingsScreen extends BaseScreen {
 		if (state == STATE_FADEOUT) {
 			game.setScreen(new MainMenu(game));
 		}
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	}
 }
