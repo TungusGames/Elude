@@ -17,13 +17,13 @@ import com.badlogic.gdx.utils.Array;
 public class Assets {
 	
 	public static TextureAtlas atlas;
-		
-	//Title screen
-	public static TextureRegion eludeTitleOn;
-	public static TextureRegion eludeTitleOff;
 	
-	//Menus
-	public static NinePatch frame9p;
+	//Main menu
+	//public static NinePatch frame9p;
+	public static TextureRegion eludeTitleOn;
+	public static TextureRegion playSingleButton;
+	public static TextureRegion settingsButton;
+	public static TextureRegion halfPlayPanel;
 	
 	//Gameplay
 	public static TextureRegion vessel;
@@ -61,7 +61,7 @@ public class Assets {
 	public static TextureRegion frameBlue;
 	public static TextureRegion frameGreen;
 	public static TextureRegion frameYellow;
-	public static TextureRegion play;
+	public static TextureRegion playLevel;
 	public static TextureRegion[] stars = new TextureRegion[4]; // 0: empty, 1: bronze, 2: silver, 3: gold
 	public static TextureRegion[] smallStars = new TextureRegion[4];
 	public static TextureRegion lock;
@@ -86,8 +86,6 @@ public class Assets {
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
 		
-		eludeTitleOn = atlas.findRegion("EludeOn");
-		eludeTitleOff = atlas.findRegion("EludeOff");
 		vessel = atlas.findRegion("vessel");
 		vesselRed = atlas.findRegion("vesselred");
 		rocket = atlas.findRegion("rocket");
@@ -117,7 +115,7 @@ public class Assets {
 		frameBlue = atlas.findRegion("frame-blue");
 		frameGreen = atlas.findRegion("frame-green");
 		frameYellow = atlas.findRegion("frame-yellow");
-		play = atlas.findRegion("play");
+		playLevel = atlas.findRegion("play");
 		stars[0] = atlas.findRegion("starempty");
 		stars[1] = atlas.findRegion("starbronze");
 		stars[2] = atlas.findRegion("starsilver");
@@ -127,6 +125,11 @@ public class Assets {
 		smallStars[2] = atlas.findRegion("starsmallsilver");
 		smallStars[3] = atlas.findRegion("starsmallgold");
 		lock = atlas.findRegion("lock");
+		
+		eludeTitleOn = atlas.findRegion("mainmenu/EludeOn");
+		playSingleButton = atlas.findRegion("mainmenu/playsingle");
+		settingsButton = atlas.findRegion("mainmenu/settings");
+		halfPlayPanel = atlas.findRegion("mainmenu/halfplaypanel");
 		
 		font = new BitmapFont(Gdx.files.internal("font/bulletproof.fnt"));
 		
@@ -143,7 +146,7 @@ public class Assets {
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion2.wav"));
 		laserShot = Gdx.audio.newSound(Gdx.files.internal("sounds/laser_shot.wav"));
 		
-		frame9p = new NinePatch(frame, 15, 84, 15, 84);
+		//frame9p = new NinePatch(frame, 15, 84, 15, 84);
 	}
 	
 	private static ParticleEffectPool loadParticle(String filename) {

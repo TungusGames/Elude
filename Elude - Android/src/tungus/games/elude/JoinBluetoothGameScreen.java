@@ -3,7 +3,7 @@ package tungus.games.elude;
 import java.util.ArrayList;
 import java.util.List;
 
-import tungus.games.elude.menu.MainMenu;
+import tungus.games.elude.menu.mainmenu.MainMenu;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
