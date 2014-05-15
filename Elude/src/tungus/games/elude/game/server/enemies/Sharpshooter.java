@@ -1,5 +1,7 @@
 package tungus.games.elude.game.server.enemies;
 
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.game.server.rockets.StraightRocket;
@@ -45,7 +47,8 @@ public class Sharpshooter extends Enemy {
 				timeSinceShot -= RELOAD;
 				if (world.enemies.size() == 1) {
 					rocketType = RocketType.SLOW_TURNING;
-				}
+				} else
+					world.effects.add(new Effect(0, 0, EffectType.LASERSHOT.ordinal()));
 				shootRocket(calcAngle());
 			}
 			turnGoal = temp.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
