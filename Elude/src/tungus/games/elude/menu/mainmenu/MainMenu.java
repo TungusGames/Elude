@@ -3,6 +3,7 @@ package tungus.games.elude.menu.mainmenu;
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
+import tungus.games.elude.menu.settings.SettingsScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -31,6 +32,7 @@ public class MainMenu extends BaseScreen {
 	//private Array<Label> labels;
 	private PlayButton playButton;
 	private Sprite settingsButton;
+	private Sprite multiplayerButton;
 	
 	private Screen nextScreen = null;
 
@@ -46,9 +48,12 @@ public class MainMenu extends BaseScreen {
 		float y = FRUSTUM_HEIGHT - height; 
 		eludeOn.setBounds(0, y, FRUSTUM_WIDTH, height);
 		playButton = new PlayButton();
-		settingsButton = new Sprite(Assets.settingsButton);
 		playButton.setBounds(175, 35, 220, 220);
+		settingsButton = new Sprite(Assets.settingsButton);
 		settingsButton.setBounds(405, 35, 105, 105);
+		multiplayerButton = new Sprite(Assets.multiplayerButton);
+		multiplayerButton.setBounds(405, 150, 220, 105);
+		multiplayerButton.setColor(1, 1, 1, 0.3f);
 		Gdx.input.setInputProcessor(new InputAdapter(){
 			private Vector3 touch = new Vector3();
 			@Override
@@ -67,7 +72,9 @@ public class MainMenu extends BaseScreen {
 					}
 					return true;
 				} else if (settingsButton.getBoundingRectangle().contains(touch.x, touch.y)) {
-					game.setScreen(new LevelSelectScreen(game, false));
+					state = STATE_FADEOUT;
+					stateTime = 0;
+					nextScreen = new SettingsScreen(game);
 					return true;
 				}
 				return false;
@@ -96,8 +103,8 @@ public class MainMenu extends BaseScreen {
 		eludeOn.draw(spriteBatch, alpha);
 		playButton.render(spriteBatch, alpha);
 		settingsButton.draw(spriteBatch, alpha);
+		multiplayerButton.draw(spriteBatch, alpha);
 		spriteBatch.end();
-	
 	}
 	
 }

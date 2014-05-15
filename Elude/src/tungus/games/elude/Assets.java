@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
@@ -23,6 +22,7 @@ public class Assets {
 	public static TextureRegion eludeTitleOn;
 	public static TextureRegion playSingleButton;
 	public static TextureRegion settingsButton;
+	public static TextureRegion multiplayerButton;
 	public static TextureRegion halfPlayPanel;
 	
 	//Gameplay
@@ -129,6 +129,7 @@ public class Assets {
 		eludeTitleOn = atlas.findRegion("mainmenu/EludeOn");
 		playSingleButton = atlas.findRegion("mainmenu/playsingle");
 		settingsButton = atlas.findRegion("mainmenu/settings");
+		multiplayerButton = atlas.findRegion("mainmenu/multi");
 		halfPlayPanel = atlas.findRegion("mainmenu/halfplaypanel");
 		
 		font = new BitmapFont(Gdx.files.internal("font/bulletproof.fnt"));

@@ -3,7 +3,7 @@ package tungus.games.elude.menu.levelselect;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
-import tungus.games.elude.menu.PlayMenu;
+import tungus.games.elude.menu.mainmenu.MainMenu;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -153,7 +153,7 @@ public class LevelSelectScreen extends BaseScreen {
 			game.setScreen(GameScreen.newSinglePlayer(game, grid.selected, finite));
 			return;
 		} else if (state == STATE_EXITING && stateTime > EXIT_DURATION) {
-			game.setScreen(new PlayMenu(game));
+			game.setScreen(new MainMenu(game));
 			return;
 		}
 		

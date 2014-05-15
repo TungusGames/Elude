@@ -35,6 +35,9 @@ public class PlayButton extends Sprite {
 		super.draw(batch, nonSplitAlpha);
 		upper.draw(batch, splitAlpha);
 		lower.draw(batch, splitAlpha);
+		Assets.font.setColor(0.5f,1f,0.5f,splitAlpha);
+		Assets.font.draw(batch, "STAGES", 215, 215);
+		Assets.font.draw(batch, "SURVIVAL", 197, 100);
 	}
 	
 	public void update(float deltaTime) {
