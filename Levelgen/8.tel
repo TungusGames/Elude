@@ -1,7 +1,24 @@
-35 20
-0.1 0.1 0.1 0.1
-
-wavestart
--1 0
-sharpshooter sharpshooter sharpshooter
-end
+40 20
+0.1 0.1 0.03 0
+wavestart 0 0
+kamikaze kamikaze kamikaze kamikaze kamikaze kamikaze kamikaze kamikaze kamikaze
+standing standing standing standing standing
+speed shield
+wavestart -1 2
+standing_fast standing_fast standing_fast
+moving moving moving
+kamikaze
+wavestart 5 3
+standing_fast standing_fast standing_fast standing_fast standing_fast
+kamikaze kamikaze kamikaze kamikaze
+speed
+wavestart 5 3
+standing_fast standing_fast standing_fast standing_fast standing_fast
+kamikaze kamikaze kamikaze kamikaze
+shield
+wavestart 5 3
+standing_fast standing_fast standing_fast standing_fast standing_fast
+kamikaze kamikaze kamikaze kamikaze
+wavestart 5 3
+standing_fast standing_fast standing_fast standing_fast standing_fast
+kamikaze kamikaze kamikaze kamikaze

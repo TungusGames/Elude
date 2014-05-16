@@ -1,0 +1,14 @@
+45 20
+0.1 0.1 0.03 0
+wavestart 0 0
+moving_matrix
+wavestart 3 0
+shield speed
+wavestart  5 0
+moving_matrix moving_matrix moving_matrix
+standing
+moving
+wavestart -1 0
+kamikaze kamikaze
+wavestart 4 1
+kamikaze kamikaze
