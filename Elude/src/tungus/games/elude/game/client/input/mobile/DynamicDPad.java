@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 public class DynamicDPad extends Sprite implements Controls {
 	
 	private final OrthographicCamera gameCamera;
+	private final OrthographicCamera uiCamera;
 		
 	private Vector2 center = new Vector2();
 	private Vector2 v = new Vector2();
@@ -22,20 +23,25 @@ public class DynamicDPad extends Sprite implements Controls {
 	
 	private static final float SIZE = 0.2f;
 	
-	public DynamicDPad(OrthographicCamera cam, float frustumWidth, float frustumHeight) {
+	public DynamicDPad(OrthographicCamera gameCam, OrthographicCamera uiCam, float frustumWidth, float frustumHeight) {
 		super(Assets.smallCircle);
-		this.gameCamera = cam;
+		this.gameCamera = gameCam;
+		this.uiCamera = uiCam;
 		setSize(SIZE, SIZE);
 	}
 
 	@Override
 	public Vector2 getDir(Vector2 vessel) {
 		if (!touched && Gdx.input.isTouched()) {
+			// Get the dir on game cam
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			gameCamera.unproject(v3);
 			center.set(v3.x, v3.y);
-			setPosition(center.x-SIZE/2, center.y-SIZE/2);
 			touched = true;
+			// Get the pos on UI cam
+			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
+			uiCamera.unproject(v3);
+			setPosition(v3.x-SIZE/2, v3.y-SIZE/2);
 			return v.set(0,0);
 		} else if (Gdx.input.isTouched()) {
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);

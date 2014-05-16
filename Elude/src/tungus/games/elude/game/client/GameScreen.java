@@ -164,21 +164,21 @@ public class GameScreen extends BaseScreen {
 		update = new UpdateInfo();
 		update.directions = new Vector2[1];
 		for (int i = 0; i < update.directions.length; i++) {
-			//if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
-			//	controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
-			//} else {
+			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
+				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
+			} else {
 				switch (Settings.INSTANCE.mobileControl) {
 				case TAP_TO_TARGET:
 					controls.add(new TapToTargetControls(renderer.camera));
 					break;
 				case DYNAMIC_DPAD:
-					controls.add(new DynamicDPad(renderer.camera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
+					controls.add(new DynamicDPad(renderer.camera, uiCam, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
 					break;
 				case STATIC_DPAD:
-					controls.add(new StaticDPad(renderer.camera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
+					controls.add(new StaticDPad(uiCam, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
 					break;
 				}				
-			//}				
+			}				
 			update.directions[i] = controls.get(i).getDir(tmp.set(0,0));
 		}
 		lastTime = TimeUtils.millis();
