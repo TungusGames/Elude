@@ -7,6 +7,8 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.input.Controls;
 import tungus.games.elude.game.client.input.KeyControls;
+import tungus.games.elude.game.client.input.mobile.DynamicDPad;
+import tungus.games.elude.game.client.input.mobile.StaticDPad;
 import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
@@ -20,6 +22,7 @@ import tungus.games.elude.menu.ingame.GameOverMenu;
 import tungus.games.elude.menu.ingame.LevelCompleteMenu;
 import tungus.games.elude.menu.ingame.PauseMenu;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
+import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.CamShaker;
 import tungus.games.elude.util.CustomInterpolations;
 
@@ -161,11 +164,21 @@ public class GameScreen extends BaseScreen {
 		update = new UpdateInfo();
 		update.directions = new Vector2[1];
 		for (int i = 0; i < update.directions.length; i++) {
-			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
-				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
-			} else {
-				controls.add(new TapToTargetControls(renderer.camera));
-			}				
+			//if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
+			//	controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
+			//} else {
+				switch (Settings.INSTANCE.mobileControl) {
+				case TAP_TO_TARGET:
+					controls.add(new TapToTargetControls(renderer.camera));
+					break;
+				case DYNAMIC_DPAD:
+					controls.add(new DynamicDPad(renderer.camera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
+					break;
+				case STATIC_DPAD:
+					controls.add(new StaticDPad(renderer.camera, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
+					break;
+				}				
+			//}				
 			update.directions[i] = controls.get(i).getDir(tmp.set(0,0));
 		}
 		lastTime = TimeUtils.millis();

@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class DynamicDPad extends Sprite implements Controls {
 	
-	private final OrthographicCamera interfaceCamera;
+	private final OrthographicCamera gameCamera;
 		
 	private Vector2 center = new Vector2();
 	private Vector2 v = new Vector2();
@@ -24,7 +24,7 @@ public class DynamicDPad extends Sprite implements Controls {
 	
 	public DynamicDPad(OrthographicCamera cam, float frustumWidth, float frustumHeight) {
 		super(Assets.smallCircle);
-		this.interfaceCamera = cam;
+		this.gameCamera = cam;
 		setSize(SIZE, SIZE);
 	}
 
@@ -32,14 +32,14 @@ public class DynamicDPad extends Sprite implements Controls {
 	public Vector2 getDir(Vector2 vessel) {
 		if (!touched && Gdx.input.isTouched()) {
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
-			interfaceCamera.unproject(v3);
+			gameCamera.unproject(v3);
 			center.set(v3.x, v3.y);
 			setPosition(center.x-SIZE/2, center.y-SIZE/2);
 			touched = true;
 			return v.set(0,0);
 		} else if (Gdx.input.isTouched()) {
 			v3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
-			interfaceCamera.unproject(v3);
+			gameCamera.unproject(v3);
 			v.set(v3.x, v3.y);
 			touched = true;
 			return v.sub(center).nor();

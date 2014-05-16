@@ -20,6 +20,7 @@ import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
+import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.CamShaker;
 
 import com.badlogic.gdx.Gdx;
@@ -123,10 +124,14 @@ public class WorldRenderer {
 			PooledEffect exp = Assets.explosion.obtain();
 			exp.setPosition(effect.x, effect.y);
 			particles.add(exp);
-			Assets.explosionSound.play();
+			if (Settings.INSTANCE.soundOn) {
+				Assets.explosionSound.play();
+			}
 			break;
 		case CAMSHAKE:
-			Gdx.input.vibrate(100);
+			if (Settings.INSTANCE.vibrateOn) {
+				Gdx.input.vibrate(100);
+			}
 			CamShaker.INSTANCE.shake(0.65f, 10f);
 			break;
 		case DEBRIS:
@@ -136,7 +141,9 @@ public class WorldRenderer {
 			particles.add(d);
 			break;
 		case LASERSHOT:
-			Assets.laserShot.play(1);
+			if (Settings.INSTANCE.soundOn) {
+				Assets.laserShot.play(1);
+			}
 			break;
 		}
 	}
