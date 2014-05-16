@@ -47,6 +47,7 @@ public class SettingsScreen extends BaseScreen {
 		public boolean keyDown(int keycode) {
 			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
 				state = STATE_FADEOUT;
+				stateTime = 0;
 				Settings.INSTANCE.mobileControl = MobileControlType.values()[controlChoose.chosen];
 				Settings.INSTANCE.soundOn = (soundChoose.chosen == 0);
 				Settings.INSTANCE.vibrateOn = (vibrateChoose.chosen == 0);
@@ -117,7 +118,6 @@ public class SettingsScreen extends BaseScreen {
 		}
 		if (state == STATE_FADEOUT && stateTime > FADE_TIME) {
 			game.setScreen(new MainMenu(game));
-			stateTime = FADE_TIME;
 		}
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		float alpha =
@@ -130,9 +130,9 @@ public class SettingsScreen extends BaseScreen {
 		Assets.font.draw(batch, "CONTROLS",	X, EMPTY_BELOW+8*LINE_HEIGHT+3*SMALLGAP+2*BIGGAP);
 		Assets.font.draw(batch, "SOUND",	X, EMPTY_BELOW+4*LINE_HEIGHT+2*SMALLGAP+  BIGGAP);
 		Assets.font.draw(batch, "VIBRATE",	X, EMPTY_BELOW+2*LINE_HEIGHT+  SMALLGAP);
-		controlChoose.render(deltaTime, batch);
-		soundChoose.render(deltaTime, batch);
-		vibrateChoose.render(deltaTime, batch);
+		controlChoose.render(deltaTime, batch, alpha);
+		soundChoose.render(deltaTime, batch, alpha);
+		vibrateChoose.render(deltaTime, batch, alpha);
 		
 		batch.end();
 	}

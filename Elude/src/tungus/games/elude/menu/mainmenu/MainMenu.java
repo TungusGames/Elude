@@ -2,6 +2,7 @@ package tungus.games.elude.menu.mainmenu;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.menu.AboutScreen;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.SettingsScreen;
 
@@ -33,6 +34,7 @@ public class MainMenu extends BaseScreen {
 	private PlayButton playButton;
 	private Sprite settingsButton;
 	private Sprite multiplayerButton;
+	private Sprite infoButton;
 	
 	private Screen nextScreen = null;
 
@@ -54,6 +56,8 @@ public class MainMenu extends BaseScreen {
 		multiplayerButton = new Sprite(Assets.multiplayerButton);
 		multiplayerButton.setBounds(405, 150, 220, 105);
 		multiplayerButton.setColor(1, 1, 1, 0.3f);
+		infoButton = new Sprite(Assets.infoButton);
+		infoButton.setBounds(520, 35, 105, 105);
 		Gdx.input.setInputProcessor(new InputAdapter(){
 			private Vector3 touch = new Vector3();
 			@Override
@@ -62,22 +66,24 @@ public class MainMenu extends BaseScreen {
 				if (playButton.getBoundingRectangle().contains(touch.x, touch.y)) {
 					int r = playButton.touchAt(touch.x, touch.y);
 					if (r == PlayButton.RETURN_FINITE_LEVELS) {
-						state = STATE_FADEOUT;
-						stateTime = 0;
-						nextScreen = new LevelSelectScreen(game, true);
+						toScreen(new LevelSelectScreen(game, true));
 					} else if (r == PlayButton.RETURN_ARCADE_LEVELS) {
-						state = STATE_FADEOUT;
-						stateTime = 0;
-						nextScreen = new LevelSelectScreen(game, false);
+						toScreen(new LevelSelectScreen(game, false));
 					}
 					return true;
 				} else if (settingsButton.getBoundingRectangle().contains(touch.x, touch.y)) {
-					state = STATE_FADEOUT;
-					stateTime = 0;
-					nextScreen = new SettingsScreen(game);
+					toScreen(new SettingsScreen(game));
+					return true;
+				} else if (infoButton.getBoundingRectangle().contains(touch.x, touch.y)) {
+					toScreen(new AboutScreen(game));
 					return true;
 				}
 				return false;
+			}
+			private void toScreen(Screen s) {
+				state = STATE_FADEOUT;
+				stateTime = 0;
+				nextScreen = s;
 			}
 		});
 	}
@@ -104,6 +110,7 @@ public class MainMenu extends BaseScreen {
 		playButton.render(spriteBatch, alpha);
 		settingsButton.draw(spriteBatch, alpha);
 		multiplayerButton.draw(spriteBatch, alpha);
+		infoButton.draw(spriteBatch, alpha);
 		spriteBatch.end();
 	}
 	

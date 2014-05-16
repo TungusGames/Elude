@@ -23,6 +23,7 @@ public class Assets {
 	public static TextureRegion playSingleButton;
 	public static TextureRegion settingsButton;
 	public static TextureRegion multiplayerButton;
+	public static TextureRegion infoButton;
 	public static TextureRegion halfPlayPanel;
 	
 	//Gameplay
@@ -130,6 +131,7 @@ public class Assets {
 		playSingleButton = atlas.findRegion("mainmenu/playsingle");
 		settingsButton = atlas.findRegion("mainmenu/settings");
 		multiplayerButton = atlas.findRegion("mainmenu/multi");
+		infoButton = atlas.findRegion("mainmenu/info");
 		halfPlayPanel = atlas.findRegion("mainmenu/halfplaypanel");
 		
 		font = new BitmapFont(Gdx.files.internal("font/bulletproof.fnt"));

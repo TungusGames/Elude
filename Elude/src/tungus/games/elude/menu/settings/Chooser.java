@@ -38,7 +38,7 @@ public class Chooser {
 		return false;
 	}
 	
-	public void render(float deltaTime, SpriteBatch batch) {
+	public void render(float deltaTime, SpriteBatch batch, float alpha) {
 		if (switching) {
 			sinceSwitch += deltaTime;
 			choosingColor.set(OFF_COLOR).lerp(ON_COLOR, sinceSwitch/SWITCH_TIME);
@@ -51,6 +51,7 @@ public class Chooser {
 			}
 		}
 		for (int i = 0; i < rects.length; i++) {
+			// Get base color
 			if (i == chosen) {
 				Assets.font.setColor(choosingColor);
 			} else if (i == prevChosen) {
@@ -58,6 +59,11 @@ public class Chooser {
 			} else {
 				Assets.font.setColor(OFF_COLOR);
 			}
+			// Mod by alpha
+			Color c = Assets.font.getColor();
+			c.a *= alpha;
+			Assets.font.setColor(c);
+			// Draw
 			Assets.font.draw(batch, texts[i], rects[i].x, rects[i].y + rects[i].height);
 		}
 	}
