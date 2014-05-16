@@ -22,9 +22,9 @@ public class SettingsScreen extends BaseScreen {
 	
 	private static final float X = 225;
 	private static final float TAB = 50;
-	private static final float LINE_HEIGHT = 35;
+	private static final float LINE_HEIGHT = 37.5f;
 	private static final float SMALLGAP = 10; 		// Gap between title and content beneath
-	private static final float BIGGAP = 40; 		// Gap between title and content beneath
+	private static final float BIGGAP = 40; 		// Gap between sections
 	private static final float EMPTY_BELOW = (480-8*LINE_HEIGHT-3*SMALLGAP-2*BIGGAP) / 2;
 	private static final float OFF_OFFSET = 150;
 	
