@@ -89,13 +89,14 @@ public class WorldRenderer {
 		}		
 
 		drawRockets(r);
-		
-		size = r.effects.size();
-		for (int i = 0; i < size; i++) {
-			drawEffect(r.effects.get(i));
+		if (updateParticles) {
+			size = r.effects.size();
+			for (int i = 0; i < size; i++) {
+				drawEffect(r.effects.get(i));
+			}
 		}
 		r.effects.clear(); // Don't repeat them in the next frames if no new data is received
-
+		
 		size = particles.size();		
 		for (Iterator<PooledEffect> it = particles.iterator(); it.hasNext(); ) {
 			PooledEffect p = it.next();
