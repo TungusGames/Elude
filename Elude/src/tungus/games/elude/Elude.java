@@ -9,7 +9,8 @@ import com.badlogic.gdx.Game;
 
 public class Elude extends Game {
 	
-	FPSLogger fps;
+	public static final String VERSION = "V0.1";
+	private FPSLogger fps;
 		
 	@Override
 	public void create () {

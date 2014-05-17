@@ -4,6 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public interface Controls {
-	public Vector2 getDir(Vector2 vessel);
+	public Vector2 getDir(Vector2 vessel, float deltaTime);
 	public void draw(SpriteBatch batch, float alpha);
 }

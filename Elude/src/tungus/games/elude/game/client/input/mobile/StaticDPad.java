@@ -30,7 +30,7 @@ public class StaticDPad extends Sprite implements Controls {
 	}
 
 	@Override
-	public Vector2 getDir(Vector2 vessel) {
+	public Vector2 getDir(Vector2 vessel, float deltaTime) {
 		v.set(0,0);
 		boolean calculatedV = false;
 		if (!pressed && Gdx.input.isTouched()) {

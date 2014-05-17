@@ -28,7 +28,7 @@ public class TapToTargetControls implements Controls {
 	}
 
 	@Override
-	public Vector2 getDir(Vector2 playerPos) {
+	public Vector2 getDir(Vector2 playerPos, float deltaTime) {
 		if (!isAndroid || Gdx.input.isTouched()) {
 			touch3.set((float)Gdx.input.getX(), (float)Gdx.input.getY(), 0f);
 			gameCam.unproject(touch3);

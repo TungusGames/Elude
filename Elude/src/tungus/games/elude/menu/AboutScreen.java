@@ -2,6 +2,7 @@ package tungus.games.elude.menu;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Elude;
 import tungus.games.elude.menu.mainmenu.MainMenu;
 
 import com.badlogic.gdx.Game;
@@ -112,6 +113,8 @@ public class AboutScreen extends BaseScreen {
 		Assets.font.draw(batch, "SARGE4267", 		ATTRIBUTE_X, 3*LINE_HEIGHT + EMPTY_BELOW);
 		Assets.font.draw(batch, "SOUNDSLIKEWILLEM ",	ATTRIBUTE_X, 2*LINE_HEIGHT + EMPTY_BELOW);
 		Assets.font.draw(batch, "FREEPIK", 			ATTRIBUTE_X,   LINE_HEIGHT + EMPTY_BELOW);
+		
+		Assets.font.draw(batch, Elude.VERSION, 		790-Assets.font.getBounds(Elude.VERSION).width,   470);
 		batch.end();
 	}
 
