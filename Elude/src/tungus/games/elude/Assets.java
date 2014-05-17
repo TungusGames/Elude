@@ -171,12 +171,11 @@ public class Assets {
 		Array<ParticleEmitter> emitters = p.getEmitters();
 		for (int i = 0; i < emitters.size; i++) {
 			// Mod color
-			float[] separateColor = (i == emitters.size-1) ? color : color.clone(); // Color for each emitter - last one uses up the original array
-			float mul = MathUtils.random()*0.6f + 0.7f;
+			float[] separateColor = color.clone(); // Color for each emitter - last one uses up the original array
 			for (int j = 0; j < 3; j++) {
 				// Randomly change the color slightly
-				mul = MathUtils.random() + 0.5f;
-				color[j] = MathUtils.clamp(separateColor[j]*mul, 0f, 1f);
+				float mul = MathUtils.random() + 0.5f;
+				separateColor[j] = MathUtils.clamp(color[j]*mul, 0f, 1f);
 			}
 			emitters.get(i).getTint().setColors(separateColor);
 			
