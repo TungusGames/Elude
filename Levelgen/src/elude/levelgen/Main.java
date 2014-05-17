@@ -57,7 +57,7 @@ public class Main {
 				wipeDrop = sc.nextFloat();
 				while (!sc.next().equals("wavestart"))
 					;
-				int t = sc.nextInt();
+				float t = sc.nextInt();
 				int n = sc.nextInt();
 				List<EnemyType> e = new ArrayList<>();
 				List<PickupType> p = new ArrayList<>();
@@ -71,7 +71,7 @@ public class Main {
 						} catch (IllegalArgumentException ex2) {
 							if (str.equals("wavestart")) {
 								waves.add(new Wave(t, n, e, p));
-								t = sc.nextInt();
+								t = sc.nextFloat();
 								n = sc.nextInt();
 								e = new ArrayList<>();
 								p = new ArrayList<>();
