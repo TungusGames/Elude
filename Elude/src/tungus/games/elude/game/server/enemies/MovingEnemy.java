@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class MovingEnemy extends Enemy {
 	
-	private static final float COLLIDER_SIZE = 0.65f;
+	private static final float COLLIDER_SIZE = 0.75f;
 	
 	private static final float MAX_HP = 4f;
 	private static final float SPEED = 4f;

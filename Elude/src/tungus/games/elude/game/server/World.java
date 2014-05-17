@@ -102,9 +102,9 @@ public class World {
 			state = vessels.get(0).hp <= 0 && isFinite ? STATE_LOST : STATE_WON;
 			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
 				waveLoader.saveScore();
-			if (isFinite)
+			if (isFinite && fScore == null)
 				fScore = ((FiniteLevelLoader)waveLoader).getScore();
-			else
+			else if (!isFinite && aScore == null)
 				aScore = ((ArcadeLoaderBase)waveLoader).getScore();
 				
 		}

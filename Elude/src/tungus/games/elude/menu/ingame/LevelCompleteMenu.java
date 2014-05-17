@@ -9,6 +9,7 @@ import tungus.games.elude.menu.levelselect.ScoreDetails;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 public class LevelCompleteMenu extends AbstractIngameMenu {
@@ -24,10 +25,10 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	//private final boolean highScoreHit;
 	
 	public LevelCompleteMenu(int levelNum, boolean isFinite) {
-		super((levelNum+1 != (isFinite ? ScoreData.finiteMedals.size() : ScoreData.arcadeMedals.size())) ?
+		super((levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : MathUtils.ceil(ScoreData.totalStars/10f)+1)) ?
 				   new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart), new Sprite(Assets.nextLevel)} :
 				   new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart)},
-			  (levelNum+1 != (isFinite ? ScoreData.finiteMedals.size() : ScoreData.arcadeMedals.size())) ?
+			  (levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : MathUtils.ceil(ScoreData.totalStars/10f)+1)) ?
 				   new Rectangle[]{new Rectangle(cam.viewportWidth/2-1.5f*BUTTON_SIZE-BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
 								   new Rectangle(cam.viewportWidth/2-0.5f*BUTTON_SIZE,				  BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
 								   new Rectangle(cam.viewportWidth/2+0.5f*BUTTON_SIZE+BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)} :
