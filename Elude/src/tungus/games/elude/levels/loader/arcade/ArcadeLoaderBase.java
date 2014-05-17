@@ -42,9 +42,12 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 	
 	public ArcadeLevelScore getScore() {
 		ArcadeLevelScore s = new ArcadeLevelScore();
+		int medalsBefore = ((ScoreData.hasMedal(false, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(false, false, levelNum) ? 1 : 0));
 		s.tried = true;
 		s.timeSurvived = timeSurvived;
 		s.enemiesKilled = enemiesKilled;
+		int medalsAfter = ((ScoreData.hasMedal(false, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(false, false, levelNum) ? 1 : 0));
+		ScoreData.totalStars += (medalsAfter-medalsBefore);
 		return s;
 	}
 	

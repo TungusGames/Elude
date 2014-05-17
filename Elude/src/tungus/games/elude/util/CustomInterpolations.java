@@ -18,7 +18,7 @@ public class CustomInterpolations {
 	};
 	
 	public static final Interpolation FLOAT_THROUGH = new Interpolation() {
-		private final Interpolation interp = Interpolation.exp5;
+		private final Interpolation interp = Interpolation.exp10;
 		@Override
 		public float apply(float a) {
 			if (a < 0.5f) {

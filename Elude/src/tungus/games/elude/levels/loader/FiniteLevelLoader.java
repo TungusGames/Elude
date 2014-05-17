@@ -94,11 +94,14 @@ public class FiniteLevelLoader extends EnemyLoader {
 	@Override
 	public void saveScore() {
 		FiniteLevelScore score = ScoreData.playerFiniteScore.get(levelNum);
+		int medalsBefore = ((score.completed ? 1 : 0) + (ScoreData.hasMedal(true, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(true, false, levelNum) ? 1 : 0));
 		score.hpLost = score.completed ? Math.min(score.hpLost, hpLost) : hpLost;
 		score.timeTaken = score.completed ? Math.min(score.timeTaken, timeSinceStart) : timeSinceStart;
 		score.completed = true;
 		this.completed = true;
 		ScoreData.save(true);
+		int medalsAfter = ((score.completed ? 1 : 0) + (ScoreData.hasMedal(true, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(true, false, levelNum) ? 1 : 0));
+		ScoreData.totalStars += (medalsAfter-medalsBefore);
 	}
 	
 	public FiniteLevelScore getScore() {

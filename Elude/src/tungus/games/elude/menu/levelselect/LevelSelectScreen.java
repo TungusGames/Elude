@@ -48,7 +48,7 @@ public class LevelSelectScreen extends BaseScreen {
 				touch3.set(x, y, 0);
 				uiCam.unproject(touch3);
 				if (grid.tapped(touch3.x, touch3.y)) {
-					details.switchTo(grid.selected);
+					details.switchTo(grid.selected, grid.isOpen(grid.selected));
 				} else if (details.tapped(touch3.x, touch3.y)) {
 					state = STATE_STARTING_LEVEL;
 					stateTime = 0;

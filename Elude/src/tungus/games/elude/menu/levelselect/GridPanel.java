@@ -79,15 +79,20 @@ public class GridPanel {
 		allButtons = new Rectangle(TOP_LEFT.x-BUTTON_DIST/2, 0, ROW_LEN*BUTTON_DIST, 12);
 		int openLeft = 3;
 		for (int i = 0; i < buttons.length; i++) {
-			boolean open = finite ? ScoreData.playerFiniteScore.get(i).completed : ScoreData.playerArcadeScore.get(i).tried;
-			if (!open && openLeft > 0) {
-				openLeft--;
-				open = true;
-				if (openLeft == 0)
-					lastOpenLevel = i;
-			}
-			if (finite ? (i <= ScoreData.lastFiniteCompleted) : (i <= ScoreData.lastArcadeTried)) {
-				open = true;
+			boolean open;
+			if (finite) {
+				open = ScoreData.playerFiniteScore.get(i).completed;
+				if (!open && openLeft > 0) {
+					openLeft--;
+					open = true;
+					if (openLeft == 0)
+						lastOpenLevel = i;
+				}
+				if (i <= ScoreData.lastFiniteCompleted) {
+					open = true;
+				}
+			} else {
+				open = (ScoreData.totalStars >= (i+1)*10);
 			}
 			buttons[i] = new LevelButton(i, finite, open);
 			buttons[i].setBounds(buttonTouchAreas[i%visibleButtons].x, buttonTouchAreas[i%visibleButtons].y, BUTTON_DRAW_SIZE, BUTTON_DRAW_SIZE);
@@ -102,7 +107,7 @@ public class GridPanel {
 		for (int i = 0; i < s; i++) {
 			if (buttonTouchAreas[i].contains(x, y)) {
 				int newSelected = i + (Math.round(middleRow)-1)*ROW_LEN;
-				if (!buttons[newSelected].open || newSelected == selected) {
+				if (newSelected == selected) {
 					return false;
 				}
 				prevSelected = selected;
@@ -293,27 +298,10 @@ public class GridPanel {
 			}
 			button.draw(batcher, text);
 			level++;
-		}
-		
+		}	
 	}
 	
-	/*private static final float COLOR_CYCLE_TIME = 8f;	
-	private float[] setColor(float i, float s, float v) {
-		float f = time + i/2;
-		rgba[0] = rgbComponent(f, s, v);
-		rgba[1] = rgbComponent(f + COLOR_CYCLE_TIME/3, s, v);
-		rgba[2] = rgbComponent(f - COLOR_CYCLE_TIME/3, s, v);
-		
-		return rgba;
+	public boolean isOpen(int levelNum) {
+		return buttons[levelNum].open;
 	}
-	
-	private float rgbComponent(float h, float s, float v) { // HSV to RGB for one component (the three components have to be offset by 120 degrees of hue)
-		float f = h % COLOR_CYCLE_TIME / COLOR_CYCLE_TIME * 6;
-		f = Math.abs(f-3);
-		f = MathUtils.clamp(f-1, 0, 1);
-		f *= v;
-		f += v*(1-s);
-		return f;
-	}*/
-
 }

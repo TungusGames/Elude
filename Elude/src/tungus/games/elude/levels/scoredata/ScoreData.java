@@ -60,7 +60,7 @@ public class ScoreData {
 	public static List<FiniteLevelScore> finiteMedals;
 	public static List<ArcadeLevelScore> arcadeMedals;
 	public static int lastFiniteCompleted = -1;
-	public static int lastArcadeTried = -1;
+	public static int totalStars = 0;
 	private static Map<Integer, FiniteLevelScore> finiteScoreMap;
 	private static Map<Integer, ArcadeLevelScore> arcadeScoreMap;
 	private static int finiteLevelnumToID[];
@@ -121,6 +121,7 @@ public class ScoreData {
 				sc = new FiniteLevelScore();
 			if (sc.completed)
 				lastFiniteCompleted = i;
+			totalStars += ((sc.completed ? 1 : 0) + (sc.timeTaken <= finiteMedals.get(i).timeTaken ? 1 : 0) + (sc.hpLost <= finiteMedals.get(i).hpLost ? 1 : 0));
 			playerFiniteScore.add(sc);
 		}
 		s = arcadeMedals.size();
@@ -128,9 +129,8 @@ public class ScoreData {
 			ArcadeLevelScore sc = arcadeScoreMap.get(arcadeLevelnumToID[i]);
 			if (sc == null)
 				sc = new ArcadeLevelScore();
-			if (sc.tried)			
-				lastArcadeTried = i;
 			playerArcadeScore.add(sc);
+			totalStars += ((sc.timeSurvived >= arcadeMedals.get(i).timeSurvived ? 1 : 0) + (sc.enemiesKilled >= arcadeMedals.get(i).enemiesKilled ? 1 : 0));
 		}
 		
 	}
