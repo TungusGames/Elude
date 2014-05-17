@@ -15,8 +15,8 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	private static final float BUTTON_SIZE = 90;
 	private static final float BUTTON_SPACING = 50;
 	private static final float BUTTON_Y = 30;
-	private static final String FINITE_TITLE = "LEVEL COMPLETE";
-	private static final String ARCADE_TITLE = "GAME OVER";
+	private final String FINITE_TITLE;
+	private final String ARCADE_TITLE = "GAME OVER";
 	
 	private ScoreDetails scoreDisplay;
 	private final int levelNum;
@@ -31,6 +31,7 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 								   new Rectangle(cam.viewportWidth/2+0.5f*BUTTON_SIZE+BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)} :
 				   new Rectangle[]{new Rectangle(cam.viewportWidth/2-BUTTON_SIZE-0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
 					   			   new Rectangle(cam.viewportWidth/2            +0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)});
+		FINITE_TITLE = "LEVEL " + (levelNum+1) + " COMPLETED";
 		scoreDisplay = isFinite ?
 				new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerFiniteScore.get(levelNum)) :
 				new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerArcadeScore.get(levelNum));
