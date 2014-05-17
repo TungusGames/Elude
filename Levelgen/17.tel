@@ -1,0 +1,11 @@
+2
+35 10
+0 0 0 0
+wavestart 0 0
+standing standing standing moving
+wavestart -1 1
+standing standing standing
+moving moving moving
+wavestart 5 0
+standing standing
+moving moving moving moving

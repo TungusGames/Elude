@@ -107,7 +107,7 @@ public class AboutScreen extends BaseScreen {
 		
 		Assets.font.setColor(1, 1, 1, alpha);
 		Assets.font.draw(batch, "MERNYEI PETER",  NAME_X, 7*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);
-		Assets.font.draw(batch, "STADLER BENEDEK",NAME_X, 6*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);
+		Assets.font.draw(batch, "STADLER BENEDEK",NAME_X, 6*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);	// <-- an awesome guy
 		Assets.font.draw(batch, "TARDOS TAMAS",   NAME_X, 5*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);
 
 		Assets.font.draw(batch, "SARGE4267", 		ATTRIBUTE_X, 3*LINE_HEIGHT + EMPTY_BELOW);

@@ -1,6 +1,5 @@
 package tungus.games.elude;
 
-import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.mainmenu.MainMenu;
 import tungus.games.elude.util.log.FPSLogger;

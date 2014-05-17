@@ -1,10 +1,12 @@
-35 30
-0.08 0.08 0 0
+5
+55 30
+0.2 0.2 0 0
 wavestart 0 0
-standing
+standing standing
 moving moving
+speed
 wavestart -1 2
-moving
+kamikaze
 wavestart -1 2
 kamikaze
 wavestart -1 1

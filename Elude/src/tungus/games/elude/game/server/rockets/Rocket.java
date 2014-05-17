@@ -19,7 +19,7 @@ public abstract class Rocket {
 		FAST_TURNING(Assets.fastFlameRocket), 
 		LOWGRAV(Assets.matrixRocket),
 		HIGHGRAV(null),
-		STRAIGHT(Assets.straightRocket);	//TODO
+		STRAIGHT(Assets.straightRocket);
 		public ParticleEffectPool effect;
 		RocketType(ParticleEffectPool e) {
 			effect = e;
@@ -27,7 +27,7 @@ public abstract class Rocket {
 	};
 	
 	public static final float ROCKET_SIZE = 0.2f; // For both collision and drawing
-	public static final float DEFAULT_DMG = 2f;
+	public static final float DEFAULT_DMG = 3.5f;
 	public static final float DEFAULT_LIFE = 6f;
 	
 	public static final Rocket fromType(RocketType t, Enemy origin, Vector2 pos, Vector2 dir, Vessel target, World w) {

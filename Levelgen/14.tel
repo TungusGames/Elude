@@ -1,0 +1,13 @@
+18
+35 20
+0.08 0.08 0 0
+wavestart 0 0
+sharpshooter
+standing
+moving
+wavestart 2 0
+sharpshooter
+moving
+wavestart -1 1
+sharpshooter sharpshooter
+moving
