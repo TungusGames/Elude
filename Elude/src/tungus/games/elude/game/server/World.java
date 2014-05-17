@@ -8,7 +8,10 @@ import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.levels.loader.EnemyLoader;
+import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
+import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
+import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
@@ -34,7 +37,9 @@ public class World {
 	public final Rectangle outerBounds;
 	public final Rectangle innerBounds;
 	
-	public final EnemyLoader waveLoader;;
+	public final EnemyLoader waveLoader;
+	public FiniteLevelScore fScore = null;
+	public ArcadeLevelScore aScore = null;
 	
 	public int state;
 	
@@ -97,6 +102,11 @@ public class World {
 			state = vessels.get(0).hp <= 0 && isFinite ? STATE_LOST : STATE_WON;
 			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
 				waveLoader.saveScore();
+			if (isFinite)
+				fScore = ((FiniteLevelLoader)waveLoader).getScore();
+			else
+				aScore = ((ArcadeLoaderBase)waveLoader).getScore();
+				
 		}
 	}
 	

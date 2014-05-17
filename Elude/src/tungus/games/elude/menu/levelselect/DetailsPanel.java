@@ -25,6 +25,8 @@ public class DetailsPanel {
 	private float stateTime = 0;
 	private float playFloatTime = 0;
 	private boolean playLoaded = false;
+	private boolean prevOpen = false;
+	private boolean open = true;
 	
 	static Interpolation interp = Interpolation.exp5In;
 
@@ -36,12 +38,19 @@ public class DetailsPanel {
 	
 	public void render(float deltaTime, SpriteBatch batch, boolean text, float alpha) {
 		stateTime += deltaTime;
+		float playAlpha = open ? 1 : 0;
 		if (state == STATE_SWITCH) {
 			if (!playLoaded) {
 				playButton.setX(PLAY_X+interp.apply(1-playFloatTime/SWITCH_TIME)*10);
 				playFloatTime += deltaTime;
+			} else {
+				float x = stateTime / SWITCH_TIME;
+				playAlpha = prevOpen && open ? 1 :
+							!prevOpen && !open ? 0 :
+							prevOpen && !open ? 1-x :
+												x;
 			}
-			if (playFloatTime > SWITCH_TIME) {
+			if (playFloatTime > SWITCH_TIME && open) {
 				playLoaded = true;
 			}
 			if (stateTime > SWITCH_TIME) {
@@ -52,7 +61,7 @@ public class DetailsPanel {
 			}
 		}
 		if (!text) {
-			playButton.setColor(1, 1, 1, alpha);
+			playButton.setColor(1, 1, 1, alpha*playAlpha);
 			playButton.draw(batch);
 		}
 
@@ -70,10 +79,12 @@ public class DetailsPanel {
 				new ScoreDetails("LEVEL " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum), false, open) :
 				new ScoreDetails("LEVEL " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerArcadeScore.get(levelNum), false, open);
 		state = STATE_SWITCH;
+		prevOpen = this.open;
+		this.open = open;
 		stateTime = 0;
 	}
 	
 	public boolean tapped(float x, float y) {
-		return playLoaded && playButton.getBoundingRectangle().contains(x, y);
+		return open && playLoaded && playButton.getBoundingRectangle().contains(x, y);
 	}
 }

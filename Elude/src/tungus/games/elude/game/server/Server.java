@@ -100,8 +100,8 @@ public class Server implements Runnable {
 				case World.STATE_WON:
 					if ((timeSinceEnd += deltaTime) > END_DELAY) {
 						sendData = world.isFinite ? 
-								new FiniteScoreInfo(((FiniteLevelLoader)world.waveLoader).getScore()) :
-								new ArcadeScoreInfo(((ArcadeLoaderBase) world.waveLoader).getScore());
+								new FiniteScoreInfo(world.fScore) :
+								new ArcadeScoreInfo(world.aScore);
 						sendData.info = GameScreen.STATE_WON;
 						state = STATE_OVER;
 					} else {
