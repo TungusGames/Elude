@@ -43,11 +43,13 @@ public class Main {
 	
 	public static void readAndOutputLevels() {
 		List<FiniteLevelScore> scores = new ArrayList<>();
+		List<Integer> ntoidList = new ArrayList<>();
 		while (running) {
 			try {
 				System.out.print("Reading file: " + (levelNum) + ".tel ");
 				sc = new Scanner(new File((levelNum) + ".tel"));
 				sc.useLocale(Locale.US);
+				ntoidList.add(sc.nextInt());
 				scores.add(new FiniteLevelScore(sc.nextFloat(), sc.nextFloat()));
 				hpDrop = sc.nextFloat();
 				speedDrop = sc.nextFloat();
@@ -110,12 +112,21 @@ public class Main {
 			waves.clear();
 			levelNum++;
 		}
+		// Turn ntoid Integer-list to int array
+		int ntoidArray[] = new int[ntoidList.size()];
+		for (int i = 0; i < ntoidArray.length; i++) {
+			ntoidArray[i] = ntoidList.get(i);
+		}
 		// Output score file
 		try {
 			FileOutputStream fileOut = new FileOutputStream("../Elude - Android/assets/medals/finite.medal");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(scores);
+			out.close();
+			fileOut = new FileOutputStream("../Elude - Android/assets/levels/finitentoid");
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(ntoidArray);
 			out.close();
 		} catch (IOException e11) {
 			e11.printStackTrace();
@@ -131,11 +142,19 @@ public class Main {
 		for (int i = 0; i < 15; i++) {
 			list.add(medal);
 		}
+		int ntoid[] = new int[15];
+		for (int i = 0; i < ntoid.length; i++) {
+			ntoid[i] = i;
+		}
 		try {
 			FileOutputStream fileOut = new FileOutputStream("../Elude - Android/assets/medals/arcade.medal");
 			ObjectOutputStream out;
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(list);
+			out.close();
+			fileOut = new FileOutputStream("../Elude - Android/assets/levels/arcadentoid");
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(ntoid);
 			out.close();
 		} catch (IOException e11) {
 			e11.printStackTrace();

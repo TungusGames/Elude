@@ -6,6 +6,7 @@ import java.util.List;
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.input.Controls;
+import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.client.input.mobile.DynamicDPad;
 import tungus.games.elude.game.client.input.mobile.StaticDPad;
 import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
@@ -25,6 +26,7 @@ import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.CamShaker;
 import tungus.games.elude.util.CustomInterpolations;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -162,9 +164,9 @@ public class GameScreen extends BaseScreen {
 		update = new UpdateInfo();
 		update.directions = new Vector2[1];
 		for (int i = 0; i < update.directions.length; i++) {
-			//if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
-			//	controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
-			//} else {
+			if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.WebGL) {
+				controls.add(new KeyControls(new int[] {Keys.W, Keys.A, Keys.S, Keys.D}));
+			} else {
 				switch (Settings.INSTANCE.mobileControl) {
 				case TAP_TO_TARGET:
 					controls.add(new TapToTargetControls(renderer.camera));
@@ -176,7 +178,7 @@ public class GameScreen extends BaseScreen {
 					controls.add(new StaticDPad(uiCam, FRUSTUM_WIDTH, FRUSTUM_HEIGHT));
 					break;
 				}				
-			//}				
+			}				
 			update.directions[i] = controls.get(i).getDir(tmp.set(0,0), 0);
 		}
 		lastTime = TimeUtils.millis();

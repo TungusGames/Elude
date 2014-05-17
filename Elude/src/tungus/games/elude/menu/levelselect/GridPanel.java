@@ -79,12 +79,15 @@ public class GridPanel {
 		allButtons = new Rectangle(TOP_LEFT.x-BUTTON_DIST/2, 0, ROW_LEN*BUTTON_DIST, 12);
 		int openLeft = 3;
 		for (int i = 0; i < buttons.length; i++) {
-			boolean open = finite ? ScoreData.playerFiniteScore.get(i).completed : true;
+			boolean open = finite ? ScoreData.playerFiniteScore.get(i).completed : ScoreData.playerArcadeScore.get(i).tried;
 			if (!open && openLeft > 0) {
 				openLeft--;
 				open = true;
 				if (openLeft == 0)
 					lastOpenLevel = i;
+			}
+			if (finite ? (i <= ScoreData.lastFiniteCompleted) : (i <= ScoreData.lastArcadeTried)) {
+				open = true;
 			}
 			buttons[i] = new LevelButton(i, finite, open);
 			buttons[i].setBounds(buttonTouchAreas[i%visibleButtons].x, buttonTouchAreas[i%visibleButtons].y, BUTTON_DRAW_SIZE, BUTTON_DRAW_SIZE);

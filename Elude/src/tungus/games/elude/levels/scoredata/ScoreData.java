@@ -5,7 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -57,17 +59,35 @@ public class ScoreData {
 	public static List<ArcadeLevelScore> playerArcadeScore;
 	public static List<FiniteLevelScore> finiteMedals;
 	public static List<ArcadeLevelScore> arcadeMedals;
+	public static int lastFiniteCompleted = -1;
+	public static int lastArcadeTried = -1;
+	private static Map<Integer, FiniteLevelScore> finiteScoreMap;
+	private static Map<Integer, ArcadeLevelScore> arcadeScoreMap;
+	private static int finiteLevelnumToID[];
+	private static int arcadeLevelnumToID[];
 	
 	private static final FileHandle medalFiniteFile = Gdx.files.internal("medals/finite.medal");
 	private static final FileHandle medalArcadeFile = Gdx.files.internal("medals/arcade.medal");
+	private static final FileHandle finiteLevelnumToIDFile = Gdx.files.internal("levels/finitentoid");
+	private static final FileHandle arcadeLevelnumToIDFile = Gdx.files.internal("levels/arcadentoid");
 	private static final FileHandle playerFiniteFile = Gdx.files.local("scores/finite.score");
 	private static final FileHandle playerArcadeFile = Gdx.files.local("scores/arcade.score");
 	
 	@SuppressWarnings("unchecked")
 	public static void load() {
 		try {
-			arcadeMedals = (List<ArcadeLevelScore>)(new ObjectInputStream(medalArcadeFile.read()).readObject());
-			finiteMedals = (List<FiniteLevelScore>)(new ObjectInputStream(medalFiniteFile.read()).readObject());
+			ObjectInputStream in = new ObjectInputStream(medalArcadeFile.read());
+			arcadeMedals = (List<ArcadeLevelScore>)(in.readObject());
+			in.close();
+			in = new ObjectInputStream(medalFiniteFile.read());
+			finiteMedals = (List<FiniteLevelScore>)(in.readObject());
+			in.close();
+			in = new ObjectInputStream(finiteLevelnumToIDFile.read());
+			finiteLevelnumToID = (int[])(in.readObject());
+			in.close();
+			in = new ObjectInputStream(arcadeLevelnumToIDFile.read());
+			arcadeLevelnumToID = (int[])(in.readObject());
+			in.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Badly serialized score file", e);
@@ -77,8 +97,8 @@ public class ScoreData {
 		}
 		
 		try {
-			playerArcadeScore = (List<ArcadeLevelScore>)(new ObjectInputStream(playerArcadeFile.read()).readObject());
-			playerFiniteScore = (List<FiniteLevelScore>)(new ObjectInputStream(playerFiniteFile.read()).readObject());
+			finiteScoreMap = (HashMap<Integer,FiniteLevelScore>)(new ObjectInputStream(playerFiniteFile.read()).readObject());
+			arcadeScoreMap = (HashMap<Integer,ArcadeLevelScore>)(new ObjectInputStream(playerArcadeFile.read()).readObject());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			Gdx.app.log("Files", "Badly serialized player score file", e);
@@ -92,26 +112,45 @@ public class ScoreData {
 			Gdx.app.log("Files", "Failed to read player score file", e);
 			genPlayerScoreFiles();
 		}
-		
+		playerFiniteScore = new ArrayList<FiniteLevelScore>(finiteMedals.size());
+		playerArcadeScore = new ArrayList<ArcadeLevelScore>(arcadeMedals.size());
+		int s = finiteMedals.size();
+		for (int i = 0; i < s; i++) {
+			FiniteLevelScore sc = finiteScoreMap.get(finiteLevelnumToID[i]);
+			if (sc == null)
+				sc = new FiniteLevelScore();
+			if (sc.completed)
+				lastFiniteCompleted = i;
+			playerFiniteScore.add(sc);
+		}
+		s = arcadeMedals.size();
+		for (int i = 0; i < s; i++) {
+			ArcadeLevelScore sc = arcadeScoreMap.get(arcadeLevelnumToID[i]);
+			if (sc == null)
+				sc = new ArcadeLevelScore();
+			if (sc.tried)			
+				lastArcadeTried = i;
+			playerArcadeScore.add(sc);
+		}
 		
 	}
 	
 	private static void genPlayerScoreFiles() {
-		playerArcadeScore = new ArrayList<ArcadeLevelScore>();
-		int s = arcadeMedals.size();
+		finiteScoreMap = new HashMap<Integer,FiniteLevelScore>();
+		int s = finiteMedals.size();
 		for (int i = 0; i < s; i++)
-			playerArcadeScore.add(new ArcadeLevelScore());
+			finiteScoreMap.put(finiteLevelnumToID[i], new FiniteLevelScore());
 		
-		playerFiniteScore = new ArrayList<FiniteLevelScore>();
-		s = finiteMedals.size();
+		arcadeScoreMap = new HashMap<Integer, ArcadeLevelScore>();
+		s = arcadeMedals.size();
 		for (int i = 0; i < s; i++)
-			playerFiniteScore.add(new FiniteLevelScore());
+			arcadeScoreMap.put(arcadeLevelnumToID[i], new ArcadeLevelScore());
 		save(false);
 		save(true);
 	}
 	
 	public static void save(boolean finite) {
-		Object o = finite ? playerFiniteScore : playerArcadeScore;
+		Object o = finite ? finiteScoreMap : arcadeScoreMap;
 		FileHandle file = finite ? playerFiniteFile : playerArcadeFile;
 		ObjectOutputStream out;
 		try {
