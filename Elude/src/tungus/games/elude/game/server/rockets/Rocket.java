@@ -102,10 +102,10 @@ public abstract class Rocket {
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		bounds.x = pos.x - ROCKET_SIZE / 2;
 		bounds.y = pos.y - ROCKET_SIZE / 2;
-		
-		if (!world.outerBounds.contains(bounds)) {
-			kill();
-			return true;
+		if (!world.outerBounds.contains(pos)) {
+			if (hitWall(pos.x < 0 || pos.x > World.WIDTH)) {
+				return true;
+			}
 		}
 		
 		int size = world.enemies.size();
@@ -148,6 +148,11 @@ public abstract class Rocket {
 	public void kill() {
 		world.rockets.remove(this);
 		world.effects.add(new Effect(pos.x, pos.y, EffectType.EXPLOSION.ordinal())); // TODO pool
+	}
+	
+	protected boolean hitWall(boolean vertical) {
+		kill();
+		return true;
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);

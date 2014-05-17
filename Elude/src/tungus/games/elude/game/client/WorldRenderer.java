@@ -184,6 +184,9 @@ public class WorldRenderer {
 
 	private PooledEffect setRocketEffect(PooledEffect effect, ReducedRocket rocket) {
 		effect.getEmitters().get(0).getAngle().setLow(rocket.angle-180);
+		if (rt[rocket.typeOrdinal] == RocketType.STRAIGHT) {
+			effect.getEmitters().get(0).getRotation().setLow(rocket.angle-90);
+		}
 		effect.setPosition(rocket.x, rocket.y);
 		return effect;
 	}
