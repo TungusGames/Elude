@@ -9,8 +9,9 @@ import tungus.games.elude.game.server.pickups.RocketWiperPickup;
 import tungus.games.elude.game.server.pickups.ShieldPickup;
 import tungus.games.elude.game.server.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
-import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
+import tungus.games.elude.levels.loader.arcade.FillUp;
 import tungus.games.elude.levels.loader.arcade.OneDeadTwoCome;
+import tungus.games.elude.levels.loader.arcade.PlusPlus;
 
 import com.badlogic.gdx.math.MathUtils;
 
@@ -28,21 +29,20 @@ public abstract class EnemyLoader {
 		if (finite)
 			return new FiniteLevelLoader(Level.levelFromFile(Assets.levelFile(n+1)), world, n);
 		else {
-			if (n == 14) {
-				return new ArcadeLoaderBase(world,n) {
-					{
-						update(0);
-					}
-					@Override
-					public void update(float deltaTime) {
-						super.update(deltaTime);
-						if (world.enemies.size() == 0)
-							for (int i = 0; i < 30; i++)
-								world.enemies.add(Enemy.fromType(world, EnemyType.KAMIKAZE));
-					}
-				};
-			} else {
-				return new OneDeadTwoCome(world, n);
+			switch(n) {
+			case 0:
+				return new FillUp(world, n, 10, 0.5f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING, EnemyType.STANDING_FAST);
+			case 1:
+				return new FillUp(world, n, 10, 0.5f, EnemyType.values());
+			case 2:
+				return new FillUp(world, n, 10, 0.5f, 0, 0.2f, 0, 0, EnemyType.STANDING_FAST, EnemyType.KAMIKAZE);
+			case 3:
+				return new PlusPlus(world, n, EnemyType.MOVING, EnemyType.STANDING_FAST);
+			case 4:
+				return new FillUp(world, n, 10, 0.5f, EnemyType.values());
+			default:
+				throw new IllegalArgumentException("Unknown arcade level number");
+				
 			}
 		}
 			

@@ -139,10 +139,10 @@ public class Main {
 		medal.tried = true;
 		medal.timeSurvived = 150;
 		medal.enemiesKilled = 40;
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < 5; i++) {
 			list.add(medal);
 		}
-		int ntoid[] = new int[15];
+		int ntoid[] = new int[5];
 		for (int i = 0; i < ntoid.length; i++) {
 			ntoid[i] = i;
 		}
