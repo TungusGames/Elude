@@ -43,6 +43,8 @@ public class ScoreDetails {
 	private final String title;
 	private final boolean hasTimeMedal;
 	private final boolean hasHitMedal;
+	private boolean highScoreTime;
+	private boolean highScoreHit;
 	private FiniteLevelScore fScore;
 	private ArcadeLevelScore aScore;
 	
@@ -89,16 +91,20 @@ public class ScoreDetails {
 		}	
 	}
 	
-	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, FiniteLevelScore score) {
+	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, FiniteLevelScore score, boolean allowHS) {
 		this(title, levelNum, true, x, y, scale, modAlpha, xSource);
 		aScore = null;
 		fScore = score;
+		highScoreTime = allowHS && (fScore.timeTaken <= ScoreData.playerFiniteScore.get(levelNum).timeTaken);
+		highScoreHit = allowHS && (fScore.hpLost <= ScoreData.playerFiniteScore.get(levelNum).hpLost);
 	}
 	
-	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, ArcadeLevelScore score) {
+	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, ArcadeLevelScore score, boolean allowHS) {
 		this(title, levelNum, false, x, y, scale, modAlpha, xSource);
 		aScore = score;
 		fScore = null;
+		highScoreTime = allowHS && (aScore.timeSurvived >= ScoreData.playerArcadeScore.get(levelNum).timeSurvived);
+		highScoreHit = allowHS && (aScore.enemiesKilled >= ScoreData.playerArcadeScore.get(levelNum).enemiesKilled);
 	}
 	
 	private boolean complete() {
@@ -120,16 +126,6 @@ public class ScoreDetails {
 				playerHit.setX(offsetXPos(starX, stateTime, 5, batchingText));
 				playerHit.setColor(1,1,1,offsetAlpha(stateTime, 5, alpha));
 				playerHit.draw(batch);
-				/*if (medalTime != null) {
-					medalTime.setX(offsetXPos(starX, stateTime, 3, batchingText));
-					medalTime.setColor(1,1,1,offsetAlpha(stateTime, 3, alpha)*NEXTMEDAL_OPACITY);
-					medalTime.draw(batch);
-				}
-				if (medalHit != null) {
-					medalHit.setX(offsetXPos(starX, stateTime, 6, batchingText));
-					medalHit.setColor(1,1,1,offsetAlpha(stateTime, 6, alpha) * NEXTMEDAL_OPACITY);
-					medalHit.draw(batch);
-				}*/
 			}
 		} else {
 			float y = yTop*scale;
@@ -154,6 +150,11 @@ public class ScoreDetails {
 											aScore.timeSurvived;
 				offsetAlpha(stateTime, 2, alpha);
 				Assets.font.draw(batch, formatSeconds(seconds*stateTime), offsetXPos(textX+SCORE_INDENT, stateTime, 2, batchingText), y);
+				if (highScoreTime) {
+					Assets.font.setColor(1, 1, 0.55f, Assets.font.getColor().a*stateTime);
+					Assets.font.draw(batch, "HIGH SCORE!", offsetXPos(textX+SCORE_INDENT+200, stateTime, 2, batchingText), y);
+					Assets.font.setColor(1, 1, 0.55f, Assets.font.getColor().a/stateTime);
+				}				
 				y -= 40;
 				if (!hasTimeMedal) {
 					Assets.font.setColor(1, 1, 1, alpha*NEXTMEDAL_OPACITY);
@@ -173,6 +174,11 @@ public class ScoreDetails {
 				offsetAlpha(stateTime, 5, alpha);
 				Assets.font.draw(batch, (int)((finite ? (int)fScore.hpLost :
 													  aScore.enemiesKilled)*stateTime) + "", offsetXPos(textX+SCORE_INDENT,stateTime,5, batchingText), y);
+				if (highScoreHit) {
+					Assets.font.setColor(1, 1, 0.55f, Assets.font.getColor().a*stateTime);
+					Assets.font.draw(batch, "HIGH SCORE!", textX+SCORE_INDENT+200, y);
+					Assets.font.setColor(1, 1, 0.55f, Assets.font.getColor().a/stateTime);
+				}
 				y -= 40;
 				if (!hasHitMedal) {
 					Assets.font.setColor(1, 1, 1, alpha*NEXTMEDAL_OPACITY);

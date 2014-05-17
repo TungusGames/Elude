@@ -20,7 +20,7 @@ public class ScoreData {
 		public float hpLost;
 		public boolean completed;
 		public FiniteLevelScore() {
-			timeTaken = hpLost = -1;
+			timeTaken = hpLost = 1000000;
 			completed = false;
 		}
 		public FiniteLevelScore(float time, float hp) {

@@ -20,6 +20,8 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	
 	private ScoreDetails scoreDisplay;
 	private final int levelNum;
+	//private final boolean highScoreTime;
+	//private final boolean highScoreHit;
 	
 	public LevelCompleteMenu(int levelNum, boolean isFinite) {
 		super((levelNum+1 != (isFinite ? ScoreData.finiteMedals.size() : ScoreData.arcadeMedals.size())) ?
@@ -33,8 +35,8 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 					   			   new Rectangle(cam.viewportWidth/2            +0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)});
 		FINITE_TITLE = "LEVEL " + (levelNum+1) + " COMPLETED";
 		scoreDisplay = isFinite ?
-				new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerFiniteScore.get(levelNum)) :
-				new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerArcadeScore.get(levelNum));
+				new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerFiniteScore.get(levelNum), false) :
+				new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerArcadeScore.get(levelNum), false);
 		this.levelNum = levelNum;
 	}
 	
@@ -52,6 +54,8 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 		batch.begin();
 		scoreDisplay.render(batch, false, move, 1);	// Two batches implicitly - SpriteBatch will switch when it encounters a new texture
 		scoreDisplay.render(batch, true, move, 1);
+		Assets.font.setColor(1, 1, 0.6f, 1);
+		
 		batch.end();
 		return r;
 	}
@@ -65,9 +69,9 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	}
 	
 	public void setScore(FiniteLevelScore s) {
-		scoreDisplay = new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s);
+		scoreDisplay = new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s, true);
 	}
 	public void setScore(ArcadeLevelScore s) {
-		scoreDisplay = new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s);
+		scoreDisplay = new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s, true);
 	}
 }

@@ -68,7 +68,7 @@ public class GridPanel {
 		totalRows = levels / ROW_LEN;
 		if (levels % ROW_LEN != 0)
 			Gdx.app.log("LevelSelect", "Bad level count - not divisible by " + ROW_LEN);
-		int visibleButtons = ROW_LEN * ACTIVE_COL_LEN;
+		int visibleButtons = Math.min(ROW_LEN * ACTIVE_COL_LEN, levels);
 		buttonTouchAreas = new Rectangle[visibleButtons];
 		for (int i = 0; i < visibleButtons; i++) {
 			buttonTouchAreas[i] = new Rectangle(i%ROW_LEN*BUTTON_DIST + TOP_LEFT.x - BUTTON_TOUCH_SIZE/2, 
@@ -140,6 +140,9 @@ public class GridPanel {
 	}
 	
 	public void pan(float x, float y) {
+		if (totalRows < ACTIVE_COL_LEN) {
+			return;
+		}
 		if (!panning) {
 			panning = true;
 			calcTouchedRow(x, y);
@@ -166,17 +169,26 @@ public class GridPanel {
 	}
 	
 	public void panStop(float x, float y) {
+		if (totalRows < ACTIVE_COL_LEN) {
+			return;
+		}
 		panning = false;
 		if (allButtons.contains(x, y))
 			flinging = true;
 	}
 	
 	public void scroll(int amount) {
+		if (totalRows < ACTIVE_COL_LEN) {
+			return;
+		}
 		middleRow += amount*0.3f;
 		middleRow = MathUtils.clamp(middleRow, 1, totalRows-2);
 	}
 	
 	public void fling(float velY) {
+		if (totalRows < ACTIVE_COL_LEN) {
+			return;
+		}
 		if (flinging) {
 			flingSpeed = velY/4;
 			Gdx.app.log("fling", ""+velY);

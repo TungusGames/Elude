@@ -67,8 +67,8 @@ public class DetailsPanel {
 	public void switchTo(int levelNum) {
 		prevLevel = activeLevel;
 		activeLevel = finite ?
-				new ScoreDetails("LEVEL " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum)) :
-				new ScoreDetails("LEVEL " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerArcadeScore.get(levelNum));
+				new ScoreDetails("LEVEL " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum), false) :
+				new ScoreDetails("LEVEL " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerArcadeScore.get(levelNum), false);
 		state = STATE_SWITCH;
 		stateTime = 0;
 	}
