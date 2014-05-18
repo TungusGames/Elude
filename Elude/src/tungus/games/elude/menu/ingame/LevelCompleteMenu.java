@@ -7,7 +7,6 @@ import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 import tungus.games.elude.menu.levelselect.ScoreDetails;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -47,7 +46,6 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 		float move = 1;
 		if (state == STATE_APPEAR) {
 			move = stateTime/APPEAR_TIME;
-			Gdx.app.log("Interp", ""+move);
 		}
 		else if (state == STATE_DISAPPEAR) {
 			move = 1-stateTime/DISAPPEAR_TIME;
