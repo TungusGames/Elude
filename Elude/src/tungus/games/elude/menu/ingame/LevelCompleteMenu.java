@@ -24,7 +24,7 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	//private final boolean highScoreHit;
 	
 	public LevelCompleteMenu(int levelNum, boolean isFinite) {
-		super((levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : MathUtils.ceil(ScoreData.totalStars/10f)+1)) ?
+		super((levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : MathUtils.floor(ScoreData.totalStars/10f))) ?
 				   new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart), new Sprite(Assets.nextLevel)} :
 				   new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart)},
 			  (levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : MathUtils.ceil(ScoreData.totalStars/10f)+1)) ?

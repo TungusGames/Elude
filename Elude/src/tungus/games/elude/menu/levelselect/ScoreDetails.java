@@ -69,9 +69,11 @@ public class ScoreDetails {
 				false; // Always displaying the medal limits might be better
 		hasHitMedal = //ScoreData.hasMedal(finite, false, levelNum);
 				false; // Always displaying the medal limits might be better
-		playerTime = new Sprite(Assets.stars[ScoreData.hasMedal(finite, true, levelNum) ? 3 : 0]);
+		playerTime = new Sprite(Assets.stars[(finite ? fScore.timeTaken <= ScoreData.finiteMedals.get(levelNum).timeTaken :
+													   aScore.timeSurvived >= ScoreData.arcadeMedals.get(levelNum).timeSurvived) ? 3 : 0]);
 		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.6f+(!finite?1:0))*scale, starWidth, starHeight);
-		playerHit =  new Sprite(Assets.stars[ScoreData.hasMedal(finite, false, levelNum) ? 3 : 0]);
+		playerHit =  new Sprite(Assets.stars[(finite ? fScore.hpLost <= ScoreData.finiteMedals.get(levelNum).hpLost : 
+		                                               aScore.enemiesKilled >= ScoreData.arcadeMedals.get(levelNum).enemiesKilled) ? 3 : 0]);
 		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.6f+(!finite?1:0))*scale, starWidth, starHeight);
 		if (finite && complete()) {
 			completition = new Sprite(Assets.stars[3]);

@@ -92,6 +92,7 @@ public class AboutScreen extends BaseScreen {
 		}
 		if (state == STATE_FADEOUT && stateTime > FADE_TIME) {
 			game.setScreen(new MainMenu(game));
+			return;
 		}
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		float alpha =
