@@ -33,7 +33,7 @@ public abstract class EnemyLoader {
 			case 0:
 				return new FillUp(world, n, 10, 0.5f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING, EnemyType.STANDING_FAST);
 			case 1:
-				return new FillUp(world, n, 10, 0.5f, EnemyType.values());
+				return new PlusPlus(world, n, EnemyType.KAMIKAZE);
 			case 2:
 				return new FillUp(world, n, 10, 0.5f, 0, 0.2f, 0, 0, EnemyType.STANDING_FAST, EnemyType.KAMIKAZE);
 			case 3:
