@@ -75,7 +75,7 @@ public class ScoreDetails {
 		playerTime = new Sprite(Assets.stars[(finite ? fScore.timeTaken <= ScoreData.finiteMedals.get(levelNum).timeTaken :
 													   aScore.timeSurvived >= ScoreData.arcadeMedals.get(levelNum).timeSurvived) ? 3 : 0]);
 		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.6f+(!finite?1:0))*scale, starWidth, starHeight);
-		playerHit =  new Sprite(Assets.stars[(finite ? fScore.hpLost <= ScoreData.finiteMedals.get(levelNum).hpLost : 
+		playerHit =  new Sprite(Assets.stars[(finite ? fScore.hpLeft >= ScoreData.finiteMedals.get(levelNum).hpLeft : 
 		                                               aScore.enemiesKilled >= ScoreData.arcadeMedals.get(levelNum).enemiesKilled) ? 3 : 0]);
 		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.6f+(!finite?1:0))*scale, starWidth, starHeight);
 		if (finite && complete()) {
@@ -105,7 +105,7 @@ public class ScoreDetails {
 			boolean allowHS, boolean open) {
 		this(title, levelNum, true, x, y, scale, modAlpha, xSource, open, score, null);
 		highScoreTime = allowHS && (fScore.timeTaken <= ScoreData.playerFiniteScore.get(levelNum).timeTaken);
-		highScoreHit = allowHS && (fScore.hpLost <= ScoreData.playerFiniteScore.get(levelNum).hpLost);
+		highScoreHit = allowHS && (fScore.hpLeft <= ScoreData.playerFiniteScore.get(levelNum).hpLeft);
 	}
 	
 	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, ArcadeLevelScore score, 
@@ -177,11 +177,11 @@ public class ScoreDetails {
 					y -= 40;
 					offsetAlpha(stateTime, 4, alpha);
 					Assets.font.setColor(1f, 1f, 0.35f, Assets.font.getColor().a);
-					Assets.font.draw(batch, finite ? "HEALTH LOST" : "ENEMIES KILLED", offsetXPos(textX, stateTime, 4, batchingText), y);
+					Assets.font.draw(batch, finite ? "HEALTH LEFT" : "ENEMIES KILLED", offsetXPos(textX, stateTime, 4, batchingText), y);
 					Assets.font.setColor(1, 1, 1, Assets.font.getColor().a);
 					y -= 40;
 					offsetAlpha(stateTime, 5, alpha);
-					Assets.font.draw(batch, (int)((finite ? (int)fScore.hpLost :
+					Assets.font.draw(batch, (int)((finite ? fScore.hpLeft :
 														  aScore.enemiesKilled)*stateTime) + "", offsetXPos(textX+SCORE_INDENT,stateTime,5, batchingText), y);
 					if (highScoreHit) {
 						Assets.font.setColor(1, 1, 0.55f, Assets.font.getColor().a*stateTime);
@@ -191,7 +191,7 @@ public class ScoreDetails {
 					y -= 40;
 					if (!hasHitMedal) {
 						Assets.font.setColor(1, 1, 1, alpha*NEXTMEDAL_OPACITY);
-						int medalKills = (finite ?(int)ScoreData.finiteMedals.get(levelNum).hpLost :
+						int medalKills = (finite ?(int)ScoreData.finiteMedals.get(levelNum).hpLeft :
 												 	  ScoreData.arcadeMedals.get(levelNum).enemiesKilled);
 						offsetAlpha(stateTime, 6, alpha);
 						//Assets.font.draw(batch, "(", offsetXPos(textX+30, stateTime, 6, batchingText), y);

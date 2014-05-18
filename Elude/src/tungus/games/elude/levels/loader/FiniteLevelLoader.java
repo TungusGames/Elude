@@ -58,7 +58,6 @@ public class FiniteLevelLoader extends EnemyLoader {
 	
 	private Level level;
 	private float timeSinceLastWave = 0;
-	public float hpLost = 0;
 	private boolean completed = false;
 	
 
@@ -95,7 +94,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	public void saveScore() {
 		FiniteLevelScore score = ScoreData.playerFiniteScore.get(levelNum);
 		int medalsBefore = ((score.completed ? 1 : 0) + (ScoreData.hasMedal(true, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(true, false, levelNum) ? 1 : 0));
-		score.hpLost = score.completed ? Math.min(score.hpLost, hpLost) : hpLost;
+		score.hpLeft = score.completed ? Math.max(score.hpLeft, world.vessels.get(0).hp) : world.vessels.get(0).hp;
 		score.timeTaken = score.completed ? Math.min(score.timeTaken, timeSinceStart) : timeSinceStart;
 		score.completed = true;
 		this.completed = true;
@@ -107,7 +106,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	public FiniteLevelScore getScore() {
 		FiniteLevelScore s = new FiniteLevelScore();
 		s.completed = this.completed;
-		s.hpLost = hpLost;
+		s.hpLeft = world.vessels.get(0).hp;
 		s.timeTaken = timeSinceStart;
 		return s;
 	}
