@@ -79,8 +79,6 @@ public class Assets {
 	public static ParticleEffectPool debris;
 	public static ParticleEffectPool vesselTrails;
 	
-	public static Sound neonFlicker;
-	public static Sound neonSound;
 	public static Sound explosionSound;
 	public static Sound laserShot;
 	
@@ -144,8 +142,6 @@ public class Assets {
 		debris = loadParticle("debris2", 40, 80);
 		vesselTrails = loadParticle("vesseltrails", 2, 2);
 		
-		neonSound = Gdx.audio.newSound(Gdx.files.internal("sounds/neonSound.wav"));
-		neonFlicker = Gdx.audio.newSound(Gdx.files.internal("sounds/flicker.wav"));
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion2.wav"));
 		laserShot = Gdx.audio.newSound(Gdx.files.internal("sounds/laser_shot.wav"));
 		

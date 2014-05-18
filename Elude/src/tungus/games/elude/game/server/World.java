@@ -13,7 +13,6 @@ import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
