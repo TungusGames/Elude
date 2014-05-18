@@ -94,7 +94,6 @@ public class GridPanel {
 			} else {
 				open = (ScoreData.totalStars >= (i+1)*10);
 			}
-			open = true; ///DEBUG!!
 			buttons[i] = new LevelButton(i, finite, open);
 			buttons[i].setBounds(buttonTouchAreas[i%visibleButtons].x, buttonTouchAreas[i%visibleButtons].y, BUTTON_DRAW_SIZE, BUTTON_DRAW_SIZE);
 			buttons[i].setOrigin(BUTTON_DRAW_SIZE/2, BUTTON_DRAW_SIZE/2);
