@@ -49,11 +49,14 @@ public class ScoreDetails {
 	private FiniteLevelScore fScore;
 	private ArcadeLevelScore aScore;
 	
-	private ScoreDetails(String title, int levelNum, boolean finite, float x, float y, float scale, boolean modAlpha, float xSource, boolean open) {
+	private ScoreDetails(String title, int levelNum, boolean finite, float x, float y, float scale, boolean modAlpha, float xSource, boolean open,
+						FiniteLevelScore fs, ArcadeLevelScore as) {
 		this.finite = finite;	
 		this.levelNum = levelNum;
 		this.title = title;
 		this.open = open;
+		this.fScore = fs;
+		this.aScore = as;
 		starX = x;
 		yTop = y;
 		textX = x*40/scale-40;
@@ -100,18 +103,14 @@ public class ScoreDetails {
 	
 	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, FiniteLevelScore score, 
 			boolean allowHS, boolean open) {
-		this(title, levelNum, true, x, y, scale, modAlpha, xSource, open);
-		aScore = null;
-		fScore = score;
+		this(title, levelNum, true, x, y, scale, modAlpha, xSource, open, score, null);
 		highScoreTime = allowHS && (fScore.timeTaken <= ScoreData.playerFiniteScore.get(levelNum).timeTaken);
 		highScoreHit = allowHS && (fScore.hpLost <= ScoreData.playerFiniteScore.get(levelNum).hpLost);
 	}
 	
 	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, ArcadeLevelScore score, 
 			boolean allowHS, boolean open) {
-		this(title, levelNum, false, x, y, scale, modAlpha, xSource, open);
-		aScore = score;
-		fScore = null;
+		this(title, levelNum, false, x, y, scale, modAlpha, xSource, open, null, score);
 		highScoreTime = allowHS && (aScore.timeSurvived >= ScoreData.playerArcadeScore.get(levelNum).timeSurvived);
 		highScoreHit = allowHS && (aScore.enemiesKilled >= ScoreData.playerArcadeScore.get(levelNum).enemiesKilled);
 	}

@@ -1,5 +1,5 @@
 12
-30 20
+45 25
 0 0 0 0
 wavestart 0 0
 standing standing standing
@@ -8,7 +8,7 @@ moving moving
 wavestart -1 0
 wavestart 1 -1
 health
-wavestart 0.2 -1
+wavestart 1 -1
 wavestart 40 0
 standing standing
 moving moving moving

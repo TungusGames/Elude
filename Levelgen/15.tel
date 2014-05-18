@@ -1,5 +1,5 @@
 6
-25 20
+27.5 20
 0.1 0.1 0 0
 wavestart 0 0
 kamikaze kamikaze kamikaze kamikaze
@@ -12,7 +12,7 @@ kamikaze kamikaze kamikaze
 wavestart 2 0
 shield
 wavestart 1 0
-health
+
 wavestart 5 3
 moving moving moving moving
 standing standing standing
