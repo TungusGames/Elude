@@ -10,7 +10,6 @@ import tungus.games.elude.game.server.pickups.ShieldPickup;
 import tungus.games.elude.game.server.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
 import tungus.games.elude.levels.loader.arcade.FillUp;
-import tungus.games.elude.levels.loader.arcade.OneDeadTwoCome;
 import tungus.games.elude.levels.loader.arcade.PlusPlus;
 
 import com.badlogic.gdx.math.MathUtils;

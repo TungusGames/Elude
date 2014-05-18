@@ -7,8 +7,6 @@ import tungus.games.elude.game.multiplayer.transfer.ArcadeScoreInfo;
 import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
-import tungus.games.elude.levels.loader.FiniteLevelLoader;
-import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.util.log.AverageLogger;
 import tungus.games.elude.util.log.FPSLogger;
 
