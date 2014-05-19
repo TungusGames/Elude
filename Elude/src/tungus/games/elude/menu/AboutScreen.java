@@ -26,10 +26,11 @@ public class AboutScreen extends BaseScreen {
 	private static final float LINE_HEIGHT = 37.5f;
 	private static final float SMALLGAP = 10; 		// Gap between title and content beneath
 	private static final float BIGGAP = 40; 		// Gap between sections
-	private static final float EMPTY_BELOW = (480-8*LINE_HEIGHT-2*SMALLGAP-BIGGAP) / 2;
+	private static final float EMPTY_BELOW = (480-9*LINE_HEIGHT-2*SMALLGAP-BIGGAP) / 2;
 	private final Rectangle[] linkRects = new Rectangle[] {
-			new Rectangle(ATTRIBUTE_X, 2*LINE_HEIGHT + EMPTY_BELOW, 220, LINE_HEIGHT),
-			new Rectangle(ATTRIBUTE_X,   LINE_HEIGHT + EMPTY_BELOW, 400, LINE_HEIGHT),
+			new Rectangle(ATTRIBUTE_X, 3*LINE_HEIGHT + EMPTY_BELOW, 220, LINE_HEIGHT),
+			new Rectangle(ATTRIBUTE_X, 2*LINE_HEIGHT + EMPTY_BELOW, 400, LINE_HEIGHT),
+			new Rectangle(ATTRIBUTE_X,   LINE_HEIGHT + EMPTY_BELOW, 200, LINE_HEIGHT),
 			new Rectangle(ATTRIBUTE_X,                 EMPTY_BELOW, 200, LINE_HEIGHT)};
 	
 	private static final int STATE_FADEIN = 0;
@@ -60,14 +61,13 @@ public class AboutScreen extends BaseScreen {
 		public boolean tap(float x, float y, int count, int button) {
 			cam.unproject(t.set(x, y, 0));
 			if (linkRects[0].contains(t.x, t.y)) {
-				Gdx.app.log("DEBUG", "First");
 				Gdx.net.openURI("http://www.freesound.org/people/sarge4267/sounds/102720/");
 			} else if (linkRects[1].contains(t.x, t.y)) {
-				Gdx.app.log("DEBUG", "2nd");
 				Gdx.net.openURI("http://www.freesound.org/people/soundslikewillem/sounds/190707/");
 			} else if (linkRects[2].contains(t.x, t.y)) {
-				Gdx.app.log("DEBUG", "3rd");
 				Gdx.net.openURI("http://www.flaticon.com/free-icon/settings-gear-ios-7-interface-symbol_17214");
+			} else if (linkRects[2].contains(t.x, t.y)) {				
+				Gdx.net.openURI("http://www.fontspace.com/blambot/bulletproof-bb");
 			}
 			return false;
 		}
@@ -103,17 +103,18 @@ public class AboutScreen extends BaseScreen {
 		
 		batch.begin();
 		Assets.font.setColor(1, 1, 0.35f, alpha);
-		Assets.font.draw(batch, "PROGRAMMING BY", X, 8*LINE_HEIGHT + 2*SMALLGAP + BIGGAP + EMPTY_BELOW);
-		Assets.font.draw(batch, "ASSETS USED FROM", X, 4*LINE_HEIGHT + SMALLGAP + EMPTY_BELOW);
+		Assets.font.draw(batch, "PROGRAMMING BY", X, 9*LINE_HEIGHT + 2*SMALLGAP + BIGGAP + EMPTY_BELOW);
+		Assets.font.draw(batch, "SOME ASSETS USED FROM", X, 5*LINE_HEIGHT + SMALLGAP + EMPTY_BELOW);
 		
 		Assets.font.setColor(1, 1, 1, alpha);
-		Assets.font.draw(batch, "MERNYEI PETER",  NAME_X, 7*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);
-		Assets.font.draw(batch, "STADLER BENEDEK",NAME_X, 6*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);	// <-- an awesome guy
-		Assets.font.draw(batch, "TARDOS TAMAS",   NAME_X, 5*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);
+		Assets.font.draw(batch, "MERNYEI PETER",  NAME_X, 8*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);
+		Assets.font.draw(batch, "STADLER BENEDEK",NAME_X, 7*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);	// <-- an awesome guy
+		Assets.font.draw(batch, "TARDOS TAMAS",   NAME_X, 6*LINE_HEIGHT +   SMALLGAP + BIGGAP + EMPTY_BELOW);
 
-		Assets.font.draw(batch, "SARGE4267", 		ATTRIBUTE_X, 3*LINE_HEIGHT + EMPTY_BELOW);
-		Assets.font.draw(batch, "SOUNDSLIKEWILLEM ",	ATTRIBUTE_X, 2*LINE_HEIGHT + EMPTY_BELOW);
-		Assets.font.draw(batch, "FREEPIK", 			ATTRIBUTE_X,   LINE_HEIGHT + EMPTY_BELOW);
+		Assets.font.draw(batch, "SARGE4267", 		ATTRIBUTE_X, 4*LINE_HEIGHT + EMPTY_BELOW);
+		Assets.font.draw(batch, "SOUNDSLIKEWILLEM ",ATTRIBUTE_X, 3*LINE_HEIGHT + EMPTY_BELOW);
+		Assets.font.draw(batch, "FREEPIK", 			ATTRIBUTE_X, 2*LINE_HEIGHT + EMPTY_BELOW);
+		Assets.font.draw(batch, "BLAMBOT",	 		ATTRIBUTE_X,   LINE_HEIGHT + EMPTY_BELOW);
 		
 		Assets.font.draw(batch, Elude.VERSION, 		790-Assets.font.getBounds(Elude.VERSION).width,   470);
 		batch.end();

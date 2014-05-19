@@ -1,5 +1,5 @@
 9
-45 50
+45 55
 0.1 0.1 0.03 0
 wavestart 0 0
 moving_matrix
@@ -9,7 +9,7 @@ wavestart  5 0
 moving_matrix moving_matrix moving_matrix
 standing
 moving
-wavestart -1 0
+wavestart -1 1
 kamikaze kamikaze
 wavestart 4 1
 kamikaze kamikaze

@@ -17,20 +17,21 @@ public class ScoreData {
 	public static class FiniteLevelScore implements Serializable {
 		private static final long serialVersionUID = -7484248790248208142L;
 		public float timeTaken;
-		public float hpLost;
+		public float hpLeft;
 		public boolean completed;
 		public FiniteLevelScore() {
-			timeTaken = hpLost = 1000000;
+			timeTaken = 1000000;
+			hpLeft = -1;
 			completed = false;
 		}
 		public FiniteLevelScore(float time, float hp) {
 			timeTaken = time;
-			hpLost = hp;
+			hpLeft = hp;
 			completed = true;
 		}
 		public void copyTo(FiniteLevelScore other) {
 			other.timeTaken = timeTaken;
-			other.hpLost = hpLost;
+			other.hpLeft = hpLeft;
 			other.completed = completed;
 		}
 	}
@@ -124,7 +125,7 @@ public class ScoreData {
 				
 			if (sc.completed)
 				lastFiniteCompleted = i;
-			totalStars += ((sc.completed ? 1 : 0) + (sc.timeTaken <= finiteMedals.get(i).timeTaken ? 1 : 0) + (sc.hpLost <= finiteMedals.get(i).hpLost ? 1 : 0));
+			totalStars += ((sc.completed ? 1 : 0) + (sc.timeTaken <= finiteMedals.get(i).timeTaken ? 1 : 0) + (sc.hpLeft <= finiteMedals.get(i).hpLeft ? 1 : 0));
 			playerFiniteScore.add(sc);
 		}
 		s = arcadeMedals.size();
@@ -175,17 +176,17 @@ public class ScoreData {
 			if (!player.completed)
 				return false;
 			if (time) {
-				return medal.timeTaken > player.timeTaken;
+				return medal.timeTaken >= player.timeTaken;
 			} else {
-				return medal.hpLost > player.hpLost;
+				return medal.hpLeft <= player.hpLeft;
 			}
 		} else {
 			ArcadeLevelScore medal = arcadeMedals.get(levelNum);
 			ArcadeLevelScore player = playerArcadeScore.get(levelNum);
 			if (time) {
-				return medal.timeSurvived < player.timeSurvived;
+				return medal.timeSurvived <= player.timeSurvived;
 			} else {
-				return medal.enemiesKilled < player.enemiesKilled;
+				return medal.enemiesKilled <= player.enemiesKilled;
 			}
 		}
 	}

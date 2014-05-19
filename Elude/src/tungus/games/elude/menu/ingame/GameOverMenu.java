@@ -33,6 +33,10 @@ public class GameOverMenu extends AbstractIngameMenu {
 	public int render() {
 		int r = super.render();
 		batch.begin();
+		float a = state == STATE_APPEAR ? stateTime / APPEAR_TIME :
+				  state == STATE_DISAPPEAR ? 1-stateTime / DISAPPEAR_TIME :
+				  1;
+		Assets.font.setColor(1, 1, 1, OPACITY.apply(a));
 		Assets.font.draw(batch, TEXT, TEXT_X, TEXT_Y);
 		batch.end();
 		return r;

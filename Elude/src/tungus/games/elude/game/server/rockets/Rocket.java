@@ -6,7 +6,6 @@ import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
-import tungus.games.elude.levels.loader.FiniteLevelLoader;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.math.Rectangle;
@@ -135,8 +134,6 @@ public abstract class Rocket {
 				if (!world.vessels.get(i).shielded) {
 					world.effects.add(new Effect(0f, 0f, EffectType.CAMSHAKE.ordinal())); //TODO pool
 					world.vessels.get(i).hp -= dmg;
-					if (world.waveLoader instanceof FiniteLevelLoader)
-						((FiniteLevelLoader)(world.waveLoader)).hpLost += dmg;
 				}
 				kill();
 				return true;

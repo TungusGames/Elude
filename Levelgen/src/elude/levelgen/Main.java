@@ -135,16 +135,21 @@ public class Main {
 	
 	public static void writeArcadeMedals() {
 		List<ArcadeLevelScore> list = new ArrayList<>();
-		ArcadeLevelScore medal = new ArcadeLevelScore();
-		medal.tried = true;
-		medal.timeSurvived = 150;
-		medal.enemiesKilled = 40;
-		for (int i = 0; i < 5; i++) {
-			list.add(medal);
+		try {
+			sc = new Scanner(new File("arcadeinfo.tel"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException("No arcade info file found!"); 			
 		}
-		int ntoid[] = new int[5];
-		for (int i = 0; i < ntoid.length; i++) {
-			ntoid[i] = i;
+		sc.useLocale(Locale.US);
+		List<Integer> ntoidList = new ArrayList<Integer>();
+		while(sc.hasNext()) {
+			ntoidList.add(sc.nextInt());
+			list.add(new ArcadeLevelScore(sc.nextFloat(), sc.nextInt()));
+		}
+		int ntoidArray[] = new int[ntoidList.size()];
+		for (int i = 0; i < ntoidArray.length; i++) {
+			ntoidArray[i] = ntoidList.get(i);
 		}
 		try {
 			FileOutputStream fileOut = new FileOutputStream("../Elude - Android/assets/medals/arcade.medal");
@@ -154,7 +159,7 @@ public class Main {
 			out.close();
 			fileOut = new FileOutputStream("../Elude - Android/assets/levels/arcadentoid");
 			out = new ObjectOutputStream(fileOut);
-			out.writeObject(ntoid);
+			out.writeObject(ntoidArray);
 			out.close();
 		} catch (IOException e11) {
 			e11.printStackTrace();
