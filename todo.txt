@@ -1,18 +1,39 @@
+/**************************** A T T E N T I O N ****************************/
+
+This file contains secure business data associated with the development of 
+the video game "Elude".
+
+If you are not part of our company "Tungus", you are almost certainly not
+authorised to read the contents of this file. Please send it back to us
+(tungusgames@gmail.com) and destroy your copy.
+
+If you are NSA or any secret organisation peeping on us, please FUCK YOU!
+
+/****************** P R I V A T E  D A T A  F O L L O W S ******************/
+
+
 Enemies - rocket types
-- Sharpshooter - fast, straight laser bolts
-- Kamikaze - fast Turning
 - Satellite (orbit around player) - LowGrav?
 - Factory
 	- Normal: weak enemies with TurningRocket
 	- Med: stronger, LowGrav
 	- Hard: slow firing HighGrav, tanklike
 - Shielded (only hittable from one direction) - LowGrav?
-- Tank (slow shooter, lots of hp) - HighGrav?
+- Tank (slow shooter, lots of hp) - HighGrav?/BIG LASER?
 - Recolored standing and moving enemies with LowGrav and HighGrav?
+- MachineGun - lots of rockets, then nothing
 
 Bosses?
+- Some of the above (maybe combined) can be considered bosses...
 
-Level loading
-- Wave - coming when less than X enemies present or Y time has passed
+Levels/gameplay
+- Training mode: player can choose the type of enemies (Laci)
+ - Is a bit redundant with survival levels...
+- Level titles
+- Re-add survival 15...
 
-LevelSelectScreen
+Settings
+- Add game simulaton to conrol settings
+XOR
+- Remove control settings completely (TapToTarget might be enough)
+
