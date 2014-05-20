@@ -105,7 +105,7 @@ public class ScoreDetails {
 			boolean allowHS, boolean open) {
 		this(title, levelNum, true, x, y, scale, modAlpha, xSource, open, score, null);
 		highScoreTime = allowHS && (fScore.timeTaken <= ScoreData.playerFiniteScore.get(levelNum).timeTaken);
-		highScoreHit = allowHS && (fScore.hpLeft <= ScoreData.playerFiniteScore.get(levelNum).hpLeft);
+		highScoreHit = allowHS && (fScore.hpLeft >= ScoreData.playerFiniteScore.get(levelNum).hpLeft);
 	}
 	
 	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, ArcadeLevelScore score, 
