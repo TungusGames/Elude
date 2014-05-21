@@ -1,7 +1,7 @@
 package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.DebrisEffect;
+import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
@@ -145,7 +145,7 @@ public abstract class Enemy {
 	protected abstract boolean aiUpdate(float deltaTime);
 	
 	public void kill(Rocket r) {
-		world.effects.add(new DebrisEffect(pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN, type.ordinal()));
+		world.effects.add(RenderInfoPool.newDebris(pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN, type.ordinal()));
 		world.enemies.remove(this);
 		world.waveLoader.onEnemyDead(this);
 	}
