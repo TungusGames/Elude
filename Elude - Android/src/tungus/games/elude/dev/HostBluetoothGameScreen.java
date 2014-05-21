@@ -1,5 +1,6 @@
-package tungus.games.elude;
+package tungus.games.elude.dev;
 
+import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
