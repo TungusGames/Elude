@@ -98,10 +98,13 @@ public class GameScreen extends BaseScreen {
 		@Override
 		public boolean keyDown(int keycode) {
 			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
-				if (state == STATE_PAUSED)
-					((PauseMenu)menus[STATE_PAUSED-1]).unPause();
-				else
+				if (state == STATE_PLAYING)
 					state = STATE_PAUSED;
+				else if (state != STATE_STARTING)
+					//If in an ingame menu, call its onBackKey()
+					//PauseMenu - unpause, others - exit to menu
+					menus[state - 1].onBackKey();
+				//If starting, does nothing
 				return true;
 			}
 			return false;
@@ -325,4 +328,9 @@ public class GameScreen extends BaseScreen {
 		}
 	}
 
+	@Override
+	public void pause() {
+		if (state == STATE_PLAYING)
+			state = STATE_PAUSED;
+	}
 }

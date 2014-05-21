@@ -73,4 +73,11 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	public void setScore(ArcadeLevelScore s) {
 		scoreDisplay = new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s, true, true);
 	}
+	
+	//Exits the game on back key
+	@Override
+	public void onBackKey() {
+		if (state == STATE_IDLE)
+			onButtonTouch(0);
+	}
 }

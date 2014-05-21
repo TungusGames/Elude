@@ -126,4 +126,6 @@ public abstract class AbstractIngameMenu {
 	
 	protected abstract void onButtonTouch(int id);
 
+	//To be called from GameScreen
+	public abstract void onBackKey();
 }

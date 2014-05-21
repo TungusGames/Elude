@@ -41,4 +41,11 @@ public class GameOverMenu extends AbstractIngameMenu {
 		batch.end();
 		return r;
 	}
+	
+	//Exits the game on back key
+	@Override
+	public void onBackKey() {
+		if (state == STATE_IDLE)
+			onButtonTouch(0);
+	}
 }

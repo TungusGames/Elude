@@ -125,7 +125,7 @@ public class ScoreData {
 				
 			if (sc.completed)
 				lastFiniteCompleted = i;
-			totalStars += ((sc.completed ? 1 : 0) + (sc.timeTaken <= finiteMedals.get(i).timeTaken ? 1 : 0) + (sc.hpLeft <= finiteMedals.get(i).hpLeft ? 1 : 0));
+			totalStars += ((sc.completed ? 1 : 0) + (sc.timeTaken <= finiteMedals.get(i).timeTaken ? 1 : 0) + (sc.hpLeft >= finiteMedals.get(i).hpLeft ? 1 : 0));
 			playerFiniteScore.add(sc);
 		}
 		s = arcadeMedals.size();

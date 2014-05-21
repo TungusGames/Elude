@@ -29,8 +29,8 @@ public class PauseMenu extends AbstractIngameMenu {
 		fadeGameOut = !(returnOnDisappear == GameScreen.STATE_PLAYING);
 	}
 	
-	//To be called when unpaused from keyboard
-	public void unPause() {
+	//Unpauses on back key
+	public void onBackKey() {
 		if (state == STATE_IDLE)
 			onButtonTouch(2);
 	}
