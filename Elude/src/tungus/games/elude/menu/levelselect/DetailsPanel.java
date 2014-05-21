@@ -6,6 +6,7 @@ import tungus.games.elude.levels.scoredata.ScoreData;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 
 public class DetailsPanel {
 
@@ -44,7 +45,7 @@ public class DetailsPanel {
 				playButton.setX(PLAY_X+interp.apply(1-playFloatTime/SWITCH_TIME)*10);
 				playFloatTime += deltaTime;
 			} else {
-				float x = stateTime / SWITCH_TIME;
+				float x = MathUtils.clamp(stateTime / SWITCH_TIME, 0, 1);
 				playAlpha = prevOpen && open ? 1 :
 							!prevOpen && !open ? 0 :
 							prevOpen && !open ? 1-x :
