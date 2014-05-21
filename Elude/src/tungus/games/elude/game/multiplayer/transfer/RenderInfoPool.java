@@ -13,19 +13,19 @@ import com.badlogic.gdx.math.Vector2;
 
 public class RenderInfoPool {
 
-	private static SyncPool<ReducedEnemy> enemyPool = new SyncPool<ReducedEnemy>() {
+	private static SyncPool<ReducedEnemy> enemyPool = new SyncPool<ReducedEnemy>(120) {
 		@Override
 		public synchronized ReducedEnemy newObject() {
 			return new ReducedEnemy();
 		}
 	};
-	private static SyncPool<ReducedPickup> pickupPool = new SyncPool<ReducedPickup>() {
+	private static SyncPool<ReducedPickup> pickupPool = new SyncPool<ReducedPickup>(30) {
 		@Override
 		public synchronized ReducedPickup newObject() {
 			return new ReducedPickup();
 		}
 	};
-	private static SyncPool<ReducedRocket> rocketPool = new SyncPool<ReducedRocket>() {
+	private static SyncPool<ReducedRocket> rocketPool = new SyncPool<ReducedRocket>(150) {
 		@Override
 		public synchronized ReducedRocket newObject() {
 			return new ReducedRocket();
@@ -37,7 +37,7 @@ public class RenderInfoPool {
 			return new ReducedVessel();
 		}
 	};
-	private static SyncPool<Effect> effectPool = new SyncPool<Effect>() {
+	private static SyncPool<Effect> effectPool = new SyncPool<Effect>(60) {
 		@Override
 		public synchronized Effect newObject() {
 			return new Effect();
