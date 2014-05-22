@@ -2,8 +2,10 @@ package tungus.games.elude.menu.settings;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Elude;
 import tungus.games.elude.menu.mainmenu.MainMenu;
 import tungus.games.elude.menu.settings.Settings.MobileControlType;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -64,7 +66,7 @@ public class SettingsScreen extends BaseScreen {
 		public boolean tap(float x, float y, int count, int button) {
 			if (state == STATE_ACTIVE) {
 				t.set(x, y, 0);
-				cam.unproject(t);
+				ViewportHelper.unproject(t, cam);
 				return controlChoose.touch(t.x, t.y) ||
 					   soundChoose.touch(t.x, t.y) ||
 					   vibrateChoose.touch(t.x, t.y);
@@ -112,6 +114,10 @@ public class SettingsScreen extends BaseScreen {
 	
 	@Override
 	public void render(float deltaTime) {
+		if (stateTime == 0 && state == STATE_FADEIN) {
+			// On first frame
+			ViewportHelper.maximizeForRatio(Elude.VIEW_RATIO);
+		}
 		stateTime += deltaTime;
 		if (state == STATE_FADEIN && stateTime > FADE_TIME) {
 			state = STATE_ACTIVE;

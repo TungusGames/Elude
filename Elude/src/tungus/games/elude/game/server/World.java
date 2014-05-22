@@ -19,8 +19,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class World {
 
-	public static final float WIDTH = 20f;
-	public static final float HEIGHT = 12f;
+	public static final float AREA = 20*12;
+	public static float WIDTH = 20f;
+	public static float HEIGHT = 12f;
 	public static final float EDGE = 2.5f; 	// Width of the area at the edge not targeted for movement
 	public static final float GAME_END_TIMEOUT = 3;
 	public static final int STATE_PLAYING = 0;
@@ -33,8 +34,8 @@ public class World {
 	public List<Effect> effects;
 	public List<Pickup> pickups;
 	
-	public final Rectangle outerBounds;
-	public final Rectangle innerBounds;
+	public static final Rectangle outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
+	public static final Rectangle innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 	
 	public final EnemyLoader waveLoader;
 	public FiniteLevelScore fScore = null;
@@ -57,9 +58,12 @@ public class World {
 		//for (int i = 0; i < 10; i++)
 		//	enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
 		//	enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
-		outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
-		innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 		waveLoader = EnemyLoader.loaderFromLevelNum(this, levelNum, finite);
+	}
+	
+	public static void calcBounds() {
+		outerBounds.set(0, 0, WIDTH, HEIGHT);
+		innerBounds.set(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 	}
 	
 	public void update(float deltaTime, Vector2[] dirs) {

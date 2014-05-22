@@ -25,6 +25,7 @@ import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.CamShaker;
 import tungus.games.elude.util.CustomInterpolations;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -136,6 +137,8 @@ public class GameScreen extends BaseScreen {
 	
 	public GameScreen(Game game, int levelNum, boolean finite, Connection connection, int clientID) {
 		super(game);
+		ViewportHelper.setFullScreen();
+		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		this.finite = finite;
 		this.levelNum = levelNum;

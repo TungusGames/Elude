@@ -2,9 +2,11 @@ package tungus.games.elude.menu.mainmenu;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Elude;
 import tungus.games.elude.menu.AboutScreen;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.SettingsScreen;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -62,7 +64,7 @@ public class MainMenu extends BaseScreen {
 			private Vector3 touch = new Vector3();
 			@Override
 			public boolean touchUp (int screenX, int screenY, int pointer, int button) {
-				camera.unproject(touch.set(screenX, screenY, 0));
+				ViewportHelper.unproject(touch.set(screenX, screenY, 0), camera);
 				if (playButton.getBoundingRectangle().contains(touch.x, touch.y)) {
 					int r = playButton.touchAt(touch.x, touch.y);
 					if (r == PlayButton.RETURN_FINITE_LEVELS) {
@@ -89,6 +91,10 @@ public class MainMenu extends BaseScreen {
 	}
 	@Override
 	public void render(float deltaTime) {
+		if (stateTime == 0 && state == STATE_FADEIN) {
+			// On first frame
+			ViewportHelper.maximizeForRatio(Elude.VIEW_RATIO);
+		}
 		playButton.update(deltaTime);
 		stateTime += deltaTime;
 		if (state == STATE_FADEIN && stateTime > FADE_TIME) {

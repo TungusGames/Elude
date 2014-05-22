@@ -4,6 +4,7 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.Elude;
 import tungus.games.elude.menu.mainmenu.MainMenu;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -86,6 +87,10 @@ public class AboutScreen extends BaseScreen {
 	
 	@Override
 	public void render(float deltaTime) {
+		if (stateTime == 0 && state == STATE_FADEIN) {
+			// On first frame
+			ViewportHelper.maximizeForRatio(Elude.VIEW_RATIO);
+		}
 		stateTime += deltaTime;
 		if (state == STATE_FADEIN && stateTime > FADE_TIME) {
 			state = STATE_ACTIVE;

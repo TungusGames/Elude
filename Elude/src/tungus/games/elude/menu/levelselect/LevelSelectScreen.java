@@ -1,9 +1,11 @@
 package tungus.games.elude.menu.levelselect;
 
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Elude;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.mainmenu.MainMenu;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -46,7 +48,8 @@ public class LevelSelectScreen extends BaseScreen {
 		public boolean tap(float x, float y, int count, int button) {
 			if (state == STATE_WORKING) {
 				touch3.set(x, y, 0);
-				uiCam.unproject(touch3);
+				Gdx.app.log("DEBUG", "x " + x + " y " + y);
+				ViewportHelper.unproject(touch3, uiCam);
 				if (grid.tapped(touch3.x, touch3.y)) {
 					details.switchTo(grid.selected, grid.isOpen(grid.selected));
 				} else if (details.tapped(touch3.x, touch3.y)) {
@@ -61,7 +64,7 @@ public class LevelSelectScreen extends BaseScreen {
 		public boolean pan(float x, float y, float deltaX, float deltaY) {
 			if (state == STATE_WORKING) {
 				touch3.set(x, y, 0);
-				uiCam.unproject(touch3);
+				ViewportHelper.unproject(touch3, uiCam);
 				grid.pan(touch3.x,touch3.y);
 			}
 			return false;
@@ -71,7 +74,7 @@ public class LevelSelectScreen extends BaseScreen {
 		public boolean panStop(float x, float y, int pointer, int button) {
 			if (state == STATE_WORKING) {
 				touch3.set(x, y, 0);
-				uiCam.unproject(touch3);
+				ViewportHelper.unproject(touch3, uiCam);
 				grid.panStop(touch3.x, touch3.y);
 			}
 			return false;
@@ -83,7 +86,7 @@ public class LevelSelectScreen extends BaseScreen {
 				touch3.set(velocityX, velocityY, 0);
 				if (velocityY < 0)
 					velocityY *= 1.5f; // Downwards flings report as weaker than they feel
-				uiCam.unproject(touch3);
+				ViewportHelper.unproject(touch3, uiCam);
 				grid.fling(touch3.y);
 			}
 			return false;
@@ -145,6 +148,10 @@ public class LevelSelectScreen extends BaseScreen {
 	
 	@Override
 	public void render(float deltaTime) {
+		if (stateTime == 0 && state == STATE_BEGIN) {
+			// On first frame
+			ViewportHelper.maximizeForRatio(Elude.VIEW_RATIO);
+		}
 		stateTime += deltaTime;
 		if (state == STATE_BEGIN && stateTime > BEGIN_DURATION) {
 			state = STATE_WORKING;
