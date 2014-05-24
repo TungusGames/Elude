@@ -2,6 +2,7 @@ package tungus.games.elude.menu.ingame;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.client.GameScreen;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,11 +29,12 @@ public abstract class AbstractIngameMenu {
 	protected static final Interpolation SHADOW = Interpolation.fade;
 	protected static final float FULL_SHADOW = 0.6f;
 	
-	protected static final OrthographicCamera cam = new OrthographicCamera(800, 480);
-	protected static final SpriteBatch batch = new SpriteBatch();
+	protected static final float FRUSTUM_WIDTH = 800;
+	protected static final float FRUSTUM_HEIGHT = 480;
+	
+	protected final OrthographicCamera cam = ViewportHelper.newCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+	protected final SpriteBatch batch = new SpriteBatch();
 	{
-		cam.position.set(cam.viewportWidth/2, cam.viewportHeight/2, 0);
-		cam.update();
 		batch.setProjectionMatrix(cam.combined);
 	}
 	

@@ -137,7 +137,6 @@ public class GameScreen extends BaseScreen {
 	
 	public GameScreen(Game game, int levelNum, boolean finite, Connection connection, int clientID) {
 		super(game);
-		ViewportHelper.setFullScreen();
 		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		this.finite = finite;
@@ -160,7 +159,7 @@ public class GameScreen extends BaseScreen {
 		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
 		uiCam.update();
 		uiBatch.setProjectionMatrix(uiCam.combined);
-		fontCam = new OrthographicCamera(800, 480);
+		fontCam = ViewportHelper.newCamera(800, 480);
 		fontCam.position.set(400, 240, 0);
 		fontCam.update();
 		fontBatch = new SpriteBatch(10);

@@ -78,19 +78,13 @@ public class AboutScreen extends BaseScreen {
 		super(game);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(new InputMultiplexer(keyExit, tapCheck));
-		cam = new OrthographicCamera(800, 480);
-		cam.position.set(400, 240, 0);
-		cam.update();
+		cam = ViewportHelper.newCamera(800, 480);
 		batch = new SpriteBatch(300);
 		batch.setProjectionMatrix(cam.combined);
 	}
 	
 	@Override
 	public void render(float deltaTime) {
-		if (stateTime == 0 && state == STATE_FADEIN) {
-			// On first frame
-			ViewportHelper.maximizeForRatio(Elude.VIEW_RATIO);
-		}
 		stateTime += deltaTime;
 		if (state == STATE_FADEIN && stateTime > FADE_TIME) {
 			state = STATE_ACTIVE;

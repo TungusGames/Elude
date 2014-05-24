@@ -74,16 +74,16 @@ public class ScoreDetails {
 				false; // Always displaying the medal limits might be better
 		playerTime = new Sprite(Assets.stars[(finite ? fScore.timeTaken <= ScoreData.finiteMedals.get(levelNum).timeTaken :
 													   aScore.timeSurvived >= ScoreData.arcadeMedals.get(levelNum).timeSurvived) ? 3 : 0]);
-		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.6f+(!finite?1:0))*scale, starWidth, starHeight);
+		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.85f+(!finite?1:0))*scale, starWidth, starHeight);
 		playerHit =  new Sprite(Assets.stars[(finite ? fScore.hpLeft >= ScoreData.finiteMedals.get(levelNum).hpLeft : 
 		                                               aScore.enemiesKilled >= ScoreData.arcadeMedals.get(levelNum).enemiesKilled) ? 3 : 0]);
-		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.6f+(!finite?1:0))*scale, starWidth, starHeight);
+		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.85f+(!finite?1:0))*scale, starWidth, starHeight);
 		if (finite && complete()) {
 			completition = new Sprite(Assets.stars[3]);
-			completition.setBounds(STAR_X, (yTop*scale/40f-10.75f+8.6f)*scale, starWidth, starHeight);
+			completition.setBounds(STAR_X, (yTop*scale/40f-10.75f+8.85f)*scale, starWidth, starHeight);
 		} else if (!finite && !open) {
 			completition = new Sprite(Assets.stars[3]);
-			completition.setBounds(textX+25, (yTop*scale/40f-10.75f+6.35f)*scale, starWidth, starHeight);
+			completition.setBounds(textX+25, (yTop*scale/40f-10.75f+6.7f)*scale, starWidth, starHeight);
 		} else {
 			completition = null;
 		}
@@ -145,7 +145,7 @@ public class ScoreDetails {
 					Assets.font.draw(batch, title, offsetXPos(textX+SCORE_INDENT*0.8f, stateTime, 0, batchingText)+100-title.length()*15, y);
 					Assets.font.setScale(1);
 					Assets.font.setColor(1, 1, 1, Assets.font.getColor().a);
-					y -= 60;
+					y -= 50;
 					if (finite) {
 						Assets.font.draw(batch, "COMPLETED", offsetXPos(textX+SCORE_INDENT, stateTime, 0, batchingText), y);
 						y -= 40;
@@ -200,7 +200,7 @@ public class ScoreDetails {
 					} 
 				} else {
 					Assets.font.setScale(1.05f);
-					Assets.font.draw(batch, "LEVEL "+(levelNum+1), offsetXPos(textX+SCORE_INDENT*0.8f, stateTime, 0, batchingText), 310);
+					Assets.font.draw(batch, finite ? "STAGE" : Assets.Strings.endless + " " +(levelNum+1), offsetXPos(textX+SCORE_INDENT*0.8f-(finite?0:20), stateTime, 0, batchingText), 310);
 					Assets.font.draw(batch, finite ? "NOT COMPLETED" : "NOT TRIED YET", offsetXPos(textX, stateTime, 3, batchingText), 270);
 				}
 				Assets.font.setScale(1);

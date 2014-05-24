@@ -4,40 +4,8 @@ import tungus.games.elude.game.server.World;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
 
 public class ViewportHelper {
-	
-	private static Vector3 viewportTopleft = new Vector3(0, 0, 0);	// Vector3 - easily chainable with Camera.unproject()
-	private static float viewportWidth = 800;
-	private static float viewportHeight = 480;
-	
-	public static void maximizeForRatio(float viewportRatio) {
-		int screenW = Gdx.graphics.getWidth();
-		int screenH = Gdx.graphics.getHeight();
-		float screenRatio = (float)screenW / screenH;
-		if (screenRatio > viewportRatio) {
-			viewportWidth = screenH * viewportRatio;
-			viewportHeight = screenH;
-			int diff = (screenW - (int)viewportWidth) / 2;			
-			Gdx.gl10.glViewport(diff, 0, (int)viewportWidth, screenH);
-			viewportTopleft.set(diff, 0, 0);
-		} else {
-			viewportHeight = screenW / viewportRatio;
-			viewportWidth = screenW;
-			int diff = (screenH - (int)viewportHeight) / 2;
-			Gdx.gl10.glViewport(0, diff, screenW, (int)viewportHeight);
-			viewportTopleft.set(0, diff, 0);
-			
-		}
-		Gdx.app.log("DEBUG", "VP top left: " + viewportTopleft.toString());
-	}
-	
-	public static void setFullScreen() {
-		
-		Gdx.gl10.glViewport(0, 0, (int)(viewportWidth = Gdx.graphics.getWidth()), (int)(viewportHeight = Gdx.graphics.getHeight()));
-		viewportTopleft.set(0, 0, 0);
-	}
 	
 	public static void setWorldSizeFromArea() {
 		float screenRatio = (float)Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
@@ -48,9 +16,26 @@ public class ViewportHelper {
 		World.calcBounds();
 	}
 	
-	public static Vector3 unproject(Vector3 t, OrthographicCamera c) {
-		c.unproject(t, viewportTopleft.x, viewportTopleft.y, viewportWidth, viewportHeight);
-		return t;
+	public static OrthographicCamera newCamera(float width, float height) {
+		float viewportRatio = width/height;
+		int screenW = Gdx.graphics.getWidth();
+		int screenH = Gdx.graphics.getHeight();
+		float screenRatio = (float)screenW / screenH;
+		OrthographicCamera cam = null;
+		if (screenRatio > viewportRatio) {
+			float viewportWidth = screenH * viewportRatio;
+			float scale = height / screenH;
+			int diff = (screenW - (int)viewportWidth) / 2;			
+			cam = new OrthographicCamera(width + 2 * diff * scale, height);
+		} else {
+			float viewportHeight = screenW / viewportRatio;
+			float scale = width / screenW;
+			int diff = (screenH - (int)viewportHeight) / 2;
+			cam = new OrthographicCamera(width, height + 2 * diff * scale);
+		}
+		cam.position.set(width/2, height/2, 0);
+		cam.update();
+		return cam;
 	}
 	
 }

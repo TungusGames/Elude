@@ -23,8 +23,8 @@ public class LevelButton extends Sprite {
 			return Assets.frameRed;
 		if (!(isFinite ? ScoreData.playerFiniteScore.get(n).completed : ScoreData.playerArcadeScore.get(n).tried))
 			return Assets.frameBlue;
-		if (ScoreData.hasMedal(isFinite, false, n) && ScoreData.hasMedal(isFinite, true, n))
-			return Assets.frameYellow;
+		//if (ScoreData.hasMedal(isFinite, false, n) && ScoreData.hasMedal(isFinite, true, n))
+		//	return Assets.frameYellow;
 		return Assets.frameGreen;
 	}
 	

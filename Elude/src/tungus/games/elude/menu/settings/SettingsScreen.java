@@ -2,7 +2,6 @@ package tungus.games.elude.menu.settings;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.Elude;
 import tungus.games.elude.menu.mainmenu.MainMenu;
 import tungus.games.elude.menu.settings.Settings.MobileControlType;
 import tungus.games.elude.util.ViewportHelper;
@@ -66,7 +65,7 @@ public class SettingsScreen extends BaseScreen {
 		public boolean tap(float x, float y, int count, int button) {
 			if (state == STATE_ACTIVE) {
 				t.set(x, y, 0);
-				ViewportHelper.unproject(t, cam);
+				cam.unproject(t);
 				return controlChoose.touch(t.x, t.y) ||
 					   soundChoose.touch(t.x, t.y) ||
 					   vibrateChoose.touch(t.x, t.y);
@@ -79,15 +78,9 @@ public class SettingsScreen extends BaseScreen {
 		super(game);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(new InputMultiplexer(tapCheck, keyInput));
-		cam = new OrthographicCamera(800, 480);
-		cam.position.set(400, 240, 0);
-		cam.update();
+		cam = ViewportHelper.newCamera(800, 480);
 		batch = new SpriteBatch(300);
 		batch.setProjectionMatrix(cam.combined);
-		Gdx.app.log("DEBUG", ""+EMPTY_BELOW);
-		Gdx.app.log("DEBUG", ""+LINE_HEIGHT);
-		Gdx.app.log("DEBUG", ""+SMALLGAP);
-		Gdx.app.log("DEBUG", ""+BIGGAP);
 		controlChoose = new Chooser(
 			new Rectangle[]{
 				new Rectangle(X+TAB, EMPTY_BELOW+6*LINE_HEIGHT+2*SMALLGAP+2*BIGGAP, 200, LINE_HEIGHT),
@@ -114,10 +107,6 @@ public class SettingsScreen extends BaseScreen {
 	
 	@Override
 	public void render(float deltaTime) {
-		if (stateTime == 0 && state == STATE_FADEIN) {
-			// On first frame
-			ViewportHelper.maximizeForRatio(Elude.VIEW_RATIO);
-		}
 		stateTime += deltaTime;
 		if (state == STATE_FADEIN && stateTime > FADE_TIME) {
 			state = STATE_ACTIVE;

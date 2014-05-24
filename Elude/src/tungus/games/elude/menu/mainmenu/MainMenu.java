@@ -2,7 +2,6 @@ package tungus.games.elude.menu.mainmenu;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.Elude;
 import tungus.games.elude.menu.AboutScreen;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.SettingsScreen;
@@ -43,9 +42,7 @@ public class MainMenu extends BaseScreen {
 	public MainMenu(final Game game) {
 		super(game);
 		Gdx.input.setCatchBackKey(false);
-		camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-		camera.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
-		camera.update();
+		camera = ViewportHelper.newCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(camera.combined);
 		float height = FRUSTUM_WIDTH * 0.28f;
@@ -64,7 +61,7 @@ public class MainMenu extends BaseScreen {
 			private Vector3 touch = new Vector3();
 			@Override
 			public boolean touchUp (int screenX, int screenY, int pointer, int button) {
-				ViewportHelper.unproject(touch.set(screenX, screenY, 0), camera);
+				camera.unproject(touch.set(screenX, screenY, 0));
 				if (playButton.getBoundingRectangle().contains(touch.x, touch.y)) {
 					int r = playButton.touchAt(touch.x, touch.y);
 					if (r == PlayButton.RETURN_FINITE_LEVELS) {
@@ -91,10 +88,6 @@ public class MainMenu extends BaseScreen {
 	}
 	@Override
 	public void render(float deltaTime) {
-		if (stateTime == 0 && state == STATE_FADEIN) {
-			// On first frame
-			ViewportHelper.maximizeForRatio(Elude.VIEW_RATIO);
-		}
 		playButton.update(deltaTime);
 		stateTime += deltaTime;
 		if (state == STATE_FADEIN && stateTime > FADE_TIME) {
