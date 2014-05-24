@@ -280,7 +280,7 @@ public class GameScreen extends BaseScreen {
 		if (state == STATE_STARTING) {
 			fontBatch.begin();
 			Assets.font.setColor(1, 1, 1, 1);
-			Assets.font.draw(fontBatch, (finite ? "STAGE " : "SURVIVAL ") + (levelNum + 1), 
+			Assets.font.draw(fontBatch, ((finite ? "STAGE" : Assets.Strings.endless) + " ") + (levelNum + 1), 
 					890-1100*CustomInterpolations.FLOAT_THROUGH.apply(timeSinceStart/START_TIME), 480/2);
 			fontBatch.end();
 		}

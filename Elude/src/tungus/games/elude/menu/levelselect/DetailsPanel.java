@@ -78,7 +78,8 @@ public class DetailsPanel {
 		prevLevel = activeLevel;
 		activeLevel = finite ?
 				new ScoreDetails("STAGE " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum), false, open) :
-				new ScoreDetails("SURVIVAL " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerArcadeScore.get(levelNum), false, open);
+				new ScoreDetails(Assets.Strings.endless + " " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, 
+								ScoreData.playerArcadeScore.get(levelNum), false, open);
 		state = STATE_SWITCH;
 		prevOpen = this.open;
 		this.open = open;
