@@ -30,15 +30,15 @@ public abstract class EnemyLoader {
 		else {
 			switch(n) {
 			case 0:
-				return new FillUp(world, n, 10, 0.5f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING, EnemyType.STANDING_FAST);
+				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING, EnemyType.STANDING_FAST);
 			case 1:
 				return new PlusPlus(world, n, EnemyType.KAMIKAZE);
 			case 2:
-				return new FillUp(world, n, 10, 0.5f, 0, 0.2f, 0, 0, EnemyType.STANDING_FAST, EnemyType.KAMIKAZE);
+				return new FillUp(world, n, 10, 50f, 0, 0.2f, 0, 0, EnemyType.STANDING_FAST, EnemyType.KAMIKAZE);
 			case 3:
 				return new PlusPlus(world, n, EnemyType.MOVING, EnemyType.STANDING_FAST);
 			case 4:
-				return new FillUp(world, n, 10, 0.5f, EnemyType.values());
+				return new FillUp(world, n, 10, 50f, EnemyType.values());
 			default:
 				throw new IllegalArgumentException("Unknown arcade level number");
 				

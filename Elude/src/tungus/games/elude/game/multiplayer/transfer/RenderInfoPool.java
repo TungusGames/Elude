@@ -25,7 +25,7 @@ public class RenderInfoPool {
 			return new ReducedPickup();
 		}
 	};
-	private static SyncPool<ReducedRocket> rocketPool = new SyncPool<ReducedRocket>(150) {
+	private static SyncPool<ReducedRocket> rocketPool = new SyncPool<ReducedRocket>(240) {
 		@Override
 		public synchronized ReducedRocket newObject() {
 			return new ReducedRocket();

@@ -4,6 +4,7 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.Elude;
 import tungus.games.elude.menu.mainmenu.MainMenu;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -77,9 +78,7 @@ public class AboutScreen extends BaseScreen {
 		super(game);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(new InputMultiplexer(keyExit, tapCheck));
-		cam = new OrthographicCamera(800, 480);
-		cam.position.set(400, 240, 0);
-		cam.update();
+		cam = ViewportHelper.newCamera(800, 480);
 		batch = new SpriteBatch(300);
 		batch.setProjectionMatrix(cam.combined);
 	}

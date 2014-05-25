@@ -25,6 +25,7 @@ import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.CamShaker;
 import tungus.games.elude.util.CustomInterpolations;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
@@ -136,6 +137,7 @@ public class GameScreen extends BaseScreen {
 	
 	public GameScreen(Game game, int levelNum, boolean finite, Connection connection, int clientID) {
 		super(game);
+		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		this.finite = finite;
 		this.levelNum = levelNum;
@@ -157,7 +159,7 @@ public class GameScreen extends BaseScreen {
 		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
 		uiCam.update();
 		uiBatch.setProjectionMatrix(uiCam.combined);
-		fontCam = new OrthographicCamera(800, 480);
+		fontCam = ViewportHelper.newCamera(800, 480);
 		fontCam.position.set(400, 240, 0);
 		fontCam.update();
 		fontBatch = new SpriteBatch(10);
@@ -277,7 +279,7 @@ public class GameScreen extends BaseScreen {
 		if (state == STATE_STARTING) {
 			fontBatch.begin();
 			Assets.font.setColor(1, 1, 1, 1);
-			Assets.font.draw(fontBatch, (finite ? "STAGE " : "SURVIVAL ") + (levelNum + 1), 
+			Assets.font.draw(fontBatch, ((finite ? "STAGE" : Assets.Strings.endless) + " ") + (levelNum + 1), 
 					890-1100*CustomInterpolations.FLOAT_THROUGH.apply(timeSinceStart/START_TIME), 480/2);
 			fontBatch.end();
 		}

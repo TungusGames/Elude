@@ -15,6 +15,10 @@ import com.badlogic.gdx.utils.Array;
 
 public class Assets {
 	
+	public static class Strings {
+		public static String endless = "ENDLESS";
+	}
+	
 	public static TextureAtlas atlas;
 	
 	//Main menu

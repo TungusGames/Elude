@@ -8,19 +8,20 @@ import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 
 public class FillUp extends ArcadeLoaderBase {
 	private final int fillTo;
-	private final float cooldown;
+	private final float incrementTime;
 	private final EnemyType[] types;
 	
-	private float timeSinceLast = 0;
+	private float timeSinceIncrement = 0;
+	private int currentFill = 1;
 	
-	public FillUp(World w, int levelNum, int fillTo, float cooldown, EnemyType... types) {
-		this(w, levelNum, fillTo, cooldown, 0, 0, 0, 0, types);
+	public FillUp(World w, int levelNum, int fillTo, float timeToMax, EnemyType... types) {
+		this(w, levelNum, fillTo, timeToMax, 0, 0, 0, 0, types);
 	}
 	
-	public FillUp(World w, int levelNum, int fillTo, float cooldown, float a, float b, float c, float d, EnemyType... types) {
+	public FillUp(World w, int levelNum, int fillTo, float timeToMax, float a, float b, float c, float d, EnemyType... types) {
 		super(w, a, b, c, d, levelNum);
 		this.fillTo = fillTo;
-		this.cooldown = cooldown;
+		this.incrementTime = timeToMax / (fillTo-1);
 		this.types = types;
 		addEnemy();
 	}
@@ -28,10 +29,14 @@ public class FillUp extends ArcadeLoaderBase {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		timeSinceLast += deltaTime;
-		if (world.enemies.size() < fillTo && timeSinceLast > cooldown) {
+		timeSinceIncrement += deltaTime;
+		if (timeSinceIncrement > incrementTime && currentFill < fillTo) {
+			currentFill++;
+			timeSinceIncrement = 0;
+		}
+		
+		if (world.enemies.size() < currentFill) {
 			addEnemy();
-			timeSinceLast = 0;
 		}
 	}
 	

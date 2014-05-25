@@ -1,9 +1,11 @@
 package tungus.games.elude.menu.levelselect;
 
+import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.mainmenu.MainMenu;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,9 +14,11 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class LevelSelectScreen extends BaseScreen {
@@ -46,6 +50,7 @@ public class LevelSelectScreen extends BaseScreen {
 		public boolean tap(float x, float y, int count, int button) {
 			if (state == STATE_WORKING) {
 				touch3.set(x, y, 0);
+				Gdx.app.log("DEBUG", "x " + x + " y " + y);
 				uiCam.unproject(touch3);
 				if (grid.tapped(touch3.x, touch3.y)) {
 					details.switchTo(grid.selected, grid.isOpen(grid.selected));
@@ -119,6 +124,9 @@ public class LevelSelectScreen extends BaseScreen {
 		}
 	};
 	private final boolean finite;
+	private final String starInfo;
+	private final Vector2 stringPos;
+	private final Sprite star;
 	private int state = STATE_BEGIN;
 	private float stateTime = 0;
 	
@@ -128,19 +136,20 @@ public class LevelSelectScreen extends BaseScreen {
 		finite = finiteLevels;
 		FRUSTUM_WIDTH = 20;
 		FRUSTUM_HEIGHT = 12;
-		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
-		uiCam.update();
+		uiCam = ViewportHelper.newCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		uiBatch = new SpriteBatch();
 		uiBatch.setProjectionMatrix(uiCam.combined);
 		Gdx.input.setInputProcessor(new InputMultiplexer(new GestureDetector(listener), otherInput));
 		grid = new GridPanel(finiteLevels ? ScoreData.playerFiniteScore.size() : ScoreData.playerArcadeScore.size(), finiteLevels);
 		details = new DetailsPanel(finiteLevels);
-		fontCam = new OrthographicCamera(800f,480f);
-		fontCam.position.set(400f, 240f, 0);
-		fontCam.update();
+		fontCam = ViewportHelper.newCamera(800f,480f);
 		fontBatch = new SpriteBatch();
 		fontBatch.setProjectionMatrix(fontCam.combined);
+		
+		starInfo = ScoreData.starsEarned + " / " + ScoreData.starsMax;
+		stringPos = new Vector2(790 - Assets.font.getBounds(starInfo).width, 470);
+		star = new Sprite(Assets.stars[3]);
+		star.setBounds(stringPos.x/40-1f, stringPos.y/40-0.7f, 0.8f, 0.8f*0.95f);
 	}
 	
 	@Override
@@ -163,18 +172,22 @@ public class LevelSelectScreen extends BaseScreen {
 		switch (state) {
 		case STATE_BEGIN:
 			grid.renderLoading(uiBatch, deltaTime, false, stateTime/BEGIN_DURATION);
+			star.draw(uiBatch, stateTime/BEGIN_DURATION);
 			break;
 		case STATE_WORKING:
 			grid.render(uiBatch, deltaTime, false);
 			details.render(deltaTime, uiBatch, false, 1);
+			star.draw(uiBatch, 1);
 			break;
 		case STATE_STARTING_LEVEL:
 			grid.renderEnding(uiBatch, deltaTime, false, stateTime/LEVELSTART_DURATION);
 			details.render(deltaTime, uiBatch, false, 1-stateTime/LEVELSTART_DURATION);
+			star.draw(uiBatch, 1-stateTime/LEVELSTART_DURATION);
 			break;
 		case STATE_EXITING:
 			grid.renderLoading(uiBatch, deltaTime, false, 1-stateTime/EXIT_DURATION, exitingFromRow);
 			details.render(deltaTime, uiBatch, false, 1-stateTime/EXIT_DURATION);
+			star.draw(uiBatch, 1-stateTime/EXIT_DURATION);
 			break;
 		}
 		uiBatch.end();
@@ -183,20 +196,26 @@ public class LevelSelectScreen extends BaseScreen {
 		switch (state) {
 		case STATE_BEGIN:
 			grid.renderLoading(fontBatch, deltaTime, true, stateTime/BEGIN_DURATION);
+			Assets.font.setColor(1, 1, 1, stateTime/BEGIN_DURATION);
 			break;
 		case STATE_WORKING:
 			grid.render(fontBatch, deltaTime, true);
 			details.render(deltaTime, fontBatch, true, 1);
+			Assets.font.setColor(1, 1, 1, 1);
 			break;
 		case STATE_STARTING_LEVEL:
 			grid.render(fontBatch, deltaTime, true);
 			details.render(deltaTime, fontBatch, true, 1-stateTime/LEVELSTART_DURATION);
+			Assets.font.setColor(1, 1, 1, 1-stateTime/LEVELSTART_DURATION);
 			break;
 		case STATE_EXITING:
 			grid.renderLoading(fontBatch, deltaTime, true, 1-stateTime/EXIT_DURATION, exitingFromRow);
 			details.render(deltaTime, fontBatch, true, 1-stateTime/EXIT_DURATION);
+			Assets.font.setColor(1, 1, 1, 1-stateTime/EXIT_DURATION);
 			break;
-		}		
+		}
+		Assets.font.setScale(1);
+		Assets.font.draw(fontBatch, starInfo, stringPos.x, stringPos.y);
 		fontBatch.end();
 	}
 }

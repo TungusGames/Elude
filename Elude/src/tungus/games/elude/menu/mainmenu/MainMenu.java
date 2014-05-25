@@ -5,6 +5,7 @@ import tungus.games.elude.BaseScreen;
 import tungus.games.elude.menu.AboutScreen;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.SettingsScreen;
+import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -41,9 +42,7 @@ public class MainMenu extends BaseScreen {
 	public MainMenu(final Game game) {
 		super(game);
 		Gdx.input.setCatchBackKey(false);
-		camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-		camera.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
-		camera.update();
+		camera = ViewportHelper.newCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(camera.combined);
 		float height = FRUSTUM_WIDTH * 0.28f;

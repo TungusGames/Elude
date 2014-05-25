@@ -47,7 +47,7 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 		s.timeSurvived = timeSurvived;
 		s.enemiesKilled = enemiesKilled;
 		int medalsAfter = ((ScoreData.hasMedal(false, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(false, false, levelNum) ? 1 : 0));
-		ScoreData.totalStars += (medalsAfter-medalsBefore);
+		ScoreData.starsEarned += (medalsAfter-medalsBefore);
 		return s;
 	}
 	

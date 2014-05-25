@@ -24,15 +24,15 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	//private final boolean highScoreHit;
 	
 	public LevelCompleteMenu(int levelNum, boolean isFinite) {
-		super((levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : Math.min(MathUtils.floor(ScoreData.totalStars/10f), ScoreData.arcadeMedals.size()))) ?
+		super((levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : Math.min(MathUtils.floor(ScoreData.starsEarned/10f), ScoreData.arcadeMedals.size()))) ?
 				   new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart), new Sprite(Assets.nextLevel)} :
 				   new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart)},
-			  (levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : Math.min(MathUtils.floor(ScoreData.totalStars/10f), ScoreData.arcadeMedals.size()))) ?
-				   new Rectangle[]{new Rectangle(cam.viewportWidth/2-1.5f*BUTTON_SIZE-BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
-								   new Rectangle(cam.viewportWidth/2-0.5f*BUTTON_SIZE,				  BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
-								   new Rectangle(cam.viewportWidth/2+0.5f*BUTTON_SIZE+BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)} :
-				   new Rectangle[]{new Rectangle(cam.viewportWidth/2-BUTTON_SIZE-0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
-					   			   new Rectangle(cam.viewportWidth/2            +0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)});
+			  (levelNum+1 < (isFinite ? ScoreData.finiteMedals.size() : Math.min(MathUtils.floor(ScoreData.starsEarned/10f), ScoreData.arcadeMedals.size()))) ?
+				   new Rectangle[]{new Rectangle(FRUSTUM_WIDTH/2-1.5f*BUTTON_SIZE-BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
+								   new Rectangle(FRUSTUM_WIDTH/2-0.5f*BUTTON_SIZE,				  BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
+								   new Rectangle(FRUSTUM_WIDTH/2+0.5f*BUTTON_SIZE+BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)} :
+				   new Rectangle[]{new Rectangle(FRUSTUM_WIDTH/2-BUTTON_SIZE-0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
+					   			   new Rectangle(FRUSTUM_WIDTH/2            +0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)});
 		FINITE_TITLE = (isFinite ? "STAGE " : "SURVIVAL ") + (levelNum+1) + " COMPLETED";
 		scoreDisplay = isFinite ?
 				new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerFiniteScore.get(levelNum), false, true) :

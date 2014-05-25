@@ -6,6 +6,7 @@ import tungus.games.elude.levels.scoredata.ScoreData;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 
 public class DetailsPanel {
 
@@ -44,7 +45,7 @@ public class DetailsPanel {
 				playButton.setX(PLAY_X+interp.apply(1-playFloatTime/SWITCH_TIME)*10);
 				playFloatTime += deltaTime;
 			} else {
-				float x = stateTime / SWITCH_TIME;
+				float x = MathUtils.clamp(stateTime / SWITCH_TIME, 0, 1);
 				playAlpha = prevOpen && open ? 1 :
 							!prevOpen && !open ? 0 :
 							prevOpen && !open ? 1-x :
@@ -76,8 +77,9 @@ public class DetailsPanel {
 	public void switchTo(int levelNum, boolean open) {
 		prevLevel = activeLevel;
 		activeLevel = finite ?
-				new ScoreDetails("STAGE " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum), false, open) :
-				new ScoreDetails("SURVIVAL " + (levelNum+1), levelNum, 12.5f, 440, 1, false, 10f, ScoreData.playerArcadeScore.get(levelNum), false, open);
+				new ScoreDetails("STAGE " + (levelNum+1), levelNum, 12.5f, 420, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum), false, open) :
+				new ScoreDetails(Assets.Strings.endless + " " + (levelNum+1), levelNum, 12.5f, 420, 1, false, 10f, 
+								ScoreData.playerArcadeScore.get(levelNum), false, open);
 		state = STATE_SWITCH;
 		prevOpen = this.open;
 		this.open = open;

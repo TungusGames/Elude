@@ -1,4 +1,4 @@
-package tungus.games.elude;
+package tungus.games.elude.dev;
 
 import java.io.IOException;
 import java.util.HashSet;
