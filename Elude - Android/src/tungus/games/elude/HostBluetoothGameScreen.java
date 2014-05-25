@@ -1,4 +1,4 @@
-package tungus.games.elude.dev;
+package tungus.games.elude;
 
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.GameScreen;

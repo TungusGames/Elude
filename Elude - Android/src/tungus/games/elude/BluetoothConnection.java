@@ -1,4 +1,4 @@
-package tungus.games.elude.dev;
+package tungus.games.elude;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
