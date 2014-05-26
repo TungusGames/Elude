@@ -116,6 +116,8 @@ public class ScoreData {
 		}
 		playerFiniteScore = new ArrayList<FiniteLevelScore>(finiteMedals.size());
 		playerArcadeScore = new ArrayList<ArcadeLevelScore>(arcadeMedals.size());
+		starsEarned = 0;
+		starsMax = 0;
 		int s = finiteMedals.size();
 		for (int i = 0; i < s; i++) {
 			FiniteLevelScore sc = finiteScoreMap.get(finiteLevelnumToID[i]);
