@@ -1,4 +1,4 @@
-package tungus.games.elude;
+package tungus.games.elude.dev;
 
 import java.util.ArrayList;
 import java.util.List;

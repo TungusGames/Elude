@@ -1,4 +1,4 @@
-package tungus.games.elude;
+package tungus.games.elude.dev;
 
 import tungus.games.elude.Elude;
 import android.content.Intent;
