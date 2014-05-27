@@ -83,7 +83,7 @@ public class ScoreDetails {
 			completition.setBounds(STAR_X, (yTop*scale/40f-10.75f+8.85f)*scale, starWidth, starHeight);
 		} else if (!finite && !open) {
 			completition = new Sprite(Assets.stars[3]);
-			completition.setBounds(textX+25, (yTop*scale/40f-10.75f+6.7f)*scale, starWidth, starHeight);
+			completition.setBounds(textX+25, (yTop*scale/40f-10.75f+6.8f)*scale, starWidth, starHeight);
 		} else {
 			completition = null;
 		}
@@ -200,7 +200,7 @@ public class ScoreDetails {
 					} 
 				} else {
 					Assets.font.setScale(1.05f);
-					Assets.font.draw(batch, finite ? "STAGE" : Assets.Strings.endless + " " +(levelNum+1), offsetXPos(textX+SCORE_INDENT*0.8f-(finite?0:20), stateTime, 0, batchingText), 310);
+					Assets.font.draw(batch, (finite ? "STAGE" : Assets.Strings.endless) + " " +(levelNum+1), offsetXPos(textX+SCORE_INDENT*0.8f-(finite?0:20), stateTime, 0, batchingText), 310);
 					Assets.font.draw(batch, finite ? "NOT COMPLETED" : "NOT TRIED YET", offsetXPos(textX, stateTime, 3, batchingText), 270);
 				}
 				Assets.font.setScale(1);

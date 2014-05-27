@@ -8,7 +8,7 @@ import com.badlogic.gdx.Game;
 
 public class Elude extends Game {
 	
-	public static final String VERSION = "V0.1.2";
+	public static final String VERSION = "V0.1.3";
 	public static final float VIEW_RATIO = 800f/480f;
 	private FPSLogger fps;
 		
