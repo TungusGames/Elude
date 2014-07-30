@@ -62,12 +62,19 @@ public class Main {
 				List<EnemyType> e = new ArrayList<>();
 				List<PickupType> p = new ArrayList<>();
 				while (sc.hasNext()) {
+					int mul = sc.hasNextInt() ? sc.nextInt() : 1;
 					String str = sc.next();
 					try {
-						e.add(EnemyType.valueOf(str.toUpperCase()));
+						EnemyType et = EnemyType.valueOf(str.toUpperCase());
+						for (int i = 0; i < mul; i++) {
+							e.add(et);
+						}						
 					} catch (IllegalArgumentException ex) {
 						try {
-							p.add(PickupType.valueOf(str.toUpperCase()));
+							PickupType pt = PickupType.valueOf(str.toUpperCase());
+							for (int i = 0; i < mul; i++) {
+								p.add(pt);
+							}
 						} catch (IllegalArgumentException ex2) {
 							if (str.equals("wavestart")) {
 								waves.add(new Wave(t, n, e, p));

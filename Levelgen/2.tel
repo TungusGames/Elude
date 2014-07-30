@@ -2,10 +2,9 @@
 50 65
 0 0 0 0
 wavestart 0 0
-machinegunner machinegunner machinegunner machinegunner machinegunner
+5 machinegunner
 wavestart 30 1
-machinegunner machinegunner machinegunner machinegunner machinegunner
+5 machinegunner 2 kamikaze
 wavestart -1 0
-machinegunner machinegunner machinegunner machinegunner machinegunner
-machinegunner machinegunner machinegunner machinegunner machinegunner
+10 machinegunner
 standing

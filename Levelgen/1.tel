@@ -4,5 +4,6 @@
 wavestart 0 0
 machinegunner
 wavestart -1 0
-machinegunner machinegunner
+2 machinegunner
+3 standing
 end
