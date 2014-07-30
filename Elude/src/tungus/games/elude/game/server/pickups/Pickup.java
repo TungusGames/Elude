@@ -6,8 +6,8 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Pickup {
@@ -55,7 +55,7 @@ public abstract class Pickup {
 	}
 	
 	protected World world;
-	public Rectangle collisionBounds;
+	public Circle collisionBounds;
 	private float lifeTimeLeft;
 	private float fullLifeTime;
 	private boolean pickedUp = false;
@@ -65,7 +65,7 @@ public abstract class Pickup {
 	
 	public Pickup(World world, Vector2 pos, PickupType type, float lifeTime) {
 		this.world = world;
-		collisionBounds = new Rectangle(pos.x-DRAW_SIZE/2, pos.y-DRAW_SIZE/2, DRAW_SIZE, DRAW_SIZE);
+		collisionBounds = new Circle(pos, DRAW_SIZE/2);
 		fullLifeTime = lifeTimeLeft = lifeTime;
 		this.type = type;
 	}

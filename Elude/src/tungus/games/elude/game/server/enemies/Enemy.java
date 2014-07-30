@@ -7,19 +7,20 @@ import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Enemy {
 	
 	public static enum EnemyType {
-		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	new float[]{0.1f,1,0.1f,1}), 
-		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f,new float[]{1,1,0.2f,1}), 
-		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f,new float[]{0.25f,0.25f,0.8f,1}), 
-		STANDING_FAST(Assets.standingEnemyRed,  0.6f, 1, 	new float[]{0.6f, 0.1f, 0.1f, 1f}), 
-		MOVING_MATRIX(Assets.movingEnemyGreen,  0.8f, 1.05f,new float[]{0.4f, 1f, 0.25f, 1f}),
-		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f,new float[]{0.9f, 0.8f, 0.2f, 1f}),
-		MACHINEGUNNER(Assets.sharpshooter,		1.05f,0.95f,new float[]{0.9f, 0.8f, 0.2f, 1f}); //TODO graphics
+		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	 new float[]{0.1f,1,0.1f,1}), 
+		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f, new float[]{1,1,0.2f,1}), 
+		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1}), 
+		STANDING_FAST(Assets.standingEnemyRed,  0.6f, 1, 	 new float[]{0.6f, 0.1f, 0.1f, 1f}), 
+		MOVING_MATRIX(Assets.movingEnemyGreen,  0.8f, 1.05f, new float[]{0.4f, 1f, 0.25f, 1f}),
+		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
+		MACHINEGUNNER(Assets.sharpshooter,		1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
+		SHIELDED	 (Assets.shielded,			1.15f,1.15f, new float[]{0.7f, 0.5f, 0.4f, 1f});//TODO graphics
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -29,9 +30,7 @@ public abstract class Enemy {
 		EnemyType(TextureRegion t, float w, float h, float[] c) {
 			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2;
 		}
-	}
-	
-	public static final float MAX_GRAPHIC_TURNSPEED = 540;
+	} 
 	
 	public static final Enemy fromType(World w, EnemyType t) {
 		Enemy e = null;
@@ -57,6 +56,8 @@ public abstract class Enemy {
 		case MACHINEGUNNER:
 			e = new MachineGunner(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
+		case SHIELDED:
+			e = new Shielded(w.randomPosOnOuterRect(new Vector2(), 1), w);
 		default:
 			throw new IllegalArgumentException("Unknown enemy type: " + t);
 		}
@@ -76,6 +77,9 @@ public abstract class Enemy {
 		return r;
 	}
 	
+	public static final float DEFAULT_TURNSPEED = 540;
+	protected float turnSpeed = DEFAULT_TURNSPEED;
+	
 	protected final World world;
 	protected RocketType rocketType;
 	
@@ -84,7 +88,7 @@ public abstract class Enemy {
 	public float rot = 0;
 	public final EnemyType type;
 	
-	public final Rectangle collisionBounds;
+	public final Circle collisionBounds;
 	
 	public float hp;
 	
@@ -99,33 +103,45 @@ public abstract class Enemy {
 		this.world = w;
 		vel = new Vector2(0,0);
 		this.hp = hp;
-		collisionBounds = new Rectangle(pos.x - boundSize/2, pos.y - boundSize/2, boundSize, boundSize);
+		collisionBounds = new Circle(pos, boundSize/2);
 	}
 	
-	public final boolean update(float deltaTime) {
+	public boolean update(float deltaTime) {
 		timeSinceShot += deltaTime;
 		boolean b = aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		collisionBounds.x = pos.x - collisionBounds.width/2;
-		collisionBounds.y = pos.y - collisionBounds.height/2;
+		//collisionBounds.x = pos.x - collisionBounds.width/2;
+		//collisionBounds.y = pos.y - collisionBounds.height/2;
+		collisionBounds.x = pos.x;
+		collisionBounds.y = pos.y;
 		float diff = turnGoal - rot;
 		if (diff < -180)
 			diff += 360;
 		if (diff > 180)
 			diff -= 360;
-		if (Math.abs(diff) < MAX_GRAPHIC_TURNSPEED * deltaTime)
+		if (Math.abs(diff) < turnSpeed * deltaTime)
 			rot = turnGoal;
 		else
-			rot += Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime;
+			rot += Math.signum(diff) * turnSpeed * deltaTime;
 		return b;
 	}
 	
 	protected abstract boolean aiUpdate(float deltaTime);
 	
-	public void kill(Rocket r) {
+	public void killByRocket(Rocket r) {
 		world.effects.add(RenderInfoPool.newDebris(pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN, type.ordinal()));
 		world.enemies.remove(this);
 		world.waveLoader.onEnemyDead(this);
+	}
+	
+	public boolean isHitBy(Rocket r) {
+		if (collisionBounds.overlaps(r.bounds)) {
+			if ((hp -= r.dmg) <= 0) {
+				killByRocket(r);
+			}
+			return true;
+		}
+		return false;
 	}
 	
 }

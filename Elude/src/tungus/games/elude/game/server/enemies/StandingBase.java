@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class StandingBase extends Enemy {
 	
-	protected static final float DEFAULT_COLLIDER_SIZE = 0.5f;	
+	protected static final float DEFAULT_COLLIDER_SIZE = 0.6f;	
 	protected static final float DEFAULT_SPEED = 4.5f;
 	protected static final float DEFAULT_HP = 4;
 		
@@ -18,16 +18,14 @@ public abstract class StandingBase extends Enemy {
 	private boolean reachedTarget = false;
 		
 	private final float speed;
-	private final boolean facePlayer;
 	
 	public StandingBase(Vector2 pos, EnemyType t, RocketType r, World w) {
-		this(pos, t, r, w, DEFAULT_HP, DEFAULT_SPEED, DEFAULT_COLLIDER_SIZE, true);
+		this(pos, t, r, w, DEFAULT_HP, DEFAULT_SPEED, DEFAULT_COLLIDER_SIZE);
 	}
 	
-	public StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float hp, float s, float collSize, boolean f) {
+	public StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float hp, float s, float collSize) {
 		super(pos, t, collSize, hp, w, r);
 		speed = s;
-		facePlayer = f;
 		targetPos = new Vector2();
 		getInnerTargetPos(pos, targetPos);
 		
@@ -49,9 +47,7 @@ public abstract class StandingBase extends Enemy {
 			if (standingUpdate(deltaTime)) {
 				return true;
 			}
-			if (facePlayer) {
-				turnGoal = tempVector.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
-			}
+			turnGoal = tempVector.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
 		}
 		return false;
 	}

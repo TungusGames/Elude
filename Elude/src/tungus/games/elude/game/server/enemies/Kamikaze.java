@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Kamikaze extends StandingBase {
 	
-	private static final float COLLIDER_SIZE = 0.6f;
+	private static final float COLLIDER_SIZE = 0.7f;
 	
 	private static final float SPEED = 4f;
 	private static final float STANDING_TIME = 3f;
@@ -19,7 +19,8 @@ public class Kamikaze extends StandingBase {
 	private float timeStood = 0;
 	
 	public Kamikaze(Vector2 pos, World w) {
-		super(pos, EnemyType.KAMIKAZE, RocketType.FAST_TURNING, w, StandingBase.DEFAULT_HP, SPEED, COLLIDER_SIZE, false);
+		super(pos, EnemyType.KAMIKAZE, RocketType.FAST_TURNING, w, StandingBase.DEFAULT_HP, SPEED, COLLIDER_SIZE);
+		turnSpeed = 0;
 	}
 	
 	@Override
@@ -33,7 +34,7 @@ public class Kamikaze extends StandingBase {
 	}
 
 	private void explode() {
-		kill(null);
+		killByRocket(null);
 		
 		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal())); //TODO pool
 		

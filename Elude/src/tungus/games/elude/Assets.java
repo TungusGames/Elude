@@ -42,6 +42,8 @@ public class Assets {
 	public static TextureRegion movingEnemyGreen;
 	public static TextureRegion kamikaze;
 	public static TextureRegion sharpshooter;
+	public static TextureRegion machinegunner;
+	public static TextureRegion shielded;
 	
 	public static TextureRegion hpBonus;
 	public static TextureRegion speedBonus;
@@ -98,6 +100,9 @@ public class Assets {
 		movingEnemyGreen = atlas.findRegion("MovingEnemyGreen");
 		kamikaze = atlas.findRegion("kamikaze");
 		sharpshooter = atlas.findRegion("sharpshooter");
+		machinegunner = atlas.findRegion("machinegunner");
+		shielded = atlas.findRegion("shielded");
+		
 		hpBonus = atlas.findRegion("hpbonus");
 		speedBonus = atlas.findRegion("speedbonus");
 		shieldBonus = atlas.findRegion("shieldbonus");

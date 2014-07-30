@@ -8,7 +8,8 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Rocket {
@@ -59,7 +60,7 @@ public abstract class Rocket {
 	
 	public Vector2 pos;
 	public Vector2 vel;
-	public Rectangle bounds;
+	public Circle bounds;
 	public final RocketType type;
 	public final int id;
 	
@@ -80,7 +81,7 @@ public abstract class Rocket {
 		this.life = life;
 		this.pos = pos;
 		this.world = world;
-		this.bounds = new Rectangle(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
+		this.bounds = new Circle(pos, ROCKET_SIZE/2);
 		this.dmg = dmg;
 		this.target = target;
 		this.id = nextID++;
@@ -110,18 +111,14 @@ public abstract class Rocket {
 		int size = world.enemies.size();
 		boolean stillIn = false;
 		for (int i = 0; i < size; i++) {
-			if (world.enemies.get(i).collisionBounds.overlaps(bounds)) {
-				if (outOfOrigin) {
-					if ((world.enemies.get(i).hp -= dmg) <= 0)
-						world.enemies.get(i).kill(this);
-					//world.explosion.play();
-					kill();
-					return true;
-				} else {
-					if (world.enemies.get(i).equals(origin)) {
-						stillIn = true;
-					}
-				}
+			Enemy e = world.enemies.get(i);
+			if (!outOfOrigin && e == origin) {
+				stillIn = (origin.collisionBounds.overlaps(bounds));
+				continue;
+			}
+			if (e.isHitBy(this)) {
+				kill();
+				return true;
 			}
 		}
 		if (!stillIn) {
@@ -130,7 +127,7 @@ public abstract class Rocket {
 		
 		size = world.vessels.size();
 		for (int i = 0; i < size; i++) {
-			if (world.vessels.get(i).bounds.overlaps(bounds)) {
+			if (Intersector.overlaps(world.vessels.get(i).bounds, bounds)) {
 				if (!world.vessels.get(i).shielded) {
 					world.effects.add(RenderInfoPool.newEffect(0f, 0f, EffectType.CAMSHAKE.ordinal())); //TODO pool
 					world.vessels.get(i).hp -= dmg;

@@ -2,8 +2,8 @@ package tungus.games.elude.game.server;
 
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Vessel {
@@ -12,7 +12,7 @@ public class Vessel {
 	public static final float HALF_WIDTH = DRAW_WIDTH / 2;
 	public static final float DRAW_HEIGHT = 0.945f;
 	public static final float HALF_HEIGHT = DRAW_HEIGHT / 2;
-	public static final float COLLIDER_SIZE = 0.6f;		//Dimensions of the bounding box for collisions
+	public static final float COLLIDER_SIZE = 0.7f;		//Dimensions of the bounding box for collisions
 	public static final float COLLIDER_HALF = COLLIDER_SIZE / 2;
 	public static final float SHIELD_SIZE = 1.3f;		//drawn size
 	public static final float SHIELD_HALF_SIZE = SHIELD_SIZE / 2;
@@ -28,7 +28,7 @@ public class Vessel {
 	public Vector2 vel;
 	public float rot = 0;
 	
-	public Rectangle bounds;
+	public Circle bounds;
 		
 	public float hp = MAX_HP;
 	public boolean shielded = false;
@@ -43,7 +43,7 @@ public class Vessel {
 		//this.world = world;
 		pos = new Vector2(World.WIDTH / 2, World.HEIGHT / 2);
 		vel = new Vector2(0, 0);
-		bounds = new Rectangle(pos.x - COLLIDER_HALF, pos.y - COLLIDER_HALF, COLLIDER_SIZE, COLLIDER_SIZE);
+		bounds = new Circle(pos, COLLIDER_SIZE/2);
 	}
 	
 	public void update(float deltaTime, Vector2 dir) {
