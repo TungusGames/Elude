@@ -1,54 +1,24 @@
 package tungus.games.elude.game.server.enemies;
 
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.game.server.rockets.StraightRocket;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Sharpshooter extends Enemy {
+public class Sharpshooter extends StandingBase {
 	
 	private static final float COLLIDER_SIZE = 0.7f;
-	
-	private static final float MAX_HP = 4f;
-	private static final float SPEED = 4.5f;
 	private static final float RELOAD = 2f;
-	
-	private static final Vector2 temp = new Vector2();
-	
-	private Vector2 targetPos = new Vector2();
-	private boolean reachedTarget = false;
-	private float timeSinceShot = 0;
-	
+			
 	public Sharpshooter(Vector2 pos, World w) {
-		super(pos, EnemyType.SHARPSHOOTER, COLLIDER_SIZE, MAX_HP, w, RocketType.STRAIGHT);
-		targetPos = new Vector2();
-		getInnerTargetPos(pos, targetPos);
-		
-		vel.set(targetPos).sub(pos).nor().scl(SPEED);
-		turnGoal = vel.angle()-90;
-		rot = turnGoal;
+		super(pos, EnemyType.SHARPSHOOTER, RocketType.STRAIGHT, w, StandingBase.DEFAULT_HP, StandingBase.DEFAULT_SPEED, COLLIDER_SIZE, true);
 	}
 	
 	@Override
-	protected boolean aiUpdate(float deltaTime) {
-		if (!reachedTarget) {
-			if (pos.dst2(targetPos) < SPEED*SPEED*deltaTime*deltaTime) {
-				pos.set(targetPos);
-				reachedTarget = true;
-				vel.set(Vector2.Zero);
-			}
-		} else {
-			timeSinceShot += deltaTime;
-			if (timeSinceShot > RELOAD) 
-			{
-				timeSinceShot -= RELOAD;
-				world.effects.add(RenderInfoPool.newEffect(0, 0, EffectType.LASERSHOT.ordinal()));
-				shootRocket(calcAngle());
-			}
-			turnGoal = temp.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
+	protected boolean standingUpdate(float deltaTime) {
+		if (timeSinceShot > RELOAD) {
+			shootRocket(calcAngle());
 		}
 		return false;
 	}

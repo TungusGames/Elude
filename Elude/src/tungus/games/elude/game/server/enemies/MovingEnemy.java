@@ -1,10 +1,8 @@
 package tungus.games.elude.game.server.enemies;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -39,10 +37,10 @@ public class MovingEnemy extends Enemy {
 	private float timeSinceShot = 0;
 	
 	public MovingEnemy(Vector2 pos, World w) {
-		this(pos, EnemyType.MOVING, w, Assets.movingEnemyBlue, RocketType.SLOW_TURNING, SPEED, RELOAD);
+		this(pos, EnemyType.MOVING, w, RocketType.SLOW_TURNING, SPEED, RELOAD);
 	}
 	
-	public MovingEnemy(Vector2 pos, EnemyType t, World w, TextureRegion tex, RocketType type, float speed, float reload) {
+	public MovingEnemy(Vector2 pos, EnemyType t, World w, RocketType type, float speed, float reload) {
 		super(pos, t, COLLIDER_SIZE, MAX_HP, w, type);
 		this.speed = speed;
 		this.reload = reload;

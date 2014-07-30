@@ -142,7 +142,7 @@ public class WorldRenderer {
 			break;
 		case LASERSHOT:
 			if (Settings.INSTANCE.soundOn) {
-				Assets.laserShot.play(1);
+				Assets.laserShot.play();
 			}
 			break;
 		}

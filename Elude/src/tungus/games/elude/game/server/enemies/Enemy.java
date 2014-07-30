@@ -7,7 +7,6 @@ import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -46,10 +45,10 @@ public abstract class Enemy {
 			e = new Kamikaze(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		case STANDING_FAST:
-			e = new StandingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.STANDING_FAST, w, Assets.standingEnemyRed, RocketType.FAST_TURNING, 4, 1.4f);
+			e = new StandingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.STANDING_FAST, w, RocketType.FAST_TURNING, 4, 1.4f);
 			break;
 		case MOVING_MATRIX:
-			e = new MovingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, Assets.movingEnemyGreen, RocketType.LOWGRAV, 2.5f, 2);
+			e = new MovingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), EnemyType.MOVING_MATRIX, w, RocketType.LOWGRAV, 2.5f, 2);
 			break;
 		case SHARPSHOOTER:
 			e = new Sharpshooter(w.randomPosOnOuterRect(new Vector2(), 1), w);
@@ -60,41 +59,14 @@ public abstract class Enemy {
 		return e;
 	}
 	
-	protected final Vector2 getInnerTargetPos(Vector2 pos, Vector2 targetPos) {
-		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
-		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
-		
-		float move = targetPos.x - pos.x;							// Get how much we can decrease the movement without
-		if (pos.x < World.EDGE || pos.x > World.WIDTH-World.EDGE) {					 	// 		getting out of the "edge" frame
-			float minMove = 0;
-			if (pos.x < World.EDGE)
-				minMove = World.EDGE - pos.x;
-			else if (pos.x > World.WIDTH - World.EDGE) {
-				minMove = World.WIDTH - World.EDGE - pos.x;
-			}
-			move -= minMove;
-		}
-		targetPos.x -= MathUtils.random(move);						// Decrease the movement by up to this value
-		
-		move = targetPos.y - pos.y;									// Do the same for Y
-		if (pos.y < World.EDGE || pos.y > World.HEIGHT-World.EDGE) {
-			float minMove = 0;
-			if (pos.y < World.EDGE)
-				minMove = World.EDGE - pos.y;
-			else if (pos.y > World.HEIGHT - World.EDGE) {
-				minMove = World.HEIGHT - World.EDGE - pos.y;
-			}
-			move -= minMove;
-		}
-		targetPos.y -= MathUtils.random(move);
-		return targetPos;
-	}
+	
 	
 	protected final Rocket shootRocket(Vector2 dir) {
 		return shootRocket(rocketType, dir);
 	}
 	
 	protected final Rocket shootRocket(RocketType t, Vector2 dir) {
+		timeSinceShot = 0;
 		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, world.vessels.get(0), world);
 		world.rockets.add(r);
 		return r;
@@ -113,6 +85,7 @@ public abstract class Enemy {
 	public float hp;
 	
 	protected float turnGoal;
+	protected float timeSinceShot = 0f;
 		
 	public Enemy(Vector2 pos, EnemyType t, float boundSize, float hp, World w,
 				 RocketType type) {
@@ -126,6 +99,7 @@ public abstract class Enemy {
 	}
 	
 	public final boolean update(float deltaTime) {
+		timeSinceShot += deltaTime;
 		boolean b = aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		collisionBounds.x = pos.x - collisionBounds.width/2;

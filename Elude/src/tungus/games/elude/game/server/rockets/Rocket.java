@@ -101,7 +101,7 @@ public abstract class Rocket {
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
 		bounds.x = pos.x - ROCKET_SIZE / 2;
 		bounds.y = pos.y - ROCKET_SIZE / 2;
-		if (!world.outerBounds.contains(pos)) {
+		if (!World.outerBounds.contains(pos)) {
 			if (hitWall(pos.x < 0 || pos.x > World.WIDTH)) {
 				return true;
 			}
