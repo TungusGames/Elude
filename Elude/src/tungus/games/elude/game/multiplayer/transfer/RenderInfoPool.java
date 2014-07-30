@@ -13,43 +13,78 @@ import com.badlogic.gdx.math.Vector2;
 
 public class RenderInfoPool {
 
-	private static SyncPool<ReducedEnemy> enemyPool = new SyncPool<ReducedEnemy>(120) {
-		@Override
-		public synchronized ReducedEnemy newObject() {
-			return new ReducedEnemy();
-		}
-	};
-	private static SyncPool<ReducedPickup> pickupPool = new SyncPool<ReducedPickup>(30) {
-		@Override
-		public synchronized ReducedPickup newObject() {
-			return new ReducedPickup();
-		}
-	};
-	private static SyncPool<ReducedRocket> rocketPool = new SyncPool<ReducedRocket>(240) {
-		@Override
-		public synchronized ReducedRocket newObject() {
-			return new ReducedRocket();
-		}
-	};
-	private static SyncPool<ReducedVessel> vesselPool = new SyncPool<ReducedVessel>() {
-		@Override
-		public synchronized ReducedVessel newObject() {
-			return new ReducedVessel();
-		}
-	};
-	private static SyncPool<Effect> effectPool = new SyncPool<Effect>(60) {
-		@Override
-		public synchronized Effect newObject() {
-			return new Effect();
-		}
-	};
-	private static SyncPool<DebrisEffect> debrisPool = new SyncPool<DebrisEffect>() {
-		@Override
-		public synchronized DebrisEffect newObject() {
-			return new DebrisEffect();
-		}
-	};
+	//Multiplication by 3 because of the three RenderInfos
+	private static final int ENEMY_POOL_SIZE = 3 * 40;
+	private static final int PICKUP_POOL_SIZE = 3 * 10;
+	private static final int ROCKET_POOL_SIZE = 3 * 80;
+	private static final int VESSEL_POOL_SIZE = 3 * 3;
+	private static final int EFFECT_POOL_SIZE = 3 * 20;
+	private static final int DEBRIS_POOL_SIZE = 3 * 10;
 	
+	private static SyncPool<ReducedEnemy> enemyPool;
+	private static SyncPool<ReducedPickup> pickupPool;
+	private static SyncPool<ReducedRocket> rocketPool;
+	private static SyncPool<ReducedVessel> vesselPool;
+	private static SyncPool<Effect> effectPool;
+	private static SyncPool<DebrisEffect> debrisPool;
+	
+	public static void init() {
+		enemyPool = new SyncPool<ReducedEnemy>(ENEMY_POOL_SIZE) {
+			@Override
+			public synchronized ReducedEnemy newObject() {
+				return new ReducedEnemy();
+			}
+		};
+		pickupPool = new SyncPool<ReducedPickup>(PICKUP_POOL_SIZE) {
+			@Override
+			public synchronized ReducedPickup newObject() {
+				return new ReducedPickup();
+			}
+		};
+		rocketPool = new SyncPool<ReducedRocket>(ROCKET_POOL_SIZE) {
+			@Override
+			public synchronized ReducedRocket newObject() {
+				return new ReducedRocket();
+			}
+		};
+		vesselPool = new SyncPool<ReducedVessel>(VESSEL_POOL_SIZE) {
+			@Override
+			public synchronized ReducedVessel newObject() {
+				return new ReducedVessel();
+			}
+		};
+		effectPool = new SyncPool<Effect>(EFFECT_POOL_SIZE) {
+			@Override
+			public synchronized Effect newObject() {
+				return new Effect();
+			}
+		};
+		debrisPool = new SyncPool<DebrisEffect>(DEBRIS_POOL_SIZE) {
+			@Override
+			public synchronized DebrisEffect newObject() {
+				return new DebrisEffect();
+			}
+		};
+		//Filling up
+		for (int i = 0; i < ENEMY_POOL_SIZE; i++) {
+			enemyPool.free(enemyPool.obtain());
+		}
+		for (int i = 0; i < PICKUP_POOL_SIZE; i++) {
+			pickupPool.free(pickupPool.obtain());
+		}
+		for (int i = 0; i < ROCKET_POOL_SIZE; i++) {
+			rocketPool.free(rocketPool.obtain());
+		}
+		for (int i = 0; i < VESSEL_POOL_SIZE; i++) {
+			vesselPool.free(vesselPool.obtain());
+		}
+		for (int i = 0; i < EFFECT_POOL_SIZE; i++) {
+			effectPool.free(effectPool.obtain());
+		}
+		for (int i = 0; i < DEBRIS_POOL_SIZE; i++) {
+			debrisPool.free(debrisPool.obtain());
+		}
+	}
 	
 	public static ReducedEnemy newEnemy(Vector2 p, float r, int t) {
 		return newEnemy(p.x, p.y, r, t);

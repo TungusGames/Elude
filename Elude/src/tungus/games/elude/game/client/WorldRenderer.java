@@ -201,7 +201,9 @@ public class WorldRenderer {
 		batch.draw(t, v.x-Vessel.HALF_WIDTH, v.y-Vessel.HALF_HEIGHT, 
 				Vessel.HALF_WIDTH, Vessel.HALF_HEIGHT, Vessel.DRAW_WIDTH, Vessel.DRAW_HEIGHT, 1, 1, v.angle);
 		if (v.shieldAlpha > 0) {
+			batch.setColor(1, 1, 1, v.shieldAlpha);
 			batch.draw(Assets.shield, v.x-Vessel.SHIELD_HALF_SIZE, v.y-Vessel.SHIELD_HALF_SIZE, Vessel.SHIELD_SIZE, Vessel.SHIELD_SIZE);
+			batch.setColor(1, 1, 1, 1);
 		}
 		if (updateParticles) {
 			modVesselTrails(tmp.set(v.x-vesselPositions[i].x, v.y-vesselPositions[i].y), i, v);

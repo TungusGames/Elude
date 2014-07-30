@@ -1,10 +1,13 @@
 package tungus.games.elude;
 
+import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.mainmenu.MainMenu;
 import tungus.games.elude.util.log.FPSLogger;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Elude extends Game {
 	
@@ -14,9 +17,14 @@ public class Elude extends Game {
 		
 	@Override
 	public void create () {
+		long oldTime = TimeUtils.millis();
 		Assets.load();
 		ScoreData.load();
+		RenderInfoPool.init();
 		setScreen(new MainMenu(this));
+		long newTime = TimeUtils.millis();
+		float deltaTime = (newTime-oldTime) / 1000f;
+		Gdx.app.log("Elude", "Loading time: " + deltaTime);
 		//setScreen(GameScreen.newSinglePlayer(this, 7, true)); // for quick debugging
 		fps = new FPSLogger("FPSLogger", "Render thread FPS: ");
 	}
