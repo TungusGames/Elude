@@ -81,6 +81,9 @@ public abstract class Enemy {
 	public static final float DEFAULT_TURNSPEED = 540;
 	protected float turnSpeed = DEFAULT_TURNSPEED;
 	
+	private static int nextID = 0;
+	public int id = nextID++;
+	
 	protected final World world;
 	protected RocketType rocketType;
 	
@@ -91,6 +94,7 @@ public abstract class Enemy {
 	
 	public final Circle collisionBounds;
 	
+	public final float maxHp;
 	public float hp;
 	
 	protected float turnGoal;
@@ -103,7 +107,7 @@ public abstract class Enemy {
 		this.pos = pos;
 		this.world = w;
 		vel = new Vector2(0,0);
-		this.hp = hp;
+		this.hp = maxHp = hp;
 		collisionBounds = new Circle(pos, boundSize/2);
 	}
 	

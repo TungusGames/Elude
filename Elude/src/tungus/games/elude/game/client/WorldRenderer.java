@@ -43,9 +43,12 @@ public class WorldRenderer {
 	private static final Vector2 tmp = new Vector2();
 
 	private SpriteBatch batch;
+	
 	private List<PooledEffect> particles = new LinkedList<PooledEffect>();
 	private IntMap<PooledEffect> rockets = new IntMap<PooledEffect>(80);
 	private IntMap<ReducedRocket> rocketsInFrame = new IntMap<ReducedRocket>(80);
+	private IntMap<EnemyHealthbar> enemyHps = new IntMap<EnemyHealthbar>(50);
+	private IntMap<ReducedEnemy> enemiesInFrame = new IntMap<ReducedEnemy>(50);
 	
 	private Vector2[] vesselPositions = null;
 	private PooledEffect[] vesselTrails = null;
@@ -69,6 +72,7 @@ public class WorldRenderer {
 		for(int i = 0; i < size; i++) {
 			drawEnemy(r.enemies.get(i));
 		}
+		drawEnemyHPs(r.enemies, deltaTime);
 
 		size = r.pickups.size();
 		for(int i = 0; i < size; i++) {
@@ -147,6 +151,35 @@ public class WorldRenderer {
 			break;
 		}
 	}
+	
+	private void drawEnemyHPs(List<ReducedEnemy> l, float deltaTime) {
+		// Make a map of active enemies
+		enemiesInFrame.clear();
+		int size = l.size();
+		for (int i = 0; i < size; i++) {
+			ReducedEnemy e = l.get(i);
+			enemiesInFrame.put(e.id, e);
+		}
+		// Update and draw HP bars from previous frame, remove any that finish
+		IntMap.Entries<EnemyHealthbar> h = enemyHps.entries();
+		while (h.hasNext) {
+			IntMap.Entry<EnemyHealthbar> hpEntry = h.next();
+			if (enemiesInFrame.containsKey(hpEntry.key)) {
+				// If it was in the new frame, draw and remove from the new map
+				//drawHpBar(enemiesInFrame.remove(hpEntry.key).hp, hpEntry.value);
+				ReducedEnemy e = enemiesInFrame.remove(hpEntry.key);
+				hpEntry.value.draw(batch, e.hp, deltaTime, e.x, e.y);
+			} else if (hpEntry.value.drawDead(batch, deltaTime)) {  // If not, draw and check if it should be removed
+				h.remove();
+			}
+		}
+		// Only the all-new enemies remain in the new frame's map, add their HPs - no need to draw yet
+		IntMap.Entries<ReducedEnemy> enemyEntries = enemiesInFrame.entries();
+		while (enemyEntries.hasNext) {
+			ReducedEnemy e = enemyEntries.next().value;
+			enemyHps.put(e.id, new EnemyHealthbar());
+		}
+	}
 
 	private void drawRockets(RenderInfo r) {
 		// Make a map of active rockets
@@ -200,6 +233,8 @@ public class WorldRenderer {
 		TextureRegion t = (v.id == vesselID) ? Assets.vessel : Assets.vesselRed;
 		batch.draw(t, v.x-Vessel.HALF_WIDTH, v.y-Vessel.HALF_HEIGHT, 
 				Vessel.HALF_WIDTH, Vessel.HALF_HEIGHT, Vessel.DRAW_WIDTH, Vessel.DRAW_HEIGHT, 1, 1, v.angle);
+		//batch.draw(Assets.smallCircle, v.x-Vessel.COLLIDER_HALF, v.y-Vessel.COLLIDER_HALF, 
+		//		Vessel.COLLIDER_HALF, Vessel.COLLIDER_HALF, Vessel.COLLIDER_SIZE, Vessel.COLLIDER_SIZE, 1, 1, v.angle);
 		if (v.shieldAlpha > 0) {
 			batch.setColor(1, 1, 1, v.shieldAlpha);
 			batch.draw(Assets.shield, v.x-Vessel.SHIELD_HALF_SIZE, v.y-Vessel.SHIELD_HALF_SIZE, Vessel.SHIELD_SIZE, Vessel.SHIELD_SIZE);

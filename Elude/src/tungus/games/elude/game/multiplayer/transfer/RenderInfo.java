@@ -19,6 +19,8 @@ public class RenderInfo extends TransferData {
 		private static final long serialVersionUID = -7557852638993394399L;
 		public float x, y;
 		public float rot;
+		public float hp;
+		public int id;
 		public int typeOrdinal;
 	}
 	public static class ReducedPickup implements Serializable {
@@ -79,7 +81,7 @@ public class RenderInfo extends TransferData {
 		int s = w.enemies.size();
 		for (int i = 0; i < s; i++) {
 			Enemy e = w.enemies.get(i);
-			enemies.add(RenderInfoPool.newEnemy(e.pos, e.rot, e.type.ordinal()));
+			enemies.add(RenderInfoPool.newEnemy(e.pos, e.rot, e.type.ordinal(), e.hp / e.maxHp, e.id));
 		}
 		pickups.clear();
 		s = w.pickups.size();
@@ -118,7 +120,7 @@ public class RenderInfo extends TransferData {
 		int s = enemies.size();
 		for (int i = 0; i < s; i++) {
 			ReducedEnemy e = enemies.get(i);
-			other.enemies.add(RenderInfoPool.newEnemy(e.x, e.y, e.rot, e.typeOrdinal));
+			other.enemies.add(RenderInfoPool.newEnemy(e.x, e.y, e.rot, e.typeOrdinal, e.hp, e.id));
 		}
 		other.pickups.clear();
 		s = pickups.size();

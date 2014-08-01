@@ -73,9 +73,7 @@ public class GameScreen extends BaseScreen {
 	private OrthographicCamera fontCam;
 	private float gameAlpha;
 		
-	private final Vector2 healthbarFromTopleft;
-	private final float healthbarFullLength;
-	private final float healthbarWidth;
+	private final PlayerHealthbar healthbar;
 	private final Rectangle pauseButton;
 	
 	private final float FRUSTUM_WIDTH;
@@ -139,22 +137,32 @@ public class GameScreen extends BaseScreen {
 		super(game);
 		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
+		
 		this.finite = finite;
 		this.levelNum = levelNum;
 		this.connection = connection;
 		this.vesselID = clientID;
+		
 		menus = new AbstractIngameMenu[]{new PauseMenu(), new GameOverMenu(), new LevelCompleteMenu(levelNum, finite)};
 		renderer = new WorldRenderer(clientID);
 		uiBatch = new SpriteBatch();
+		
 		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
 		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
-		healthbarWidth = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
-		healthbarFromTopleft = new Vector2(healthbarWidth, 2*healthbarWidth);
+		
+		Rectangle hb = new Rectangle();
+		hb.height = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
+		hb.x = hb.height;
+		hb.y = FRUSTUM_HEIGHT - 2 * hb.height;
+		
 		pauseButton = new Rectangle();
-		pauseButton.width = pauseButton.height = 2.5f*healthbarWidth;
+		pauseButton.width = pauseButton.height = 2.5f*hb.height;
 		pauseButton.y = FRUSTUM_HEIGHT - 0.25f - pauseButton.height;
 		pauseButton.x = FRUSTUM_WIDTH - 0.25f - pauseButton.width;
-		healthbarFullLength = FRUSTUM_WIDTH - 2*healthbarFromTopleft.x - 0.5f - pauseButton.width;
+		
+		hb.width = FRUSTUM_WIDTH - 2*hb.x - 0.5f - pauseButton.width;
+		healthbar = new PlayerHealthbar(hb);
+		
 		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
 		uiCam.update();
@@ -265,14 +273,7 @@ public class GameScreen extends BaseScreen {
 		for (int i = 0; i < controls.size(); i++) {
 			controls.get(i).draw(uiBatch, gameAlpha);
 		}
-		float hpPerMax = render.hp[vesselID];
-		if (hpPerMax > 0) {
-			uiBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f*gameAlpha);
-			uiBatch.draw(Assets.whiteRectangle, healthbarFromTopleft.x, FRUSTUM_HEIGHT-healthbarFromTopleft.y, 
-								hpPerMax * healthbarFullLength, healthbarWidth);
-		}
-		
-		uiBatch.setColor(1,1,1,gameAlpha);
+		healthbar.draw(uiBatch, render.hp[vesselID], deltaTime, gameAlpha);
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
 		

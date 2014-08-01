@@ -10,7 +10,7 @@ public abstract class StandingBase extends Enemy {
 	
 	protected static final float DEFAULT_COLLIDER_SIZE = 0.6f;	
 	protected static final float DEFAULT_SPEED = 4.5f;
-	protected static final float DEFAULT_HP = 4;
+	protected static final float DEFAULT_HP = 7;
 		
 	private static Vector2 tempVector = new Vector2();
 	

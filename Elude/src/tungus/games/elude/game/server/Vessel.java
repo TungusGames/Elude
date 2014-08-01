@@ -86,8 +86,8 @@ public class Vessel {
 				else
 					rot += Math.signum(diff) * MAX_GRAPHIC_TURNSPEED * deltaTime;
 			}
-			bounds.x = pos.x - COLLIDER_HALF;								// Update the bounds 
-			bounds.y = pos.y - COLLIDER_HALF;
+			bounds.x = pos.x;								// Update the bounds 
+			bounds.y = pos.y;
 		}	
 	}
 	
