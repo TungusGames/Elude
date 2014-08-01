@@ -2,8 +2,25 @@
 50 75
 0 0 0 0
 wavestart 0 0
-machinegunner
+shielded
 wavestart -1 0
-2 machinegunner
-3 standing
+shielded
+wavestart -1 0
+shielded
+wavestart -1 0
+shielded
+wavestart -1 0
+shielded
+wavestart -1 0
+shielded
+wavestart -1 0
+shielded
+wavestart -1 0
+shielded
+wavestart -1 0
+shielded
+wavestart -1 0
+shielded
+wavestart -1 0
+shielded
 end

@@ -26,7 +26,7 @@ public abstract class Rocket {
 		}
 	};
 	
-	public static final float ROCKET_SIZE = 0.2f; // For both collision and drawing
+	public static final float ROCKET_SIZE = 0.1f; // Diameter
 	public static final float DEFAULT_DMG = 3.5f;
 	public static final float DEFAULT_LIFE = 6f;
 	

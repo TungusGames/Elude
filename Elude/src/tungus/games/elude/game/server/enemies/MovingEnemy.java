@@ -106,7 +106,6 @@ public class MovingEnemy extends Enemy {
 			else if (turnSpeed < -MAX_TURNSPEED)
 				turnSpeed = -MAX_TURNSPEED;
 			vel.rotate(turnSpeed * deltaTime);
-			turnGoal = vel.angle()-90;
 			timeSinceShot += deltaTime;
 			if (turningRight && turnSpeed > 0 || !turningRight && turnSpeed < 0) {
 				turnInOneDir = 0;

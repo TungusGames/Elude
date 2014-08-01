@@ -20,7 +20,7 @@ public abstract class Enemy {
 		MOVING_MATRIX(Assets.movingEnemyGreen,  0.8f, 1.05f, new float[]{0.4f, 1f, 0.25f, 1f}),
 		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
 		MACHINEGUNNER(Assets.sharpshooter,		1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
-		SHIELDED	 (Assets.shielded,			1.15f,1.15f, new float[]{0.7f, 0.5f, 0.4f, 1f});//TODO graphics
+		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f});//TODO graphics
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -58,6 +58,7 @@ public abstract class Enemy {
 			break;
 		case SHIELDED:
 			e = new Shielded(w.randomPosOnOuterRect(new Vector2(), 1), w);
+			break;
 		default:
 			throw new IllegalArgumentException("Unknown enemy type: " + t);
 		}
@@ -114,6 +115,7 @@ public abstract class Enemy {
 		//collisionBounds.y = pos.y - collisionBounds.height/2;
 		collisionBounds.x = pos.x;
 		collisionBounds.y = pos.y;
+		turnGoal = calcTurnGoal();
 		float diff = turnGoal - rot;
 		if (diff < -180)
 			diff += 360;
@@ -124,6 +126,10 @@ public abstract class Enemy {
 		else
 			rot += Math.signum(diff) * turnSpeed * deltaTime;
 		return b;
+	}
+	
+	protected float calcTurnGoal() {
+		return vel.angle()-90;
 	}
 	
 	protected abstract boolean aiUpdate(float deltaTime);

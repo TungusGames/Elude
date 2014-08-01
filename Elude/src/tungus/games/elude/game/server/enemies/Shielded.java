@@ -1,9 +1,12 @@
 package tungus.games.elude.game.server.enemies;
 
+import java.util.Iterator;
+
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
@@ -11,26 +14,28 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Shielded extends StandingBase {
 	private static final float RELOAD = 2;
-	private static final float OUTER_R = 0.575f;
+	private static final float OUTER_R = EnemyType.SHIELDED.halfWidth;
 	private static final float INNER_R = OUTER_R / 2;
-	private static final float TURNSPEED = 100; // Degrees per second
+	private static final float POS_FROM_CIRCLE_MIDDLE = OUTER_R / 4;
+	private static final float TURNSPEED = 50; // Degrees per second
 	
 	private static final Vector2 t = new Vector2();
 	
 	private final Circle in, out;
 	
 	public Shielded(Vector2 pos, World w) {
-		super(pos, EnemyType.STANDING, RocketType.SLOW_TURNING, w);
-		turnSpeed = TURNSPEED; // Modify value that is only used for graphics for other enemy types
+		//super(pos, EnemyType.SHIELDED, RocketType.SLOW_TURNING, w);
+		super(pos, EnemyType.SHIELDED, RocketType.SLOW_TURNING, w, StandingBase.DEFAULT_HP, StandingBase.DEFAULT_SPEED, OUTER_R*2);
+		turnSpeed = TURNSPEED; // Modify value that is only used for graphics for other enemy types, more important here
 		in = new Circle(pos, INNER_R);
-		out = collisionBounds;
+		out = new Circle(pos, OUTER_R);
 	}
 	
 	@Override
 	public boolean update(float deltaTime) {
 		boolean b = super.update(deltaTime);
-		in.x = out.x; 
-		in.y = out.y;
+		out.x = in.x = pos.x - MathUtils.cosDeg(rot+90) * POS_FROM_CIRCLE_MIDDLE;
+		out.y = in.y = pos.y - MathUtils.sinDeg(rot+90) * POS_FROM_CIRCLE_MIDDLE;
 		return b;
 	}
 
@@ -44,19 +49,46 @@ public class Shielded extends StandingBase {
 	
 	@Override
 	public boolean isHitBy(Rocket r) {
+		Gdx.app.log("SHIELDED", "POS: " + pos.x + ", " + pos.y + "; C: " + in.x + ", " + in.y + "; ROT: " + rot);
 		if (!out.overlaps(r.bounds))
 			return false;
 		if (in.overlaps(r.bounds)) {
-			killByRocket(r);
+			if ((hp -= r.dmg) <= 0) {
+				killByRocket(r);
+			}
+			Gdx.app.log("SHIELDED", "HIT!");
 			return true;
 		}
-		t.set(in.x, in.y).add(MathUtils.cosDeg(rot+90), MathUtils.sinDeg(rot+90));
+		t.set(in.x, in.y).add(MathUtils.cosDeg(rot/*+90*/), MathUtils.sinDeg(rot/*+90*/));
+		Gdx.app.log("SHIELDED", "SECOND ON LINE: " + t.x + ", " + t.y);
 		if (Intersector.pointLineSide(in.x, in.y, t.x, t.y, r.pos.x, r.pos.y) != -1) {
+			Gdx.app.log("SHIELDED", "HIT!");
 			return true;
 		}
 		if (Intersector.distanceLinePoint(in.x, in.y, t.x, t.y, r.pos.x, r.pos.y) <= r.bounds.radius) {
+			Gdx.app.log("SHIELDED", "HIT!");
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	protected float calcTurnGoal() {
+		return closestRocketAngle() - 90;
+	}
+	
+	private float closestRocketAngle() {
+		Iterator<Rocket> it = world.rockets.iterator();
+		float closestDist2 = World.WIDTH*World.WIDTH;
+		float angle = t.set(world.vessels.get(0).pos).sub(pos).angle();
+		while(it.hasNext()) {
+			Rocket r = it.next();
+			float d2 = t.dst2(pos);
+			if (d2 < closestDist2) {
+				closestDist2 = d2;
+				angle = t.set(r.pos).sub(pos).angle();
+			}
+		}
+		return angle;
 	}
 }

@@ -47,9 +47,18 @@ public abstract class StandingBase extends Enemy {
 			if (standingUpdate(deltaTime)) {
 				return true;
 			}
-			turnGoal = tempVector.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
+			
 		}
 		return false;
+	}
+	
+	@Override
+	protected float calcTurnGoal() {
+		if (reachedTarget) {
+			return tempVector.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
+		} else {
+			return super.calcTurnGoal();
+		}
 	}
 
 	protected abstract boolean standingUpdate(float deltaTime);
