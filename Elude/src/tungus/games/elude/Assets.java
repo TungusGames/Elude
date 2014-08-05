@@ -44,6 +44,7 @@ public class Assets {
 	public static TextureRegion sharpshooter;
 	public static TextureRegion machinegunner;
 	public static TextureRegion shielded;
+	public static TextureRegion orbiter;
 	
 	public static TextureRegion hpBonus;
 	public static TextureRegion speedBonus;
@@ -102,6 +103,7 @@ public class Assets {
 		sharpshooter = atlas.findRegion("sharpshooter");
 		machinegunner = atlas.findRegion("machinegunner");
 		shielded = atlas.findRegion("shielded");
+		orbiter = atlas.findRegion("orbiter");
 		
 		hpBonus = atlas.findRegion("hpbonus");
 		speedBonus = atlas.findRegion("speedbonus");

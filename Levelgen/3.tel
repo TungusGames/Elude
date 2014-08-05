@@ -2,6 +2,14 @@
 35 65
 0 0 0 0
 wavestart 0 0
-standing standing standing
-wavestart -1 1
-standing moving moving moving
+orbiter
+wavestart -1 0
+orbiter orbiter
+wavestart -1 0
+orbiter orbiter
+wavestart -1 0
+orbiter orbiter
+wavestart -1 0
+orbiter orbiter
+wavestart -1 0
+orbiter orbiter

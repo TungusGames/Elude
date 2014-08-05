@@ -64,11 +64,11 @@ public class FiniteLevelLoader extends EnemyLoader {
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
 		super(world, level.hpChance, level.speedChance, level.rocketWipeChance, level.shieldChance, levelNum);
 		this.level = level;
-		Wave w = level.waves.removeFirst();
+		/*Wave w = level.waves.removeFirst();
 		int size = w.enemies.size();
 		for (int i = 0; i < size; i++) {
 			world.enemies.add(Enemy.fromType(world, w.enemies.get(i)));
-		}
+		}*/
 	}
 	
 	@Override

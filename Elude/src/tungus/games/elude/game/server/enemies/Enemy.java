@@ -19,8 +19,9 @@ public abstract class Enemy {
 		STANDING_FAST(Assets.standingEnemyRed,  0.6f, 1, 	 new float[]{0.6f, 0.1f, 0.1f, 1f}), 
 		MOVING_MATRIX(Assets.movingEnemyGreen,  0.8f, 1.05f, new float[]{0.4f, 1f, 0.25f, 1f}),
 		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
-		MACHINEGUNNER(Assets.sharpshooter,		1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
-		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f});//TODO graphics
+		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}),
+		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}),
+		ORBITER		 (Assets.orbiter,			1.4f, 0.7f,  new float[]{0.55f,0.7f, 0.1f, 1f});			
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -58,6 +59,9 @@ public abstract class Enemy {
 			break;
 		case SHIELDED:
 			e = new Shielded(w.randomPosOnOuterRect(new Vector2(), 1), w);
+			break;
+		case ORBITER:
+			e = new Orbiter(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown enemy type: " + t);
