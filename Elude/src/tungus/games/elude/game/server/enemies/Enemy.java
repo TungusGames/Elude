@@ -17,11 +17,12 @@ public abstract class Enemy {
 		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f, new float[]{1,1,0.2f,1}), 
 		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1}), 
 		STANDING_FAST(Assets.standingEnemyRed,  0.6f, 1, 	 new float[]{0.6f, 0.1f, 0.1f, 1f}), 
-		MOVING_MATRIX(Assets.movingEnemyGreen,  0.8f, 1.05f, new float[]{0.4f, 1f, 0.25f, 1f}),
+		MOVING_MATRIX(Assets.movingEnemyGreen,  0.8f, 1.05f, new float[]{0.4f, 1f, 0.25f,  1f}),
 		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
 		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}),
 		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}),
-		ORBITER		 (Assets.orbiter,			1.4f, 0.7f,  new float[]{0.55f,0.7f, 0.1f, 1f});			
+		ORBITER		 (Assets.orbiter,			1.4f, 0.7f,  new float[]{0.55f,0.7f, 0.1f, 1f}),		
+		CLOSING		 (Assets.sharpshooter,		0.9f, 0.9f,  new float[]{0.7f, 0.8f, 0.3f, 1f});
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -63,6 +64,9 @@ public abstract class Enemy {
 		case ORBITER:
 			e = new Orbiter(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
+		case CLOSING:
+			e = new Closing(w.randomPosOnOuterRect(new Vector2(), 1), w);
+			break;
 		default:
 			throw new IllegalArgumentException("Unknown enemy type: " + t);
 		}
@@ -103,6 +107,8 @@ public abstract class Enemy {
 	
 	protected float turnGoal;
 	protected float timeSinceShot = 0f;
+	
+	protected static final Vector2 t = new Vector2();
 		
 	public Enemy(Vector2 pos, EnemyType t, float boundSize, float hp, World w,
 				 RocketType type) {
@@ -137,7 +143,11 @@ public abstract class Enemy {
 	}
 	
 	protected float calcTurnGoal() {
-		return vel.angle()-90;
+		if (!vel.equals(Vector2.Zero)) {
+			return vel.angle()-90;
+		} else {
+			return t.set(world.vessels.get(0).pos).sub(pos).angle();
+		}
 	}
 	
 	protected abstract boolean aiUpdate(float deltaTime);

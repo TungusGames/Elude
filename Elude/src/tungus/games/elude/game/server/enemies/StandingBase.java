@@ -11,9 +11,7 @@ public abstract class StandingBase extends Enemy {
 	protected static final float DEFAULT_COLLIDER_SIZE = 0.6f;	
 	protected static final float DEFAULT_SPEED = 4.5f;
 	protected static final float DEFAULT_HP = 7;
-		
-	private static Vector2 tempVector = new Vector2();
-	
+			
 	private final Vector2 targetPos;
 	private boolean reachedTarget = false;
 		
@@ -50,15 +48,6 @@ public abstract class StandingBase extends Enemy {
 			
 		}
 		return false;
-	}
-	
-	@Override
-	protected float calcTurnGoal() {
-		if (reachedTarget) {
-			return tempVector.set(world.vessels.get(0).pos).sub(pos).angle()-90; // Turn towards player
-		} else {
-			return super.calcTurnGoal();
-		}
 	}
 
 	protected abstract boolean standingUpdate(float deltaTime);
