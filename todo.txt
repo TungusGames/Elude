@@ -1,17 +1,3 @@
-/**************************** A T T E N T I O N ****************************/
-
-This file contains secure business data associated with the development of 
-the video game "Elude".
-
-If you are not part of our company "Tungus", you are almost certainly not
-authorised to read the contents of this file. Please send it back to us
-(tungusgames@gmail.com) and destroy your copy.
-
-If you are NSA or any secret organisation peeping on us, please FUCK YOU!
-
-/****************** P R I V A T E  D A T A  F O L L O W S ******************/
-
-
 Enemies - rocket types
 - Satellite (orbit around player) - LowGrav?
 - Factory
@@ -37,3 +23,19 @@ Settings
 XOR
 - Remove control settings completely (TapToTarget might be enough)
 
+
+
+SEPT 1 BRAINSTORM
+Standing
+Moving
+Kamikaze *
+Sharpshooter
+
+MachineGunner
+Splitter *
+Shielded
+Miner
+Mortar
+Factory + Minion *
+
+*: fast rocket

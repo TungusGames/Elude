@@ -11,7 +11,7 @@ public class Closing extends Enemy {
 	private static final float COLL_SIZE = 0.85f;
 	private static final float GOAL_DISTANCE = 2f;
 	private static final float GOAL_DISTANCE2 = GOAL_DISTANCE * GOAL_DISTANCE;
-	private static final float SPEED = Vessel.MAX_SPEED * 0.6f;
+	private static final float SPEED = Vessel.MAX_SPEED * 0.4f;
 	private static final float RELOAD = 2f;
 	
 	private Vector2 player;
