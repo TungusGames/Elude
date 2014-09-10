@@ -30,13 +30,13 @@ public abstract class EnemyLoader {
 		else {
 			switch(n) {
 			case 0:
-				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING, EnemyType.STANDING_FAST);
+				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING); //Standing fast removed
 			case 1:
 				return new PlusPlus(world, n, EnemyType.KAMIKAZE);
 			case 2:
-				return new FillUp(world, n, 10, 50f, 0, 0.2f, 0, 0, EnemyType.STANDING_FAST, EnemyType.KAMIKAZE);
+				return new FillUp(world, n, 10, 50f, 0, 0.2f, 0, 0, EnemyType.KAMIKAZE); //Standing fast removed
 			case 3:
-				return new PlusPlus(world, n, EnemyType.MOVING, EnemyType.STANDING_FAST);
+				return new PlusPlus(world, n, EnemyType.MOVING); //Standing fast removed
 			case 4:
 				return new FillUp(world, n, 10, 50f, EnemyType.values());
 			default:

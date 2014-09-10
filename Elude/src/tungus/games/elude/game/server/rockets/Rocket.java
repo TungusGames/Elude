@@ -16,9 +16,7 @@ public abstract class Rocket {
 	
 	public static enum RocketType { 
 		SLOW_TURNING(Assets.flameRocket), 
-		FAST_TURNING(Assets.fastFlameRocket), 
-		LOWGRAV(Assets.matrixRocket),
-		HIGHGRAV(null),
+		FAST_TURNING(Assets.matrixRocket), 
 		STRAIGHT(Assets.straightRocket);
 		public ParticleEffectPool effect;
 		RocketType(ParticleEffectPool e) {
@@ -38,9 +36,6 @@ public abstract class Rocket {
 			break;
 		case FAST_TURNING:
 			r = new TurningRocket(origin, pos, dir, w, target, true);
-			break;
-		case LOWGRAV:
-			r = new LowGravityRocket(origin, pos, dir, w, target);
 			break;
 		case STRAIGHT:
 			r = new StraightRocket(origin, pos, dir, w, target);
