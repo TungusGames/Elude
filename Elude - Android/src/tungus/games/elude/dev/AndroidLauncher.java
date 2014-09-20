@@ -13,9 +13,8 @@ public class AndroidLauncher extends AndroidApplication {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
-        cfg.useGL20 = false;
         cfg.maxSimultaneousSounds = 150;
-        this.createWakeLock(cfg);
+        this.createWakeLock(true); //TODO check if this works
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         BluetoothConnector.app = this;
         initialize(new Elude(), cfg);

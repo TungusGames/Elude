@@ -11,7 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 
 public class JoinBluetoothGameScreen extends BaseScreen {
 
@@ -56,7 +56,7 @@ public class JoinBluetoothGameScreen extends BaseScreen {
 		} else
 		switch (state) {
 			case STARTING:
-				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT); // TODO loading screen
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // TODO loading screen
 				if (client.state == BluetoothConnector.ClientState.ENABLED) {
 					client.enableDiscovery();
 					if (client.state == BluetoothConnector.ClientState.DISCOVERING) 

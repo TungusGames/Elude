@@ -12,7 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 
 public class HostBluetoothGameScreen extends BaseScreen {
 
@@ -49,7 +49,7 @@ public class HostBluetoothGameScreen extends BaseScreen {
 	
 	@Override
 	public void render(float deltaTime) {
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (server.state == BluetoothConnector.ServerState.ERROR) {
 			Screen next = new MainMenu(game);
 			game.setScreen(next);

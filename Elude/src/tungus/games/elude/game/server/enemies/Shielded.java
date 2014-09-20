@@ -49,24 +49,19 @@ public class Shielded extends StandingBase {
 	
 	@Override
 	public boolean isHitBy(Rocket r) {
-		Gdx.app.log("SHIELDED", "POS: " + pos.x + ", " + pos.y + "; C: " + in.x + ", " + in.y + "; ROT: " + rot);
 		if (!out.overlaps(r.bounds))
 			return false;
 		if (in.overlaps(r.bounds)) {
 			if ((hp -= r.dmg) <= 0) {
 				killByRocket(r);
 			}
-			Gdx.app.log("SHIELDED", "HIT!");
 			return true;
 		}
 		t.set(in.x, in.y).add(MathUtils.cosDeg(rot/*+90*/), MathUtils.sinDeg(rot/*+90*/));
-		Gdx.app.log("SHIELDED", "SECOND ON LINE: " + t.x + ", " + t.y);
 		if (Intersector.pointLineSide(in.x, in.y, t.x, t.y, r.pos.x, r.pos.y) != -1) {
-			Gdx.app.log("SHIELDED", "HIT!");
 			return true;
 		}
 		if (Intersector.distanceLinePoint(in.x, in.y, t.x, t.y, r.pos.x, r.pos.y) <= r.bounds.radius) {
-			Gdx.app.log("SHIELDED", "HIT!");
 			return true;
 		}
 		return false;
