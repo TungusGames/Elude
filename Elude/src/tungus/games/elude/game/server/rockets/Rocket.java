@@ -124,7 +124,7 @@ public abstract class Rocket {
 		for (int i = 0; i < size; i++) {
 			if (Intersector.overlaps(world.vessels.get(i).bounds, bounds)) {
 				if (!world.vessels.get(i).shielded) {
-					world.effects.add(RenderInfoPool.newEffect(0f, 0f, EffectType.CAMSHAKE.ordinal())); //TODO pool
+					world.effects.add(RenderInfoPool.newEffect(0f, 0f, EffectType.CAMSHAKE.ordinal()));
 					world.vessels.get(i).hp -= dmg;
 				}
 				kill();
@@ -136,7 +136,7 @@ public abstract class Rocket {
 	
 	public void kill() {
 		world.rockets.remove(this);
-		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal())); // TODO pool
+		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal()));
 	}
 	
 	protected boolean hitWall(boolean vertical) {

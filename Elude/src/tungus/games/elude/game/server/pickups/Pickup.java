@@ -16,7 +16,7 @@ public abstract class Pickup {
 		HEALTH(Assets.hpBonus), 
 		SPEED(Assets.speedBonus), 
 		SHIELD(Assets.shieldBonus), 
-		ROCKETWIPER(Assets.smallCircle);
+		FREEZER(Assets.freezerBonus);
 		public TextureRegion tex;
 		PickupType(TextureRegion t) {
 			tex = t;
@@ -45,8 +45,8 @@ public abstract class Pickup {
 		case SHIELD:
 			p = new ShieldPickup(w, w.randomPosInInnerRect(new Vector2()));
 			break;
-		case ROCKETWIPER:
-			p = new RocketWiperPickup(w, w.randomPosInInnerRect(new Vector2()));
+		case FREEZER:
+			p = new FreezerPickup(w, w.randomPosInInnerRect(new Vector2()));
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown PickupType " + t);

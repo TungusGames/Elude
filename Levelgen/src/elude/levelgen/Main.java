@@ -25,7 +25,7 @@ public class Main {
 	
 	private static float hpDrop;
 	private static float speedDrop;
-	private static float wipeDrop;
+	private static float freezerDrop;
 	private static float shieldDrop;
 	
 	private static int levelNum = 1;
@@ -54,7 +54,7 @@ public class Main {
 				hpDrop = sc.nextFloat();
 				speedDrop = sc.nextFloat();
 				shieldDrop = sc.nextFloat();
-				wipeDrop = sc.nextFloat();
+				freezerDrop = sc.nextFloat();
 				while (!sc.next().equals("wavestart"))
 					;
 				float t = sc.nextInt();
@@ -103,7 +103,7 @@ public class Main {
 			lvl.waves = waves;
 			lvl.hpChance = hpDrop;
 			lvl.speedChance = speedDrop;
-			lvl.rocketWipeChance = wipeDrop;
+			lvl.freezerChance = freezerDrop;
 			lvl.shieldChance = shieldDrop;
 			try {
 				System.out.print("Writing file: " + (levelNum) + ".lvl ");

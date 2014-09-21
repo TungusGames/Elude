@@ -39,7 +39,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 		public Deque<Wave> waves;
 		public float hpChance;
 		public float speedChance;
-		public float rocketWipeChance;
+		public float freezerChance;
 		public float shieldChance;
 		
 		public static Level levelFromFile(FileHandle file) {
@@ -62,7 +62,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	
 
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
-		super(world, level.hpChance, level.speedChance, level.rocketWipeChance, level.shieldChance, levelNum);
+		super(world, level.hpChance, level.speedChance, level.freezerChance, level.shieldChance, levelNum);
 		this.level = level;
 		/*Wave w = level.waves.removeFirst();
 		int size = w.enemies.size();

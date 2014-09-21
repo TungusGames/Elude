@@ -4,8 +4,8 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.pickups.FreezerPickup;
 import tungus.games.elude.game.server.pickups.HealthPickup;
-import tungus.games.elude.game.server.pickups.RocketWiperPickup;
 import tungus.games.elude.game.server.pickups.ShieldPickup;
 import tungus.games.elude.game.server.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
@@ -18,7 +18,7 @@ public abstract class EnemyLoader {
 	protected final World world;
 	protected final float hpChance;
 	protected final float speedChance;
-	protected final float wipeChance;
+	protected final float freezerChance;
 	protected final float shieldChance;
 	
 	protected final int levelNum;
@@ -55,7 +55,7 @@ public abstract class EnemyLoader {
 		this.world = w;
 		this.hpChance = hpChance;
 		this.speedChance = speedChance;
-		this.wipeChance = wipeChance;
+		this.freezerChance = wipeChance;
 		this.levelNum = levelNum;
 		this.shieldChance = shieldChance;
 	}
@@ -70,9 +70,9 @@ public abstract class EnemyLoader {
 			world.pickups.add(new HealthPickup(world, e.pos));
 		else if ((rand -= hpChance) < speedChance)
 			world.pickups.add(new SpeedPickup(world, e.pos));
-		else if ((rand -= speedChance) < wipeChance)
-			world.pickups.add(new RocketWiperPickup(world, e.pos));
-		else if ((rand -= wipeChance) < shieldChance)
+		else if ((rand -= speedChance) < freezerChance)
+			world.pickups.add(new FreezerPickup(world, e.pos));
+		else if ((rand -= freezerChance) < shieldChance)
 			world.pickups.add(new ShieldPickup(world, e.pos));
 	}
 	

@@ -49,6 +49,7 @@ public class Assets {
 	public static TextureRegion hpBonus;
 	public static TextureRegion speedBonus;
 	public static TextureRegion shieldBonus;
+	public static TextureRegion freezerBonus;
 	
 	public static TextureRegion whiteRectangle;
 	public static TextureRegion smallCircle;
@@ -108,6 +109,7 @@ public class Assets {
 		hpBonus = atlas.findRegion("hpbonus");
 		speedBonus = atlas.findRegion("speedbonus");
 		shieldBonus = atlas.findRegion("shieldbonus");
+		freezerBonus = atlas.findRegion("freezer");
 		virtualDPadPerimeter = atlas.findRegion("virtualdpadperimeter");
 		whiteRectangle = atlas.findRegion("whiterect");
 		smallCircle = atlas.findRegion("smallcircle");

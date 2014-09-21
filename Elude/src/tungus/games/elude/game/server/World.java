@@ -46,6 +46,8 @@ public class World {
 	public int levelNum;
 	public boolean isFinite;
 	
+	public float freezeTime = 0f;
+	
 	public World(int levelNum, boolean finite) {
 		vessels = new ArrayList<Vessel>();
 		rockets = new ArrayList<Rocket>();
@@ -76,13 +78,16 @@ public class World {
 			isVesselAlive = isVesselAlive || v.hp > 0;
 		}
 		
-		size = enemies.size();
-		for (int i = 0; i < size; i++) {
-			if (enemies.get(i).update(deltaTime)) {
-				i--;
-				size--;
+		if (freezeTime <= 0f) {
+			
+			size = enemies.size();
+			for (int i = 0; i < size; i++) {
+				if (enemies.get(i).update(deltaTime)) {
+					i--;
+					size--;
+				}
 			}
-		}
+		} else freezeTime -= deltaTime;
 		
 		size = rockets.size();
 		for (int i = 0; i < size; i++) {

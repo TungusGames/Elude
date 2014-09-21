@@ -47,7 +47,7 @@ public class RenderInfo extends TransferData {
 	}
 	public static class Effect implements Serializable {
 		private static final long serialVersionUID = 1892821292900322357L;
-		public enum EffectType{EXPLOSION, DEBRIS, CAMSHAKE, LASERSHOT}
+		public enum EffectType{EXPLOSION, DEBRIS, CAMSHAKE, LASERSHOT, FREEZE}
 		public int typeOrdinal;
 		public float x, y;
 	}

@@ -17,11 +17,13 @@ import tungus.games.elude.game.multiplayer.transfer.RenderInfo.ReducedVessel;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.pickups.FreezerPickup;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.CamShaker;
+import tungus.games.elude.util.CustomInterpolations.FadeInOut;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -54,6 +56,9 @@ public class WorldRenderer {
 	private PooledEffect[] vesselTrails = null;
 	public OrthographicCamera camera;
 	private int vesselID;
+	
+	private float freezeTime = 0f;
+	private final FadeInOut freezeFade= new FadeInOut(0.5f, FreezerPickup.FREEZE_TIME);
 
 	public WorldRenderer(int myVesselID) {
 		batch = new SpriteBatch(5460);
@@ -66,19 +71,27 @@ public class WorldRenderer {
 	}
 
 	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateParticles) {
-		batch.setColor(1, 1, 1, alpha);
+		/*if (freezeTime > 0f) {
+			freezeTime -= deltaTime;
+			batch.setColor(1 - freezeFade.apply(FreezerPickup.FREEZE_TIME % freezeTime), 1, 1, 1);
+		} else*/ batch.setColor(1, 1, 1, 1);
 		batch.begin();
 		int size = r.enemies.size();
 		for(int i = 0; i < size; i++) {
 			drawEnemy(r.enemies.get(i));
 		}
 		drawEnemyHPs(r.enemies, deltaTime);
-
+		batch.setColor(1, 1, 1, 1);
 		size = r.pickups.size();
 		for(int i = 0; i < size; i++) {
 			drawPickup(r.pickups.get(i));
 		}
-
+		if (freezeTime > 0f) {
+			freezeTime -= deltaTime;
+			batch.setColor(0f, 1f, 1f, freezeFade.apply(freezeTime) * 0.75f);
+			batch.draw(Assets.whiteRectangle, 0, 0, World.WIDTH, World.HEIGHT);
+			batch.setColor(Color.WHITE);
+		}
 		size = r.vessels.size();
 		if (vesselPositions == null && size != 0) {
 			vesselPositions = new Vector2[size];
@@ -148,6 +161,9 @@ public class WorldRenderer {
 			if (Settings.INSTANCE.soundOn) {
 				Assets.laserShot.play();
 			}
+			break;
+		case FREEZE:
+			freezeTime = FreezerPickup.FREEZE_TIME;
 			break;
 		}
 	}
