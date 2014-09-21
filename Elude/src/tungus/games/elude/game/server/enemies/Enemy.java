@@ -18,7 +18,8 @@ public abstract class Enemy {
 		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1}), 
 		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
 		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}),
-		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f});
+		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}),
+		SPLITTER	 (Assets.splitter,			1.05f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f});
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -50,6 +51,9 @@ public abstract class Enemy {
 			break;
 		case SHIELDED:
 			e = new Shielded(w.randomPosOnOuterRect(new Vector2(), 1), w);
+			break;
+		case SPLITTER:
+			e = new Splitter(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown enemy type: " + t);
@@ -130,7 +134,7 @@ public abstract class Enemy {
 		if (!vel.equals(Vector2.Zero)) {
 			return vel.angle()-90;
 		} else {
-			return t.set(world.vessels.get(0).pos).sub(pos).angle();
+			return t.set(world.vessels.get(0).pos).sub(pos).angle()-90;
 		}
 	}
 	
@@ -152,4 +156,11 @@ public abstract class Enemy {
 		return false;
 	}
 	
+	public float width() {
+		return type.width;
+	}
+
+	public float height() {
+		return type.height;
+	}
 }

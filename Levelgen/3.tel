@@ -2,14 +2,14 @@
 35 65
 0 0 0 0
 wavestart 0 0
-orbiter
+splitter
 wavestart -1 0
-orbiter orbiter
+2 splitter
 wavestart -1 0
-orbiter orbiter
+2 splitter
 wavestart -1 0
-orbiter orbiter
+3 splitter
 wavestart -1 0
-orbiter orbiter
+3 splitter
 wavestart -1 0
-orbiter orbiter
+4 splitter

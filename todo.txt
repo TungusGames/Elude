@@ -26,16 +26,23 @@ XOR
 
 
 SEPT 1 BRAINSTORM
+
+Balanced:
 Standing
 Moving
 Kamikaze *
 Sharpshooter
 
+Balance needed:
 MachineGunner
-Splitter *
 Shielded
+
+Implementing needed:
+Splitter *
+Factory + Minion *
+
 Miner
 Mortar
-Factory + Minion *
+
 
 *: fast rocket

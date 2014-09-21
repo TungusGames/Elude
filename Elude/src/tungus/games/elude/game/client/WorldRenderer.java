@@ -226,7 +226,7 @@ public class WorldRenderer {
 
 	private void drawEnemy(ReducedEnemy e) {
 		int o = e.typeOrdinal;
-		batch.draw(et[o].tex, e.x-et[o].halfWidth, e.y-et[o].halfHeight, et[o].halfWidth, et[o].halfHeight, et[o].width, et[o].height, 1, 1, e.rot);
+		batch.draw(et[o].tex, e.x-e.width/2, e.y-e.height/2, e.width/2, e.height/2, e.width, e.height, 1, 1, e.rot);
 	}
 
 	private void drawVessel(ReducedVessel v, int i, boolean updateParticles) {

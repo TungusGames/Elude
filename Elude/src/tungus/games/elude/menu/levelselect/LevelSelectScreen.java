@@ -50,7 +50,6 @@ public class LevelSelectScreen extends BaseScreen {
 		public boolean tap(float x, float y, int count, int button) {
 			if (state == STATE_WORKING) {
 				touch3.set(x, y, 0);
-				Gdx.app.log("DEBUG", "x " + x + " y " + y);
 				uiCam.unproject(touch3);
 				if (grid.tapped(touch3.x, touch3.y)) {
 					details.switchTo(grid.selected, grid.isOpen(grid.selected));

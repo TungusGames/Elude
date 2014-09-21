@@ -20,6 +20,8 @@ public class RenderInfo extends TransferData {
 		public float x, y;
 		public float rot;
 		public float hp;
+		public float width;
+		public float height;
 		public int id;
 		public int typeOrdinal;
 	}
@@ -81,7 +83,7 @@ public class RenderInfo extends TransferData {
 		int s = w.enemies.size();
 		for (int i = 0; i < s; i++) {
 			Enemy e = w.enemies.get(i);
-			enemies.add(RenderInfoPool.newEnemy(e.pos, e.rot, e.type.ordinal(), e.hp / e.maxHp, e.id));
+			enemies.add(RenderInfoPool.newEnemy(e.pos, e.rot, e.type.ordinal(), e.hp / e.maxHp, e.id, e.width(), e.height()));
 		}
 		pickups.clear();
 		s = w.pickups.size();
@@ -120,7 +122,7 @@ public class RenderInfo extends TransferData {
 		int s = enemies.size();
 		for (int i = 0; i < s; i++) {
 			ReducedEnemy e = enemies.get(i);
-			other.enemies.add(RenderInfoPool.newEnemy(e.x, e.y, e.rot, e.typeOrdinal, e.hp, e.id));
+			other.enemies.add(RenderInfoPool.newEnemy(e.x, e.y, e.rot, e.typeOrdinal, e.hp, e.id, e.width, e.height));
 		}
 		other.pickups.clear();
 		s = pickups.size();

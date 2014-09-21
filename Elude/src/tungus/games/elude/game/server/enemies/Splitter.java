@@ -1,0 +1,81 @@
+package tungus.games.elude.game.server.enemies;
+
+import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.rockets.Rocket;
+import tungus.games.elude.game.server.rockets.Rocket.RocketType;
+
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+
+public class Splitter extends Enemy {
+	
+	private static final float HP = 7f;
+	private static final float COLL = 0.85f;
+	private static final float SPEED = 3f;
+	private static final float RELOAD = 1.5f;
+	
+	private static final int DEFAULT_SPLITS = 2;	// How many more "generations" the first spawned enemies will create  
+	private static final int SPLIT_INTO = 3;		// How many smaller enemies each dead will split into
+	private static final float MIN_SIZE = 0.75f;	// Relatively as part of full size
+	
+	private final int splitsLeft;	// How many more "generations" this enemy will spawn
+	private boolean arrived = false;
+	
+	public Splitter(Vector2 pos, World w) {
+		this(pos, w, DEFAULT_SPLITS);
+	}
+	
+	public Splitter(Vector2 pos, World w, int splits) {
+		super(pos, EnemyType.SPLITTER, coeff(splits, MIN_SIZE)*COLL, coeff(splits, 0.5f)*HP, w, RocketType.SLOW_TURNING);
+		vel.set(MathUtils.random(World.innerBounds.width) + World.EDGE, MathUtils.random(World.innerBounds.height) + World.EDGE).sub(pos).nor().scl(SPEED);
+		splitsLeft = splits;
+	}
+	
+	@Override
+	protected boolean aiUpdate(float deltaTime) {
+		if (!World.innerBounds.contains(pos)) {
+			if (arrived) {
+				vel.set(MathUtils.random(World.innerBounds.width) + World.EDGE, MathUtils.random(World.innerBounds.height) + World.EDGE).sub(pos).nor().scl(SPEED);
+			}
+		} else if (!arrived) {
+			arrived = true;
+		}
+		if (timeSinceShot > RELOAD) {
+			shootRocket(world.vessels.get(0).pos.cpy().sub(pos));
+		}
+		return false;
+	}
+	
+	@Override
+	public void killByRocket(Rocket r) {
+		super.killByRocket(r);
+		if (splitsLeft > 0) {
+			for (int i = 0; i < SPLIT_INTO; i++) {
+				world.enemies.add(new Splitter(pos.cpy(), world, splitsLeft-1));
+			}
+		}
+	}
+	
+	@Override
+	public float width() {
+		return super.width() * coeff(splitsLeft, MIN_SIZE);
+	}
+	
+	@Override
+	public float height() {
+		return super.height() * coeff(splitsLeft, MIN_SIZE);
+	}
+	
+	/**
+	 * Maps (0 to DEFAULT_SPLITS) to ("bottom" param to 1f)
+	 * @param splitsLeft
+	 * @param bottom The lowest value, used for last enemies
+	 * @return The value to multiply size, HP with
+	 */
+	private static float coeff(int splitsLeft, float bottom) {
+		//return (splitsLeft + DEFAULT_SPLITS) / (float)(DEFAULT_SPLITS * 2);
+		return bottom + (1-bottom)/DEFAULT_SPLITS * splitsLeft;
+	}
+	
+	
+}

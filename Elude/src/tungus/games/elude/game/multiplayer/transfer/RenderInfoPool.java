@@ -86,12 +86,12 @@ public class RenderInfoPool {
 		}
 	}
 	
-	public static ReducedEnemy newEnemy(Vector2 p, float r, int t, float hp, int id) {
-		return newEnemy(p.x, p.y, r, t, hp, id);
+	public static ReducedEnemy newEnemy(Vector2 p, float r, int t, float hp, int id, float width, float height) {
+		return newEnemy(p.x, p.y, r, t, hp, id, width, height);
 	}
-	public static ReducedEnemy newEnemy(float x, float y, float r, int t, float hp, int id) {
+	public static ReducedEnemy newEnemy(float x, float y, float r, int t, float hp, int id, float w, float h) {
 		ReducedEnemy e = enemyPool.obtain();
-		e.x = x; e.y = y; e.rot = r; e.typeOrdinal = t;	e.hp = hp; e.id = id; return e;
+		e.x = x; e.y = y; e.rot = r; e.typeOrdinal = t;	e.hp = hp; e.id = id; e.width = w; e.height = h; return e;
 	}
 	
 	public static ReducedPickup newPickup(Vector2 p, float a, int t) {
