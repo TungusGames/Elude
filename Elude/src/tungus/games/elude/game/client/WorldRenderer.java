@@ -70,7 +70,7 @@ public class WorldRenderer {
 		this.vesselID = myVesselID;
 	}
 
-	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateParticles) {
+	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateEffects) {
 		/*if (freezeTime > 0f) {
 			freezeTime -= deltaTime;
 			batch.setColor(1 - freezeFade.apply(FreezerPickup.FREEZE_TIME % freezeTime), 1, 1, 1);
@@ -87,7 +87,9 @@ public class WorldRenderer {
 			drawPickup(r.pickups.get(i));
 		}
 		if (freezeTime > 0f) {
-			freezeTime -= deltaTime;
+			if (updateEffects) {
+				freezeTime -= deltaTime;
+			}
 			batch.setColor(0f, 1f, 1f, freezeFade.apply(freezeTime) * 0.75f);
 			batch.draw(Assets.whiteRectangle, 0, 0, World.WIDTH, World.HEIGHT);
 			batch.setColor(1, 1, 1, alpha);
@@ -103,11 +105,11 @@ public class WorldRenderer {
 			}
 		}
 		for(int i = 0; i < size; i++) {
-			drawVessel(r.vessels.get(i), i, updateParticles);
+			drawVessel(r.vessels.get(i), i, updateEffects);
 		}		
 
 		drawRockets(r);
-		if (updateParticles) {
+		if (updateEffects) {
 			size = r.effects.size();
 			for (int i = 0; i < size; i++) {
 				drawEffect(r.effects.get(i));
@@ -123,7 +125,7 @@ public class WorldRenderer {
 				it.remove();
 			} else {
 				batch.setColor(1, 1, 1, alpha);
-				if (updateParticles) {
+				if (updateEffects) {
 					p.draw(batch, deltaTime);
 				} else {
 					p.draw(batch);

@@ -82,18 +82,16 @@ public class World {
 			v.update(deltaTime, dirs[i]);
 			isVesselAlive = isVesselAlive || v.hp > 0;
 		}
-		
-		if (freezeTime <= 0f) {
-			for (ListIterator<Enemy> it = enemies.listIterator(); it.hasNext(); ) {
-				Enemy e = it.next();
-				if (e.update(deltaTime) || e.hp <= 0) {
-					it.remove();
-				}
+		float deltaForEnemy = (freezeTime > 0 ? 0 : deltaTime);
+		for (ListIterator<Enemy> it = enemies.listIterator(); it.hasNext(); ) {
+			Enemy e = it.next();
+			if (e.update(deltaForEnemy) || e.hp <= 0) {
+				it.remove();
 			}
-			while (!enemiesToAdd.isEmpty()) {
-				((Deque<Enemy>)enemies).addFirst(enemiesToAdd.remove(0));
-			}
-		} else freezeTime -= deltaTime;
+		}
+		while (!enemiesToAdd.isEmpty()) {
+			((Deque<Enemy>)enemies).addFirst(enemiesToAdd.remove(0));
+		}
 		
 		size = rockets.size();
 		for (ListIterator<Rocket> it = rockets.listIterator(); it.hasNext(); ) {

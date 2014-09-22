@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Splitter extends Enemy {
 	
 	private static final float HP = 7f;
-	private static final float COLL = 0.85f;
+	private static final float COLL = 0.9f;
 	private static final float SPEED = 3f;
 	private static final float RELOAD = 1.5f;
 	

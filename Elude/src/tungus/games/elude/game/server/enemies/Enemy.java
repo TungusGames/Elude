@@ -19,7 +19,7 @@ public abstract class Enemy {
 		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
 		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}),
 		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}),
-		SPLITTER	 (Assets.splitter,			1.05f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}),
+		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}),
 		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}),
 		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f});
 		public TextureRegion tex;
