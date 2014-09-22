@@ -111,7 +111,7 @@ public abstract class Rocket {
 				stillIn = (origin.collisionBounds.overlaps(bounds));
 				continue;
 			}
-			if (e.isHitBy(this)) {
+			if (e.hitBy(this)) {
 				kill();
 				return true;
 			}
@@ -135,7 +135,6 @@ public abstract class Rocket {
 	}
 	
 	public void kill() {
-		world.rockets.remove(this);
 		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal()));
 	}
 	

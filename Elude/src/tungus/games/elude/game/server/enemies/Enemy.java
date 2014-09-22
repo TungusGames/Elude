@@ -19,7 +19,9 @@ public abstract class Enemy {
 		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
 		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}),
 		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}),
-		SPLITTER	 (Assets.splitter,			1.05f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f});
+		SPLITTER	 (Assets.splitter,			1.05f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}),
+		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}),
+		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f});
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -54,6 +56,9 @@ public abstract class Enemy {
 			break;
 		case SPLITTER:
 			e = new Splitter(w.randomPosOnOuterRect(new Vector2(), 1), w);
+			break;
+		case FACTORY:
+			e = new Factory(w.randomPosOnOuterRect(new Vector2(), 1), w);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown enemy type: " + t);
@@ -142,11 +147,10 @@ public abstract class Enemy {
 	
 	public void killByRocket(Rocket r) {
 		world.effects.add(RenderInfoPool.newDebris(pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN, type.ordinal()));
-		world.enemies.remove(this);
 		world.waveLoader.onEnemyDead(this);
 	}
 	
-	public boolean isHitBy(Rocket r) {
+	public boolean hitBy(Rocket r) {
 		if (collisionBounds.overlaps(r.bounds)) {
 			if ((hp -= r.dmg) <= 0) {
 				killByRocket(r);

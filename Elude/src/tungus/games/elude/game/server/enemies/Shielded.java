@@ -47,7 +47,7 @@ public class Shielded extends StandingBase {
 	}
 	
 	@Override
-	public boolean isHitBy(Rocket r) {
+	public boolean hitBy(Rocket r) {
 		if (!out.overlaps(r.bounds))
 			return false;
 		if (in.overlaps(r.bounds)) {

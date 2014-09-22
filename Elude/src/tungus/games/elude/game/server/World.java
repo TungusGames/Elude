@@ -1,7 +1,9 @@
 package tungus.games.elude.game.server;
 
-import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
 import tungus.games.elude.game.server.enemies.Enemy;
@@ -31,6 +33,7 @@ public class World {
 	public List<Vessel> vessels;
 	public List<Rocket> rockets;
 	public List<Enemy> enemies;
+	public List<Enemy> enemiesToAdd;
 	public List<Effect> effects;
 	public List<Pickup> pickups;
 	
@@ -49,11 +52,12 @@ public class World {
 	public float freezeTime = 0f;
 	
 	public World(int levelNum, boolean finite) {
-		vessels = new ArrayList<Vessel>();
-		rockets = new ArrayList<Rocket>();
-		enemies = new ArrayList<Enemy>();
-		effects = new ArrayList<Effect>();
-		pickups = new ArrayList<Pickup>();
+		vessels = new LinkedList<Vessel>();
+		rockets = new LinkedList<Rocket>();
+		enemies = new LinkedList<Enemy>();
+		enemiesToAdd = new LinkedList<Enemy>();
+		effects = new LinkedList<Effect>();
+		pickups = new LinkedList<Pickup>();
 		this.levelNum = levelNum;
 		this.isFinite = finite;
 		//vessels.add(new Vessel(this));
@@ -68,6 +72,7 @@ public class World {
 		innerBounds.set(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void update(float deltaTime, Vector2[] dirs) {
 		effects.clear(); //TODO pool / trash?
 		int size = vessels.size();
@@ -79,29 +84,30 @@ public class World {
 		}
 		
 		if (freezeTime <= 0f) {
-			
-			size = enemies.size();
-			for (int i = 0; i < size; i++) {
-				if (enemies.get(i).update(deltaTime)) {
-					i--;
-					size--;
+			for (ListIterator<Enemy> it = enemies.listIterator(); it.hasNext(); ) {
+				Enemy e = it.next();
+				if (e.update(deltaTime) || e.hp <= 0) {
+					it.remove();
 				}
+			}
+			while (!enemiesToAdd.isEmpty()) {
+				((Deque<Enemy>)enemies).addFirst(enemiesToAdd.remove(0));
 			}
 		} else freezeTime -= deltaTime;
 		
 		size = rockets.size();
-		for (int i = 0; i < size; i++) {
-			if (rockets.get(i).update(deltaTime)) {
-				i--;
-				size--;
+		for (ListIterator<Rocket> it = rockets.listIterator(); it.hasNext(); ) {
+			Rocket r = it.next();
+			if (r.update(deltaTime)) {
+				it.remove();
 			}
 		}
 		
 		size = pickups.size();
-		for (int i = 0; i < size; i++) {
-			if (pickups.get(i).update(deltaTime)) {
-				i--;
-				size--;
+		for (ListIterator<Pickup> it = pickups.listIterator(); it.hasNext(); ) {
+			Pickup p = it.next();
+			if (p.update(deltaTime)) {
+				it.remove();
 			}
 		}
 		

@@ -3,6 +3,7 @@ package tungus.games.elude.game.multiplayer.transfer;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import tungus.games.elude.game.multiplayer.Connection.TransferData;
 import tungus.games.elude.game.server.Vessel;
@@ -80,30 +81,27 @@ public class RenderInfo extends TransferData {
 	public void setFromWorld() {
 		RenderInfoPool.freeAlmostAll(this); // Puts everything in the pool except effects
 		enemies.clear();
-		int s = w.enemies.size();
-		for (int i = 0; i < s; i++) {
-			Enemy e = w.enemies.get(i);
+		for (ListIterator<Enemy> it = w.enemies.listIterator(); it.hasNext();) {
+			Enemy e = it.next();
 			enemies.add(RenderInfoPool.newEnemy(e.pos, e.rot, e.type.ordinal(), e.hp / e.maxHp, e.id, e.width(), e.height()));
 		}
 		pickups.clear();
-		s = w.pickups.size();
-		for (int i = 0; i < s; i++) {
-			Pickup p = w.pickups.get(i);
+		for (ListIterator<Pickup> it = w.pickups.listIterator(); it.hasNext();) {
+			Pickup p = it.next();
 			pickups.add(RenderInfoPool.newPickup(new Vector2(p.collisionBounds.x+Pickup.HALF_SIZE, p.collisionBounds.y+Pickup.HALF_SIZE), p.alpha, p.type.ordinal()));
 		}
 		vessels.clear();
-		s = w.vessels.size();
-		for (int i = 0; i < s; i++) {
-			Vessel v = w.vessels.get(i);
+		int i = 0;
+		for (ListIterator<Vessel> it = w.vessels.listIterator(); it.hasNext(); i++) {
+			Vessel v = it.next();
 			vessels.add(RenderInfoPool.newVessel(v.pos, v.rot, i, v.shieldAlpha));
 		}
 		rockets.clear();
-		s = w.rockets.size();
-		for (int i = 0; i < s; i++) {
-			Rocket r = w.rockets.get(i);
+		for (ListIterator<Rocket> it = w.rockets.listIterator(); it.hasNext();) {
+			Rocket r = it.next();
 			rockets.add(RenderInfoPool.newRocket(r.pos, r.vel.angle(), r.type.ordinal(), r.id));
 		}
-		for (int i = 0; i < hp.length; i++) {
+		for (i = 0; i < hp.length; i++) {
 			hp[i] = w.vessels.get(i).hp / Vessel.MAX_HP;
 		}
 	}
