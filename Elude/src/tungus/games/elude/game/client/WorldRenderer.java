@@ -74,14 +74,14 @@ public class WorldRenderer {
 		/*if (freezeTime > 0f) {
 			freezeTime -= deltaTime;
 			batch.setColor(1 - freezeFade.apply(FreezerPickup.FREEZE_TIME % freezeTime), 1, 1, 1);
-		} else*/ batch.setColor(1, 1, 1, 1);
+		} else*/ batch.setColor(1, 1, 1, alpha);
 		batch.begin();
 		int size = r.enemies.size();
 		for(int i = 0; i < size; i++) {
 			drawEnemy(r.enemies.get(i));
 		}
 		drawEnemyHPs(r.enemies, deltaTime);
-		batch.setColor(1, 1, 1, 1);
+		batch.setColor(1, 1, 1, alpha);
 		size = r.pickups.size();
 		for(int i = 0; i < size; i++) {
 			drawPickup(r.pickups.get(i));
@@ -90,7 +90,7 @@ public class WorldRenderer {
 			freezeTime -= deltaTime;
 			batch.setColor(0f, 1f, 1f, freezeFade.apply(freezeTime) * 0.75f);
 			batch.draw(Assets.whiteRectangle, 0, 0, World.WIDTH, World.HEIGHT);
-			batch.setColor(Color.WHITE);
+			batch.setColor(1, 1, 1, alpha);
 		}
 		size = r.vessels.size();
 		if (vesselPositions == null && size != 0) {
