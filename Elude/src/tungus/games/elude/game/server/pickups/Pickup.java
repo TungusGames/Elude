@@ -77,7 +77,6 @@ public abstract class Pickup {
 	public boolean update(float deltaTime) {
 		lifeTimeLeft -= deltaTime;
 		if (lifeTimeLeft <= 0f) {
-			kill();
 			return true;
 		}
 		if (!pickedUp) {
@@ -101,8 +100,4 @@ public abstract class Pickup {
 	}
 	
 	protected abstract void produceEffect(Vessel vessel);
-	
-	public void kill() {
-		world.pickups.remove(this);
-	}
 }
