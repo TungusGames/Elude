@@ -19,7 +19,7 @@ public class StreamConnection extends Connection {
     		while (true) {
     			try {
     				// Read from the InputStream
-    				synchronized(this) {
+    				synchronized(StreamConnection.this) {
         				newest = (TransferData)objInStream.readObject();
     				}
     				// Send the obtained bytes to the UI activity

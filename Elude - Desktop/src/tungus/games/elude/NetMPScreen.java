@@ -34,9 +34,10 @@ public class NetMPScreen extends BaseScreen {
 		super(game);
 		try {
 			Scanner sc = new Scanner(Gdx.files.internal("mpdebug.txt").read());
-			if (sc.next().equals("listen")) {
+			String str = sc.next();
+			if (str.equals("listen")) {
 				mode = MODE_LISTEN;
-			} else if (sc.next().equals("connect")) {
+			} else if (str.equals("connect")) {
 				mode = MODE_CONNECT;
 				IP = sc.next();
 			} else {
@@ -61,9 +62,11 @@ public class NetMPScreen extends BaseScreen {
 			new Thread(new FakeDebugClientScreen(game, levelNum, finite, p2.c2)).start();
 			game.setScreen(new GameScreen(game, levelNum, finite, p1.c2, 0));
 		} else if (mode == MODE_CONNECT) {
+			Gdx.app.log("MODE", "CONNECT");
 			s = Gdx.net.newClientSocket(Net.Protocol.TCP, IP, port, new SocketHints());
 			game.setScreen(new GameScreen(game, levelNum, finite, new StreamConnection(s.getInputStream(), s.getOutputStream()), 1));
 		} else if (mode == MODE_LISTEN) {
+			Gdx.app.log("MODE", "LISTEN");
 			try {
 				s = Gdx.net.newServerSocket(Net.Protocol.TCP, port, new ServerSocketHints()).accept(new SocketHints());
 				LocalConnectionPair c = new LocalConnectionPair();

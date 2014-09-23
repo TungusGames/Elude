@@ -10,6 +10,7 @@ import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
 import tungus.games.elude.game.server.Server;
+import tungus.games.elude.util.log.FPSLogger;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -39,18 +40,23 @@ public class FakeDebugClientScreen extends BaseScreen implements Runnable {
 		
 	private List<Controls> controls;
 	
+	private FPSLogger logger;
 	
 	private RenderInfo render;
 	private UpdateInfo update;
 	
 	@Override
 	public void run() {
+		logger = new FPSLogger("FPSLogger", "Fake client FPS: ");
 		while (state != STATE_LOST && state != STATE_WON) {
 			long time1 = System.nanoTime();
+			logger.log();
 			render(1/60f);
-			float delta = (System.nanoTime()-time1)/1000000f;
+			float delta = (System.nanoTime()-time1)/1000000000f;
+			Gdx.app.log("Fake", "Delta: "+delta);
 			try {
-				Thread.sleep(Math.max((long)(((1/60f)-delta)*1000),0));
+				Thread.sleep(Math.max((long)(((1/60f)-delta)*500),0));
+				//Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -76,6 +82,7 @@ public class FakeDebugClientScreen extends BaseScreen implements Runnable {
 
 	@Override
 	public void render(float deltaTime) {
+		long t1 = System.nanoTime();
 		if (deltaTime > 0.05f) {
 			Gdx.app.log("LagWarn", "DeltaTime: " + deltaTime);
 			deltaTime = 0.05f;
@@ -122,9 +129,10 @@ public class FakeDebugClientScreen extends BaseScreen implements Runnable {
 			update.info = Server.STATE_OVER;
 			break;
 		}
-		
+		long tw = System.nanoTime();
 		connection.write(update);
-		
+		Gdx.app.log("WTFSMALLER", "Delta on write: " + (System.nanoTime()-tw)/1000000f + " ms");
+		Gdx.app.log("WTF", "Inner delta: " + (System.nanoTime()-t1)/1000000f + " ms");
 		// RENDER
 		
 	}
