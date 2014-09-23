@@ -26,9 +26,8 @@ public class Main {
         settings.filterMag = TextureFilter.Linear;
         settings.filterMin = TextureFilter.Linear;
         TexturePacker.process(settings, "../img/done", "../Elude - Android/assets/textures", "game");
-        if (NetMPScreen.ready) {
-        	Elude.mpScreen = NetMPScreen.class;
-        }
+        
+        Elude.mpScreen = NetMPScreen.class;
 		
 		new LwjglApplication(new Elude(), cfg);
 	}

@@ -1,0 +1,3 @@
+fake
+listen 8901
+connect 25.25.250.25 8901
