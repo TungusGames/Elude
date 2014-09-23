@@ -2,6 +2,7 @@ package tungus.games.elude.menu.mainmenu;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Elude;
 import tungus.games.elude.menu.AboutScreen;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.SettingsScreen;
@@ -76,6 +77,13 @@ public class MainMenu extends BaseScreen {
 				} else if (infoButton.getBoundingRectangle().contains(touch.x, touch.y)) {
 					toScreen(new AboutScreen(game));
 					return true;
+				} else if (Elude.mpScreen != null && multiplayerButton.getBoundingRectangle().contains(touch.x, touch.y)) {
+					try {
+						toScreen((Screen)(Elude.mpScreen.getConstructors()[0].newInstance(game)));
+					} catch (Exception e) {
+						Gdx.app.log("Net(?) MP", "Reflection magic failed");
+						e.printStackTrace();
+					}
 				}
 				return false;
 			}

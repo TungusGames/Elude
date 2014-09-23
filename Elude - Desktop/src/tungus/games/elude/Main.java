@@ -1,7 +1,5 @@
 package tungus.games.elude;
 
-import tungus.games.elude.Elude;
-
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -28,6 +26,9 @@ public class Main {
         settings.filterMag = TextureFilter.Linear;
         settings.filterMin = TextureFilter.Linear;
         TexturePacker.process(settings, "../img/done", "../Elude - Android/assets/textures", "game");
+        if (NetMPScreen.ready) {
+        	Elude.mpScreen = NetMPScreen.class;
+        }
 		
 		new LwjglApplication(new Elude(), cfg);
 	}

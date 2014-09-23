@@ -7,11 +7,13 @@ import tungus.games.elude.util.log.FPSLogger;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Elude extends Game {
 	
 	public static final String VERSION = "V0.1.3";
+	public static Class<? extends Screen> mpScreen = null;
 	public static final float VIEW_RATIO = 800f/480f;
 	private FPSLogger fps;
 		
