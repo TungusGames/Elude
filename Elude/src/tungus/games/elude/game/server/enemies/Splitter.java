@@ -41,7 +41,7 @@ public class Splitter extends Enemy {
 			arrived = true;
 		}
 		if (timeSinceShot > RELOAD) {
-			shootRocket(world.vessels.get(0).pos.cpy().sub(pos));
+			shootRocket();
 		}
 		return false;
 	}

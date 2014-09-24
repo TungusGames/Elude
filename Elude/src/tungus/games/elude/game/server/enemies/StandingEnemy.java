@@ -23,7 +23,7 @@ public class StandingEnemy extends StandingBase {
 	@Override
 	protected boolean standingUpdate(float deltaTime) {
 		if (timeSinceShot > reload) {
-			shootRocket(world.vessels.get(0).pos.cpy().sub(pos));
+			shootRocket();
 		}
 		return false;
 	}

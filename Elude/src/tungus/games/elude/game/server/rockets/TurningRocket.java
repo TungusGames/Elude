@@ -35,6 +35,7 @@ public class TurningRocket extends Rocket {
 	
 	@Override
 	public void aiUpdate(float deltaTime) {
+		target = targetPlayer(); //Needed?
 		tempVector2.set(target.pos).sub(pos);
 		float angleDiff = tempVector2.angle()-vel.angle();
 		if (angleDiff < -180f) 

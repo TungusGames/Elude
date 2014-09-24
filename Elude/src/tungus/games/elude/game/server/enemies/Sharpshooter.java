@@ -1,5 +1,6 @@
 package tungus.games.elude.game.server.enemies;
 
+import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.game.server.rockets.StraightRocket;
@@ -24,8 +25,9 @@ public class Sharpshooter extends StandingBase {
 	}
 	
 	private Vector2 calcAngle() {
-		Vector2 p = world.vessels.get(0).pos;
-		Vector2 v = world.vessels.get(0).vel;
+		Vessel ve = targetPlayer();
+		Vector2 p = ve.pos;
+		Vector2 v = ve.vel;
 		float dx = p.x-pos.x;
 		float dy = p.y-pos.y;
 		float q = dx/dy;

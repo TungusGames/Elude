@@ -143,6 +143,19 @@ public abstract class Rocket {
 		return true;
 	}
 	
+	protected Vessel targetPlayer() {
+		Vessel r = null;
+		float bestDist = 10000;
+		for (Vessel v : world.vessels) {
+			float d = v.pos.dst2(pos);
+			if (r == null || d < bestDist) {
+				r = v;
+				bestDist = d;
+			}
+		}
+		return r;
+	}
+	
 	protected abstract void aiUpdate(float deltaTime);
 	
 }

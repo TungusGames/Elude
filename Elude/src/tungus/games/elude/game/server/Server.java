@@ -64,7 +64,7 @@ public class Server implements Runnable {
 		lastTime = TimeUtils.millis();
 		while (state != STATE_OVER) {
 			fps.log();
-			while(!allNewData()) {
+			while(!hasNewData()) {
 				/*try {
 					wait(5);
 				} catch (InterruptedException e) {

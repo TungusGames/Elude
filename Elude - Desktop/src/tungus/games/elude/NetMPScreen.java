@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class NetMPScreen extends BaseScreen {
 	
-	private static final int levelNum = 1;
+	private static final int levelNum = 0;
 	private static final boolean finite = false;
 	
 	private static final int MODE_FAKE = 0;

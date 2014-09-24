@@ -42,7 +42,7 @@ public class Minion extends Enemy {
 		}
 		
 		if (timeSinceShot > RELOAD) {
-			shootRocket(world.vessels.get(0).pos.cpy().sub(pos));
+			shootRocket();
 		}
 		
 		if (parent.hp <= 0) {

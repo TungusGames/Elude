@@ -46,7 +46,7 @@ public class MachineGunner extends Enemy {
 				turnAtEdge();
 			}
 			if (timeSinceShot > (shots == 0 ? LONG_RELOAD : SHORT_RELOAD)) {
-				shootRocket(world.vessels.get(0).pos.cpy().sub(pos));
+				shootRocket();
 				if (++shots == SHOTS_AT_ONCE) {
 					shots = 0;
 				}

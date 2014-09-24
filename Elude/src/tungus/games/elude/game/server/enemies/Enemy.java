@@ -2,6 +2,7 @@ package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
+import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
@@ -66,7 +67,9 @@ public abstract class Enemy {
 		return e;
 	}
 	
-	
+	protected final Rocket shootRocket() {
+		return shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
+	}
 	
 	protected final Rocket shootRocket(Vector2 dir) {
 		return shootRocket(rocketType, dir);
@@ -74,7 +77,7 @@ public abstract class Enemy {
 	
 	protected final Rocket shootRocket(RocketType t, Vector2 dir) {
 		timeSinceShot = 0;
-		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, world.vessels.get(0), world);
+		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, targetPlayer(), world);
 		world.rockets.add(r);
 		return r;
 	}
@@ -139,7 +142,7 @@ public abstract class Enemy {
 		if (!vel.equals(Vector2.Zero)) {
 			return vel.angle()-90;
 		} else {
-			return t.set(world.vessels.get(0).pos).sub(pos).angle()-90;
+			return t.set(targetPlayer().pos).sub(pos).angle()-90;
 		}
 	}
 	
@@ -166,5 +169,18 @@ public abstract class Enemy {
 
 	public float height() {
 		return type.height;
+	}
+	
+	protected Vessel targetPlayer() {
+		Vessel r = null;
+		float bestDist = 10000;
+		for (Vessel v : world.vessels) {
+			float d = v.pos.dst2(pos);
+			if (r == null || d < bestDist) {
+				r = v;
+				bestDist = d;
+			}
+		}
+		return r;
 	}
 }

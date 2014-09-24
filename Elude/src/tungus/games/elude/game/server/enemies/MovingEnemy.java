@@ -114,7 +114,7 @@ public class MovingEnemy extends Enemy {
 			turnInOneDir += Math.abs(turnSpeed*deltaTime);
 			if (timeSinceShot > reload) {
 				timeSinceShot -= reload;
-				shootRocket(world.vessels.get(0).pos.cpy().sub(pos));
+				shootRocket();
 			}
 		}
 		return false;

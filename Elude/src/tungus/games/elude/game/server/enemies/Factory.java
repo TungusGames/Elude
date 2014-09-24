@@ -35,7 +35,7 @@ public class Factory extends StandingBase {
 	
 	@Override
 	protected float calcTurnGoal() {
-		return t.set(world.vessels.get(0).pos).sub(pos).angle()-90;
+		return t.set(targetPlayer().pos).sub(pos).angle()-90;
 	}
 	
 	@Override
