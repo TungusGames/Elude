@@ -46,7 +46,7 @@ public class Server implements Runnable {
 			c.newest = new UpdateInfo();
 		}
 		this.world = new World(levelNum, isFinite);
-		sendData = render = new RenderInfo(world);
+		sendData = render = new RenderInfo(world.effects);
 		sendData.info = GameScreen.STATE_PLAYING;
 	}
 	
@@ -60,7 +60,7 @@ public class Server implements Runnable {
 			}*/
 		}
 		setupArrays();
-		render.setFromWorld();
+		render.setFromWorld(world);
 		lastTime = TimeUtils.millis();
 		while (state != STATE_OVER) {
 			fps.log();
@@ -85,14 +85,14 @@ public class Server implements Runnable {
 				world.update(deltaTime, dirs);
 				switch (world.state) {
 				case World.STATE_PLAYING:
-					render.setFromWorld();
+					render.setFromWorld(world);
 					break;
 				case World.STATE_LOST:
 					if ((timeSinceEnd += deltaTime) > END_DELAY) {
 						sendData = new TransferData(GameScreen.STATE_LOST);
 						state = STATE_OVER;
 					} else {
-						render.setFromWorld();
+						render.setFromWorld(world);
 					}
 					break;
 				case World.STATE_WON:
@@ -103,7 +103,7 @@ public class Server implements Runnable {
 						sendData.info = GameScreen.STATE_WON;
 						state = STATE_OVER;
 					} else {
-						render.setFromWorld();
+						render.setFromWorld(world);
 					}
 				}
 			} else if (state == STATE_WAITING_START) {
@@ -126,9 +126,11 @@ public class Server implements Runnable {
 			synchronized(c) {
 				switch (u.info) {
 				case STATE_WAITING_START:
+					Gdx.app.log("SERVERSTATE", "Waiting as requested by " + i);
 					state = STATE_WAITING_START;
 					break;
 				case STATE_RUNNING:
+					Gdx.app.log("SERVERSTATE", "Running as requested by " + i);
 					if (state != STATE_WAITING_START) {
 						state = STATE_RUNNING;
 						sendData.info = GameScreen.STATE_PLAYING;

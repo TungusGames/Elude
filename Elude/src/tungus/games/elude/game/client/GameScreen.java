@@ -199,8 +199,8 @@ public class GameScreen extends BaseScreen {
 			update.directions[i] = controls.get(i).getDir(tmp.set(0,0), 0);
 		}
 		lastTime = TimeUtils.millis();
-		render = new RenderInfo(null);
-		connection.newest = new RenderInfo(null);
+		render = new RenderInfo();
+		connection.newest = new RenderInfo();
 	}
 	
 
@@ -212,7 +212,6 @@ public class GameScreen extends BaseScreen {
 		}
 		CamShaker.INSTANCE.update(deltaTime);
 		logTime("outside", 50);
-		Gdx.app.log("MPDEBUG", "Screen before read");
 		synchronized(connection) {
 			if (!connection.newest.handled) {
 				switch(connection.newest.info) {
@@ -223,9 +222,10 @@ public class GameScreen extends BaseScreen {
 				case STATE_PLAYING:
 					if (state == STATE_READY) {
 						state = STATE_PLAYING;
-						Gdx.app.log("MPDEBUG", "State = PLAYING!");
 					}
 					connection.newest.copyTo(render);
+					Gdx.app.log("Enemies received: ", ""+((RenderInfo)connection.newest).enemies.size());
+					Gdx.app.log("Enemies copied: ", ""+render.enemies.size());
 					break;
 				case STATE_WON:
 					state = STATE_WON;
@@ -244,7 +244,6 @@ public class GameScreen extends BaseScreen {
 				connection.newest.handled = true;
 			}
 		}
-		Gdx.app.log("MPDEBUG", "Screen after read");
 		
 		switch (state) {
 		case STATE_STARTING:
@@ -276,12 +275,11 @@ public class GameScreen extends BaseScreen {
 			update.info = Server.STATE_OVER;
 			break;
 		}
-		Gdx.app.log("MPTEST", "Write start");
+		Gdx.app.log("SCREEN STATE", ""+state);
 		connection.write(update);
 		logTime("update", 50);
 		
 		// RENDER
-		Gdx.app.log("MPTEST", "Render start");
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		renderer.render(deltaTime, gameAlpha, render, state == STATE_PLAYING);
 		

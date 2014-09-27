@@ -65,20 +65,16 @@ public class RenderInfo extends TransferData {
 	public List<Effect> effects;
 	
 	public float[] hp = null;
-	
-	private final World w;
-	
-	public RenderInfo(World world) {
-		w = world;
-		if (w != null) {
-			effects = world.effects;
-		} else {
-			effects = new ArrayList<Effect>();
-		}
 		
+	public RenderInfo() {
+		effects = new ArrayList<Effect>();
+	}
+	
+	public RenderInfo(List<Effect> e) {
+		effects = e;
 	}
 
-	public void setFromWorld() {
+	public void setFromWorld(World w) {
 		RenderInfoPool.freeAlmostAll(this); // Puts everything in the pool except effects
 		enemies.clear();
 		for (ListIterator<Enemy> it = w.enemies.listIterator(); it.hasNext();) {
@@ -112,7 +108,7 @@ public class RenderInfo extends TransferData {
 		if (otherData instanceof RenderInfo) {
 			other = (RenderInfo)otherData;
 		} else {
-			other = new RenderInfo(null);
+			other = new RenderInfo();
 		}
 		super.copyTo(other);
 		RenderInfoPool.freeAll(other);
