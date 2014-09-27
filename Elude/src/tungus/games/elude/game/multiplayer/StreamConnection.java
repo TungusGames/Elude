@@ -6,6 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+
 public class StreamConnection extends Connection {
 	
 	private ObjectInputStream objInStream;
@@ -20,10 +23,15 @@ public class StreamConnection extends Connection {
     			try {
     				// Read from the InputStream
     				synchronized(StreamConnection.this) {
-        				newest = (TransferData)objInStream.readObject();
+    					if (objInStream.available() > 0) {
+    						Gdx.app.log("MPDEBUG", "Stream trying to read");
+    						newest = (TransferData)objInStream.readObject();
+    						Gdx.app.log("MPDEBUG", "Stream managed to read");
+    					}
     				}
     				// Send the obtained bytes to the UI activity
     			} catch (Exception e) {
+    				Gdx.app.log("MPDEBUG", "Stream in exc");
     				break;
     			}
     		}
@@ -32,10 +40,19 @@ public class StreamConnection extends Connection {
     
     public StreamConnection(InputStream in, OutputStream out) {
         try {
-        	objInStream = new ObjectInputStream(in);
+        	Gdx.app.log("MPDEBUG", "Creating StreamC");
         	objOutStream = new ObjectOutputStream(out);
+        	Gdx.app.log("MPDEBUG", "Stream out OK");
+        	objOutStream.flush();
+        	Gdx.app.log("MPDEBUG", "Stream out flushed");
+        	objInStream = new ObjectInputStream(in);
+        	Gdx.app.log("MPDEBUG", "Stream in OK");
+        	
         	thread.start();
-        } catch (IOException e) { } //TODO error handling
+        	Gdx.app.log("MPDEBUG", "Stream thread OK");
+        } catch (IOException e) {
+        	throw new GdxRuntimeException(e);
+        } //TODO error handling
     }
  
     /* Call this from the main activity to send data to the remote device */
@@ -43,6 +60,8 @@ public class StreamConnection extends Connection {
     public void write(TransferData data) {
         try {
             objOutStream.writeObject(data);
-        } catch (IOException e) { } //TODO exception handling
+        } catch (IOException e) {
+        	throw new GdxRuntimeException(e);
+        } //TODO exception handling
     }
 }

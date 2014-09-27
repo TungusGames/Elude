@@ -47,6 +47,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class GameScreen extends BaseScreen {
 	
 	public static final int STATE_STARTING = 4;
+	public static final int STATE_READY = 5;
 	public static final int STATE_PLAYING = 0;
 	public static final int STATE_PAUSED = 1;
 	public static final int STATE_LOST = 2;
@@ -135,6 +136,7 @@ public class GameScreen extends BaseScreen {
 	
 	public GameScreen(Game game, int levelNum, boolean finite, Connection connection, int clientID) {
 		super(game);
+		Gdx.app.log("MPDEBUG", "Creating screen");
 		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		
@@ -209,11 +211,14 @@ public class GameScreen extends BaseScreen {
 		}
 		CamShaker.INSTANCE.update(deltaTime);
 		logTime("outside", 50);
-		
+		Gdx.app.log("MPDEBUG", "Screen before read");
 		synchronized(connection) {
 			if (!connection.newest.handled) {
 				switch(connection.newest.info) {
+				case STATE_STARTING:
+					break;
 				case STATE_PLAYING:
+					state = STATE_PLAYING;
 					connection.newest.copyTo(render);
 					break;
 				case STATE_WON:
@@ -233,17 +238,21 @@ public class GameScreen extends BaseScreen {
 				connection.newest.handled = true;
 			}
 		}
+		Gdx.app.log("MPDEBUG", "Screen after read");
 		
 		switch (state) {
 		case STATE_STARTING:
 			if (timeSinceStart > START_TIME) {
-				state = STATE_PLAYING;
+				state = STATE_READY;
 				gameAlpha = 1;
 			} else {
 				gameAlpha = Interpolation.fade.apply(timeSinceStart/START_TIME);
 				timeSinceStart += deltaTime;
 			}
 			update.info = Server.STATE_WAITING_START;
+			break;
+		case STATE_READY:
+			update.info = Server.STATE_RUNNING;
 			break;
 		case STATE_PLAYING:
 			for (int i = 0; i < update.directions.length; i++) {
@@ -261,11 +270,12 @@ public class GameScreen extends BaseScreen {
 			update.info = Server.STATE_OVER;
 			break;
 		}
-		
+		Gdx.app.log("MPTEST", "Write start");
 		connection.write(update);
 		logTime("update", 50);
 		
 		// RENDER
+		Gdx.app.log("MPTEST", "Render start");
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		renderer.render(deltaTime, gameAlpha, render, state == STATE_PLAYING);
 		

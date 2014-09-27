@@ -106,6 +106,8 @@ public class Server implements Runnable {
 						render.setFromWorld();
 					}
 				}
+			} else if (state == STATE_WAITING_START) {
+				sendData.info = GameScreen.STATE_STARTING;
 			}
 			
 			long sendStart = TimeUtils.millis();
