@@ -27,7 +27,7 @@ public class Splitter extends Enemy {
 	
 	public Splitter(Vector2 pos, World w, int splits) {
 		super(pos, EnemyType.SPLITTER, coeff(splits, MIN_SIZE)*COLL, coeff(splits, 0.5f)*HP, w, RocketType.SLOW_TURNING);
-		vel.set(MathUtils.random(World.innerBounds.width) + World.EDGE, MathUtils.random(World.innerBounds.height) + World.EDGE).sub(pos).nor().scl(SPEED);
+		vel.set(SPEED, 0).rotate(MathUtils.random(360));
 		splitsLeft = splits;
 	}
 	

@@ -82,7 +82,11 @@ public class World {
 			v.update(deltaTime, dirs[i]);
 			isVesselAlive = isVesselAlive || v.hp > 0;
 		}
-		float deltaForEnemy = (freezeTime > 0 ? 0 : deltaTime);
+		float deltaForEnemy = deltaTime;
+		if (freezeTime > 0) {
+			freezeTime -= deltaTime;
+			deltaForEnemy = 0;
+		}
 		for (ListIterator<Enemy> it = enemies.listIterator(); it.hasNext(); ) {
 			Enemy e = it.next();
 			if (e.update(deltaForEnemy) || e.hp <= 0) {

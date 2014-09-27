@@ -97,6 +97,7 @@ public class GameScreen extends BaseScreen {
 	private InputAdapter inputListener = new InputAdapter() {
 		@Override
 		public boolean keyDown(int keycode) {
+			Gdx.app.log("KEY", "Down " + keycode);
 			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
 				if (state == STATE_PLAYING)
 					state = STATE_PAUSED;
@@ -114,6 +115,7 @@ public class GameScreen extends BaseScreen {
 		private final Vector3 touch3 = new Vector3();
 		@Override
 		public boolean tap(float x, float y, int count, int button) {
+			Gdx.app.log("TAP", "Down " + x + ", " + y);
 			rawTap.set(x, y, 0);
 			if (state == STATE_PLAYING) {
 				touch3.set(rawTap);
@@ -198,7 +200,6 @@ public class GameScreen extends BaseScreen {
 		}
 		lastTime = TimeUtils.millis();
 		render = new RenderInfo(null);
-		render.hp = new float[update.directions.length];
 		connection.newest = new RenderInfo(null);
 	}
 	
@@ -216,9 +217,14 @@ public class GameScreen extends BaseScreen {
 			if (!connection.newest.handled) {
 				switch(connection.newest.info) {
 				case STATE_STARTING:
+				case STATE_READY:
+					connection.newest.copyTo(render);
 					break;
 				case STATE_PLAYING:
-					state = STATE_PLAYING;
+					if (state == STATE_READY) {
+						state = STATE_PLAYING;
+						Gdx.app.log("MPDEBUG", "State = PLAYING!");
+					}
 					connection.newest.copyTo(render);
 					break;
 				case STATE_WON:
@@ -283,7 +289,12 @@ public class GameScreen extends BaseScreen {
 		for (int i = 0; i < controls.size(); i++) {
 			controls.get(i).draw(uiBatch, gameAlpha);
 		}
-		healthbar.draw(uiBatch, render.hp[vesselID], deltaTime, gameAlpha);
+		Gdx.app.log("SERVER VESSELS", "" + render.vessels.size());
+		if (render.hp != null && render.hp.length > 0) {
+			healthbar.draw(uiBatch, render.hp[vesselID], deltaTime, gameAlpha);
+		} else {
+			healthbar.draw(uiBatch, 1, deltaTime, gameAlpha);
+		}
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
 		

@@ -131,6 +131,7 @@ public class Server implements Runnable {
 				case STATE_RUNNING:
 					if (state != STATE_WAITING_START) {
 						state = STATE_RUNNING;
+						sendData.info = GameScreen.STATE_PLAYING;
 					}
 					if (!u.handled) {
 						for (int j = 0; j < u.directions.length; j++) {

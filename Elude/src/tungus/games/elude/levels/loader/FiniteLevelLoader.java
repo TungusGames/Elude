@@ -14,6 +14,7 @@ import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 public class FiniteLevelLoader extends EnemyLoader {
@@ -44,7 +45,9 @@ public class FiniteLevelLoader extends EnemyLoader {
 		
 		public static Level levelFromFile(FileHandle file) {
 			try {
-				Level level = (Level)(new ObjectInputStream(file.read()).readObject());
+				ObjectInputStream o = new ObjectInputStream(file.read());
+				Gdx.app.log("AVAILABLE: ", ""+o.available());
+				Level level = (Level)(o.readObject());
 				return level;
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();

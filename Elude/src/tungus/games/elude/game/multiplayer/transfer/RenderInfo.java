@@ -64,7 +64,7 @@ public class RenderInfo extends TransferData {
 	public List<ReducedVessel> vessels = new ArrayList<ReducedVessel>();
 	public List<Effect> effects;
 	
-	public float[] hp;
+	public float[] hp = null;
 	
 	private final World w;
 	
