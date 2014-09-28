@@ -3,6 +3,7 @@ package tungus.games.elude.game.server;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.Connection.TransferData;
+import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
 import tungus.games.elude.game.multiplayer.transfer.ArcadeScoreInfo;
 import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
@@ -39,6 +40,9 @@ public class Server implements Runnable {
 	
 	private RenderInfo render;
 	private TransferData sendData;
+	//private final ServerSendHelper sender;
+	private final Connection sender;
+	private final Object sendInvoker;
 	
 	public Server(int levelNum, boolean isFinite, Connection[] connections) {
 		this.connections = connections;
@@ -46,6 +50,11 @@ public class Server implements Runnable {
 			c.newest = new UpdateInfo();
 		}
 		this.world = new World(levelNum, isFinite);
+		
+		LocalConnectionPair p = new LocalConnectionPair();
+		sendInvoker = new Object();
+		new Thread(new ServerSendHelper(p.c1, connections, sendInvoker)).start();
+		sender = p.c2;
 		sendData = render = new RenderInfo(world.effects);
 		sendData.info = GameScreen.STATE_PLAYING;
 	}
@@ -64,7 +73,7 @@ public class Server implements Runnable {
 		lastTime = TimeUtils.millis();
 		while (state != STATE_OVER) {
 			fps.log();
-			while(!hasNewData()) {
+			while(!allNewData()) {
 				/*try {
 					wait(5);
 				} catch (InterruptedException e) {
@@ -111,9 +120,17 @@ public class Server implements Runnable {
 			}
 			
 			long sendStart = TimeUtils.millis();
-			for (Connection c : connections)
-				c.write(sendData);
-			sendTime.log(TimeUtils.millis()-sendStart);
+			/*for (Connection c : connections)
+				c.write(sendData);*/
+			sender.write(sendData);
+			synchronized (sendInvoker) {
+				sendInvoker.notify();
+			}
+			long s = TimeUtils.millis()-sendStart;
+			sendTime.log(s);
+			if (s > 10) {
+				Gdx.app.log("Send time", ""+s);
+			}
 		}
 		Gdx.app.log("Server", "Server stopped!");
 	}
@@ -126,11 +143,9 @@ public class Server implements Runnable {
 			synchronized(c) {
 				switch (u.info) {
 				case STATE_WAITING_START:
-					Gdx.app.log("SERVERSTATE", "Waiting as requested by " + i);
 					state = STATE_WAITING_START;
 					break;
 				case STATE_RUNNING:
-					Gdx.app.log("SERVERSTATE", "Running as requested by " + i);
 					if (state != STATE_WAITING_START) {
 						state = STATE_RUNNING;
 						sendData.info = GameScreen.STATE_PLAYING;

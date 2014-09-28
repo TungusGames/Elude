@@ -97,7 +97,6 @@ public class GameScreen extends BaseScreen {
 	private InputAdapter inputListener = new InputAdapter() {
 		@Override
 		public boolean keyDown(int keycode) {
-			Gdx.app.log("KEY", "Down " + keycode);
 			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
 				if (state == STATE_PLAYING)
 					state = STATE_PAUSED;
@@ -115,7 +114,6 @@ public class GameScreen extends BaseScreen {
 		private final Vector3 touch3 = new Vector3();
 		@Override
 		public boolean tap(float x, float y, int count, int button) {
-			Gdx.app.log("TAP", "Down " + x + ", " + y);
 			rawTap.set(x, y, 0);
 			if (state == STATE_PLAYING) {
 				touch3.set(rawTap);
@@ -138,7 +136,6 @@ public class GameScreen extends BaseScreen {
 	
 	public GameScreen(Game game, int levelNum, boolean finite, Connection connection, int clientID) {
 		super(game);
-		Gdx.app.log("MPDEBUG", "Creating screen");
 		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
 		
@@ -224,8 +221,6 @@ public class GameScreen extends BaseScreen {
 						state = STATE_PLAYING;
 					}
 					connection.newest.copyTo(render);
-					Gdx.app.log("Enemies received: ", ""+((RenderInfo)connection.newest).enemies.size());
-					Gdx.app.log("Enemies copied: ", ""+render.enemies.size());
 					break;
 				case STATE_WON:
 					state = STATE_WON;
@@ -275,7 +270,6 @@ public class GameScreen extends BaseScreen {
 			update.info = Server.STATE_OVER;
 			break;
 		}
-		Gdx.app.log("SCREEN STATE", ""+state);
 		connection.write(update);
 		logTime("update", 50);
 		
@@ -287,7 +281,6 @@ public class GameScreen extends BaseScreen {
 		for (int i = 0; i < controls.size(); i++) {
 			controls.get(i).draw(uiBatch, gameAlpha);
 		}
-		Gdx.app.log("SERVER VESSELS", "" + render.vessels.size());
 		if (render.hp != null && render.hp.length > 0) {
 			healthbar.draw(uiBatch, render.hp[vesselID], deltaTime, gameAlpha);
 		} else {

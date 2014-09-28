@@ -55,7 +55,7 @@ public class MainMenu extends BaseScreen {
 		settingsButton.setBounds(405, 35, 105, 105);
 		multiplayerButton = new Sprite(Assets.multiplayerButton);
 		multiplayerButton.setBounds(405, 150, 220, 105);
-		multiplayerButton.setColor(1, 1, 1, 0.3f);
+		multiplayerButton.setColor(1, 1, 1, Elude.mpScreen == null ? 0.3f : 1f);
 		infoButton = new Sprite(Assets.infoButton);
 		infoButton.setBounds(520, 35, 105, 105);
 		Gdx.input.setInputProcessor(new InputAdapter(){

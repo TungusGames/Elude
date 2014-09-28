@@ -71,9 +71,9 @@ public class FakeDebugClientScreen extends BaseScreen implements Runnable {
 			controls.add(new KeyControls(new int[] {Keys.DPAD_UP, Keys.DPAD_LEFT, Keys.DPAD_DOWN, Keys.DPAD_RIGHT}));			
 			update.directions[i] = controls.get(i).getDir(tmp.set(0,0), 0);
 		}
-		render = new RenderInfo(null);
+		render = new RenderInfo();
 		render.hp = new float[update.directions.length];
-		connection.newest = new RenderInfo(null);
+		connection.newest = new RenderInfo();
 	}
 	
 
@@ -87,6 +87,7 @@ public class FakeDebugClientScreen extends BaseScreen implements Runnable {
 			if (!connection.newest.handled) {
 				switch(connection.newest.info) {
 				case STATE_PLAYING:
+				case STATE_STARTING:
 					state = STATE_PLAYING;
 					connection.newest.copyTo(render);
 					break;
