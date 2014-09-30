@@ -12,6 +12,7 @@ import tungus.games.elude.game.server.Server;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
@@ -19,7 +20,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class NetMPScreen extends BaseScreen {
 	
-	private static final int levelNum = 2;
+	private static final int levelNum = 4;
 	private static final boolean finite = false;
 	
 	private static final int MODE_FAKE = 0;
@@ -66,15 +67,17 @@ public class NetMPScreen extends BaseScreen {
 			//SocketHints hints = new SocketHints();
 			//hints.
 			s = Gdx.net.newClientSocket(Net.Protocol.TCP, IP, port, new SocketHints());
-			game.setScreen(new GameScreen(game, levelNum, finite, new StreamConnection(s.getInputStream(), s.getOutputStream()), 1));
+			game.setScreen(new GameScreen(game, levelNum, finite, new StreamConnection(s.getInputStream(), s.getOutputStream(), s), 1));
 		} else if (mode == MODE_LISTEN) {
 			Gdx.app.log("MODE", "LISTEN");
 			try {
 				ServerSocketHints hints = new ServerSocketHints();
 				hints.acceptTimeout = 0;
-				s = Gdx.net.newServerSocket(Net.Protocol.TCP, port, hints).accept(new SocketHints());
+				ServerSocket ss = Gdx.net.newServerSocket(Net.Protocol.TCP, port, hints); 
+				s = ss.accept(new SocketHints());
+				ss.dispose();
 				LocalConnectionPair c = new LocalConnectionPair();
-				new Thread(new Server(levelNum, finite, new Connection[] {c.c1, new StreamConnection(s.getInputStream(), s.getOutputStream())})).start();
+				new Thread(new Server(levelNum, finite, new Connection[] {c.c1, new StreamConnection(s.getInputStream(), s.getOutputStream(), s)})).start();
 				game.setScreen(new GameScreen(game, levelNum, finite, c.c2, 0));
 			} catch (GdxRuntimeException e) {
 				Gdx.app.log("Net MP", "Socket accept timed out. Retrying...");

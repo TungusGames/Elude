@@ -26,4 +26,5 @@ public abstract class Connection {
 	}
 	public TransferData newest;
 	public abstract void write(TransferData o);
+	public void close() {};
 }

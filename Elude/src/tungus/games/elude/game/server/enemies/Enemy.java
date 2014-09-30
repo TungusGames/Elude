@@ -1,5 +1,8 @@
 package tungus.games.elude.game.server.enemies;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
 import tungus.games.elude.game.server.Vessel;
@@ -14,23 +17,36 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Enemy {
 	
 	public static enum EnemyType {
-		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	 new float[]{0.1f,1,0.1f,1}), 
-		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f, new float[]{1,1,0.2f,1}), 
-		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1}), 
-		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}),
-		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}),
-		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}),
-		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}),
-		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}),
-		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f});
+		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true), 
+		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f, new float[]{   1,    1, 0.2f,  1}, true), 
+		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1  }, true), 
+		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}, true),
+		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}, true),
+		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true),
+		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true),
+		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}, false),
+		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true);
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
 		public float height;
 		public float halfHeight;
+		public boolean spawns;
 		public float[] debrisColor;
-		EnemyType(TextureRegion t, float w, float h, float[] c) {
-			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2;
+		EnemyType(TextureRegion t, float w, float h, float[] c, boolean spawnsNormally) {
+			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2; spawns = spawnsNormally;
+		}
+		
+		public static EnemyType[] normalSpawners() {
+			EnemyType[] all = EnemyType.values();
+			List<EnemyType> s = new LinkedList<EnemyType>();
+			for (EnemyType t : all) {
+				if (t.spawns) {
+					s.add(t);
+				}
+			}
+			EnemyType[] spawners = new EnemyType[s.size()];
+			return s.toArray(spawners);
 		}
 	} 
 	

@@ -6,13 +6,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class StreamConnection extends Connection {
 
 	private ObjectInputStream objInStream;
 	private ObjectOutputStream objOutStream;
-
+	private final Disposable toClose;
 
 	private Thread thread = new Thread() {
 		@Override
@@ -34,7 +36,7 @@ public class StreamConnection extends Connection {
 		}
 	};
 
-	public StreamConnection(InputStream in, OutputStream out) {
+	public StreamConnection(InputStream in, OutputStream out, Disposable c) {
 		try {
 			objOutStream = new ObjectOutputStream(out);
 			objOutStream.flush();
@@ -43,6 +45,7 @@ public class StreamConnection extends Connection {
 		} catch (IOException e) {
 			throw new GdxRuntimeException(e);
 		} //TODO error handling
+		toClose = c;
 	}
 
 	/* Call this from the main activity to send data to the remote device */
@@ -52,7 +55,14 @@ public class StreamConnection extends Connection {
 			objOutStream.reset();
 			objOutStream.writeUnshared(data);
 		} catch (IOException e) {
-			throw new GdxRuntimeException(e);
+			Gdx.app.log("SEND ERROR", "Failed to send data");
 		} //TODO exception handling
+	}
+	
+	@Override
+	public void close() {
+		if (toClose != null) {
+			toClose.dispose();
+		}
 	}
 }

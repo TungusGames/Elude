@@ -133,6 +133,9 @@ public class Server implements Runnable {
 			}
 		}
 		Gdx.app.log("Server", "Server stopped!");
+		for (Connection c : connections) {
+			c.close();
+		}
 	}
 	
 	private void readInput() {

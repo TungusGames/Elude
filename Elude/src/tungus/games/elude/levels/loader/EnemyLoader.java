@@ -38,7 +38,7 @@ public abstract class EnemyLoader {
 			case 3:
 				return new PlusPlus(world, n, EnemyType.MOVING); //Standing fast removed
 			case 4:
-				return new FillUp(world, n, 10, 50f, EnemyType.values());
+				return new FillUp(world, n, 10, 50f, EnemyType.normalSpawners());
 			default:
 				throw new IllegalArgumentException("Unknown arcade level number");
 				
