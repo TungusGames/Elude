@@ -10,22 +10,24 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public abstract class Enemy {
 	
 	public static enum EnemyType {
-		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true), 
-		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f, new float[]{   1,    1, 0.2f,  1}, true), 
-		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1  }, true), 
-		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}, true),
-		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}, true),
-		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true),
-		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true),
-		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}, false),
-		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true);
+		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true, StandingEnemy.class), 
+		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f, new float[]{   1,    1, 0.2f,  1}, true, MovingEnemy.class), 
+		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1  }, true, Kamikaze.class), 
+		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}, true, Sharpshooter.class),
+		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}, true, MachineGunner.class),
+		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class),
+		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Splitter.class),
+		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class),
+		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class);
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -33,8 +35,9 @@ public abstract class Enemy {
 		public float halfHeight;
 		public boolean spawns;
 		public float[] debrisColor;
-		EnemyType(TextureRegion t, float w, float h, float[] c, boolean spawnsNormally) {
-			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2; spawns = spawnsNormally;
+		public Class<? extends Enemy> mClass;
+		EnemyType(TextureRegion t, float w, float h, float[] c, boolean spawnsNormally, Class<? extends Enemy> cl) {
+			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2; spawns = spawnsNormally; mClass = cl;
 		}
 		
 		public static EnemyType[] normalSpawners() {
@@ -51,36 +54,12 @@ public abstract class Enemy {
 	} 
 	
 	public static final Enemy fromType(World w, EnemyType t) {
-		Enemy e = null;
-		switch (t) {
-		case STANDING:
-			e = new StandingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), w);
-			break;
-		case MOVING:
-			e = new MovingEnemy(w.randomPosOnOuterRect(new Vector2(), 1), w);
-			break;
-		case KAMIKAZE:
-			e = new Kamikaze(w.randomPosOnOuterRect(new Vector2(), 1), w);
-			break;
-		case SHARPSHOOTER:
-			e = new Sharpshooter(w.randomPosOnOuterRect(new Vector2(), 1), w);
-			break;
-		case MACHINEGUNNER:
-			e = new MachineGunner(w.randomPosOnOuterRect(new Vector2(), 1), w);
-			break;
-		case SHIELDED:
-			e = new Shielded(w.randomPosOnOuterRect(new Vector2(), 1), w);
-			break;
-		case SPLITTER:
-			e = new Splitter(w.randomPosOnOuterRect(new Vector2(), 1), w);
-			break;
-		case FACTORY:
-			e = new Factory(w.randomPosOnOuterRect(new Vector2(), 1), w);
-			break;
-		default:
-			throw new IllegalArgumentException("Unknown enemy type: " + t);
+		try {
+			return (Enemy)(t.mClass.getConstructor(Vector2.class, World.class).newInstance(w.randomPosOnOuterRect(new Vector2(), 1), w));
+		} catch (Exception ex) {
+			Gdx.app.log("ERROR", "Enemy instantiation reflection magic failed.");
+			throw new GdxRuntimeException(ex);
 		}
-		return e;
 	}
 	
 	protected final Rocket shootRocket() {

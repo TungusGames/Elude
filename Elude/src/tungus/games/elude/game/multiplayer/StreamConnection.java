@@ -1,20 +1,18 @@
 package tungus.games.elude.game.multiplayer;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class StreamConnection extends Connection {
 
 	private ObjectInputStream objInStream;
 	private ObjectOutputStream objOutStream;
-	private final Disposable toClose;
+	private final Socket socket;
 
 	private Thread thread = new Thread() {
 		@Override
@@ -36,16 +34,16 @@ public class StreamConnection extends Connection {
 		}
 	};
 
-	public StreamConnection(InputStream in, OutputStream out, Disposable c) {
+	public StreamConnection(Socket s) {
 		try {
-			objOutStream = new ObjectOutputStream(out);
+			objOutStream = new ObjectOutputStream(s.getOutputStream());
 			objOutStream.flush();
-			objInStream = new ObjectInputStream(in);
+			objInStream = new ObjectInputStream(s.getInputStream());
 			thread.start();
 		} catch (IOException e) {
 			throw new GdxRuntimeException(e);
 		} //TODO error handling
-		toClose = c;
+		socket = s;
 	}
 
 	/* Call this from the main activity to send data to the remote device */
@@ -56,13 +54,12 @@ public class StreamConnection extends Connection {
 			objOutStream.writeUnshared(data);
 		} catch (IOException e) {
 			Gdx.app.log("SEND ERROR", "Failed to send data");
+			e.printStackTrace();
 		} //TODO exception handling
 	}
 	
 	@Override
 	public void close() {
-		if (toClose != null) {
-			toClose.dispose();
-		}
+		socket.dispose();
 	}
 }

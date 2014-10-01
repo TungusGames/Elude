@@ -152,7 +152,7 @@ public class BluetoothConnector {
 		                if (socket != null) {
 		                	// Create the Connection object and sign to the render thread
 		                	if (bluetoothConnection == null) {
-		                		bluetoothConnection = new StreamConnection(socket.getInputStream(), socket.getOutputStream(), new BluetoothCloser(socket));
+		                		bluetoothConnection = new StreamConnection(new BTSocket(socket));
 			                	state = ServerState.CONNECTED;
 		                	}
 		                	serverSocket.close();
@@ -355,16 +355,10 @@ public class BluetoothConnector {
 		            } catch (IOException closeException) { }
 		            return;
 		        }
-		        // Create the Connection object and sign to the render thread
-		        try {
-		        	if (bluetoothConnection == null) {
-		        		bluetoothConnection = new StreamConnection(socket.getInputStream(), socket.getOutputStream(), new BluetoothCloser(socket));
-		        		state = ClientState.CONNECTED;
-		        	}		        	
-		        } catch (IOException e) {
-		        	e.printStackTrace();
-		        	state = ClientState.ERROR;
-		        }
+		        if (bluetoothConnection == null) {
+					bluetoothConnection = new StreamConnection(new BTSocket(socket));
+					state = ClientState.CONNECTED;
+				}
 		    }
 		 
 		    /** Will cancel an in-progress connection, and close the socket */
