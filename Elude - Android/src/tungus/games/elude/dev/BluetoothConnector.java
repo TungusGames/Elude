@@ -131,7 +131,7 @@ public class BluetoothConnector {
 		    public AcceptThread() {
 		    	super();
 		    	try {	        	
-		    		// MY_UUID is the app's UUID string, also used by the client code
+		    		// MY_UUID is the app's UUID string, also used by the client code		    		
 		    		serverSocket = adapter.listenUsingRfcommWithServiceRecord("Elude", MY_UUID);
 			      	} catch (IOException e) {
 			      		state = ServerState.ERROR;
@@ -145,7 +145,9 @@ public class BluetoothConnector {
 		        // Keep listening until exception occurs or a socket is returned
 		        while (true) {
 		            try {
+		            	Gdx.app.log("Bluetooth", "Server trying to accept");
 		            	BluetoothSocket socket = serverSocket.accept();
+		            	Gdx.app.log("Bluetooth", "Server accepted");
 		                // If a connection was accepted
 		                if (socket != null) {
 		                	// Create the Connection object and sign to the render thread
@@ -157,6 +159,7 @@ public class BluetoothConnector {
 			                break;
 			            }
 		            } catch (IOException e) { // TODO Is error needed here?
+		            	Gdx.app.log("Bluetooth", "Server exception during accept");
 		            	e.printStackTrace();
 		            	state = ServerState.ERROR;
 		                break;
@@ -305,10 +308,17 @@ public class BluetoothConnector {
 				}
 			}
 			if (device != null) {
-				connectThread = new ConnectThread(device);
-				if (state == ClientState.CONNECTING)
-					return true;
+				return connectTo(device);
 			} return false;
+		}
+		
+		public boolean connectTo(BluetoothDevice device) {
+			connectThread = new ConnectThread(device);
+			connectThread.start();
+			if (state == ClientState.CONNECTING) {
+				return true;
+			}
+			return false;
 		}
 		
 		public class ConnectThread extends Thread {
@@ -335,7 +345,9 @@ public class BluetoothConnector {
 		        try {
 		            // Connect the device through the socket. This will block
 		            // until it succeeds or throws an exception
+		        	Gdx.app.log("Bluetooth", "Client trying to connect");
 		            socket.connect();
+		            Gdx.app.log("Bluetooth", "Client connected");
 		        } catch (IOException connectException) {
 		            // Unable to connect; close the socket and get out
 		            try {

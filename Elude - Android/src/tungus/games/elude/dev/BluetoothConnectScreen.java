@@ -46,7 +46,7 @@ public class BluetoothConnectScreen extends BaseScreen {
 		public boolean touchDown (int screenX, int screenY, int pointer, int button) {
 			int n = gui.tapSelection(screenX, screenY);
 			if (n != -1) {
-				client.connectTo(devices.get(n).getName());
+				client.connectTo(devices.get(n));
 			}
 			return false;
 		}
@@ -111,9 +111,6 @@ public class BluetoothConnectScreen extends BaseScreen {
 			break;
 		case DISCOVERING:
 			client.listDevices(devices);
-			if (devices.size() > 0) {
-				Gdx.app.log("Bluetooth", "Listed device!");
-			}
 			break;
 		default:
 			break;
