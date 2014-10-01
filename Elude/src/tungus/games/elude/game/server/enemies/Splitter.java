@@ -22,12 +22,16 @@ public class Splitter extends Enemy {
 	private boolean arrived = false;
 	
 	public Splitter(Vector2 pos, World w) {
-		this(pos, w, DEFAULT_SPLITS);
+		this(pos, w, DEFAULT_SPLITS, true);
 	}
 	
-	public Splitter(Vector2 pos, World w, int splits) {
+	public Splitter(Vector2 pos, World w, int splits, boolean edge) {
 		super(pos, EnemyType.SPLITTER, coeff(splits, MIN_SIZE)*COLL, coeff(splits, 0.5f)*HP, w, RocketType.SLOW_TURNING);
-		vel.set(SPEED, 0).rotate(MathUtils.random(360));
+		if (edge) {
+			vel.set(World.WIDTH/2, World.HEIGHT/2).sub(pos).nor().scl(SPEED);
+		} else {
+			vel.set(SPEED, 0).rotate(MathUtils.random(360));
+		}
 		splitsLeft = splits;
 	}
 	
@@ -51,7 +55,7 @@ public class Splitter extends Enemy {
 		super.killByRocket(r);
 		if (splitsLeft > 0) {
 			for (int i = 0; i < SPLIT_INTO; i++) {
-				world.enemies.add(new Splitter(pos.cpy(), world, splitsLeft-1));
+				world.enemies.add(new Splitter(pos.cpy(), world, splitsLeft-1, false));
 			}
 		}
 	}
