@@ -17,7 +17,8 @@ public abstract class Rocket {
 	public static enum RocketType { 
 		SLOW_TURNING(Assets.flameRocket), 
 		FAST_TURNING(Assets.matrixRocket), 
-		STRAIGHT(Assets.straightRocket);
+		STRAIGHT(Assets.straightRocket),
+		MINE(Assets.matrixRocket);
 		public ParticleEffectPool effect;
 		RocketType(ParticleEffectPool e) {
 			effect = e;
@@ -40,6 +41,9 @@ public abstract class Rocket {
 		case STRAIGHT:
 			r = new StraightRocket(origin, pos, dir, w, target);
 			break;
+		case MINE:
+			r = new Mine(origin, pos, dir, w, target);
+			break;
 		default:
 			throw new IllegalArgumentException("Unknown rocket type: " + t);
 		}
@@ -55,7 +59,8 @@ public abstract class Rocket {
 	
 	public Vector2 pos;
 	public Vector2 vel;
-	public Circle bounds;
+	public Circle boundsForEnemy;
+	public Circle boundsForVessel;
 	public final RocketType type;
 	public final int id;
 	
@@ -70,13 +75,17 @@ public abstract class Rocket {
 	}
 	
 	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life) {
+		this(origin, t, pos, dir, world, target, dmg, life, ROCKET_SIZE, ROCKET_SIZE);
+	}
+	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life, float sizeForEnemy, float sizeForVessel) {
 		super();
 		this.origin = origin;
 		this.type = t;
 		this.life = life;
 		this.pos = pos;
 		this.world = world;
-		this.bounds = new Circle(pos, ROCKET_SIZE/2);
+		this.boundsForEnemy = new Circle(pos, sizeForEnemy/2);
+		this.boundsForVessel = new Circle(pos, sizeForVessel/2);
 		this.dmg = dmg;
 		this.target = target;
 		this.id = nextID++;
@@ -95,8 +104,10 @@ public abstract class Rocket {
 		}
 		aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		bounds.x = pos.x;
-		bounds.y = pos.y;
+		boundsForEnemy.x = pos.x;
+		boundsForEnemy.y = pos.y;
+		boundsForVessel.x = pos.x;
+		boundsForVessel.y = pos.y;
 		if (!World.outerBounds.contains(pos)) {
 			if (hitWall(pos.x < 0 || pos.x > World.WIDTH)) {
 				return true;
@@ -108,7 +119,7 @@ public abstract class Rocket {
 		for (int i = 0; i < size; i++) {
 			Enemy e = world.enemies.get(i);
 			if (!outOfOrigin && e == origin) {
-				stillIn = (origin.collisionBounds.overlaps(bounds));
+				stillIn = (origin.collisionBounds.overlaps(boundsForVessel));
 				continue;
 			}
 			if (e.hitBy(this)) {
@@ -122,7 +133,7 @@ public abstract class Rocket {
 		
 		size = world.vessels.size();
 		for (int i = 0; i < size; i++) {
-			if (Intersector.overlaps(world.vessels.get(i).bounds, bounds)) {
+			if (Intersector.overlaps(world.vessels.get(i).bounds, boundsForVessel)) {
 				if (!world.vessels.get(i).shielded) {
 					world.effects.add(RenderInfoPool.newEffect(0f, 0f, EffectType.CAMSHAKE.ordinal()));
 					world.vessels.get(i).hp -= dmg;

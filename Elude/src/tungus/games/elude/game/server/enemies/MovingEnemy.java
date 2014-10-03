@@ -12,9 +12,9 @@ public class MovingEnemy extends Enemy {
 	private static final float COLLIDER_SIZE = 0.85f;
 	
 	private static final float MAX_HP = 7f;
-	private static final float SPEED = 3f;
+	protected static final float SPEED = 3f;
 	private static final float MAX_TURNSPEED = 100f;
-	private static final float RELOAD = 2f;
+	protected static final float RELOAD = 2f;
 	
 	private static final int STATE_ARRIVING = 0;
 	private static final int STATE_MOVING_INSIDE = 1;

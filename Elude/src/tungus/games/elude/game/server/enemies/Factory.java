@@ -40,7 +40,7 @@ public class Factory extends StandingBase {
 	
 	@Override
 	public boolean hitBy(Rocket r) {
-		if (pos.dst2(r.pos) < (RADIUS+r.bounds.radius)*(RADIUS+r.bounds.radius)) {
+		if (pos.dst2(r.pos) < (RADIUS+r.boundsForEnemy.radius)*(RADIUS+r.boundsForEnemy.radius)) {
 			if ((hp -= r.dmg) <= 0) {
 				killByRocket(r);
 			}

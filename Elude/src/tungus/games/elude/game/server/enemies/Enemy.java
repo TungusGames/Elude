@@ -27,7 +27,8 @@ public abstract class Enemy {
 		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class),
 		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Splitter.class),
 		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class),
-		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class);
+		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class),
+		MINER		 (Assets.whiteRectangle,	0.6f, 0.6f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class);
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -149,7 +150,7 @@ public abstract class Enemy {
 	}
 	
 	public boolean hitBy(Rocket r) {
-		if (collisionBounds.overlaps(r.bounds)) {
+		if (collisionBounds.overlaps(r.boundsForEnemy)) {
 			if ((hp -= r.dmg) <= 0) {
 				killByRocket(r);
 			}
