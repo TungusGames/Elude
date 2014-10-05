@@ -1,0 +1,26 @@
+#ifdef GL_ES
+    precision mediump float;
+#endif
+
+varying vec4 v_color;
+varying vec2 v_texCoords;
+varying vec4 pos;
+
+uniform sampler2D u_texture;
+uniform mat4 u_projTrans;
+
+uniform vec2 worldSize;
+uniform vec2 viewportSize;
+uniform float time;
+uniform float R;
+uniform vec2 center;
+
+void main() {
+        vec2 worldCoord = gl_FragCoord.xy / viewportSize.xy * worldSize.xy;
+       // worldCoord.x = gl_FragCoord.x / 800 * 20;
+       // worldCoord.y = gl_FragCoord.y / 480 * 12;
+        float dist = length(worldCoord - center);
+        float intensity = (R-dist)*((sin(time+dist)+1)/2);
+        gl_FragColor = vec4(intensity, intensity * 0.1, intensity*0.1, 1.0) * texture2D(u_texture, v_texCoords);
+      // gl_FragColor = vec4(worldCoord.x/20, worldCoord.y/12, 1, 1) * texture2D(u_texture, v_texCoords);
+}
