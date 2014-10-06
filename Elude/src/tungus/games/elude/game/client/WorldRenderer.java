@@ -41,22 +41,23 @@ public class WorldRenderer {
 	private static final RocketType[] rt = RocketType.values();
 	private static final PickupType[] pt = PickupType.values();
 	private static final EffectType[] eft = EffectType.values();
-	
+
 	private static final Vector2 tmp = new Vector2();
 
 	private SpriteBatch batch;
-	
+
 	private List<PooledEffect> particles = new LinkedList<PooledEffect>();
 	private IntMap<PooledEffect> rockets = new IntMap<PooledEffect>(80);
 	private IntMap<ReducedRocket> rocketsInFrame = new IntMap<ReducedRocket>(80);
 	private IntMap<EnemyHealthbar> enemyHps = new IntMap<EnemyHealthbar>(50);
 	private IntMap<ReducedEnemy> enemiesInFrame = new IntMap<ReducedEnemy>(50);
-	
+	private MineEffects mines = new MineEffects(100);
+
 	private Vector2[] vesselPositions = null;
 	private PooledEffect[] vesselTrails = null;
 	public OrthographicCamera camera;
 	private int vesselID;
-	
+
 	private float freezeTime = 0f;
 	private final FadeInOut freezeFade= new FadeInOut(0.5f, FreezerPickup.FREEZE_TIME);
 
@@ -76,6 +77,8 @@ public class WorldRenderer {
 			batch.setColor(1 - freezeFade.apply(FreezerPickup.FREEZE_TIME % freezeTime), 1, 1, 1);
 		} else*/ batch.setColor(1, 1, 1, alpha);
 		batch.begin();
+		prepRockets(r);
+		mines.render(deltaTime, alpha);
 		int size = r.enemies.size();
 		for(int i = 0; i < size; i++) {
 			drawEnemy(r.enemies.get(i));
@@ -116,7 +119,7 @@ public class WorldRenderer {
 			}
 		}
 		r.effects.clear(); // Don't repeat them in the next frames if no new data is received
-		
+
 		size = particles.size();		
 		for (Iterator<PooledEffect> it = particles.iterator(); it.hasNext(); ) {
 			PooledEffect p = it.next();
@@ -130,7 +133,7 @@ public class WorldRenderer {
 				} else {
 					p.draw(batch);
 				}
-				
+
 			}
 		}
 		batch.end();
@@ -169,7 +172,7 @@ public class WorldRenderer {
 			break;
 		}
 	}
-	
+
 	private void drawEnemyHPs(List<ReducedEnemy> l, float deltaTime) {
 		// Make a map of active enemies
 		enemiesInFrame.clear();
@@ -199,13 +202,24 @@ public class WorldRenderer {
 		}
 	}
 
-	private void drawRockets(RenderInfo r) {
+	private void prepRockets(RenderInfo r) {
 		// Make a map of active rockets
 		rocketsInFrame.clear();
+		mines.clear();
 		int size = r.rockets.size();
 		for (int i = 0; i < size; i++) {
-			rocketsInFrame.put(r.rockets.get(i).id, r.rockets.get(i));
+			ReducedRocket roc = r.rockets.get(i);
+			if (roc.typeOrdinal != RocketType.MINE.ordinal()) {
+				rocketsInFrame.put(r.rockets.get(i).id, r.rockets.get(i));
+			} else {
+				mines.add(roc.id, roc.x, roc.y);
+			}
+
 		}
+	}
+
+	private void drawRockets(RenderInfo r) {
+
 		// Update rocket effects from previous frame, remove any that are missing from the RenderData
 		IntMap.Entries<PooledEffect> effectEntries = rockets.entries();
 		while (effectEntries.hasNext) {
@@ -263,7 +277,7 @@ public class WorldRenderer {
 			vesselPositions[i].set(v.x, v.y);
 		}
 	}
-	
+
 	private void modVesselTrails(Vector2 vel, int i, ReducedVessel v) {
 		PooledEffect trails = vesselTrails[i];
 		ParticleEmitter particleEmitter = trails.getEmitters().get(0);
