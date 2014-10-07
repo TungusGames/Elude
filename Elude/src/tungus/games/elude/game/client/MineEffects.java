@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.IntIntMap.Entries;
 import com.badlogic.gdx.utils.IntIntMap.Entry;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public class MineEffects {
 	
@@ -92,7 +91,6 @@ public class MineEffects {
 		}
 		for (int i = 0; i < N; i++) {
 			times[i] += delta;
-			Gdx.app.log("time sent", ""+times[0]);
 		}
 		shader.setUniform1fv("time[0]", times, 0, N);
 		batch.draw(Assets.whiteRectangle, 0, 0, World.WIDTH, World.HEIGHT);
@@ -114,7 +112,8 @@ public class MineEffects {
 			coords[2*i] = coordsOld[e.value*2];
 			coords[2*i+1] = coordsOld[e.value*2+1];
 			newFrameIDs.put(e.key, i);
-			N = times.length;
+			i++;
 		}
+		N = i;
 	}
 }

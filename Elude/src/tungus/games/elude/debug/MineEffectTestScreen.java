@@ -26,7 +26,7 @@ public class MineEffectTestScreen extends BaseScreen {
 		} else if (time < 8) {
 			mines.add(0, 6, 8);
 		} else if (time < 12) {
-			;
+			time = time + 0;
 		} else if (time < 16) {
 			mines.add(1, 8, 8);
 			mines.add(2, 16, 4);
