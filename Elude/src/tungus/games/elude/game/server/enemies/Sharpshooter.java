@@ -13,7 +13,7 @@ public class Sharpshooter extends StandingBase {
 	private static final float RELOAD = 2f;
 			
 	public Sharpshooter(Vector2 pos, World w) {
-		super(pos, EnemyType.SHARPSHOOTER, RocketType.STRAIGHT, w, StandingBase.DEFAULT_HP, StandingBase.DEFAULT_SPEED, COLLIDER_SIZE);
+		super(pos, EnemyType.SHARPSHOOTER, RocketType.STRAIGHT, w, EnemyType.SHARPSHOOTER.hp, StandingBase.DEFAULT_SPEED, COLLIDER_SIZE);
 	}
 	
 	@Override

@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.enemies.Enemy;
+import tungus.games.elude.game.server.enemies.Splitter;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
@@ -45,16 +48,19 @@ public class Main {
 		List<FiniteLevelScore> scores = new ArrayList<>();
 		List<Integer> ntoidList = new ArrayList<>();
 		while (running) {
+			float totalEnemyHP = 0;
 			try {
 				System.out.print("Reading file: " + (levelNum) + ".tel ");
 				sc = new Scanner(new File((levelNum) + ".tel"));
 				sc.useLocale(Locale.US);
 				ntoidList.add(sc.nextInt());
 				scores.add(new FiniteLevelScore(sc.nextFloat(), sc.nextFloat()));
+				
 				hpDrop = sc.nextFloat();
 				speedDrop = sc.nextFloat();
 				shieldDrop = sc.nextFloat();
 				freezerDrop = sc.nextFloat();
+				
 				while (!sc.next().equals("wavestart"))
 					;
 				float t = sc.nextInt();
@@ -68,6 +74,12 @@ public class Main {
 						EnemyType et = EnemyType.valueOf(str.toUpperCase());
 						for (int i = 0; i < mul; i++) {
 							e.add(et);
+							if (et != EnemyType.SPLITTER) {
+								totalEnemyHP += et.hp;
+							} else {
+								totalEnemyHP += Splitter.totalHP();
+							}
+							
 						}						
 					} catch (IllegalArgumentException ex) {
 						try {
@@ -105,6 +117,7 @@ public class Main {
 			lvl.speedChance = speedDrop;
 			lvl.freezerChance = freezerDrop;
 			lvl.shieldChance = shieldDrop;
+			lvl.totalEnemyHP = totalEnemyHP;
 			try {
 				System.out.print("Writing file: " + (levelNum) + ".lvl ");
 				fileOut = new FileOutputStream("../Elude - Android/assets/levels/" + (levelNum) + ".lvl");

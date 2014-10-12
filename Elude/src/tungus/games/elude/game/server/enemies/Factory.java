@@ -8,13 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 public class Factory extends StandingBase {
 
 	private static final float RELOAD = 2;
-	private static final float HP = 28;
 	private static final float SPEED = 1;
 	private static final float RADIUS = 1f;
 	private static final float TURNSPEED = 20;
 	
 	public Factory(Vector2 pos, World w) {
-		super(pos, EnemyType.FACTORY, null, w, HP, SPEED, 0);
+		super(pos, EnemyType.FACTORY, null, w, EnemyType.FACTORY.hp, SPEED, 0);
 		turnSpeed = TURNSPEED;
 	}
 
@@ -41,7 +40,8 @@ public class Factory extends StandingBase {
 	@Override
 	public boolean hitBy(Rocket r) {
 		if (pos.dst2(r.pos) < (RADIUS+r.boundsForEnemy.radius)*(RADIUS+r.boundsForEnemy.radius)) {
-			if ((hp -= r.dmg) <= 0) {
+			takeDamage(r.dmg);
+			if (hp <= 0) {
 				killByRocket(r);
 			}
 			return true;

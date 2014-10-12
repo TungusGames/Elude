@@ -42,6 +42,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 		public float speedChance;
 		public float freezerChance;
 		public float shieldChance;
+		public float totalEnemyHP;
 		
 		public static Level levelFromFile(FileHandle file) {
 			try {
@@ -62,7 +63,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	private Level level;
 	private float timeSinceLastWave = 0;
 	private boolean completed = false;
-	
+	private float enemiesHpTaken = 0;
 
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
 		super(world, level.hpChance, level.speedChance, level.freezerChance, level.shieldChance, levelNum);
@@ -114,8 +115,20 @@ public class FiniteLevelLoader extends EnemyLoader {
 		return s;
 	}
 	
+	public float progress() {
+		return (float)enemiesHpTaken / level.totalEnemyHP;
+	}
+	
 	@Override
 	public boolean isOver() {
 		return level.waves.isEmpty();
+	}
+	
+	@Override
+	public void onEnemyHurt(Enemy e, float dmg) {
+		super.onEnemyHurt(e, dmg);
+		if (e.type.spawns) {
+			enemiesHpTaken += dmg;
+		}
 	}
 }

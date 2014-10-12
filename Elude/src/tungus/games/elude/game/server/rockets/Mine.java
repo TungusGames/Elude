@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Mine extends Rocket {
 
-	private static final float DAMAGE = 20f;
-	private static final float SIZE = 2f;
+	private static final float DAMAGE = 15f;
+	public static final float SIZE = 3f;
 	public static final float LIFETIME = 10f;
 	public final Circle coreBounds;
 	

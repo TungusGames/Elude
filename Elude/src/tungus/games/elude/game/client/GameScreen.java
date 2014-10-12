@@ -75,6 +75,7 @@ public class GameScreen extends BaseScreen {
 	private float gameAlpha;
 		
 	private final PlayerHealthbar healthbar;
+	private final LevelProgressbar progressbar;
 	private final Rectangle pauseButton;
 	
 	private final float FRUSTUM_WIDTH;
@@ -162,7 +163,18 @@ public class GameScreen extends BaseScreen {
 		pauseButton.x = FRUSTUM_WIDTH - 0.25f - pauseButton.width;
 		
 		hb.width = FRUSTUM_WIDTH - 2*hb.x - 0.5f - pauseButton.width;
-		healthbar = new PlayerHealthbar(hb);
+		if (finite) {
+			hb.y += hb.height/2;
+			hb.height *= 0.85f;
+			healthbar = new PlayerHealthbar(hb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+			Rectangle pb = new Rectangle(hb);
+			pb.y -= FRUSTUM_HEIGHT - hb.y;
+			progressbar = new LevelProgressbar(pb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+		} else {
+			healthbar = new PlayerHealthbar(hb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+			progressbar = null;
+		}
+		
 		
 		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
@@ -274,6 +286,10 @@ public class GameScreen extends BaseScreen {
 		logTime("update", 50);
 		
 		// RENDER
+		renderGraphics(deltaTime);
+	}
+	
+	private void renderGraphics(float deltaTime) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		renderer.render(deltaTime, gameAlpha, render, state == STATE_PLAYING);
 		
@@ -282,12 +298,23 @@ public class GameScreen extends BaseScreen {
 			controls.get(i).draw(uiBatch, gameAlpha);
 		}
 		if (render.hp != null && render.hp.length > 0) {
-			healthbar.draw(uiBatch, render.hp[vesselID], deltaTime, gameAlpha);
+			healthbar.drawBar(uiBatch, render.hp[vesselID], deltaTime, gameAlpha);
 		} else {
-			healthbar.draw(uiBatch, 1, deltaTime, gameAlpha);
+			healthbar.drawBar(uiBatch, 1, deltaTime, gameAlpha);
+		}
+		if (progressbar != null) {
+			if (render != null && render.progress > -1) {
+				progressbar.drawBar(uiBatch, render.progress, deltaTime, gameAlpha);
+			} else {
+				progressbar.drawBar(uiBatch, 0, deltaTime, gameAlpha);
+			}
 		}
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
+		healthbar.drawText(gameAlpha);
+		if (progressbar != null) {
+			progressbar.drawText(gameAlpha);
+		}
 		
 		if (state == STATE_STARTING) {
 			fontBatch.begin();
@@ -305,7 +332,6 @@ public class GameScreen extends BaseScreen {
 			break;
 		}
 		logTime("render", 50);
-		
 	}
 	
 	private void logTime(String message, long minToLog) {

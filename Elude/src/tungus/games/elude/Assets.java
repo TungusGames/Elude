@@ -3,6 +3,8 @@ package tungus.games.elude;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
@@ -145,7 +147,10 @@ public class Assets {
 		infoButton = atlas.findRegion("mainmenu/info");
 		halfPlayPanel = atlas.findRegion("mainmenu/halfplaypanel");
 		
-		font = new BitmapFont(Gdx.files.internal("font/bulletproof.fnt"));
+		Texture fontTex = new Texture(Gdx.files.internal("font/bulletproof.png"));
+		fontTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		TextureRegion fontRegion = new TextureRegion(fontTex);
+		font = new BitmapFont(Gdx.files.internal("font/bulletproof.fnt"), fontRegion);
 		
 		flameRocket = loadParticle("flamerocket", 40, 80);
 		matrixRocket = loadParticle("matrixrocket");

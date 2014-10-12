@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Minion extends Enemy {
 	
-	private static final float HP = 3.5f;
 	private static final float COLL = 0.65f;
 	private static final float SPEED = 2.5f;
 	private static final float RELOAD = 1.75f;
@@ -23,7 +22,7 @@ public class Minion extends Enemy {
 	private final Vector2 goal;
 	
 	public Minion(Vector2 pos, float dir, Factory parent, World w) {
-		super(pos, EnemyType.MINION, COLL, HP, w, RocketType.FAST_TURNING);
+		super(pos, EnemyType.MINION, COLL, EnemyType.MINION.hp, w, RocketType.FAST_TURNING);
 		vel.set(1, 0).rotate(dir).scl(SPEED);
 		this.parent = parent;
 		goal = new Vector2(MathUtils.random(World.innerBounds.width) + World.EDGE, MathUtils.random(World.innerBounds.height) + World.EDGE);

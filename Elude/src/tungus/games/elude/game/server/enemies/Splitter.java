@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Splitter extends Enemy {
 	
-	private static final float HP = 7f;
 	private static final float COLL = 0.9f;
 	private static final float SPEED = 3f;
 	private static final float RELOAD = 1.5f;
@@ -26,7 +25,7 @@ public class Splitter extends Enemy {
 	}
 	
 	public Splitter(Vector2 pos, World w, int splits, boolean edge) {
-		super(pos, EnemyType.SPLITTER, coeff(splits, MIN_SIZE)*COLL, coeff(splits, 0.5f)*HP, w, RocketType.SLOW_TURNING);
+		super(pos, EnemyType.SPLITTER, coeff(splits, MIN_SIZE)*COLL, coeff(splits, 0.5f)*EnemyType.SPLITTER.hp, w, RocketType.SLOW_TURNING);
 		if (edge) {
 			vel.set(World.WIDTH/2, World.HEIGHT/2).sub(pos).nor().scl(SPEED);
 		} else {
@@ -79,6 +78,18 @@ public class Splitter extends Enemy {
 	private static float coeff(int splitsLeft, float bottom) {
 		//return (splitsLeft + DEFAULT_SPLITS) / (float)(DEFAULT_SPLITS * 2);
 		return bottom + (1-bottom)/DEFAULT_SPLITS * splitsLeft;
+	}
+	
+	public static float totalHP() {
+		return recursiveHP(DEFAULT_SPLITS);
+	}
+	
+	private static float recursiveHP(int r) {
+		float hp = coeff(r, 0.5f)*EnemyType.SPLITTER.hp;
+		if (r > 0) {
+			hp += SPLIT_INTO * recursiveHP(r-1);
+		}
+		return hp;
 	}
 	
 	

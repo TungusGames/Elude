@@ -11,6 +11,7 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.rockets.Rocket;
+import tungus.games.elude.levels.loader.FiniteLevelLoader;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -65,6 +66,7 @@ public class RenderInfo extends TransferData {
 	public List<Effect> effects;
 	
 	public float[] hp = null;
+	public float progress = -1;
 		
 	public RenderInfo() {
 		effects = new ArrayList<Effect>();
@@ -76,6 +78,9 @@ public class RenderInfo extends TransferData {
 
 	public void setFromWorld(World w) {
 		RenderInfoPool.freeAlmostAll(this); // Puts everything in the pool except effects
+		if (w.waveLoader instanceof FiniteLevelLoader) {
+			this.progress = ((FiniteLevelLoader)w.waveLoader).progress();
+		}
 		enemies.clear();
 		for (ListIterator<Enemy> it = w.enemies.listIterator(); it.hasNext();) {
 			Enemy e = it.next();
@@ -149,6 +154,8 @@ public class RenderInfo extends TransferData {
 			other.hp = new float[hp.length];
 		for (int i = 0; i < s; i++)
 			other.hp[i] = hp[i];
+		
+		other.progress = this.progress;
 		return other;
 	}
 }

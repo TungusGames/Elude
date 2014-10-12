@@ -24,7 +24,7 @@ public class Shielded extends StandingBase {
 	
 	public Shielded(Vector2 pos, World w) {
 		//super(pos, EnemyType.SHIELDED, RocketType.SLOW_TURNING, w);
-		super(pos, EnemyType.SHIELDED, RocketType.SLOW_TURNING, w, StandingBase.DEFAULT_HP, StandingBase.DEFAULT_SPEED, OUTER_R*2);
+		super(pos, EnemyType.SHIELDED, RocketType.SLOW_TURNING, w, EnemyType.SHIELDED.hp, StandingBase.DEFAULT_SPEED, OUTER_R*2);
 		turnSpeed = TURNSPEED; // Modify value that is only used for graphics for other enemy types, more important here
 		in = new Circle(pos, INNER_R);
 		out = new Circle(pos, OUTER_R);
@@ -51,7 +51,8 @@ public class Shielded extends StandingBase {
 		if (!out.overlaps(r.boundsForEnemy))
 			return false;
 		if (in.overlaps(r.boundsForEnemy)) {
-			if ((hp -= r.dmg) <= 0) {
+			takeDamage(r.dmg);
+			if (hp <= 0) {
 				killByRocket(r);
 			}
 			return true;

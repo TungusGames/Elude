@@ -76,6 +76,8 @@ public abstract class EnemyLoader {
 			world.pickups.add(new ShieldPickup(world, e.pos));
 	}
 	
+	public void onEnemyHurt(Enemy e, float dmg) {}
+	
 	public abstract void saveScore();
 	public abstract boolean isOver();
 }

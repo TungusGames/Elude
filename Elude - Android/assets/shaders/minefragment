@@ -15,7 +15,7 @@ uniform vec2 viewportSize;
 uniform float time[100];
 uniform float R;	//Radius
 uniform vec2 center[100];
-const float constantUntil = 0.5;
+const float constantUntil = 0.75;
 const float maxR = 0.6;
 const float minR = 0.25;
 const float maxG = 0.3;

@@ -19,7 +19,7 @@ public class Kamikaze extends StandingBase {
 	private float timeStood = 0;
 	
 	public Kamikaze(Vector2 pos, World w) {
-		super(pos, EnemyType.KAMIKAZE, RocketType.FAST_TURNING, w, StandingBase.DEFAULT_HP, SPEED, COLLIDER_SIZE);
+		super(pos, EnemyType.KAMIKAZE, RocketType.FAST_TURNING, w, EnemyType.KAMIKAZE.hp, SPEED, COLLIDER_SIZE);
 		turnSpeed = 0;
 	}
 	
@@ -34,6 +34,7 @@ public class Kamikaze extends StandingBase {
 	}
 
 	private void explode() {
+		world.waveLoader.onEnemyHurt(this, hp);
 		killByRocket(null);
 		
 		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal())); //TODO pool

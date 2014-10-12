@@ -10,7 +10,6 @@ public abstract class StandingBase extends Enemy {
 	
 	protected static final float DEFAULT_COLLIDER_SIZE = 0.6f;	
 	protected static final float DEFAULT_SPEED = 4.5f;
-	protected static final float DEFAULT_HP = 7;
 			
 	private final Vector2 targetPos;
 	private boolean reachedTarget = false;
@@ -18,7 +17,7 @@ public abstract class StandingBase extends Enemy {
 	private final float speed;
 	
 	public StandingBase(Vector2 pos, EnemyType t, RocketType r, World w) {
-		this(pos, t, r, w, DEFAULT_HP, DEFAULT_SPEED, DEFAULT_COLLIDER_SIZE);
+		this(pos, t, r, w, t.hp, DEFAULT_SPEED, DEFAULT_COLLIDER_SIZE);
 	}
 	
 	public StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float hp, float s, float collSize) {

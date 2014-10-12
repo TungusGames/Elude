@@ -13,22 +13,23 @@ import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public abstract class Enemy {
 	
 	public static enum EnemyType {
-		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true, StandingEnemy.class), 
-		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f, new float[]{   1,    1, 0.2f,  1}, true, MovingEnemy.class), 
-		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1  }, true, Kamikaze.class), 
-		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}, true, Sharpshooter.class),
-		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}, true, MachineGunner.class),
-		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class),
-		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Splitter.class),
-		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class),
-		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class),
-		MINER		 (Assets.whiteRectangle,	0.6f, 0.6f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class);
+		STANDING	 (Assets.standingEnemyGreen,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true, StandingEnemy.class, 	2), 
+		MOVING		 (Assets.movingEnemyBlue,   0.8f, 1.05f, new float[]{   1,    1, 0.2f,  1}, true, MovingEnemy.class,	2), 
+		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1  }, true, Kamikaze.class,		2), 
+		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}, true, Sharpshooter.class,	2),
+		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}, true, MachineGunner.class,	2),
+		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class,		2),
+		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Splitter.class,		2),
+		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class,			1),
+		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class,		8),
+		MINER		 (Assets.whiteRectangle,	0.6f, 0.6f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,			2);
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;
@@ -36,9 +37,11 @@ public abstract class Enemy {
 		public float halfHeight;
 		public boolean spawns;
 		public float[] debrisColor;
+		public float hp;
 		public Class<? extends Enemy> mClass;
-		EnemyType(TextureRegion t, float w, float h, float[] c, boolean spawnsNormally, Class<? extends Enemy> cl) {
-			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2; spawns = spawnsNormally; mClass = cl;
+		EnemyType(TextureRegion t, float w, float h, float[] c, boolean spawnsNormally, Class<? extends Enemy> cl, float hits) {
+			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2; 
+			spawns = spawnsNormally; mClass = cl; hp = hits*Rocket.DEFAULT_DMG;
 		}
 		
 		public static EnemyType[] normalSpawners() {
@@ -144,19 +147,30 @@ public abstract class Enemy {
 	
 	protected abstract boolean aiUpdate(float deltaTime);
 	
+	private boolean died = false;
 	public void killByRocket(Rocket r) {
-		world.effects.add(RenderInfoPool.newDebris(pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN, type.ordinal()));
-		world.waveLoader.onEnemyDead(this);
+		if (!died) {
+			world.effects.add(RenderInfoPool.newDebris(pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN, type.ordinal()));
+			world.waveLoader.onEnemyDead(this);
+			died = true;
+		}
 	}
 	
 	public boolean hitBy(Rocket r) {
-		if (collisionBounds.overlaps(r.boundsForEnemy)) {
-			if ((hp -= r.dmg) <= 0) {
+		if (!died && collisionBounds.overlaps(r.boundsForEnemy)) {
+			takeDamage(r.dmg);
+			if (hp <= 0) {
 				killByRocket(r);
 			}
 			return true;
 		}
 		return false;
+	}
+	
+	protected void takeDamage(float d) {
+		float diff = (float)Math.min(hp, d);
+		world.waveLoader.onEnemyHurt(this, diff);
+		hp -= diff;
 	}
 	
 	public float width() {

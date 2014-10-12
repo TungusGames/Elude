@@ -3,9 +3,10 @@
 0 0 0 1
 wavestart 0 0
 shielded
-10 miner
+1 miner
 wavestart -1 0
 shielded
+2 miner
 wavestart -1 0
 shielded
 wavestart -1 0

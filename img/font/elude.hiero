@@ -1,5 +1,5 @@
 font.name=Forte
-font.size=60
+font.size=35
 font.bold=false
 font.italic=false
 
@@ -13,7 +13,7 @@ pad.advance.y=0
 glyph.native.rendering=false
 glyph.page.width=512
 glyph.page.height=256
-glyph.text=ABCDEFGHIJKLMNOPQRSTUVWX\nYZ0123456789:.!?()[]-_/\<>
+glyph.text=ABCDEFGHIJKLMNOPQRSTUVWX\nYZ0123456789:.!?()[]-_/\<>%
 
 effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.GradientEffect
 effect.Top color=ffffff

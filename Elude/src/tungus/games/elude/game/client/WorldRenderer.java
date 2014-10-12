@@ -75,10 +75,12 @@ public class WorldRenderer {
 		/*if (freezeTime > 0f) {
 			freezeTime -= deltaTime;
 			batch.setColor(1 - freezeFade.apply(FreezerPickup.FREEZE_TIME % freezeTime), 1, 1, 1);
-		} else*/ batch.setColor(1, 1, 1, alpha);
-		batch.begin();
+		} else*/ 
 		prepRockets(r);
 		mines.render(deltaTime, alpha);
+		
+		batch.setColor(1, 1, 1, alpha);
+		batch.begin();
 		int size = r.enemies.size();
 		for(int i = 0; i < size; i++) {
 			drawEnemy(r.enemies.get(i));

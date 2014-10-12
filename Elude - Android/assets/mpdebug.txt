@@ -1,2 +1,3 @@
+listen 12345
+connect 25.196.222.90 12345
 fake
-connect 84.3.255.22 8901

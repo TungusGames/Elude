@@ -11,7 +11,6 @@ public class MovingEnemy extends Enemy {
 	
 	private static final float COLLIDER_SIZE = 0.85f;
 	
-	private static final float MAX_HP = 7f;
 	protected static final float SPEED = 3f;
 	private static final float MAX_TURNSPEED = 100f;
 	protected static final float RELOAD = 2f;
@@ -41,7 +40,7 @@ public class MovingEnemy extends Enemy {
 	}
 	
 	public MovingEnemy(Vector2 pos, EnemyType t, World w, RocketType type, float speed, float reload) {
-		super(pos, t, COLLIDER_SIZE, MAX_HP, w, type);
+		super(pos, t, COLLIDER_SIZE, t.hp, w, type);
 		this.speed = speed;
 		this.reload = reload;
 		moveBounds = new Rectangle(2*World.EDGE, 2*World.EDGE, World.WIDTH-4*World.EDGE, World.HEIGHT-4*World.EDGE);

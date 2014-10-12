@@ -2,6 +2,7 @@ package tungus.games.elude.game.client;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.rockets.Mine;
 import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Gdx;
@@ -45,7 +46,7 @@ public class MineEffects {
 		shader.begin();
 		shader.setUniformf("worldSize", World.WIDTH, World.HEIGHT);
 		shader.setUniformf("viewportSize", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		shader.setUniformf("R", 3);
+		shader.setUniformf("R", Mine.SIZE / 2 * 1.35f);
 		shader.setUniformi("L", 0);
 		shader.end();
 		OrthographicCamera cam = ViewportHelper.newCamera(20, 12);
