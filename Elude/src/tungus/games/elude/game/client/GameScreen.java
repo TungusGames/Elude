@@ -17,6 +17,7 @@ import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
 import tungus.games.elude.game.server.Server;
+import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
 import tungus.games.elude.menu.ingame.LevelCompleteMenu;
@@ -311,10 +312,12 @@ public class GameScreen extends BaseScreen {
 		}
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
-		healthbar.drawText(gameAlpha);
+		fontBatch.begin();
+		healthbar.drawText(fontBatch, gameAlpha);
 		if (progressbar != null) {
-			progressbar.drawText(gameAlpha);
+			progressbar.drawText(fontBatch, gameAlpha);
 		}
+		fontBatch.end();
 		
 		if (state == STATE_STARTING) {
 			fontBatch.begin();

@@ -60,6 +60,9 @@ public class WorldRenderer {
 
 	private float freezeTime = 0f;
 	private final FadeInOut freezeFade= new FadeInOut(0.5f, FreezerPickup.FREEZE_TIME);
+	
+	private EnemyType highlightedEnemy = null;
+	private PickupType highlightedPickup = null;
 
 	public WorldRenderer(int myVesselID) {
 		batch = new SpriteBatch(5460);
@@ -70,12 +73,26 @@ public class WorldRenderer {
 		CamShaker.INSTANCE = new CamShaker(batch);
 		this.vesselID = myVesselID;
 	}
-
+	
 	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateEffects) {
-		/*if (freezeTime > 0f) {
-			freezeTime -= deltaTime;
-			batch.setColor(1 - freezeFade.apply(FreezerPickup.FREEZE_TIME % freezeTime), 1, 1, 1);
-		} else*/ 
+		highlightedEnemy = null;
+		highlightedPickup = null;
+		renderWithHighlightSet(deltaTime, alpha, r, updateEffects);
+	}
+	
+	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateEffects, EnemyType et) {
+		highlightedEnemy = et;
+		highlightedPickup = null;
+		renderWithHighlightSet(deltaTime, alpha, r, updateEffects);
+	}
+	
+	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateEffects, PickupType pt) {
+		highlightedEnemy = null;
+		highlightedPickup = pt;
+		renderWithHighlightSet(deltaTime, alpha, r, updateEffects);
+	}
+
+	private void renderWithHighlightSet(float deltaTime, float alpha, RenderInfo r, boolean updateEffects) {
 		prepRockets(r);
 		mines.render(deltaTime, alpha);
 		
@@ -260,7 +277,15 @@ public class WorldRenderer {
 
 	private void drawEnemy(ReducedEnemy e) {
 		int o = e.typeOrdinal;
-		batch.draw(et[o].tex, e.x-e.width/2, e.y-e.height/2, e.width/2, e.height/2, e.width, e.height, 1, 1, e.rot);
+		if (et[o] == highlightedEnemy) {
+			Color c = batch.getColor();
+			batch.setColor(Color.WHITE);
+			batch.draw(et[o].tex, e.x-e.width/2, e.y-e.height/2, e.width/2, e.height/2, e.width, e.height, 1, 1, e.rot);
+			batch.setColor(c);
+		} else {
+			batch.draw(et[o].tex, e.x-e.width/2, e.y-e.height/2, e.width/2, e.height/2, e.width, e.height, 1, 1, e.rot);
+		}
+		
 	}
 
 	private void drawVessel(ReducedVessel v, int i, boolean updateParticles) {
@@ -300,9 +325,16 @@ public class WorldRenderer {
 
 	private void drawPickup(ReducedPickup p) {
 		int o = p.typeOrdinal;
-		batch.setColor(1, 1, 1, batch.getColor().a*p.alpha);
-		batch.draw(pt[o].tex, p.x-Pickup.HALF_SIZE, p.y-Pickup.HALF_SIZE, Pickup.DRAW_SIZE, Pickup.DRAW_SIZE);
-		batch.setColor(1, 1, 1, batch.getColor().a/p.alpha);
+		if (pt[o] == highlightedPickup) {
+			Color c = batch.getColor();
+			batch.setColor(1, 1, 1, p.alpha);
+			batch.draw(pt[o].tex, p.x-Pickup.HALF_SIZE, p.y-Pickup.HALF_SIZE, Pickup.DRAW_SIZE, Pickup.DRAW_SIZE);
+			batch.setColor(c);
+		} else {
+			batch.setColor(1, 1, 1, batch.getColor().a*p.alpha);
+			batch.draw(pt[o].tex, p.x-Pickup.HALF_SIZE, p.y-Pickup.HALF_SIZE, Pickup.DRAW_SIZE, Pickup.DRAW_SIZE);
+			batch.setColor(1, 1, 1, batch.getColor().a/p.alpha);
+		}
 	}
 
 

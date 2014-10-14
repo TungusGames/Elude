@@ -2,7 +2,6 @@ package tungus.games.elude.game.client;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.Vessel;
-import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +14,6 @@ public class PlayerHealthbar {
 	private final Rectangle r;
 	private float display;
 	
-	private final SpriteBatch fontBatch;
 	private final Vector2 textCoord;
 	private final float textScale;
 	
@@ -23,8 +21,6 @@ public class PlayerHealthbar {
 		this.r = r;
 		Gdx.app.log("HB", ""+r.height);
 		display = 1;
-		fontBatch = new SpriteBatch();
-		fontBatch.setProjectionMatrix(ViewportHelper.newCamera(800, 480).combined);
 		textScale = r.height;
 		float camScale = 800 / frustumWidth;
 		textCoord = new Vector2(r.x * camScale + 8*textScale, (r.y+r.height) * camScale - 5*textScale);
@@ -41,12 +37,10 @@ public class PlayerHealthbar {
 		}
 	}
 	
-	public void drawText(float alpha) {
-		fontBatch.begin();
+	public void drawText(SpriteBatch fontBatch, float alpha) {
 		Assets.font.setScale(textScale);
 		Assets.font.setColor(1, 1, 1, alpha);
 		Assets.font.draw(fontBatch, "HP: " + (int)(display*Vessel.MAX_HP), textCoord.x, textCoord.y);
 		Assets.font.setScale(1);
-		fontBatch.end();
 	}
 }

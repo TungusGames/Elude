@@ -1,7 +1,6 @@
 package tungus.games.elude.game.client;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.util.ViewportHelper;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -12,15 +11,12 @@ public class LevelProgressbar {
 	private final Rectangle r;
 	private float display;
 	
-	private final SpriteBatch fontBatch;
 	private final Vector2 textCoord;
 	private final float textScale;
 	
 	public LevelProgressbar(Rectangle r, float frustumWidth, float frustumHeight) {
 		this.r = r;
 		display = 0;
-		fontBatch = new SpriteBatch();
-		fontBatch.setProjectionMatrix(ViewportHelper.newCamera(800, 480).combined);
 		textScale = r.height;
 		float camScale = 800 / frustumWidth;
 		textCoord = new Vector2(r.x * camScale + 8*textScale, (r.y+r.height) * camScale - 5*textScale);
@@ -41,12 +37,10 @@ public class LevelProgressbar {
 		batch.setColor(1,1,1,gameAlpha);
 	}
 	
-	public void drawText(float alpha) {
-		fontBatch.begin();
+	public void drawText(SpriteBatch fontBatch, float alpha) {
 		Assets.font.setScale(textScale);
 		Assets.font.setColor(1, 1, 1, alpha);
 		Assets.font.draw(fontBatch, "PROGRESS: " + (int)(display*100) + "%", textCoord.x, textCoord.y);
 		Assets.font.setScale(1);
-		fontBatch.end();
 	}
 }
