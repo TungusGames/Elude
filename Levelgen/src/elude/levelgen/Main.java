@@ -12,10 +12,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import tungus.games.elude.game.server.World;
-import tungus.games.elude.game.server.enemies.Enemy;
-import tungus.games.elude.game.server.enemies.Splitter;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.enemies.Splitter;
 import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Wave;
@@ -112,7 +110,8 @@ public class Main {
 			
 			FileOutputStream fileOut = null;
 			Level lvl = new Level();
-			lvl.waves = waves;
+			lvl.waves = new Wave[waves.size()];
+			lvl.waves = waves.toArray(lvl.waves);
 			lvl.hpChance = hpDrop;
 			lvl.speedChance = speedDrop;
 			lvl.freezerChance = freezerDrop;

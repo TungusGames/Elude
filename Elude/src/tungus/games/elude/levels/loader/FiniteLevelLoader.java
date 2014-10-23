@@ -37,7 +37,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	public static class Level implements Serializable {
 
 		private static final long serialVersionUID = 3972235095607047708L;
-		public Deque<Wave> waves;
+		public Wave[] waves;
 		public float hpChance;
 		public float speedChance;
 		public float freezerChance;
@@ -56,7 +56,11 @@ public class FiniteLevelLoader extends EnemyLoader {
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new RuntimeException("Failed to read level file " + file.path(), e);
-			}
+			}			
+		}
+		
+		public Level() {
+			
 		}
 	}
 	
@@ -64,6 +68,8 @@ public class FiniteLevelLoader extends EnemyLoader {
 	private float timeSinceLastWave = 0;
 	private boolean completed = false;
 	private float enemiesHpTaken = 0;
+	
+	private int nextWave = 0;
 
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
 		super(world, level.hpChance, level.speedChance, level.freezerChance, level.shieldChance, levelNum);
@@ -79,7 +85,10 @@ public class FiniteLevelLoader extends EnemyLoader {
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		timeSinceLastWave += deltaTime;
-		Wave w = level.waves.peek();
+		if (nextWave >= level.waves.length) {
+			return;
+		}
+		Wave w = level.waves[nextWave];
 		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemies.size())) {
 			timeSinceLastWave = 0;
 			int size = w.enemies.size();
@@ -90,7 +99,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 			for (int i = 0; i < size; i++) {
 				world.pickups.add(Pickup.fromType(world, w.pickups.get(i)));
 			}
-			level.waves.removeFirst();
+			nextWave++;
 		}
 	}
 	
@@ -121,7 +130,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	
 	@Override
 	public boolean isOver() {
-		return level.waves.isEmpty();
+		return nextWave >= level.waves.length;
 	}
 	
 	@Override

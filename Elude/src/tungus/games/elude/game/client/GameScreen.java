@@ -102,7 +102,7 @@ public class GameScreen extends BaseScreen {
 			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
 				if (state == STATE_PLAYING)
 					state = STATE_PAUSED;
-				else if (state != STATE_STARTING)
+				else if (state != STATE_STARTING && state != STATE_READY)
 					//If in an ingame menu, call its onBackKey()
 					//PauseMenu - unpause, others - exit to menu
 					menus[state - 1].onBackKey();

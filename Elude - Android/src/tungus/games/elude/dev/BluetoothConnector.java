@@ -60,15 +60,20 @@ public class BluetoothConnector {
 	}
 	
 	public void enable() {
+		reset();
 		if (!adapter.isEnabled()) {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			app.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 		} else {
-			server = new Server();
-			client = new Client();
 			server.state = ServerState.ENABLED;
 			client.state = ClientState.ENABLED;
 		}
+	}
+	
+	public void reset() {
+		server = new Server();
+		client = new Client();
+		bluetoothConnection = null;
 	}
 	
 	// Processes the result of the requested "Enable BT" and "Enable visibility" dialogs

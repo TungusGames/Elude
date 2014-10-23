@@ -94,7 +94,7 @@ public class MineEffects {
 			times[i] += delta;
 		}
 		shader.setUniform1fv("time[0]", times, 0, N);
-		batch.draw(Assets.whiteRectangle, 0, 0, World.WIDTH, World.HEIGHT);
+		//batch.draw(Assets.whiteRectangle, 0, 0, World.WIDTH, World.HEIGHT);
 		batch.end();
 	}
 

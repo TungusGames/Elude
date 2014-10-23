@@ -47,6 +47,8 @@ public class Assets {
 	public static TextureRegion machinegunner;
 	public static TextureRegion shielded;
 	public static TextureRegion splitter;
+	public static TextureRegion factory;
+	public static TextureRegion miner;
 	
 	public static TextureRegion hpBonus;
 	public static TextureRegion speedBonus;
@@ -116,6 +118,8 @@ public class Assets {
 		whiteRectangle = atlas.findRegion("whiterect");
 		smallCircle = atlas.findRegion("smallcircle");
 		shield = atlas.findRegion("shield");
+		factory = atlas.findRegion("factory");
+		miner = atlas.findRegion("miner");
 		
 		pause = atlas.findRegion("pause");
 		resume = atlas.findRegion("ingamemenu/resume");

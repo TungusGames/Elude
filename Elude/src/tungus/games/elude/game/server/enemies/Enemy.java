@@ -28,8 +28,8 @@ public abstract class Enemy {
 		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class,		2),
 		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Splitter.class,		2),
 		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class,			1),
-		FACTORY		 (Assets.splitter,          2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class,		8),
-		MINER		 (Assets.whiteRectangle,	0.6f, 0.6f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,			2);
+		FACTORY		 (Assets.factory,           2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class,		8),
+		MINER		 (Assets.miner,				0.6f, 0.6f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,			2);
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;

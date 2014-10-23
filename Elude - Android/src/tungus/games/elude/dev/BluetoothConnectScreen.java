@@ -23,8 +23,8 @@ public class BluetoothConnectScreen extends BaseScreen {
 	
 	private static final int levelNum = 4;
 	
-	private Client client = BluetoothConnector.INSTANCE.client;
-	private Server server = BluetoothConnector.INSTANCE.server;
+	private final Client client;
+	private final Server server;
 	
 	private boolean serverReady = false;
 	private boolean clientReady = false;
@@ -54,9 +54,12 @@ public class BluetoothConnectScreen extends BaseScreen {
 	
 	public BluetoothConnectScreen(Game game) {
 		super(game);
+		BluetoothConnector.INSTANCE.enable();
+		server = BluetoothConnector.INSTANCE.server;
+		client = BluetoothConnector.INSTANCE.client;
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(listener);
-		BluetoothConnector.INSTANCE.enable();
+		
 	}
 	
 	@Override
@@ -115,6 +118,15 @@ public class BluetoothConnectScreen extends BaseScreen {
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public void hide() {
+		if (server.acceptThread != null && server.acceptThread.isAlive())
+			server.acceptThread.cancel();
+		if (client.connectThread != null && client.connectThread.isAlive())
+			client.connectThread.cancel();
+		client.disableDiscovery();
 	}
 	
 }
