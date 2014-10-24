@@ -32,11 +32,11 @@ public class Bar {
 						   Color empty, Color full, Color bg, String prefix, String postfix, float max) {
 		this.r = r;
 		displayedValue = start;
-		textScaleY = 0.41f;
-		textScaleX = 0.41f * 21.67f / frustumWidth;
+		textScaleY = 0.417f / 0.033f * r.height / frustumHeight;
+		textScaleX = textScaleY * (800f/480) / (frustumWidth/frustumHeight);
 		float camScaleY = 480 / frustumHeight;
 		float camScaleX = 800 / frustumWidth;
-		textCoord = new Vector2(r.x * camScaleX + 8*textScaleX, (r.y+r.height) * camScaleY - 5*textScaleY);
+		textCoord = new Vector2((r.x+r.height*0.15f) * camScaleX, (r.y+r.height*0.85f) * camScaleY);
 		this.empty = empty;
 		this.full = full;
 		this.bg = bg;
