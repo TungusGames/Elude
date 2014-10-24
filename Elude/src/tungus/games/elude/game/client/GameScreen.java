@@ -17,7 +17,7 @@ import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
 import tungus.games.elude.game.server.Server;
-import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
 import tungus.games.elude.menu.ingame.LevelCompleteMenu;
@@ -34,6 +34,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -75,12 +76,12 @@ public class GameScreen extends BaseScreen {
 	private OrthographicCamera fontCam;
 	private float gameAlpha;
 		
-	private final PlayerHealthbar healthbar;
-	private final LevelProgressbar progressbar;
-	private final Rectangle pauseButton;
+	private Bar healthbar;
+	private Bar progressbar;
+	private Rectangle pauseButton;
 	
-	private final float FRUSTUM_WIDTH;
-	private final float FRUSTUM_HEIGHT;
+	private float FRUSTUM_WIDTH;
+	private float FRUSTUM_HEIGHT;
 	
 	private long lastTime;
 	
@@ -150,41 +151,12 @@ public class GameScreen extends BaseScreen {
 		renderer = new WorldRenderer(clientID);
 		uiBatch = new SpriteBatch();
 		
-		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
-		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
+		initFromScreenSize();
 		
-		Rectangle hb = new Rectangle();
-		hb.height = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
-		hb.x = hb.height;
-		hb.y = FRUSTUM_HEIGHT - 2 * hb.height;
-		
-		pauseButton = new Rectangle();
-		pauseButton.width = pauseButton.height = 2.5f*hb.height;
-		pauseButton.y = FRUSTUM_HEIGHT - 0.25f - pauseButton.height;
-		pauseButton.x = FRUSTUM_WIDTH - 0.25f - pauseButton.width;
-		
-		hb.width = FRUSTUM_WIDTH - 2*hb.x - 0.5f - pauseButton.width;
-		if (finite) {
-			hb.y += hb.height/2;
-			hb.height *= 0.85f;
-			healthbar = new PlayerHealthbar(hb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-			Rectangle pb = new Rectangle(hb);
-			pb.y -= FRUSTUM_HEIGHT - hb.y;
-			progressbar = new LevelProgressbar(pb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-		} else {
-			healthbar = new PlayerHealthbar(hb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-			progressbar = null;
-		}
-		
-		
-		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
-		uiCam.update();
-		uiBatch.setProjectionMatrix(uiCam.combined);
-		fontCam = ViewportHelper.newCamera(800, 480);
+		fontCam = new OrthographicCamera(800, 480);
 		fontCam.position.set(400, 240, 0);
 		fontCam.update();
-		fontBatch = new SpriteBatch(10);
+		fontBatch = new SpriteBatch(100);
 		fontBatch.setProjectionMatrix(fontCam.combined);
 		
 		controls = new ArrayList<Controls>();
@@ -213,6 +185,45 @@ public class GameScreen extends BaseScreen {
 		connection.newest = new RenderInfo();
 	}
 	
+
+	private void initFromScreenSize() {
+		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
+		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
+		
+		Rectangle hb = new Rectangle();
+		hb.height = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
+		hb.x = hb.height;
+		hb.y = FRUSTUM_HEIGHT - 2 * hb.height;
+		
+		pauseButton = new Rectangle();
+		pauseButton.width = pauseButton.height = 2.5f*hb.height;
+		pauseButton.y = FRUSTUM_HEIGHT - 0.25f - pauseButton.height;
+		pauseButton.x = FRUSTUM_WIDTH - 0.25f - pauseButton.width;
+		
+		hb.width = FRUSTUM_WIDTH - 2*hb.x - 0.5f - pauseButton.width;
+		if (finite) {
+			hb.y += hb.height/2;
+			hb.height *= 0.85f;
+			healthbar = new Bar(hb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT, (render == null || render.hp == null) ? 1 : render.hp[vesselID], 
+											Color.RED, Color.GREEN, null, "HP: ", "", Vessel.MAX_HP);
+			Rectangle pb = new Rectangle(hb);
+			pb.y -= FRUSTUM_HEIGHT - hb.y;
+			Color fore = new Color(0.1f, 0.6f, 1f, 0.8f);
+			Color back = new Color(0.1f, 0.1f, 0.5f, 0.8f);
+			progressbar = new Bar(pb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 0,
+											  fore, fore, back, "PROGRESS: ", "%", 100);
+		} else {
+			healthbar = new Bar(hb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT, (render == null || render.hp == null) ? 1 : render.hp[vesselID],
+											Color.RED, Color.GREEN, null, "HP: ", "", Vessel.MAX_HP);
+			progressbar = null;
+		}
+		
+		
+		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
+		uiCam.update();
+		uiBatch.setProjectionMatrix(uiCam.combined);
+	}
 
 	@Override
 	public void render(float deltaTime) {
@@ -379,5 +390,10 @@ public class GameScreen extends BaseScreen {
 	public void pause() {
 		if (state == STATE_PLAYING)
 			state = STATE_PAUSED;
+	}
+	
+	@Override
+	public void resize(int w, int h) {
+		initFromScreenSize();
 	}
 }
