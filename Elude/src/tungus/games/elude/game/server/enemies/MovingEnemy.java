@@ -24,6 +24,7 @@ public class MovingEnemy extends Enemy {
 	private int state = STATE_ARRIVING;
 	private final Vector2 arrivePos;
 	
+	private float maxTurn = MAX_TURNSPEED;
 	private float turnSpeed;
 	private float turnAccel;
 	private float turnInOneDir = 0;
@@ -36,13 +37,14 @@ public class MovingEnemy extends Enemy {
 	private float timeSinceShot = 0;
 	
 	public MovingEnemy(Vector2 pos, World w) {
-		this(pos, EnemyType.MOVING, w, RocketType.SLOW_TURNING, SPEED, RELOAD);
+		this(pos, EnemyType.MOVING, w, RocketType.SLOW_TURNING, SPEED, RELOAD, MAX_TURNSPEED);
 	}
 	
-	public MovingEnemy(Vector2 pos, EnemyType t, World w, RocketType type, float speed, float reload) {
+	public MovingEnemy(Vector2 pos, EnemyType t, World w, RocketType type, float speed, float reload, float maxTurn) {
 		super(pos, t, COLLIDER_SIZE, t.hp, w, type);
 		this.speed = speed;
 		this.reload = reload;
+		this.maxTurn = maxTurn;
 		moveBounds = new Rectangle(2*World.EDGE, 2*World.EDGE, World.WIDTH-4*World.EDGE, World.HEIGHT-4*World.EDGE);
 		arrivePos = new Vector2();
 		arrivePos.x = MathUtils.clamp(pos.x, moveBounds.x, moveBounds.width+moveBounds.x);
@@ -63,12 +65,6 @@ public class MovingEnemy extends Enemy {
 			}
 			break;
 		case STATE_MOVING_INSIDE:
-			/*float aa = MathUtils.random(-100, 100) * deltaTime;
-			turnAccel += aa;
-			if (turnSpeed > MAX_TURNSPEED)
-				turnAccel -= 2*aa;
-			else if (turnSpeed > -MAX_TURNSPEED && MathUtils.randomBoolean())
-				turnAccel -= 2*aa;*/
 			turnSpeed += turnAccel * deltaTime;
 			
 			if (turnInOneDir > 200) {
@@ -91,7 +87,7 @@ public class MovingEnemy extends Enemy {
 			}
 			break;
 		case STATE_TURNING_IN:
-			turnSpeed = turningRight ? -MAX_TURNSPEED : MAX_TURNSPEED;
+			turnSpeed = turningRight ? -maxTurn : maxTurn;
 			if (moveBounds.contains(pos)) {
 				state = STATE_MOVING_INSIDE;
 				turnSpeed = MathUtils.random(-60, 60);
@@ -100,10 +96,10 @@ public class MovingEnemy extends Enemy {
 			break;
 		}
 		if (state != STATE_ARRIVING) {
-			if (turnSpeed > MAX_TURNSPEED)
-				turnSpeed = MAX_TURNSPEED;
-			else if (turnSpeed < -MAX_TURNSPEED)
-				turnSpeed = -MAX_TURNSPEED;
+			if (turnSpeed > maxTurn)
+				turnSpeed = maxTurn;
+			else if (turnSpeed < -maxTurn)
+				turnSpeed = -maxTurn;
 			vel.rotate(turnSpeed * deltaTime);
 			timeSinceShot += deltaTime;
 			if (turningRight && turnSpeed > 0 || !turningRight && turnSpeed < 0) {
@@ -111,10 +107,17 @@ public class MovingEnemy extends Enemy {
 			}
 			turningRight = (turnSpeed < 0);
 			turnInOneDir += Math.abs(turnSpeed*deltaTime);
-			if (timeSinceShot > reload) {
+			if (canShoot()) {
 				timeSinceShot -= reload;
 				shootRocket();
 			}
+		}
+		return false;
+	}
+	
+	protected boolean canShoot() {
+		if (timeSinceShot > reload) {
+			return true;
 		}
 		return false;
 	}

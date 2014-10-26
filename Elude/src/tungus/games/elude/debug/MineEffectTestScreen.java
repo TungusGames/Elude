@@ -1,7 +1,7 @@
 package tungus.games.elude.debug;
 
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.game.client.MineEffects;
+import tungus.games.elude.game.client.MineRenderer;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class MineEffectTestScreen extends BaseScreen {
 	
-	private MineEffects mines = new MineEffects(100);
+	private MineRenderer mines = new MineRenderer(100);
 	private float time = 0;
 	
 	public MineEffectTestScreen(Game game) {
@@ -24,22 +24,22 @@ public class MineEffectTestScreen extends BaseScreen {
 		if (time < 4) {
 			;
 		} else if (time < 8) {
-			mines.add(0, 6, 8);
+			mines.add(0, 6, 8, delta);
 		} else if (time < 12) {
 			time = time + 0;
 		} else if (time < 16) {
-			mines.add(1, 8, 8);
-			mines.add(2, 16, 4);
+			mines.add(1, 8, 8, delta);
+			mines.add(2, 16, 4, delta);
 		} else if (time < 20) {
-			mines.add(2, 16, 4);
-			mines.add(3, 2, 7);
-			mines.add(4, 5, 10);
+			mines.add(2, 16, 4, delta);
+			mines.add(3, 2, 7, delta);
+			mines.add(4, 5, 10, delta);
 		} else if (time < 24) {
-			mines.add(4, 5, 10);
+			mines.add(4, 5, 10, delta);
 		} else if (time < 28) {
 			;
 		} else {
-			mines.add(5, 6, 7);
+			mines.add(5, 6, 7, delta);
 		}
 		mines.render(delta, 1);
 	}

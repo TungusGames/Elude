@@ -16,21 +16,25 @@ public abstract class StandingBase extends Enemy {
 		
 	private final float speed;
 	
-	public StandingBase(Vector2 pos, EnemyType t, RocketType r, World w) {
-		this(pos, t, r, w, t.hp, DEFAULT_SPEED, DEFAULT_COLLIDER_SIZE);
+	protected StandingBase(Vector2 pos, EnemyType t, RocketType r, World w) {
+		this(pos, t, r, w, t.hp, DEFAULT_SPEED, DEFAULT_COLLIDER_SIZE, World.EDGE);
 	}
 	
-	public StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float hp, float s, float collSize) {
+	protected StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float hp, float s, float collSize) {
+		this(pos, t, r, w, hp, s, collSize, World.EDGE);
+	}
+	
+	protected StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float hp, float s, float collSize, float edge) {
 		super(pos, t, collSize, hp, w, r);
 		speed = s;
 		targetPos = new Vector2();
-		getInnerTargetPos(pos, targetPos);
+		getInnerTargetPos(pos, targetPos, edge);
 		
 		vel.set(targetPos).sub(pos).nor().scl(speed);
 		turnGoal = vel.angle()-90;
 		rot = turnGoal;
 	}
-
+	
 	@Override
 	protected boolean aiUpdate(float deltaTime) {
 		if (!reachedTarget) {
@@ -51,29 +55,29 @@ public abstract class StandingBase extends Enemy {
 
 	protected abstract boolean standingUpdate(float deltaTime);
 	
-	private final Vector2 getInnerTargetPos(Vector2 pos, Vector2 targetPos) {
-		targetPos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
-		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
+	private final Vector2 getInnerTargetPos(Vector2 pos, Vector2 targetPos, float distFromEdge) {
+		targetPos.x = MathUtils.random() * (World.WIDTH - 2*distFromEdge) + distFromEdge;
+		targetPos.y = MathUtils.random() * (World.HEIGHT - 2*distFromEdge) + distFromEdge;
 		
 		float move = targetPos.x - pos.x;							// Get how much we can decrease the movement without
-		if (pos.x < World.EDGE || pos.x > World.WIDTH-World.EDGE) {					 	// 		getting out of the "edge" frame
+		if (pos.x < distFromEdge || pos.x > World.WIDTH-distFromEdge) {					 	// 		getting out of the "edge" frame
 			float minMove = 0;
-			if (pos.x < World.EDGE)
-				minMove = World.EDGE - pos.x;
-			else if (pos.x > World.WIDTH - World.EDGE) {
-				minMove = World.WIDTH - World.EDGE - pos.x;
+			if (pos.x < distFromEdge)
+				minMove = distFromEdge - pos.x;
+			else if (pos.x > World.WIDTH - distFromEdge) {
+				minMove = World.WIDTH - distFromEdge - pos.x;
 			}
 			move -= minMove;
 		}
 		targetPos.x -= MathUtils.random(move);						// Decrease the movement by up to this value
 		
 		move = targetPos.y - pos.y;									// Do the same for Y
-		if (pos.y < World.EDGE || pos.y > World.HEIGHT-World.EDGE) {
+		if (pos.y < distFromEdge || pos.y > World.HEIGHT-distFromEdge) {
 			float minMove = 0;
-			if (pos.y < World.EDGE)
-				minMove = World.EDGE - pos.y;
-			else if (pos.y > World.HEIGHT - World.EDGE) {
-				minMove = World.HEIGHT - World.EDGE - pos.y;
+			if (pos.y < distFromEdge)
+				minMove = distFromEdge - pos.y;
+			else if (pos.y > World.HEIGHT - distFromEdge) {
+				minMove = World.HEIGHT - distFromEdge - pos.y;
 			}
 			move -= minMove;
 		}

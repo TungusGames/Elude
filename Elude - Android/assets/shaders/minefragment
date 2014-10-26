@@ -9,19 +9,11 @@ varying vec4 pos;
 uniform sampler2D u_texture;
 uniform mat4 u_projTrans;
 
-uniform int L;
-uniform vec2 worldSize;
-uniform vec2 viewportSize;
-uniform float time[100];
+uniform float time;
 uniform float R;	//Radius
-uniform vec2 center[100];
-const float constantUntil = 0.75;
-const float maxR = 0.6;
-const float minR = 0.25;
-const float maxG = 0.3;
-const float minG = 0.0;
-const float maxB = 0.05;
-const float minB = 0.0;
+
+const vec3 minC = vec3(0.25, 0.0, 0.0);
+const vec3 maxC = vec3(0.6, 0.3, 0.05);
 
 // Goes from bottom to top as b goes from 0 to 1
 float between(float b, float bottom, float top)
@@ -30,22 +22,9 @@ float between(float b, float bottom, float top)
 }		
 
 void main() {
-        vec2 worldCoord = gl_FragCoord.xy / viewportSize.xy * worldSize.xy;
-        vec3 color = vec3(0);
-        for (int i = 0; i < L; i++)
-        {
-	        float dist = distance(worldCoord, center[i]);
-
-	        float dist1to0 = clamp((1.0-dist/R), 0.0, 1.0);			 // Goes linearly from 1 to 0 as [dist] goes from 0 to [R]
-	        float c = clamp((dist1to0/(1.0-constantUntil)), 0.0, 1.0); // Stays constant for [constantUntil] part of R, then goes linearly to 0
-	        float waveR = (sin(-time[i]*4.25+dist*6.0/R)+1.0)/2.0;				 // Sine wave between 1 and 0 moving outward 
-	        													 //	(coefficients define speed and frequency)
-	        float waveG = pow(waveR, 6.0);	// Stay 1 at 1, go low quickly otherwise
-	        float waveB = pow(waveR, 10.0);
-	        color += vec3(c*between(waveR, minR, maxR), 
-        				  c*between(waveG, minG, maxG), 
-        				  c*between(waveB, minB, maxB));
-        }
-        gl_FragColor = vec4(color, 1.0) * texture2D(u_texture, v_texCoords);
+    vec4 tex = texture2D(u_texture, v_texCoords);
+	vec3 v = vec3((sin(time*4.25+tex.r*6.0/R)+1.0)/2.0, 0.0, 0.0);				 // Sine wave between 1 and 0 moving outward 	       													 					
+	v.gb = vec2(pow(v.r, 6.0), pow(v.g, 10.0));        							 //	(coefficients define speed and frequency)
+    gl_FragColor = vec4(mix(minC, maxC, v), min(tex.g, tex.a) * v_color.a);
 }
 

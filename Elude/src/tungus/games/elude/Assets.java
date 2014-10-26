@@ -55,6 +55,8 @@ public class Assets {
 	public static TextureRegion shieldBonus;
 	public static TextureRegion freezerBonus;
 	
+	public static TextureRegion mineHelp;
+	
 	public static TextureRegion whiteRectangle;
 	public static TextureRegion smallCircle;
 	
@@ -120,6 +122,7 @@ public class Assets {
 		shield = atlas.findRegion("shield");
 		factory = atlas.findRegion("factory");
 		miner = atlas.findRegion("miner");
+		mineHelp = atlas.findRegion("minehelper");
 		
 		pause = atlas.findRegion("pause");
 		resume = atlas.findRegion("ingamemenu/resume");

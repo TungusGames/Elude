@@ -17,6 +17,7 @@ public class Shielded extends StandingBase {
 	private static final float INNER_R = OUTER_R / 2;
 	private static final float POS_FROM_CIRCLE_MIDDLE = OUTER_R / 4;
 	private static final float TURNSPEED = 50; // Degrees per second
+	private static final float ARRIVE_DIST_FROM_EDGE = 4;
 	
 	private static final Vector2 t = new Vector2();
 	
@@ -24,7 +25,7 @@ public class Shielded extends StandingBase {
 	
 	public Shielded(Vector2 pos, World w) {
 		//super(pos, EnemyType.SHIELDED, RocketType.SLOW_TURNING, w);
-		super(pos, EnemyType.SHIELDED, RocketType.SLOW_TURNING, w, EnemyType.SHIELDED.hp, StandingBase.DEFAULT_SPEED, OUTER_R*2);
+		super(pos, EnemyType.SHIELDED, RocketType.SLOW_TURNING, w, EnemyType.SHIELDED.hp, StandingBase.DEFAULT_SPEED, OUTER_R*2, ARRIVE_DIST_FROM_EDGE);
 		turnSpeed = TURNSPEED; // Modify value that is only used for graphics for other enemy types, more important here
 		in = new Circle(pos, INNER_R);
 		out = new Circle(pos, OUTER_R);

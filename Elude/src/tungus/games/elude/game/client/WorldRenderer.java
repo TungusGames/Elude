@@ -51,7 +51,7 @@ public class WorldRenderer {
 	private IntMap<ReducedRocket> rocketsInFrame = new IntMap<ReducedRocket>(80);
 	private IntMap<EnemyHealthbar> enemyHps = new IntMap<EnemyHealthbar>(50);
 	private IntMap<ReducedEnemy> enemiesInFrame = new IntMap<ReducedEnemy>(50);
-	private MineEffects mines = new MineEffects(100);
+	private MineRenderer mines = new MineRenderer(100);
 
 	private Vector2[] vesselPositions = null;
 	private PooledEffect[] vesselTrails = null;
@@ -93,8 +93,8 @@ public class WorldRenderer {
 	}
 
 	private void renderWithHighlightSet(float deltaTime, float alpha, RenderInfo r, boolean updateEffects) {
-		prepRockets(r);
-		mines.render(deltaTime, alpha);
+		prepRockets(r, deltaTime);
+		mines.render(updateEffects ? deltaTime : 0, alpha);
 		
 		batch.setColor(1, 1, 1, alpha);
 		batch.begin();
@@ -221,7 +221,7 @@ public class WorldRenderer {
 		}
 	}
 
-	private void prepRockets(RenderInfo r) {
+	private void prepRockets(RenderInfo r, float delta) {
 		// Make a map of active rockets
 		rocketsInFrame.clear();
 		mines.clear();
@@ -231,7 +231,7 @@ public class WorldRenderer {
 			if (roc.typeOrdinal != RocketType.MINE.ordinal()) {
 				rocketsInFrame.put(r.rockets.get(i).id, r.rockets.get(i));
 			} else {
-				mines.add(roc.id, roc.x, roc.y);
+				mines.add(roc.id, roc.x, roc.y, delta);
 			}
 
 		}

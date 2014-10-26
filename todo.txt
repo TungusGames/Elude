@@ -46,3 +46,19 @@ Mortar
 
 
 *: fast rocket
+
+OCT 26
+- Textures
+   - Minion
+   - Shielded
+- Balance Shielded
+- Figure out Miner - not hurt enemies with mines? Hurt them on the whole area but try not to lay them on standing enemies at least? shoot? (Current way makes little sense..)
+      - Also, balance (mine area, dmg)
+- 2 bosses
+    - Standing, laser shooting + producing enemies?
+    - What else?
+- Multiplayer
+    - BT if possible
+    - Google Play Game Services
+- Levels...
+- Music...
