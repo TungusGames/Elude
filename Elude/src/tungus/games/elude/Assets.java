@@ -1,5 +1,6 @@
 package tungus.games.elude;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
@@ -10,10 +11,13 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Assets {
 	
@@ -56,6 +60,7 @@ public class Assets {
 	public static TextureRegion freezerBonus;
 	
 	public static TextureRegion mineHelp;
+	public static TextureRegion linearGradientSpot;
 	
 	public static TextureRegion whiteRectangle;
 	public static TextureRegion smallCircle;
@@ -80,7 +85,7 @@ public class Assets {
 	public static TextureRegion[] stars = new TextureRegion[4]; // 0: empty, 1: bronze, 2: silver, 3: gold
 	public static TextureRegion[] smallStars = new TextureRegion[4];
 	public static TextureRegion lock;
-	
+		
 	public static BitmapFont font;
 	
 	public static final String PARTICLE_LOCATION = "particles/";	
@@ -95,6 +100,10 @@ public class Assets {
 	
 	public static Sound explosionSound;
 	public static Sound laserShot;
+	
+	public static ShaderProgram defaultShader;
+	public static ShaderProgram mine;
+	public static ShaderProgram freezeEnemy;
 	
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
@@ -123,6 +132,7 @@ public class Assets {
 		factory = atlas.findRegion("factory");
 		miner = atlas.findRegion("miner");
 		mineHelp = atlas.findRegion("minehelper");
+		linearGradientSpot = atlas.findRegion("lineargradientspot");
 		
 		pause = atlas.findRegion("pause");
 		resume = atlas.findRegion("ingamemenu/resume");
@@ -170,7 +180,19 @@ public class Assets {
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion2.wav"));
 		laserShot = Gdx.audio.newSound(Gdx.files.internal("sounds/laser_shot.wav"));
 		
-		//frame9p = new NinePatch(frame, 15, 84, 15, 84);
+		mine = compileShader("basicvertex", "minefragment", "Mine");
+		freezeEnemy = compileShader("basicvertex", "freezefragment", "Freeze");
+		defaultShader = SpriteBatch.createDefaultShader();
+	}
+	
+	private static ShaderProgram compileShader(String vertex, String fragment, String name) {
+		ShaderProgram s = new ShaderProgram(Gdx.files.internal("shaders/" + vertex), Gdx.files.internal("shaders/" + fragment));
+		if (!s.isCompiled()) {
+			Gdx.app.setLogLevel(Application.LOG_ERROR);
+			Gdx.app.log(name + " shader error", mine.getLog());
+			throw new GdxRuntimeException(name + " shader not compiled");			
+		}
+		return s;
 	}
 	
 	private static ParticleEffectPool loadParticle(String filename) {

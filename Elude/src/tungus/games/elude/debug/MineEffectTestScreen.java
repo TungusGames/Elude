@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class MineEffectTestScreen extends BaseScreen {
 	
-	private MineRenderer mines = new MineRenderer(100);
+	private MineRenderer mines = new MineRenderer();
 	private float time = 0;
 	
 	public MineEffectTestScreen(Game game) {

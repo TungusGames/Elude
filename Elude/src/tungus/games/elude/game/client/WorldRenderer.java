@@ -51,15 +51,13 @@ public class WorldRenderer {
 	private IntMap<ReducedRocket> rocketsInFrame = new IntMap<ReducedRocket>(80);
 	private IntMap<EnemyHealthbar> enemyHps = new IntMap<EnemyHealthbar>(50);
 	private IntMap<ReducedEnemy> enemiesInFrame = new IntMap<ReducedEnemy>(50);
-	private MineRenderer mines = new MineRenderer(100);
+	private MineRenderer mines = new MineRenderer();
+	private FreezeRenderer freeze = new FreezeRenderer();
 
 	private Vector2[] vesselPositions = null;
 	private PooledEffect[] vesselTrails = null;
 	public OrthographicCamera camera;
 	private int vesselID;
-
-	private float freezeTime = 0f;
-	private final FadeInOut freezeFade= new FadeInOut(0.5f, FreezerPickup.FREEZE_TIME);
 	
 	private EnemyType highlightedEnemy = null;
 	private PickupType highlightedPickup = null;
@@ -95,26 +93,24 @@ public class WorldRenderer {
 	private void renderWithHighlightSet(float deltaTime, float alpha, RenderInfo r, boolean updateEffects) {
 		prepRockets(r, deltaTime);
 		mines.render(updateEffects ? deltaTime : 0, alpha);
-		
+		freeze.render(updateEffects ? deltaTime : 0);
 		batch.setColor(1, 1, 1, alpha);
+		if (freeze.active) {
+			batch.setShader(freeze.enemyShader);
+		}
 		batch.begin();
 		int size = r.enemies.size();
 		for(int i = 0; i < size; i++) {
 			drawEnemy(r.enemies.get(i));
+		}
+		if (freeze.active) {
+			batch.setShader(Assets.defaultShader);	
 		}
 		drawEnemyHPs(r.enemies, deltaTime);
 		batch.setColor(1, 1, 1, alpha);
 		size = r.pickups.size();
 		for(int i = 0; i < size; i++) {
 			drawPickup(r.pickups.get(i));
-		}
-		if (freezeTime > 0f) {
-			if (updateEffects) {
-				freezeTime -= deltaTime;
-			}
-			batch.setColor(0f, 1f, 1f, freezeFade.apply(freezeTime) * 0.75f);
-			batch.draw(Assets.whiteRectangle, 0, 0, World.WIDTH, World.HEIGHT);
-			batch.setColor(1, 1, 1, alpha);
 		}
 		size = r.vessels.size();
 		if (vesselPositions == null && size != 0) {
@@ -187,7 +183,8 @@ public class WorldRenderer {
 			}
 			break;
 		case FREEZE:
-			freezeTime = FreezerPickup.FREEZE_TIME;
+			//freezeTime = FreezerPickup.FREEZE_TIME;
+			freeze.turnOn(effect.x, effect.y, FreezerPickup.FREEZE_TIME);
 			break;
 		}
 	}
@@ -335,6 +332,10 @@ public class WorldRenderer {
 			batch.draw(pt[o].tex, p.x-Pickup.HALF_SIZE, p.y-Pickup.HALF_SIZE, Pickup.DRAW_SIZE, Pickup.DRAW_SIZE);
 			batch.setColor(1, 1, 1, batch.getColor().a/p.alpha);
 		}
+	}
+	
+	public void resendShaders() {
+		mines.resendShader();
 	}
 
 

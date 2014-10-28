@@ -4,8 +4,6 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.rockets.Mine;
 import tungus.games.elude.util.ViewportHelper;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -34,11 +32,9 @@ public class MineRenderer {
 	private final ShaderProgram shader;
 	private final SpriteBatch batch;
 	
-	public MineRenderer(int s) {
+	public MineRenderer() {
 		mines = new IntMap<MineEffect>(20);
-		shader = new ShaderProgram(Gdx.files.internal("shaders/minevertex"),
-				   Gdx.files.internal("shaders/minefragment"));
-		Gdx.app.log("Shader", ""+shader.getLog());
+		shader = Assets.mine;
 		shader.begin();
 		shader.setUniformf("R", DRAW_R);
 		shader.setUniformf("time", 0);
@@ -86,5 +82,12 @@ public class MineRenderer {
 		}		
 		batch.end();
 		batch.setColor(1, 1, 1, 1);
+	}
+	
+	public void resendShader() {
+		shader.begin();
+		shader.setUniformf("R", DRAW_R);
+		shader.setUniformf("time", 0);
+		shader.end();
 	}
 }

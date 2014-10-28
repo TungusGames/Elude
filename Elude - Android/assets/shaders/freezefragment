@@ -1,0 +1,21 @@
+#ifdef GL_ES
+    precision mediump float;
+#endif
+
+varying vec4 v_color;
+varying vec2 v_texCoords;
+varying vec4 pos;
+
+uniform sampler2D u_texture;
+uniform mat4 u_projTrans;
+
+uniform float a;	
+
+void main() {
+	vec4 tex = texture2D(u_texture, v_texCoords);
+	float max = max(max(tex.r, tex.g), tex.b);
+	float min = min(min(tex.r, tex.g), tex.b);
+	vec4 cyan = vec4(min, max, max, tex.a);
+    gl_FragColor = v_color * mix(tex, cyan, a);
+}
+

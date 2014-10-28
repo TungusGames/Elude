@@ -393,6 +393,11 @@ public class GameScreen extends BaseScreen {
 	}
 	
 	@Override
+	public void resume() {
+		renderer.resendShaders();
+	}
+	
+	@Override
 	public void resize(int w, int h) {
 		initFromScreenSize();
 	}

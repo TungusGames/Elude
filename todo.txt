@@ -51,6 +51,7 @@ OCT 26
 - Textures
    - Minion
    - Shielded
+   - Remake MovingEnemy? (new players see it similar to vessel(?))
 - Balance Shielded
 - Figure out Miner - not hurt enemies with mines? Hurt them on the whole area but try not to lay them on standing enemies at least? shoot? (Current way makes little sense..)
       - Also, balance (mine area, dmg)
@@ -60,5 +61,8 @@ OCT 26
 - Multiplayer
     - BT if possible
     - Google Play Game Services
+- Fixes, tweaks, small stuff
+    - Effects sent properly (Esp. for MP..)
+    - Dying effect for player? (+ for bosses?)
 - Levels...
 - Music...
