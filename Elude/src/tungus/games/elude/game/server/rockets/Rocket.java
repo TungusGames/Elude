@@ -26,7 +26,7 @@ public abstract class Rocket {
 	};
 	
 	public static final float ROCKET_SIZE = 0.1f; // Diameter
-	public static final float DEFAULT_DMG = 3.5f;
+	public static final float DEFAULT_DMG = 3f;
 	public static final float DEFAULT_LIFE = 6f;
 	
 	public static final Rocket fromType(RocketType t, Enemy origin, Vector2 pos, Vector2 dir, Vessel target, World w) {

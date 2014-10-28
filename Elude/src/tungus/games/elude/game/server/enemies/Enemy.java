@@ -24,11 +24,11 @@ public abstract class Enemy {
 		KAMIKAZE	 (Assets.kamikaze, 			0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1  }, true, Kamikaze.class,		2), 
 		SHARPSHOOTER (Assets.sharpshooter,	 	1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}, true, Sharpshooter.class,	2),
 		MACHINEGUNNER(Assets.machinegunner,		1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}, true, MachineGunner.class,	2),
-		SHIELDED	 (Assets.shielded,			1.15f,0.86f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class,		2),
+		SHIELDED	 (Assets.shielded,			1.3f,1.016f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class,		2),
 		SPLITTER	 (Assets.splitter,			1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Splitter.class,		2),
-		MINION		 (Assets.splitter,			0.65f,0.65f, new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class,			1),
+		MINION		 (Assets.minion,			0.65f,0.65f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class,			1),
 		FACTORY		 (Assets.factory,           2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class,		8),
-		MINER		 (Assets.miner,				0.6f, 0.6f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,			2);
+		MINER		 (Assets.miner,				0.9f, 0.9f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,			2);
 		public TextureRegion tex;
 		public float width;
 		public float halfWidth;

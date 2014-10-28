@@ -49,9 +49,10 @@ Mortar
 
 OCT 26
 - Textures
-   - Minion
-   - Shielded
+   - Minion DONE
+   - Shielded DONE
    - Remake MovingEnemy? (new players see it similar to vessel(?))
+	DONE
 - Balance Shielded
 - Figure out Miner - not hurt enemies with mines? Hurt them on the whole area but try not to lay them on standing enemies at least? shoot? (Current way makes little sense..)
       - Also, balance (mine area, dmg)

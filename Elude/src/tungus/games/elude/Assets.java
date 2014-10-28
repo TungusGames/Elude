@@ -52,6 +52,7 @@ public class Assets {
 	public static TextureRegion shielded;
 	public static TextureRegion splitter;
 	public static TextureRegion factory;
+	public static TextureRegion minion;
 	public static TextureRegion miner;
 	
 	public static TextureRegion hpBonus;
@@ -120,6 +121,7 @@ public class Assets {
 		machinegunner = atlas.findRegion("machinegunner");
 		shielded = atlas.findRegion("shielded");
 		splitter = atlas.findRegion("splitter");
+		minion = atlas.findRegion("minion");
 		
 		hpBonus = atlas.findRegion("hpbonus");
 		speedBonus = atlas.findRegion("speedbonus");
