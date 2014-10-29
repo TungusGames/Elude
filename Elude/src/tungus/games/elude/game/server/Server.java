@@ -53,7 +53,9 @@ public class Server implements Runnable {
 		
 		LocalConnectionPair p = new LocalConnectionPair();
 		sendInvoker = new Object();
-		new Thread(new ServerSendHelper(p.c1, connections, sendInvoker)).start();
+		Thread t = new Thread(new ServerSendHelper(p.c1, connections, sendInvoker));
+		t.setName("SendHelper thread");
+		t.start();
 		sender = p.c2;
 		sendData = render = new RenderInfo(world.effects);
 		sendData.info = GameScreen.STATE_PLAYING;

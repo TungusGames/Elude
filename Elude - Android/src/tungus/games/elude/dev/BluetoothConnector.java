@@ -1,6 +1,8 @@
 package tungus.games.elude.dev;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -138,6 +140,7 @@ public class BluetoothConnector {
 		    public AcceptThread() {
 		    	super();
 		    	try {	        	
+		    		setName("Accept thread");
 		    		// MY_UUID is the app's UUID string, also used by the client code		    		
 		    		serverSocket = adapter.listenUsingRfcommWithServiceRecord("Elude", MY_UUID);
 			      	} catch (IOException e) {
@@ -154,13 +157,14 @@ public class BluetoothConnector {
 		            try {
 		            	Gdx.app.log("Bluetooth", "Server trying to accept");
 		            	BluetoothSocket socket = serverSocket.accept();
-		            	Gdx.app.log("Bluetooth", "Server accepted");
+		            	Gdx.app.log("Bluetooth", "Server accepted, almost connected");
 		                // If a connection was accepted
 		                if (socket != null) {
 		                	// Create the Connection object and sign to the render thread
 		                	if (bluetoothConnection == null) {
-		                		bluetoothConnection = new StreamConnection(new BTSocket(socket));
+		                		bluetoothConnection = new StreamConnection(new BTSocket(socket), true);
 			                	state = ServerState.CONNECTED;
+			                	Gdx.app.log("Bluetooth", "Server connected, StreamConnection initialized");
 		                	}
 		                	serverSocket.close();
 			                break;
@@ -334,6 +338,7 @@ public class BluetoothConnector {
 			
 		    public ConnectThread(BluetoothDevice device) {	 
 		        // Get a BluetoothSocket to connect with the given BluetoothDevice
+		    	setName("Connect thread");
 		        try {
 		        	state = ClientState.CONNECTING;
 		            // uuid is the app's UUID string, also used by the server code
@@ -354,7 +359,7 @@ public class BluetoothConnector {
 		            // until it succeeds or throws an exception
 		        	Gdx.app.log("Bluetooth", "Client trying to connect");
 		            socket.connect();
-		            Gdx.app.log("Bluetooth", "Client connected");
+		            Gdx.app.log("Bluetooth", "Client almost connected, socket ready");
 		        } catch (IOException connectException) {
 		            // Unable to connect; close the socket and get out
 		            try {
@@ -363,8 +368,10 @@ public class BluetoothConnector {
 		            return;
 		        }
 		        if (bluetoothConnection == null) {
-					bluetoothConnection = new StreamConnection(new BTSocket(socket));
+					bluetoothConnection = new StreamConnection(new BTSocket(socket), true);
 					state = ClientState.CONNECTED;
+					Gdx.app.log("Bluetooth", "Bluetooth connected, StreamConnection initialized");
+					
 				}
 		    }
 		 
