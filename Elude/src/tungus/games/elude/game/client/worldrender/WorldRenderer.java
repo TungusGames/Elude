@@ -1,43 +1,62 @@
-package tungus.games.elude.game.client;
+package tungus.games.elude.game.client.worldrender;
 
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.DebrisEffect;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.ReducedEnemy;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.ReducedPickup;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.ReducedRocket;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.ReducedVessel;
-import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
-import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
-import tungus.games.elude.game.server.pickups.FreezerPickup;
-import tungus.games.elude.game.server.pickups.Pickup;
-import tungus.games.elude.game.server.pickups.Pickup.PickupType;
-import tungus.games.elude.game.server.rockets.Rocket.RocketType;
-import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.CamShaker;
-import tungus.games.elude.util.CustomInterpolations.FadeInOut;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntMap;
 
 public class WorldRenderer {
-
-	private static final EnemyType[] et = EnemyType.values();
+	
+	private RenderPhase[] phases = RenderPhase.values();	
+	
+	public OrthographicCamera camera;
+	
+	int vesselID;
+	boolean updateParticles;
+	SpriteBatch batch;
+	CamShaker camShaker;
+	IntMap<PooledEffect> lastingEffects;
+	
+	public WorldRenderer(int myVesselID) {
+		batch = new SpriteBatch(5460);
+		camera = new OrthographicCamera(World.WIDTH, World.HEIGHT);
+		camera.position.set(World.WIDTH/2, World.HEIGHT/2, 0);
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
+		camShaker = new CamShaker(batch);
+		lastingEffects = new IntMap<PooledEffect>(100);
+		this.vesselID = myVesselID;
+	}
+	
+	public void render(float deltaTime, float alpha, RenderInfo renderInfo, boolean updateEffects) {
+		this.updateParticles = updateEffects;
+		camShaker.update(deltaTime);
+		for (int i = 0; i < phases.length; i++) {
+			RenderPhase p = phases[i];
+			List<Renderable> phaseList = renderInfo.phases.get(i);
+			p.renderer.begin(p, this, deltaTime);
+			for (Renderable r : phaseList) {
+				p.renderer.render(r);
+			}
+			p.renderer.end();
+		}
+	}
+	
+	public void resetContext() {
+		for (RenderPhase p : phases) {
+			p.renderer.resetContext();
+		}
+	}
+	
+	
+	/*private static final EnemyType[] et = EnemyType.values();
 	private static final RocketType[] rt = RocketType.values();
 	private static final PickupType[] pt = PickupType.values();
 	private static final EffectType[] eft = EffectType.values();
@@ -336,7 +355,7 @@ public class WorldRenderer {
 	
 	public void resendShaders() {
 		mines.resendShader();
-	}
+	}*/
 
 
 }

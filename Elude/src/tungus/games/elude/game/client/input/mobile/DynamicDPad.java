@@ -31,7 +31,7 @@ public class DynamicDPad extends Sprite implements Controls {
 	private float stateTime = FADE_TIME;
 	
 	public DynamicDPad(OrthographicCamera gameCam, OrthographicCamera uiCam, float frustumWidth, float frustumHeight) {
-		super(Assets.virtualDPadPerimeter);
+		super(Assets.Tex.VIRTUALDPAD.t);
 		this.gameCamera = gameCam;
 		this.uiCamera = uiCam;
 		setSize(SIZE, SIZE);

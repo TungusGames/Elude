@@ -147,7 +147,7 @@ public class LevelSelectScreen extends BaseScreen {
 		
 		starInfo = ScoreData.starsEarned + " / " + ScoreData.starsMax;
 		stringPos = new Vector2(790 - Assets.font.getBounds(starInfo).width, 470);
-		star = new Sprite(Assets.stars[3]);
+		star = new Sprite(Assets.Tex.STAR_ON.t);
 		star.setBounds(stringPos.x/40-1f, stringPos.y/40-0.7f, 0.8f, 0.8f*0.95f);
 	}
 	

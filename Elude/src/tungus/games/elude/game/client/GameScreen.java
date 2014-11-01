@@ -10,6 +10,7 @@ import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.client.input.mobile.DynamicDPad;
 import tungus.games.elude.game.client.input.mobile.StaticDPad;
 import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
+import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
 import tungus.games.elude.game.multiplayer.transfer.ArcadeScoreInfo;
@@ -24,7 +25,6 @@ import tungus.games.elude.menu.ingame.LevelCompleteMenu;
 import tungus.games.elude.menu.ingame.PauseMenu;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.Settings;
-import tungus.games.elude.util.CamShaker;
 import tungus.games.elude.util.CustomInterpolations;
 import tungus.games.elude.util.ViewportHelper;
 
@@ -231,7 +231,6 @@ public class GameScreen extends BaseScreen {
 			Gdx.app.log("LagWarn", "DeltaTime: " + deltaTime);
 			deltaTime = 0.05f;
 		}
-		CamShaker.INSTANCE.update(deltaTime);
 		logTime("outside", 50);
 		synchronized(connection) {
 			if (!connection.newest.handled) {
@@ -321,7 +320,7 @@ public class GameScreen extends BaseScreen {
 				progressbar.drawBar(uiBatch, 0, deltaTime, gameAlpha);
 			}
 		}
-		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
+		uiBatch.draw(Assets.Tex.PAUSE.t, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
 		fontBatch.begin();
 		healthbar.drawText(fontBatch, gameAlpha);
@@ -394,7 +393,7 @@ public class GameScreen extends BaseScreen {
 	
 	@Override
 	public void resume() {
-		renderer.resendShaders();
+		renderer.resetContext();
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package tungus.games.elude.game.client;
+package tungus.games.elude.game.client.worldrender;
 
 import tungus.games.elude.Assets;
 
@@ -35,11 +35,11 @@ public class EnemyHealthbar {
 		float originalAlpha = batch.getColor().a;
 		batch.setColor(0, 1, 0, alpha*originalAlpha);
 		if (green > 0) {
-			batch.draw(Assets.whiteRectangle, pos.x - BAR_LENGTH / 2, pos.y + DIST_FROM_ENEMY, green, BAR_WIDTH);
+			batch.draw(Assets.Tex.WHITE_RECTANGLE.t, pos.x - BAR_LENGTH / 2, pos.y + DIST_FROM_ENEMY, green, BAR_WIDTH);
 		}
 		batch.setColor(1, 0, 0, batch.getColor().a);
 		if (red > 0) {
-			batch.draw(Assets.whiteRectangle, pos.x - BAR_LENGTH / 2 + green, pos.y + DIST_FROM_ENEMY, red, BAR_WIDTH);
+			batch.draw(Assets.Tex.WHITE_RECTANGLE.t, pos.x - BAR_LENGTH / 2 + green, pos.y + DIST_FROM_ENEMY, red, BAR_WIDTH);
 		}
 		batch.setColor(1, 1, 1, originalAlpha);
 	}

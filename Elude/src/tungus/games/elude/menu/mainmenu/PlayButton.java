@@ -15,11 +15,11 @@ public class PlayButton extends Sprite {
 	private boolean split = false;
 	private boolean switching = false;
 	
-	private final Sprite upper = new Sprite(Assets.halfPlayPanel);
-	private final Sprite lower = new Sprite(Assets.halfPlayPanel);
+	private final Sprite upper = new Sprite(Assets.Tex.HALF_PLAY_PANEL.t);
+	private final Sprite lower = new Sprite(Assets.Tex.HALF_PLAY_PANEL.t);
 	
 	public PlayButton() {
-		super(Assets.playSingleButton);
+		super(Assets.Tex.PLAY_SINGLE_BUTTON.t);
 		//		playButton.setBounds(175, 35, 220, 220);
 		upper.setBounds(175, 150, 220, 105);
 		lower.setBounds(175, 35, 220, 105);

@@ -13,10 +13,10 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Pickup {
 	
 	public enum PickupType{
-		HEALTH(Assets.hpBonus), 
-		SPEED(Assets.speedBonus), 
-		SHIELD(Assets.shieldBonus), 
-		FREEZER(Assets.freezerBonus);
+		HEALTH(Assets.Tex.HPBONUS.t), 
+		SPEED(Assets.Tex.SPEEDBONUS.t), 
+		SHIELD(Assets.Tex.SHIELDBONUS.t), 
+		FREEZER(Assets.Tex.FREEZERBONUS.t);
 		public TextureRegion tex;
 		PickupType(TextureRegion t) {
 			tex = t;

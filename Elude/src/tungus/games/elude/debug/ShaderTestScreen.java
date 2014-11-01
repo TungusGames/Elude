@@ -59,7 +59,7 @@ public class ShaderTestScreen extends BaseScreen {
 			addSpot();
 		}
 		shader.setUniform1fv("time[0]", time, 0, time.length);
-		batch.draw(Assets.whiteRectangle, 0, 0, 20, 12);
+		batch.draw(Assets.Tex.WHITE_RECTANGLE.t, 0, 0, 20, 12);
 		batch.end();
 	}
 

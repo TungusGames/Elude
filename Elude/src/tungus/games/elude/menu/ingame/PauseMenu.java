@@ -16,7 +16,7 @@ public class PauseMenu extends AbstractIngameMenu {
 	private static final float TEXT_Y = BUTTON_Y + BUTTON_SIZE + BUTTON_SPACING;
 	
 	public PauseMenu() {
-		super(new Sprite[]{new Sprite(Assets.toMenu), new Sprite(Assets.restart), new Sprite(Assets.resume)},
+		super(new Sprite[]{new Sprite(Assets.Tex.TO_MENU.t), new Sprite(Assets.Tex.RESTART.t), new Sprite(Assets.Tex.RESUME.t)},
 		   new Rectangle[]{new Rectangle(FRUSTUM_WIDTH/2-1.5f*BUTTON_SIZE-BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
 						   new Rectangle(FRUSTUM_WIDTH/2-0.5f*BUTTON_SIZE,				  BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
 						   new Rectangle(FRUSTUM_WIDTH/2+0.5f*BUTTON_SIZE+BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)});

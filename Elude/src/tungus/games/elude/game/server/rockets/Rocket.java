@@ -15,10 +15,10 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Rocket {
 	
 	public static enum RocketType { 
-		SLOW_TURNING(Assets.flameRocket), 
-		FAST_TURNING(Assets.matrixRocket), 
-		STRAIGHT(Assets.straightRocket),
-		MINE(Assets.matrixRocket);
+		SLOW_TURNING(Assets.Particles.FLAME_ROCKET.p), 
+		FAST_TURNING(Assets.Particles.MATRIX_ROCKET.p), 
+		STRAIGHT(Assets.Particles.STRAIGHT_ROCKET.p),
+		MINE(/*Assets.Particles.FLAME_ROCKET.p*/null);
 		public ParticleEffectPool effect;
 		RocketType(ParticleEffectPool e) {
 			effect = e;

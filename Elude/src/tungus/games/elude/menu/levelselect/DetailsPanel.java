@@ -33,7 +33,7 @@ public class DetailsPanel {
 
 	public DetailsPanel(boolean finiteLevels) {
 		finite = finiteLevels;
-		playButton = new Sprite(Assets.playLevel);
+		playButton = new Sprite(Assets.Tex.PLAY_LEVEL.t);
 		playButton.setBounds(PLAY_X+10, 0.5f, 3f, 1.8f);
 	}
 	

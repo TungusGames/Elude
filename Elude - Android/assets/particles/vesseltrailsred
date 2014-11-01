@@ -10,8 +10,8 @@ max: 200
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 80.0
-highMax: 80.0
+highMin: 150.0
+highMax: 150.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -96,18 +96,7 @@ timeline0: 0.0
 timeline1: 0.09487666
 timeline2: 0.095876664
 - Rotation - 
-active: true
-lowMin: 0.0
-lowMax: 360.0
-highMin: -180.0
-highMax: 180.0
-relative: true
-scalingCount: 2
-scaling0: 0.0
-scaling1: 1.0
-timelineCount: 2
-timeline0: 0.0
-timeline1: 1.0
+active: false
 - Wind - 
 active: false
 - Gravity - 
@@ -148,4 +137,4 @@ aligned: false
 additive: true
 behind: false
 - Image Path -
-C:\Users\Peti\git\elude\img\done\sq2.png
+C:\Users\Peti\git\elude\img\done\particle.png
