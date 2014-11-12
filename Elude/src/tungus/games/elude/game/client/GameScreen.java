@@ -133,7 +133,9 @@ public class GameScreen extends BaseScreen {
 	
 	public static GameScreen newSinglePlayer(Game game, int levelNum, boolean finite) {
 		LocalConnectionPair c = new LocalConnectionPair();
-		new Thread(new Server(levelNum, finite, new Connection[] {c.c1})).start();
+		Thread t = new Thread(new Server(levelNum, finite, new Connection[] {c.c1}));
+		t.setName("Server (singleplayer)");
+		t.start();
 		return new GameScreen(game, levelNum, finite, c.c2, 0);
 	}
 	

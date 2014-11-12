@@ -82,6 +82,7 @@ public class BluetoothConnectScreen extends BaseScreen {
 		case ENABLED:
 			if (!serverReady) {
 				server.acceptThread = server.new AcceptThread();
+				server.acceptThread.setName("Accept thread");
 				server.acceptThread.start();
 				server.enableVisibility();
 				serverReady = true;		
@@ -89,8 +90,11 @@ public class BluetoothConnectScreen extends BaseScreen {
 			break;
 		case CONNECTED:
 			LocalConnectionPair c = new LocalConnectionPair();
-			new Thread(new tungus.games.elude.game.server.Server(levelNum, false, new Connection[] {c.c1, BluetoothConnector.INSTANCE.bluetoothConnection})).start();
+			Thread t = new Thread(new tungus.games.elude.game.server.Server(levelNum, false, new Connection[] {c.c1, BluetoothConnector.INSTANCE.bluetoothConnection}));
+			t.setName("Server thread (multiplayer)");
+			t.start();
 			game.setScreen(new GameScreen(game, levelNum, false, c.c2, 0));
+			//game.setScreen(new BluetoothTestSend(game, BluetoothConnector.INSTANCE.bluetoothConnection));
 			break;
 		default:
 			break;
@@ -111,6 +115,7 @@ public class BluetoothConnectScreen extends BaseScreen {
 			break;
 		case CONNECTED:
 			game.setScreen(new GameScreen(game, levelNum, false, BluetoothConnector.INSTANCE.bluetoothConnection, 1));
+			//game.setScreen(new BluetoothTestReceive(game, BluetoothConnector.INSTANCE.bluetoothConnection));
 			break;
 		case DISCOVERING:
 			client.listDevices(devices);

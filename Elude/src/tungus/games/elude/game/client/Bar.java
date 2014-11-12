@@ -67,7 +67,7 @@ public class Bar {
 	public void drawText(SpriteBatch fontBatch, float alpha) {
 		Assets.font.setScale(textScaleX, textScaleY);
 		Assets.font.setColor(1, 1, 1, alpha);
-		Assets.font.draw(fontBatch, prefix + (int)(displayedValue*maxValue) + postfix, textCoord.x, textCoord.y);
+		Assets.font.draw(fontBatch, prefix + (int)(Math.max(0, displayedValue*maxValue)) + postfix, textCoord.x, textCoord.y);
 		Assets.font.setScale(1);
 	}
 	

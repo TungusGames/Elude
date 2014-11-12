@@ -9,18 +9,42 @@ import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class StreamConnection extends Connection {
-
+	
+	//private final Object sendLock = new Object();
+	
 	private ObjectInputStream objInStream;
 	private ObjectOutputStream objOutStream;
 	private final Socket socket;
-
+	
+	private static class Timer implements Runnable {
+		private int ms;
+		private Thread t;
+		public Timer(Thread t, int ms) {
+			this.t = t;
+			this.ms = ms;
+		}
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(ms);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			t.interrupt();
+		}
+	}
+	
 	private Thread thread = new Thread() {
 		@Override
 		public void run() {
 			// Keep listening to the InputStream until an exception occurs
 			while (true) {
 				try {
-					TransferData received = (TransferData)objInStream.readObject();
+					TransferData received = null;
+					//synchronized(sendLock) {
+					//	new Thread(new Timer(this, 1000)).start();
+						received = (TransferData)objInStream.readObject();
+					//}					
 					// Read from the InputStream
 					synchronized(StreamConnection.this) {
 						newest = received;
@@ -28,18 +52,22 @@ public class StreamConnection extends Connection {
 					}
 					// Send the obtained bytes to the UI activity
 				} catch (Exception e) {
+					e.printStackTrace();
 					break;
 				}
 			}
 		}
 	};
 
-	public StreamConnection(Socket s) {
+	public StreamConnection(Socket s, boolean startRead) {
 		try {
 			objOutStream = new ObjectOutputStream(s.getOutputStream());
 			objOutStream.flush();
 			objInStream = new ObjectInputStream(s.getInputStream());
-			thread.start();
+			thread.setName("StreamConnection read thread");
+			if (startRead) {
+				thread.start();
+			}			
 		} catch (IOException e) {
 			throw new GdxRuntimeException(e);
 		} //TODO error handling
@@ -50,8 +78,10 @@ public class StreamConnection extends Connection {
 	@Override
 	public void write(TransferData data) {
 		try {
-			objOutStream.reset();
-			objOutStream.writeUnshared(data);
+			//synchronized(sendLock) {
+				objOutStream.reset();
+				objOutStream.writeUnshared(data);
+			//}
 		} catch (IOException e) {
 			Gdx.app.log("SEND ERROR", "Failed to send data");
 			e.printStackTrace();
@@ -61,5 +91,9 @@ public class StreamConnection extends Connection {
 	@Override
 	public void close() {
 		socket.dispose();
+	}
+	
+	public void startRead() {
+		thread.start();
 	}
 }

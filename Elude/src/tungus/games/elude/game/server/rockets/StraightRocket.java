@@ -6,6 +6,7 @@ import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class StraightRocket extends Rocket {
@@ -29,6 +30,8 @@ public class StraightRocket extends Rocket {
 				vel.x = -vel.x;
 			else
 				vel.y = -vel.y;
+			pos.x = MathUtils.clamp(pos.x, boundsForVessel.x, World.WIDTH-boundsForVessel.x);
+			pos.y = MathUtils.clamp(pos.y, boundsForVessel.y, World.HEIGHT-boundsForVessel.y);
 			bounced = true;
 			return false;
 		}
