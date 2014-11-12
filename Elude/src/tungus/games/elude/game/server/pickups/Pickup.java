@@ -1,24 +1,27 @@
 package tungus.games.elude.game.server.pickups;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Tex;
+import tungus.games.elude.game.client.worldrender.Renderable;
+import tungus.games.elude.game.client.worldrender.Sprite;
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class Pickup {
+public abstract class Pickup extends Updatable {
 	
 	public enum PickupType{
-		HEALTH(Assets.Tex.HPBONUS.t), 
-		SPEED(Assets.Tex.SPEEDBONUS.t), 
-		SHIELD(Assets.Tex.SHIELDBONUS.t), 
-		FREEZER(Assets.Tex.FREEZERBONUS.t);
-		public TextureRegion tex;
-		PickupType(TextureRegion t) {
+		HEALTH(Assets.Tex.HPBONUS), 
+		SPEED(Assets.Tex.SPEEDBONUS), 
+		SHIELD(Assets.Tex.SHIELDBONUS), 
+		FREEZER(Assets.Tex.FREEZERBONUS);
+		public Tex tex;
+		PickupType(Tex t) {
 			tex = t;
 		}
 	}
@@ -74,6 +77,7 @@ public abstract class Pickup {
 		this(world, pos, type, DEFAULT_LIFETIME);
 	}
 	
+	@Override
 	public boolean update(float deltaTime) {
 		lifeTimeLeft -= deltaTime;
 		if (lifeTimeLeft <= 0f) {
@@ -97,6 +101,11 @@ public abstract class Pickup {
 			alpha = PICKED_UP.apply(1, 0, 1-lifeTimeLeft/TAKE_TIME);
 		}
 		return false;
+	}
+	
+	@Override
+	public Renderable getRenderable() {
+		return Sprite.create(type.tex.ordinal(), collisionBounds.x, collisionBounds.y, DRAW_SIZE, DRAW_SIZE, 0, alpha);
 	}
 	
 	protected abstract void produceEffect(Vessel vessel);
