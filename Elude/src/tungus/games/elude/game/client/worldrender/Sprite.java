@@ -13,7 +13,8 @@ public class Sprite extends Poolable implements Renderable {
 		return s;
 	}
 	
-	protected float x, y, width, height, rot, alpha;
+	public float x, y;
+	protected float width, height, rot, alpha;
 	protected int texID;
 	
 	public Sprite(LinkedPool<Sprite> p) {

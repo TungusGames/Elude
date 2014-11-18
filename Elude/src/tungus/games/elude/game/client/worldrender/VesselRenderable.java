@@ -66,6 +66,11 @@ public class VesselRenderable extends Sprite {
 		}
 		trails.setPosition(x, y);
 	}
+	
+	@Override
+	public Renderable clone() {
+		return create(x, y, vx, vy, rot, shieldAlpha, id);
+	}
 
 	
 }

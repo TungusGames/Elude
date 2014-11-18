@@ -1,7 +1,7 @@
 package tungus.games.elude.game.server.enemies;
 
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
+import tungus.games.elude.Assets.Particles;
+import tungus.games.elude.game.client.worldrender.ParticleAdder;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
@@ -37,7 +37,7 @@ public class Kamikaze extends StandingBase {
 		world.waveLoader.onEnemyHurt(this, hp);
 		killByRocket(null);
 		
-		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal())); //TODO pool
+		world.effects.add(ParticleAdder.create(Particles.EXPLOSION, pos.x, pos.y, id));
 		
 		for (int i = 0; i < ROCKETS_SHOT; i++) {
 			shootRocket(new Vector2(1,0).rotate(MathUtils.random(360)));

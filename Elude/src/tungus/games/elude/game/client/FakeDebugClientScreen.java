@@ -6,6 +6,8 @@ import java.util.List;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.game.client.input.Controls;
 import tungus.games.elude.game.client.input.KeyControls;
+import tungus.games.elude.game.client.worldrender.RenderPhase;
+import tungus.games.elude.game.client.worldrender.VesselRenderable;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
@@ -110,8 +112,8 @@ public class FakeDebugClientScreen extends BaseScreen implements Runnable {
 			break;
 		case STATE_PLAYING:
 			for (int i = 0; i < update.directions.length; i++) {
-				update.directions[i] = controls.get(i).getDir(tmp.set(render.vessels.get(i).x, render.vessels.get(i).y), deltaTime);
-			}
+				VesselRenderable v = (VesselRenderable)(render.phases.get(RenderPhase.VESSEL.ordinal()).get(i));
+				update.directions[i] = controls.get(i).getDir(tmp.set(v.x, v.y), deltaTime);			}
 			update.info = Server.STATE_RUNNING;
 			break;
 		case STATE_PAUSED:

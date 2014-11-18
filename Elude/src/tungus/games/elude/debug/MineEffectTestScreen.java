@@ -20,7 +20,7 @@ public class MineEffectTestScreen extends BaseScreen {
 	public void render(float delta) {
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		time += delta;
-		mines.clear();
+		mines.begin();
 		if (time < 4) {
 			;
 		} else if (time < 8) {

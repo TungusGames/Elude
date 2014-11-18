@@ -1,7 +1,7 @@
 package tungus.games.elude.game.server.rockets;
 
-import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
+import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.worldrender.SoundEffect;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
@@ -17,7 +17,7 @@ public class StraightRocket extends Rocket {
 	public StraightRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		super(origin, RocketType.STRAIGHT, pos, dir, world, target);
 		vel.nor().scl(SPEED);
-		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.LASERSHOT.ordinal()));
+		world.effects.add(SoundEffect.create(Assets.Sounds.LASERSHOT));
 	}
 
 	@Override

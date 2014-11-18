@@ -10,6 +10,8 @@ import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.client.input.mobile.DynamicDPad;
 import tungus.games.elude.game.client.input.mobile.StaticDPad;
 import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
+import tungus.games.elude.game.client.worldrender.RenderPhase;
+import tungus.games.elude.game.client.worldrender.VesselRenderable;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
@@ -281,7 +283,8 @@ public class GameScreen extends BaseScreen {
 			break;
 		case STATE_PLAYING:
 			for (int i = 0; i < update.directions.length; i++) {
-				update.directions[i] = controls.get(i).getDir(tmp.set(render.vessels.get(i).x, render.vessels.get(i).y), deltaTime);
+				VesselRenderable v = (VesselRenderable)(render.phases.get(RenderPhase.VESSEL.ordinal()).get(i));
+				update.directions[i] = controls.get(i).getDir(tmp.set(v.x, v.y), deltaTime);
 			}
 			update.info = Server.STATE_RUNNING;
 			break;

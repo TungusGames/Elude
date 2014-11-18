@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect;
+import tungus.games.elude.game.client.worldrender.Renderable;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.rockets.Rocket;
@@ -34,7 +34,7 @@ public class World {
 	public List<Rocket> rockets;
 	public List<Enemy> enemies;
 	public List<Enemy> enemiesToAdd;
-	public List<Effect> effects;
+	public List<Renderable> effects;
 	public List<Pickup> pickups;
 	
 	public static final Rectangle outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
@@ -56,7 +56,7 @@ public class World {
 		rockets = new LinkedList<Rocket>();
 		enemies = new LinkedList<Enemy>();
 		enemiesToAdd = new LinkedList<Enemy>();
-		effects = new LinkedList<Effect>();
+		effects = new LinkedList<Renderable>();
 		pickups = new LinkedList<Pickup>();
 		this.levelNum = levelNum;
 		this.isFinite = finite;

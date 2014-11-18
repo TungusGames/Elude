@@ -5,6 +5,7 @@ import java.util.List;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
+import tungus.games.elude.game.client.worldrender.DebrisAdder;
 import tungus.games.elude.game.client.worldrender.Renderable;
 import tungus.games.elude.game.client.worldrender.Sprite;
 import tungus.games.elude.game.server.Updatable;
@@ -151,7 +152,7 @@ public abstract class Enemy extends Updatable {
 	private boolean died = false;
 	public void killByRocket(Rocket r) {
 		if (!died) {
-			world.effects.add(RenderInfoPool.newDebris(pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN, type.ordinal()));
+			world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN));
 			world.waveLoader.onEnemyDead(this);
 			died = true;
 		}

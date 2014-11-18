@@ -1,15 +1,16 @@
 package tungus.games.elude.game.client.worldrender;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.game.client.worldrender.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
 import tungus.games.elude.util.LinkedPool.Poolable;
 
 public class SoundEffect extends Poolable implements Effect {
 	private static LinkedPool<SoundEffect> pool = new LinkedPool<SoundEffect>(SoundEffect.class, 15);
-	public static Effect create(int id) {
+	public static Effect create(Sounds asset) {
 		SoundEffect s = pool.obtain();
-		s.id = id;
+		s.id = asset.ordinal();
 		return s;
 	}
 	private int id;
@@ -24,6 +25,6 @@ public class SoundEffect extends Poolable implements Effect {
 	
 	@Override
 	public Renderable clone() {
-		return create(id);
+		return create(Assets.Sounds.values()[id]);
 	}
 }

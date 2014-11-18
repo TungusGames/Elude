@@ -1,8 +1,10 @@
 package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
+import tungus.games.elude.Assets.Particles;
+import tungus.games.elude.game.client.worldrender.CamShake;
+import tungus.games.elude.game.client.worldrender.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.ParticleRemover;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
@@ -135,7 +137,7 @@ public abstract class Rocket {
 		for (int i = 0; i < size; i++) {
 			if (Intersector.overlaps(world.vessels.get(i).bounds, boundsForVessel)) {
 				if (!world.vessels.get(i).shielded) {
-					world.effects.add(RenderInfoPool.newEffect(0f, 0f, EffectType.CAMSHAKE.ordinal()));
+					world.effects.add(CamShake.create());
 					world.vessels.get(i).hp -= dmg;
 				}
 				kill();
@@ -146,7 +148,8 @@ public abstract class Rocket {
 	}
 	
 	public void kill() {
-		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal()));
+		world.effects.add(ParticleRemover.create(id));
+		world.effects.add(ParticleAdder.create(Particles.EXPLOSION, pos.x, pos.y, id));
 	}
 	
 	protected boolean hitWall(boolean vertical) {
