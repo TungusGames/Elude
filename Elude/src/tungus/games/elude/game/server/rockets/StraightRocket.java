@@ -1,7 +1,9 @@
 package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.worldrender.Renderable;
 import tungus.games.elude.game.client.worldrender.SoundEffect;
+import tungus.games.elude.game.client.worldrender.StraightRocketRenderable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
@@ -37,6 +39,11 @@ public class StraightRocket extends Rocket {
 		}
 		kill();
 		return true;
+	}
+	
+	@Override
+	public Renderable getRenderable() {
+		return StraightRocketRenderable.create(pos.x, pos.y, vel.angle(), id, type.effect);
 	}
 
 }

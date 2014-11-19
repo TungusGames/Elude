@@ -54,7 +54,7 @@ public class Splitter extends Enemy {
 		super.killByRocket(r);
 		if (splitsLeft > 0) {
 			for (int i = 0; i < SPLIT_INTO; i++) {
-				world.enemies.add(new Splitter(pos.cpy(), world, splitsLeft-1, false));
+				world.addNextFrame.add(new Splitter(pos.cpy(), world, splitsLeft-1, false));
 			}
 		}
 	}

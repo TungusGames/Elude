@@ -1,19 +1,18 @@
 package tungus.games.elude.game.server;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 import tungus.games.elude.game.client.worldrender.Renderable;
-import tungus.games.elude.game.server.enemies.Enemy;
-import tungus.games.elude.game.server.pickups.Pickup;
-import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
+import tungus.games.elude.util.LinkedPool.Poolable;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -30,12 +29,14 @@ public class World {
 	public static final int STATE_LOST = 1;
 	public static final int STATE_WON = 2;
 	
+	//public List<Vessel> vessels;
+	//public List<Rocket> rockets;
+	//public List<Enemy> enemies;
 	public List<Vessel> vessels;
-	public List<Rocket> rockets;
-	public List<Enemy> enemies;
-	public List<Enemy> enemiesToAdd;
+	public List<Updatable> updatables;
+	public List<Updatable> addNextFrame;
 	public List<Renderable> effects;
-	public List<Pickup> pickups;
+	//public List<Pickup> pickups;
 	
 	public static final Rectangle outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 	public static final Rectangle innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
@@ -52,12 +53,10 @@ public class World {
 	public float freezeTime = 0f;
 	
 	public World(int levelNum, boolean finite) {
-		vessels = new LinkedList<Vessel>();
-		rockets = new LinkedList<Rocket>();
-		enemies = new LinkedList<Enemy>();
-		enemiesToAdd = new LinkedList<Enemy>();
-		effects = new LinkedList<Renderable>();
-		pickups = new LinkedList<Pickup>();
+		vessels = new ArrayList<Vessel>();
+		updatables = new LinkedList<Updatable>();
+		addNextFrame = new LinkedList<Updatable>();
+		effects = new LinkedList<Renderable>();		
 		this.levelNum = levelNum;
 		this.isFinite = finite;
 		//vessels.add(new Vessel(this));
@@ -74,47 +73,36 @@ public class World {
 	
 	@SuppressWarnings("unchecked")
 	public void update(float deltaTime, Vector2[] dirs) {
-		effects.clear(); //TODO pool / trash?
-		int size = vessels.size();
+		while (!effects.isEmpty()) {
+			((Poolable)(effects.remove(0))).free();
+		}
+		
+		
 		boolean isVesselAlive = false;
-		for(int i = 0; i < size; i++) {
-			Vessel v = vessels.get(i);
-			v.update(deltaTime, dirs[i]);
-			isVesselAlive = isVesselAlive || v.hp > 0;
-		}
-		float deltaForEnemy = deltaTime;
-		if (freezeTime > 0) {
-			freezeTime -= deltaTime;
-			deltaForEnemy = 0;
-		}
-		for (ListIterator<Enemy> it = enemies.listIterator(); it.hasNext(); ) {
-			Enemy e = it.next();
-			if (e.update(deltaForEnemy) || e.hp <= 0) {
-				it.remove();
-			}
-		}
-		while (!enemiesToAdd.isEmpty()) {
-			((Deque<Enemy>)enemies).addFirst(enemiesToAdd.remove(0));
-		}
-		
-		size = rockets.size();
-		for (ListIterator<Rocket> it = rockets.listIterator(); it.hasNext(); ) {
-			Rocket r = it.next();
-			if (r.update(deltaTime)) {
-				it.remove();
+		for (int i = 0; i < vessels.size(); i++) {
+			Vessel v = vessels.get(0);
+			v.setInput(dirs[i]);
+			if (v.update(deltaTime)) {
+				isVesselAlive = true;
 			}
 		}
 		
-		size = pickups.size();
-		for (ListIterator<Pickup> it = pickups.listIterator(); it.hasNext(); ) {
-			Pickup p = it.next();
-			if (p.update(deltaTime)) {
+		boolean gameContinuing = false;
+		for (ListIterator<Updatable> it = updatables.listIterator(); it.hasNext();) {
+			Updatable u = it.next();
+			if (u.update(deltaTime)) {
 				it.remove();
+			} else if (u.keepsWorldGoing) {
+				gameContinuing = true;
 			}
 		}
 		
+		while (!addNextFrame.isEmpty()) {
+			((Deque<Updatable>)updatables).addFirst(addNextFrame.remove(0));
+		}
 		waveLoader.update(deltaTime);
-		if (!isVesselAlive || (enemies.size() == 0 && rockets.size() == 0 && waveLoader.isOver())) {
+		
+		if (!isVesselAlive || (!gameContinuing && waveLoader.isOver())) {
 			state = vessels.get(0).hp <= 0 && isFinite ? STATE_LOST : STATE_WON;
 			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
 				waveLoader.saveScore();

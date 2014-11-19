@@ -20,7 +20,7 @@ public class Factory extends StandingBase {
 	@Override
 	protected boolean standingUpdate(float deltaTime) {
 		if (timeSinceShot > RELOAD) {
-			world.enemiesToAdd.add(new Minion(pos.cpy(), rot+90, this, world));
+			world.addNextFrame.add(new Minion(pos.cpy(), rot+90, this, world));
 			timeSinceShot = 0;
 			turnSpeed = 0;
 		}

@@ -67,13 +67,13 @@ public abstract class EnemyLoader {
 	public void onEnemyDead(Enemy e) {
 		float rand = MathUtils.random();
 		if (rand < hpChance)
-			world.pickups.add(new HealthPickup(world, e.pos));
+			world.addNextFrame.add(new HealthPickup(world, e.pos));
 		else if ((rand -= hpChance) < speedChance)
-			world.pickups.add(new SpeedPickup(world, e.pos));
+			world.addNextFrame.add(new SpeedPickup(world, e.pos));
 		else if ((rand -= speedChance) < freezerChance)
-			world.pickups.add(new FreezerPickup(world, e.pos));
+			world.addNextFrame.add(new FreezerPickup(world, e.pos));
 		else if ((rand -= freezerChance) < shieldChance)
-			world.pickups.add(new ShieldPickup(world, e.pos));
+			world.addNextFrame.add(new ShieldPickup(world, e.pos));
 	}
 	
 	public void onEnemyHurt(Enemy e, float dmg) {}

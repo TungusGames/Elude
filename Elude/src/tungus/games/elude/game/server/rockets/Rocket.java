@@ -5,24 +5,30 @@ import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.game.client.worldrender.CamShake;
 import tungus.games.elude.game.client.worldrender.ParticleAdder;
 import tungus.games.elude.game.client.worldrender.ParticleRemover;
+import tungus.games.elude.game.client.worldrender.Renderable;
+import tungus.games.elude.game.client.worldrender.RocketRenderable;
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class Rocket {
+public abstract class Rocket extends Updatable {
+	
+	public interface Hittable {
+		public boolean isHitBy(Rocket r);
+	}
 	
 	public static enum RocketType { 
-		SLOW_TURNING(Assets.Particles.FLAME_ROCKET.p), 
-		FAST_TURNING(Assets.Particles.MATRIX_ROCKET.p), 
-		STRAIGHT(Assets.Particles.STRAIGHT_ROCKET.p),
+		SLOW_TURNING(Assets.Particles.FLAME_ROCKET), 
+		FAST_TURNING(Assets.Particles.MATRIX_ROCKET), 
+		STRAIGHT(Assets.Particles.STRAIGHT_ROCKET),
 		MINE(/*Assets.Particles.FLAME_ROCKET.p*/null);
-		public ParticleEffectPool effect;
-		RocketType(ParticleEffectPool e) {
+		public Particles effect;
+		RocketType(Particles e) {
 			effect = e;
 		}
 	};
@@ -91,13 +97,21 @@ public abstract class Rocket {
 		this.dmg = dmg;
 		this.target = target;
 		this.id = nextID++;
+		this.keepsWorldGoing = true;
 		vel = dir;
 	}
 	
 	public final boolean update(float deltaTime) {
 		life -= deltaTime;
 		// If there are no enemies alive, speed up the pace by dying twice as fast
-		if (world.enemies.size() == 0) { 
+		boolean enemyAlive = false;
+		for (Updatable u : world.updatables) {
+			if (u instanceof Enemy) {
+				enemyAlive = true;
+			}
+		}
+		
+		if (!enemyAlive) { 
 			life -= deltaTime;
 		}
 		if (life <= 0) {
@@ -116,15 +130,13 @@ public abstract class Rocket {
 			}
 		}
 		
-		int size = world.enemies.size();
 		boolean stillIn = false;
-		for (int i = 0; i < size; i++) {
-			Enemy e = world.enemies.get(i);
-			if (!outOfOrigin && e == origin) {
+		for (Updatable u : world.updatables) {
+			if (!outOfOrigin && u == origin) {
 				stillIn = (origin.collisionBounds.overlaps(boundsForVessel));
 				continue;
 			}
-			if (e.hitBy(this)) {
+			if (u instanceof Hittable && ((Hittable)u).isHitBy(this)) {
 				kill();
 				return true;
 			}
@@ -133,12 +145,11 @@ public abstract class Rocket {
 			outOfOrigin = true;
 		}
 		
-		size = world.vessels.size();
-		for (int i = 0; i < size; i++) {
-			if (Intersector.overlaps(world.vessels.get(i).bounds, boundsForVessel)) {
-				if (!world.vessels.get(i).shielded) {
+		for (Vessel v : world.vessels) {
+			if (Intersector.overlaps(v.bounds, boundsForVessel)) {
+				if (!v.shielded) {
 					world.effects.add(CamShake.create());
-					world.vessels.get(i).hp -= dmg;
+					v.hp -= dmg;
 				}
 				kill();
 				return true;
@@ -171,5 +182,10 @@ public abstract class Rocket {
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);
+	
+	@Override
+	public Renderable getRenderable() {
+		return RocketRenderable.create(pos.x, pos.y, vel.angle(), id, type.effect);
+	}
 	
 }

@@ -79,7 +79,7 @@ public abstract class Enemy extends Updatable {
 	protected final Rocket shootRocket(RocketType t, Vector2 dir) {
 		timeSinceShot = 0;
 		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, targetPlayer(), world);
-		world.rockets.add(r);
+		world.addNextFrame.add(r);
 		return r;
 	}
 	
@@ -113,9 +113,10 @@ public abstract class Enemy extends Updatable {
 		this.type = t;
 		this.pos = pos;
 		this.world = w;
-		vel = new Vector2(0,0);
+		this.vel = new Vector2(0,0);
 		this.hp = maxHp = hp;
-		collisionBounds = new Circle(pos, boundSize/2);
+		this.collisionBounds = new Circle(pos, boundSize/2);
+		this.keepsWorldGoing = true;
 	}
 	
 	public boolean update(float deltaTime) {
@@ -136,7 +137,7 @@ public abstract class Enemy extends Updatable {
 			rot = turnGoal;
 		else
 			rot += Math.signum(diff) * turnSpeed * deltaTime;
-		return b;
+		return b || hp <= 0;
 	}
 	
 	protected float calcTurnGoal() {

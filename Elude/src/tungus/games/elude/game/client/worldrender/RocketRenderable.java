@@ -1,6 +1,7 @@
 package tungus.games.elude.game.client.worldrender;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.util.LinkedPool;
 import tungus.games.elude.util.LinkedPool.Poolable;
 
@@ -20,9 +21,9 @@ public class RocketRenderable extends Poolable implements Renderable {
 		}
 	};*/
 	private static LinkedPool<RocketRenderable> pool = new LinkedPool<RocketRenderable>(RocketRenderable.class, 300);
-	public static Renderable create(float x, float y, float a, int i, int p) {
+	public static Renderable create(float x, float y, float a, int i, Particles p) {
 		RocketRenderable r = pool.obtain();
-		r.x = x; r.y = y; r.angle = a; r.rocketID = i; r.particleTypeID = p;
+		r.x = x; r.y = y; r.angle = a; r.rocketID = i; r.particleTypeID = p.ordinal();
 		return r;
 	}
 	
@@ -49,7 +50,7 @@ public class RocketRenderable extends Poolable implements Renderable {
 	
 	@Override
 	public Renderable clone() {
-		return create(x, y, angle, rocketID, particleTypeID);
+		return create(x, y, angle, rocketID, Particles.values()[particleTypeID]);
 	}
 
 }

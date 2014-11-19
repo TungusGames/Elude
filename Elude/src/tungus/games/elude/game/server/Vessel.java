@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-public class Vessel {
+public class Vessel extends Updatable {
 
 	public static final float DRAW_WIDTH = 0.75f;		//Dimensions of the sprite drawn
 	public static final float HALF_WIDTH = DRAW_WIDTH / 2;
@@ -46,9 +46,13 @@ public class Vessel {
 		bounds = new Circle(pos, COLLIDER_SIZE/2);
 	}
 	
-	public void update(float deltaTime, Vector2 dir) {
+	public void setInput(Vector2 dir) {
+		vel.set(dir).scl(MAX_SPEED);
+	}
+	
+	@Override
+	public boolean update(float deltaTime) {
 		if (hp > 0) {
-			vel.set(dir).scl(MAX_SPEED);
 			if (speedBonusTime > 0f) {
 				speedBonusTime -= deltaTime;
 				vel.scl(speedBonus);
@@ -88,7 +92,10 @@ public class Vessel {
 			}
 			bounds.x = pos.x;								// Update the bounds 
 			bounds.y = pos.y;
-		}	
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	public void addShield(float shieldTime) {

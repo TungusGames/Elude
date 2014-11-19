@@ -2,6 +2,7 @@ package tungus.games.elude.game.server.enemies;
 
 import java.util.Iterator;
 
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
@@ -74,11 +75,14 @@ public class Shielded extends StandingBase {
 	}
 	
 	private float closestRocketAngle() {
-		Iterator<Rocket> it = world.rockets.iterator();
+		Iterator<Updatable> it = world.updatables.iterator();
 		float closestDist2 = World.WIDTH*World.WIDTH;
 		float angle = t.set(world.vessels.get(0).pos).sub(pos).angle();
 		while(it.hasNext()) {
-			Rocket r = it.next();
+			Updatable u = it.next();
+			if (!(u instanceof Rocket))
+				continue;
+			Rocket r = (Rocket)u;
 			float d2 = t.dst2(pos);
 			if (d2 < closestDist2) {
 				closestDist2 = d2;

@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 public class StraightRocketRenderable extends RocketRenderable {
 	
 	private static LinkedPool<RocketRenderable> pool = new LinkedPool<RocketRenderable>(StraightRocketRenderable.class, 300);
-	public static Renderable create(float x, float y, float angle, int id, Particles particle) {	
+	public static Renderable create(float x, float y, float angle, int id) {	
 		StraightRocketRenderable r = (StraightRocketRenderable)pool.obtain();
-		r.x = x; r.y = y; r.angle = angle; r.rocketID = id; r.particleTypeID = particle.ordinal();
+		r.x = x; r.y = y; r.angle = angle; r.rocketID = id; r.particleTypeID = Particles.STRAIGHT_ROCKET.ordinal();
 		return r;
 	}
 	
@@ -26,6 +26,6 @@ public class StraightRocketRenderable extends RocketRenderable {
 	
 	@Override
 	public Renderable clone() {
-		return create(x, y, angle, rocketID, particleTypeID);
+		return create(x, y, angle, rocketID, Particles.values()[particleTypeID]);
 	}
 }

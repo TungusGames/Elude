@@ -45,7 +45,7 @@ public class RenderInfo extends TransferData {
 			this.progress = ((FiniteLevelLoader)w.waveLoader).progress();
 		}
 		
-		//TODO...
+		//for (Updatable gameElement : world.)
 		
 		for (i = 0; i < hp.length; i++) {
 			hp[i] = w.vessels.get(i).hp / Vessel.MAX_HP;

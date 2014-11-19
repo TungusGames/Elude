@@ -1,9 +1,8 @@
 package tungus.games.elude.game.server.enemies;
 
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
-import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.game.server.rockets.Mine;
-import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
 import com.badlogic.gdx.math.Vector2;
@@ -24,8 +23,8 @@ public class Miner extends MovingEnemy {
 	}
 
 	private boolean mineIsNearby() {
-		for (Rocket r : world.rockets) {
-			if (r instanceof Mine && pos.dst2(r.pos) < Mine.SIZE*Mine.SIZE) {
+		for (Updatable u : world.updatables) {
+			if (u instanceof Mine && pos.dst2(((Mine)u).pos) < Mine.SIZE*Mine.SIZE) {
 				return true;
 			}
 		}

@@ -65,7 +65,7 @@ public class Assets {
 		
 		VIRTUALDPAD,
 		
-		PAUSE("ingamemenu/pause"),
+		PAUSE(),
 		RESUME("ingamemenu/resume"),
 		TO_MENU("ingamemenu/tomenu"),
 		SHADOWER("ingamemenu/shadower"),
