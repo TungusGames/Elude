@@ -2,9 +2,8 @@ package tungus.games.elude.game.client.worldrender;
 
 import tungus.games.elude.game.client.worldrender.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
-import tungus.games.elude.util.LinkedPool.Poolable;
 
-public class ParticleRemover extends Poolable implements Effect {
+public class ParticleRemover extends Effect {
 	private static LinkedPool<ParticleRemover> pool = new LinkedPool<ParticleRemover>(ParticleRemover.class, 15);
 	public static Effect create(int a) {
 		ParticleRemover p = pool.obtain();

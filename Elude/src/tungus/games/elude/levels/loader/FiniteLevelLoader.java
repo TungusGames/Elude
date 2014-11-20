@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.List;
 
-import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
@@ -89,17 +88,11 @@ public class FiniteLevelLoader extends EnemyLoader {
 			return;
 		}
 		Wave w = level.waves[nextWave];
-		int enemyCount = 0;
-		for (Updatable u : world.updatables) {
-			if (u instanceof Enemy) {
-				enemyCount++;
-			}
-		}
-		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= enemyCount)) {
+		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemyCount)) {
 			timeSinceLastWave = 0;
 			int size = w.enemies.size();
 			for (int i = 0; i < size; i++) {
-				world.updatables.add(Enemy.fromType(world, w.enemies.get(i)));
+				world.addEnemy(Enemy.fromType(world, w.enemies.get(i)));
 			}
 			size = w.pickups.size();
 			for (int i = 0; i < size; i++) {

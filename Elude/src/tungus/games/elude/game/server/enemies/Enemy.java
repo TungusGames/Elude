@@ -6,6 +6,7 @@ import java.util.List;
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
 import tungus.games.elude.game.client.worldrender.DebrisAdder;
+import tungus.games.elude.game.client.worldrender.RenderPhase;
 import tungus.games.elude.game.client.worldrender.Renderable;
 import tungus.games.elude.game.client.worldrender.Sprite;
 import tungus.games.elude.game.server.Updatable;
@@ -199,6 +200,6 @@ public abstract class Enemy extends Updatable {
 	
 	@Override
 	public Renderable getRenderable() {
-		return Sprite.create(type.tex.ordinal(), pos.x, pos.y, type.width, type.height, rot, 1);
+		return Sprite.create(RenderPhase.ENEMY, type.tex, pos.x, pos.y, type.width, type.height, rot, 1);
 	}
 }

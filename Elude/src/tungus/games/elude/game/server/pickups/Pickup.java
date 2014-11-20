@@ -2,6 +2,7 @@ package tungus.games.elude.game.server.pickups;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
+import tungus.games.elude.game.client.worldrender.RenderPhase;
 import tungus.games.elude.game.client.worldrender.Renderable;
 import tungus.games.elude.game.client.worldrender.Sprite;
 import tungus.games.elude.game.server.Updatable;
@@ -105,7 +106,7 @@ public abstract class Pickup extends Updatable {
 	
 	@Override
 	public Renderable getRenderable() {
-		return Sprite.create(type.tex.ordinal(), collisionBounds.x, collisionBounds.y, DRAW_SIZE, DRAW_SIZE, 0, alpha);
+		return Sprite.create(RenderPhase.PICKUP, type.tex, collisionBounds.x, collisionBounds.y, DRAW_SIZE, DRAW_SIZE, 0, alpha);
 	}
 	
 	protected abstract void produceEffect(Vessel vessel);

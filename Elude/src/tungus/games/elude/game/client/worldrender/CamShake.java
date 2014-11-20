@@ -3,11 +3,10 @@ package tungus.games.elude.game.client.worldrender;
 import tungus.games.elude.game.client.worldrender.Renderable.Effect;
 import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.LinkedPool;
-import tungus.games.elude.util.LinkedPool.Poolable;
 
 import com.badlogic.gdx.Gdx;
 
-public class CamShake extends Poolable implements Effect {
+public class CamShake extends Effect {
 	private static LinkedPool<CamShake> pool = new LinkedPool<CamShake>(CamShake.class, 5);
 	public static Effect create() {
 		CamShake p = pool.obtain();

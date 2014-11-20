@@ -13,6 +13,6 @@ public abstract class Updatable {
 	}
 	
 	public abstract boolean update(float deltaTime);
-	public Renderable getRenderable() { return null; }
+	public abstract Renderable getRenderable();
 	
 }

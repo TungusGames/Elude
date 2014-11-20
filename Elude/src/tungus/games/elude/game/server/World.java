@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import tungus.games.elude.game.client.worldrender.Renderable;
+import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
@@ -29,14 +30,12 @@ public class World {
 	public static final int STATE_LOST = 1;
 	public static final int STATE_WON = 2;
 	
-	//public List<Vessel> vessels;
-	//public List<Rocket> rockets;
-	//public List<Enemy> enemies;
 	public List<Vessel> vessels;
 	public List<Updatable> updatables;
 	public List<Updatable> addNextFrame;
 	public List<Renderable> effects;
-	//public List<Pickup> pickups;
+
+	public int enemyCount = 0;
 	
 	public static final Rectangle outerBounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 	public static final Rectangle innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
@@ -159,5 +158,10 @@ public class World {
 	 */
 	public Vector2 randomPosInInnerRect(Vector2 v) {
 		return randomPosInInnerRect(v, EDGE);
+	}
+	
+	public void addEnemy(Enemy e) {
+		enemyCount++;
+		addNextFrame.add(e);
 	}
 }

@@ -3,11 +3,10 @@ package tungus.games.elude.game.client.worldrender;
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.util.LinkedPool;
-import tungus.games.elude.util.LinkedPool.Poolable;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 
-public class RocketRenderable extends Poolable implements Renderable {
+public class RocketRenderable extends Renderable {
 	
 	/*private static class BasicRocketRenderable extends RocketRenderable<BasicRocketRenderable> {
 		private static LinkedPool<BasicRocketRenderable> pool = new LinkedPool<BasicRocketRenderable>(BasicRocketRenderable.class, 300, 600);
@@ -32,6 +31,7 @@ public class RocketRenderable extends Poolable implements Renderable {
 	
 	public RocketRenderable(LinkedPool<RocketRenderable> p) {
 		super(p);
+		phase = RenderPhase.ROCKET;
 	}
 	
 	@Override
@@ -52,5 +52,4 @@ public class RocketRenderable extends Poolable implements Renderable {
 	public Renderable clone() {
 		return create(x, y, angle, rocketID, Particles.values()[particleTypeID]);
 	}
-
 }

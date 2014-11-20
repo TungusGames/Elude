@@ -25,6 +25,7 @@ public class VesselRenderable extends Sprite {
 	
 	public VesselRenderable(LinkedPool<Sprite> p) {
 		super(p);
+		phase = RenderPhase.VESSEL;
 	}
 	
 	@Override

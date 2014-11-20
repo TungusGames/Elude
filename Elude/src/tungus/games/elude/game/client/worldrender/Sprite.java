@@ -1,15 +1,16 @@
 package tungus.games.elude.game.client.worldrender;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Tex;
 import tungus.games.elude.util.LinkedPool;
-import tungus.games.elude.util.LinkedPool.Poolable;
 
-public class Sprite extends Poolable implements Renderable {
+public class Sprite extends Renderable {
 	
 	private static LinkedPool<Sprite> pool = new LinkedPool<Sprite>(Sprite.class, 300);
-	public static Renderable create(int t, float x, float y, float w, float h, float r, float a) {
+	public static Renderable create(RenderPhase phase, Tex tex, float x, float y, float width, float height, float rot, float alpha) {
 		Sprite s = pool.obtain();
-		s.x = x; s.y = y; s.width = w; s.height = h; s.texID = t; s.rot = r; s.alpha = a;
+		s.x = x; s.y = y; s.width = width; s.height = height; s.texID = tex.ordinal(); s.rot = rot; s.alpha = alpha;
+		s.phase = phase;
 		return s;
 	}
 	
@@ -30,6 +31,6 @@ public class Sprite extends Poolable implements Renderable {
 	
 	@Override
 	public Renderable clone() {
-		return create(texID, x, y, width, height, rot, alpha);
+		return create(phase, Assets.Tex.values()[texID], x, y, width, height, rot, alpha);
 	}
 }

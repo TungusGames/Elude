@@ -7,6 +7,7 @@ import java.util.List;
 import tungus.games.elude.game.client.worldrender.RenderPhase;
 import tungus.games.elude.game.client.worldrender.Renderable;
 import tungus.games.elude.game.multiplayer.Connection.TransferData;
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
@@ -45,7 +46,20 @@ public class RenderInfo extends TransferData {
 			this.progress = ((FiniteLevelLoader)w.waveLoader).progress();
 		}
 		
-		//for (Updatable gameElement : world.)
+		for (Vessel vessel : w.vessels) {
+			Renderable r = vessel.getRenderable();
+			RenderPhase ph = r.phase;
+			int ord = ph.ordinal();
+			List<Renderable> list = phases.get(ord);
+			list.add(r);
+		}	
+		
+		for (Updatable element : w.updatables) {
+			Renderable r = element.getRenderable();
+			if (r != null) {
+				phases.get(r.phase.ordinal()).add(r);
+			}			
+		}
 		
 		for (i = 0; i < hp.length; i++) {
 			hp[i] = w.vessels.get(i).hp / Vessel.MAX_HP;
@@ -73,7 +87,6 @@ public class RenderInfo extends TransferData {
 					otherPhaseList.add(r.clone());
 				}
 			}
-			i++;
 		}
 		size = hp.length;
 		if (other.hp == null || other.hp.length < hp.length)

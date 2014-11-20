@@ -4,11 +4,10 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.game.client.worldrender.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
-import tungus.games.elude.util.LinkedPool.Poolable;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 
-public class ParticleAdder extends Poolable implements Effect {
+public class ParticleAdder extends Effect {
 	private static LinkedPool<ParticleAdder> pool = new LinkedPool<ParticleAdder>(ParticleAdder.class, 15);
 	public static Effect create(Particles t, float x, float y, int a) {
 		ParticleAdder p = pool.obtain();

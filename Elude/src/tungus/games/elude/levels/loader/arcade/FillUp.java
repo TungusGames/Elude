@@ -1,10 +1,10 @@
 package tungus.games.elude.levels.loader.arcade;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+
+import com.badlogic.gdx.math.MathUtils;
 
 public class FillUp extends ArcadeLoaderBase {
 	private final int fillTo;
@@ -35,12 +35,12 @@ public class FillUp extends ArcadeLoaderBase {
 			timeSinceIncrement = 0;
 		}
 		
-		if (world.enemies.size() < currentFill) {
+		if (world.enemyCount < currentFill) {
 			addEnemy();
 		}
 	}
 	
 	private void addEnemy() {
-		world.enemies.add(Enemy.fromType(world, types[MathUtils.random(types.length-1)]));
+		world.addEnemy(Enemy.fromType(world, types[MathUtils.random(types.length-1)]));
 	}
 }

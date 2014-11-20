@@ -2,9 +2,8 @@ package tungus.games.elude.game.client.worldrender;
 
 import tungus.games.elude.game.client.worldrender.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
-import tungus.games.elude.util.LinkedPool.Poolable;
 
-public class FreezeEffect extends Poolable implements Effect {
+public class FreezeEffect extends Effect {
 
 	private static LinkedPool<FreezeEffect> pool = new LinkedPool<FreezeEffect>(FreezeEffect.class, 2);
 	public static Effect create(float x, float y, float t) {

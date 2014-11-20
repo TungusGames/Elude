@@ -4,9 +4,8 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.game.client.worldrender.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
-import tungus.games.elude.util.LinkedPool.Poolable;
 
-public class SoundEffect extends Poolable implements Effect {
+public class SoundEffect extends Effect {
 	private static LinkedPool<SoundEffect> pool = new LinkedPool<SoundEffect>(SoundEffect.class, 15);
 	public static Effect create(Sounds asset) {
 		SoundEffect s = pool.obtain();

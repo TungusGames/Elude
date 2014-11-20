@@ -104,14 +104,7 @@ public abstract class Rocket extends Updatable {
 	public final boolean update(float deltaTime) {
 		life -= deltaTime;
 		// If there are no enemies alive, speed up the pace by dying twice as fast
-		boolean enemyAlive = false;
-		for (Updatable u : world.updatables) {
-			if (u instanceof Enemy) {
-				enemyAlive = true;
-			}
-		}
-		
-		if (!enemyAlive) { 
+		if (world.enemyCount > 0) { 
 			life -= deltaTime;
 		}
 		if (life <= 0) {

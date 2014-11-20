@@ -1,5 +1,7 @@
 package tungus.games.elude.game.server;
 
+import tungus.games.elude.game.client.worldrender.Renderable;
+import tungus.games.elude.game.client.worldrender.VesselRenderable;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
 import com.badlogic.gdx.math.Circle;
@@ -106,5 +108,10 @@ public class Vessel extends Updatable {
 	public void removeShield() {
 		shieldAlpha = 0;
 		shielded = false;
+	}
+	
+	@Override
+	public Renderable getRenderable() {
+		return VesselRenderable.create(pos.x, pos.y, vel.x, vel.y, rot, shieldAlpha, id);
 	}
 }

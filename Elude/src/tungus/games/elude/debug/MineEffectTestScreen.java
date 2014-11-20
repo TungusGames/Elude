@@ -20,7 +20,8 @@ public class MineEffectTestScreen extends BaseScreen {
 	public void render(float delta) {
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		time += delta;
-		mines.begin();
+		//TODO if the test is still needed, should be rewritten for renderables...
+		/*mines.begin();
 		if (time < 4) {
 			;
 		} else if (time < 8) {
@@ -41,6 +42,6 @@ public class MineEffectTestScreen extends BaseScreen {
 		} else {
 			mines.add(5, 6, 7, delta);
 		}
-		mines.render(delta, 1);
+		mines.render(delta, 1);*/
 	}
 }
