@@ -26,7 +26,7 @@ public abstract class Rocket extends Updatable {
 		SLOW_TURNING(Assets.Particles.FLAME_ROCKET), 
 		FAST_TURNING(Assets.Particles.MATRIX_ROCKET), 
 		STRAIGHT(Assets.Particles.STRAIGHT_ROCKET),
-		MINE(/*Assets.Particles.FLAME_ROCKET.p*/null);
+		MINE(Assets.Particles.FLAME_ROCKET/*null*/);
 		public Particles effect;
 		RocketType(Particles e) {
 			effect = e;

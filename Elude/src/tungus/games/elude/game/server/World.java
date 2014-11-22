@@ -81,7 +81,7 @@ public class World {
 		for (int i = 0; i < vessels.size(); i++) {
 			Vessel v = vessels.get(0);
 			v.setInput(dirs[i]);
-			if (v.update(deltaTime)) {
+			if (!v.update(deltaTime)) {
 				isVesselAlive = true;
 			}
 		}

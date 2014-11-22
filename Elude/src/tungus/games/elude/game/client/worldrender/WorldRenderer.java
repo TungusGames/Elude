@@ -1,6 +1,7 @@
 package tungus.games.elude.game.client.worldrender;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.IntMap.Entry;
 
 public class WorldRenderer {
 	
@@ -48,6 +50,15 @@ public class WorldRenderer {
 			}
 			p.renderer.end();
 		}
+		//while (effects.hasNext) {
+		for (Iterator<Entry<PooledEffect>> it = lastingEffects.iterator(); it.hasNext();) {
+			PooledEffect effect = it.next().value;
+			effect.draw(batch, deltaTime);
+			if (effect.isComplete()) {
+				it.remove();
+			}
+		}
+		
 		batch.end();
 	}
 	
