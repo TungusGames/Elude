@@ -20,10 +20,9 @@ public class BluetoothConnection extends Connection {
     		while (true) {
     			try {
     				// Read from the InputStream
-    				synchronized(this) {
+    				synchronized(BluetoothConnection.this) {
         				newest = (TransferData)objInStream.readObject();
     				}
-    				// Send the obtained bytes to the UI activity
     			} catch (Exception e) {
     				break;
     			}
@@ -40,7 +39,7 @@ public class BluetoothConnection extends Connection {
         } catch (IOException e) { } //TODO error handling
     }
  
-    /* Call this from the main activity to send data to the remote device */
+    /* Call this from the game to send data to the remote device */
     @Override
     public void write(TransferData data) {
         try {
@@ -48,7 +47,7 @@ public class BluetoothConnection extends Connection {
         } catch (IOException e) { } //TODO exception handling
     }
  
-    /* Call this from the main activity to shutdown the connection */
+    /* Call this from the game to shutdown the connection */
     public void cancel() {
         try {
             socket.close();

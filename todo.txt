@@ -33,7 +33,7 @@ Levels/gameplay
 - Re-add survival 15...
 
 Settings
-- Add game simulaton to conrol settings
+- Add game simulaton to control settings
 XOR
 - Remove control settings completely (TapToTarget might be enough)
 
