@@ -14,6 +14,7 @@ import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 public class FiniteLevelLoader extends EnemyLoader {
@@ -36,15 +37,18 @@ public class FiniteLevelLoader extends EnemyLoader {
 	public static class Level implements Serializable {
 
 		private static final long serialVersionUID = 3972235095607047708L;
-		public Deque<Wave> waves;
+		public Wave[] waves;
 		public float hpChance;
 		public float speedChance;
-		public float rocketWipeChance;
+		public float freezerChance;
 		public float shieldChance;
+		public float totalEnemyHP;
 		
 		public static Level levelFromFile(FileHandle file) {
 			try {
-				Level level = (Level)(new ObjectInputStream(file.read()).readObject());
+				ObjectInputStream o = new ObjectInputStream(file.read());
+				Gdx.app.log("AVAILABLE: ", ""+o.available());
+				Level level = (Level)(o.readObject());
 				return level;
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -52,30 +56,39 @@ public class FiniteLevelLoader extends EnemyLoader {
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new RuntimeException("Failed to read level file " + file.path(), e);
-			}
+			}			
+		}
+		
+		public Level() {
+			
 		}
 	}
 	
 	private Level level;
 	private float timeSinceLastWave = 0;
 	private boolean completed = false;
+	private float enemiesHpTaken = 0;
 	
+	private int nextWave = 0;
 
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
-		super(world, level.hpChance, level.speedChance, level.rocketWipeChance, level.shieldChance, levelNum);
+		super(world, level.hpChance, level.speedChance, level.freezerChance, level.shieldChance, levelNum);
 		this.level = level;
-		Wave w = level.waves.removeFirst();
+		/*Wave w = level.waves.removeFirst();
 		int size = w.enemies.size();
 		for (int i = 0; i < size; i++) {
 			world.enemies.add(Enemy.fromType(world, w.enemies.get(i)));
-		}
+		}*/
 	}
 	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		timeSinceLastWave += deltaTime;
-		Wave w = level.waves.peek();
+		if (nextWave >= level.waves.length) {
+			return;
+		}
+		Wave w = level.waves[nextWave];
 		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemies.size())) {
 			timeSinceLastWave = 0;
 			int size = w.enemies.size();
@@ -86,7 +99,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 			for (int i = 0; i < size; i++) {
 				world.pickups.add(Pickup.fromType(world, w.pickups.get(i)));
 			}
-			level.waves.removeFirst();
+			nextWave++;
 		}
 	}
 	
@@ -111,8 +124,20 @@ public class FiniteLevelLoader extends EnemyLoader {
 		return s;
 	}
 	
+	public float progress() {
+		return (float)enemiesHpTaken / level.totalEnemyHP;
+	}
+	
 	@Override
 	public boolean isOver() {
-		return level.waves.isEmpty();
+		return nextWave >= level.waves.length;
+	}
+	
+	@Override
+	public void onEnemyHurt(Enemy e, float dmg) {
+		super.onEnemyHurt(e, dmg);
+		if (e.type.spawns) {
+			enemiesHpTaken += dmg;
+		}
 	}
 }

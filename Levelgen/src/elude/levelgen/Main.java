@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.enemies.Splitter;
 import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Wave;
@@ -25,7 +26,7 @@ public class Main {
 	
 	private static float hpDrop;
 	private static float speedDrop;
-	private static float wipeDrop;
+	private static float freezerDrop;
 	private static float shieldDrop;
 	
 	private static int levelNum = 1;
@@ -45,16 +46,19 @@ public class Main {
 		List<FiniteLevelScore> scores = new ArrayList<>();
 		List<Integer> ntoidList = new ArrayList<>();
 		while (running) {
+			float totalEnemyHP = 0;
 			try {
 				System.out.print("Reading file: " + (levelNum) + ".tel ");
 				sc = new Scanner(new File((levelNum) + ".tel"));
 				sc.useLocale(Locale.US);
 				ntoidList.add(sc.nextInt());
 				scores.add(new FiniteLevelScore(sc.nextFloat(), sc.nextFloat()));
+				
 				hpDrop = sc.nextFloat();
 				speedDrop = sc.nextFloat();
 				shieldDrop = sc.nextFloat();
-				wipeDrop = sc.nextFloat();
+				freezerDrop = sc.nextFloat();
+				
 				while (!sc.next().equals("wavestart"))
 					;
 				float t = sc.nextInt();
@@ -62,12 +66,25 @@ public class Main {
 				List<EnemyType> e = new ArrayList<>();
 				List<PickupType> p = new ArrayList<>();
 				while (sc.hasNext()) {
+					int mul = sc.hasNextInt() ? sc.nextInt() : 1;
 					String str = sc.next();
 					try {
-						e.add(EnemyType.valueOf(str.toUpperCase()));
+						EnemyType et = EnemyType.valueOf(str.toUpperCase());
+						for (int i = 0; i < mul; i++) {
+							e.add(et);
+							if (et != EnemyType.SPLITTER) {
+								totalEnemyHP += et.hp;
+							} else {
+								totalEnemyHP += Splitter.totalHP();
+							}
+							
+						}						
 					} catch (IllegalArgumentException ex) {
 						try {
-							p.add(PickupType.valueOf(str.toUpperCase()));
+							PickupType pt = PickupType.valueOf(str.toUpperCase());
+							for (int i = 0; i < mul; i++) {
+								p.add(pt);
+							}
 						} catch (IllegalArgumentException ex2) {
 							if (str.equals("wavestart")) {
 								waves.add(new Wave(t, n, e, p));
@@ -93,11 +110,13 @@ public class Main {
 			
 			FileOutputStream fileOut = null;
 			Level lvl = new Level();
-			lvl.waves = waves;
+			lvl.waves = new Wave[waves.size()];
+			lvl.waves = waves.toArray(lvl.waves);
 			lvl.hpChance = hpDrop;
 			lvl.speedChance = speedDrop;
-			lvl.rocketWipeChance = wipeDrop;
+			lvl.freezerChance = freezerDrop;
 			lvl.shieldChance = shieldDrop;
+			lvl.totalEnemyHP = totalEnemyHP;
 			try {
 				System.out.print("Writing file: " + (levelNum) + ".lvl ");
 				fileOut = new FileOutputStream("../Elude - Android/assets/levels/" + (levelNum) + ".lvl");

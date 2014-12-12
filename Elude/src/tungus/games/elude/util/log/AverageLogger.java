@@ -11,8 +11,8 @@ public class AverageLogger {
 	private long startTime;
 	private final String tag;
 	private final String msg;
-	private int count;
-	private float sum;
+	private int count = 0;
+	private float sum = 0;
 	
 	public AverageLogger(String tag, String msg) {
 		startTime = TimeUtils.millis();

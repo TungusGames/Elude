@@ -1,7 +1,7 @@
 11
 35 65
-0 0 0 0
+0 0 0 1
 wavestart 0 0
-standing standing standing
-wavestart -1 1
-standing moving moving moving
+splitter
+wavestart -1 0
+2 splitter

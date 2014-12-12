@@ -4,8 +4,8 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.pickups.FreezerPickup;
 import tungus.games.elude.game.server.pickups.HealthPickup;
-import tungus.games.elude.game.server.pickups.RocketWiperPickup;
 import tungus.games.elude.game.server.pickups.ShieldPickup;
 import tungus.games.elude.game.server.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
@@ -18,7 +18,7 @@ public abstract class EnemyLoader {
 	protected final World world;
 	protected final float hpChance;
 	protected final float speedChance;
-	protected final float wipeChance;
+	protected final float freezerChance;
 	protected final float shieldChance;
 	
 	protected final int levelNum;
@@ -30,15 +30,15 @@ public abstract class EnemyLoader {
 		else {
 			switch(n) {
 			case 0:
-				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING, EnemyType.STANDING_FAST);
+				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING); //Standing fast removed
 			case 1:
 				return new PlusPlus(world, n, EnemyType.KAMIKAZE);
 			case 2:
-				return new FillUp(world, n, 10, 50f, 0, 0.2f, 0, 0, EnemyType.STANDING_FAST, EnemyType.KAMIKAZE);
+				return new FillUp(world, n, 10, 50f, 0, 0.2f, 0, 0, EnemyType.KAMIKAZE); //Standing fast removed
 			case 3:
-				return new PlusPlus(world, n, EnemyType.MOVING, EnemyType.STANDING_FAST);
+				return new PlusPlus(world, n, EnemyType.MOVING); //Standing fast removed
 			case 4:
-				return new FillUp(world, n, 10, 50f, EnemyType.values());
+				return new FillUp(world, n, 10, 50f, EnemyType.normalSpawners());
 			default:
 				throw new IllegalArgumentException("Unknown arcade level number");
 				
@@ -55,7 +55,7 @@ public abstract class EnemyLoader {
 		this.world = w;
 		this.hpChance = hpChance;
 		this.speedChance = speedChance;
-		this.wipeChance = wipeChance;
+		this.freezerChance = wipeChance;
 		this.levelNum = levelNum;
 		this.shieldChance = shieldChance;
 	}
@@ -70,11 +70,13 @@ public abstract class EnemyLoader {
 			world.pickups.add(new HealthPickup(world, e.pos));
 		else if ((rand -= hpChance) < speedChance)
 			world.pickups.add(new SpeedPickup(world, e.pos));
-		else if ((rand -= speedChance) < wipeChance)
-			world.pickups.add(new RocketWiperPickup(world, e.pos));
-		else if ((rand -= wipeChance) < shieldChance)
+		else if ((rand -= speedChance) < freezerChance)
+			world.pickups.add(new FreezerPickup(world, e.pos));
+		else if ((rand -= freezerChance) < shieldChance)
 			world.pickups.add(new ShieldPickup(world, e.pos));
 	}
+	
+	public void onEnemyHurt(Enemy e, float dmg) {}
 	
 	public abstract void saveScore();
 	public abstract boolean isOver();

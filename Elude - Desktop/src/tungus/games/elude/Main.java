@@ -1,7 +1,5 @@
 package tungus.games.elude;
 
-import tungus.games.elude.Elude;
-
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -13,7 +11,6 @@ public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Elude";
-		cfg.useGL20 = false;
 		cfg.width = 800;
 		cfg.height = 480;
 		cfg.audioDeviceSimultaneousSources = 150;
@@ -29,6 +26,8 @@ public class Main {
         settings.filterMag = TextureFilter.Linear;
         settings.filterMin = TextureFilter.Linear;
         TexturePacker.process(settings, "../img/done", "../Elude - Android/assets/textures", "game");
+        
+        Elude.mpScreen = NetMPScreen.class;
 		
 		new LwjglApplication(new Elude(), cfg);
 	}

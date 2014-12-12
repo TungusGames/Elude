@@ -6,6 +6,7 @@ import tungus.games.elude.game.client.input.Controls;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -55,5 +56,9 @@ public class StaticDPad extends Sprite implements Controls {
 		}
 		return v.set(0, 0);
 	}
-
+	
+	@Override
+	public void draw(SpriteBatch batch, float alpha) {
+		super.draw(batch, alpha);
+	}
 }

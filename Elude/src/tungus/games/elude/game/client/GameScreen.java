@@ -17,6 +17,7 @@ import tungus.games.elude.game.multiplayer.transfer.FiniteScoreInfo;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.multiplayer.transfer.UpdateInfo;
 import tungus.games.elude.game.server.Server;
+import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.menu.ingame.AbstractIngameMenu;
 import tungus.games.elude.menu.ingame.GameOverMenu;
 import tungus.games.elude.menu.ingame.LevelCompleteMenu;
@@ -33,7 +34,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
@@ -47,6 +49,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class GameScreen extends BaseScreen {
 	
 	public static final int STATE_STARTING = 4;
+	public static final int STATE_READY = 5;
 	public static final int STATE_PLAYING = 0;
 	public static final int STATE_PAUSED = 1;
 	public static final int STATE_LOST = 2;
@@ -73,13 +76,12 @@ public class GameScreen extends BaseScreen {
 	private OrthographicCamera fontCam;
 	private float gameAlpha;
 		
-	private final Vector2 healthbarFromTopleft;
-	private final float healthbarFullLength;
-	private final float healthbarWidth;
-	private final Rectangle pauseButton;
+	private Bar healthbar;
+	private Bar progressbar;
+	private Rectangle pauseButton;
 	
-	private final float FRUSTUM_WIDTH;
-	private final float FRUSTUM_HEIGHT;
+	private float FRUSTUM_WIDTH;
+	private float FRUSTUM_HEIGHT;
 	
 	private long lastTime;
 	
@@ -101,7 +103,7 @@ public class GameScreen extends BaseScreen {
 			if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
 				if (state == STATE_PLAYING)
 					state = STATE_PAUSED;
-				else if (state != STATE_STARTING)
+				else if (state != STATE_STARTING && state != STATE_READY)
 					//If in an ingame menu, call its onBackKey()
 					//PauseMenu - unpause, others - exit to menu
 					menus[state - 1].onBackKey();
@@ -131,7 +133,9 @@ public class GameScreen extends BaseScreen {
 	
 	public static GameScreen newSinglePlayer(Game game, int levelNum, boolean finite) {
 		LocalConnectionPair c = new LocalConnectionPair();
-		new Thread(new Server(levelNum, finite, new Connection[] {c.c1})).start();
+		Thread t = new Thread(new Server(levelNum, finite, new Connection[] {c.c1}));
+		t.setName("Server (singleplayer)");
+		t.start();
 		return new GameScreen(game, levelNum, finite, c.c2, 0);
 	}
 	
@@ -139,30 +143,22 @@ public class GameScreen extends BaseScreen {
 		super(game);
 		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
+		
 		this.finite = finite;
 		this.levelNum = levelNum;
 		this.connection = connection;
 		this.vesselID = clientID;
+		
 		menus = new AbstractIngameMenu[]{new PauseMenu(), new GameOverMenu(), new LevelCompleteMenu(levelNum, finite)};
 		renderer = new WorldRenderer(clientID);
 		uiBatch = new SpriteBatch();
-		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
-		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
-		healthbarWidth = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
-		healthbarFromTopleft = new Vector2(healthbarWidth, 2*healthbarWidth);
-		pauseButton = new Rectangle();
-		pauseButton.width = pauseButton.height = 2.5f*healthbarWidth;
-		pauseButton.y = FRUSTUM_HEIGHT - 0.25f - pauseButton.height;
-		pauseButton.x = FRUSTUM_WIDTH - 0.25f - pauseButton.width;
-		healthbarFullLength = FRUSTUM_WIDTH - 2*healthbarFromTopleft.x - 0.5f - pauseButton.width;
-		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
-		uiCam.update();
-		uiBatch.setProjectionMatrix(uiCam.combined);
-		fontCam = ViewportHelper.newCamera(800, 480);
+		
+		initFromScreenSize();
+		
+		fontCam = new OrthographicCamera(800, 480);
 		fontCam.position.set(400, 240, 0);
 		fontCam.update();
-		fontBatch = new SpriteBatch(10);
+		fontBatch = new SpriteBatch(100);
 		fontBatch.setProjectionMatrix(fontCam.combined);
 		
 		controls = new ArrayList<Controls>();
@@ -187,11 +183,49 @@ public class GameScreen extends BaseScreen {
 			update.directions[i] = controls.get(i).getDir(tmp.set(0,0), 0);
 		}
 		lastTime = TimeUtils.millis();
-		render = new RenderInfo(null);
-		render.hp = new float[update.directions.length];
-		connection.newest = new RenderInfo(null);
+		render = new RenderInfo();
+		connection.newest = new RenderInfo();
 	}
 	
+
+	private void initFromScreenSize() {
+		FRUSTUM_WIDTH = (float)Gdx.graphics.getWidth() / Gdx.graphics.getPpcX();
+		FRUSTUM_HEIGHT = (float)Gdx.graphics.getHeight() / Gdx.graphics.getPpcY();
+		
+		Rectangle hb = new Rectangle();
+		hb.height = 0.25f + (float)Math.max(0, (FRUSTUM_HEIGHT-5)/32f);
+		hb.x = hb.height;
+		hb.y = FRUSTUM_HEIGHT - 2 * hb.height;
+		
+		pauseButton = new Rectangle();
+		pauseButton.width = pauseButton.height = 2.5f*hb.height;
+		pauseButton.y = FRUSTUM_HEIGHT - 0.25f - pauseButton.height;
+		pauseButton.x = FRUSTUM_WIDTH - 0.25f - pauseButton.width;
+		
+		hb.width = FRUSTUM_WIDTH - 2*hb.x - 0.5f - pauseButton.width;
+		if (finite) {
+			hb.y += hb.height/2;
+			hb.height *= 0.85f;
+			healthbar = new Bar(hb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT, (render == null || render.hp == null) ? 1 : render.hp[vesselID], 
+											Color.RED, Color.GREEN, null, "HP: ", "", Vessel.MAX_HP);
+			Rectangle pb = new Rectangle(hb);
+			pb.y -= FRUSTUM_HEIGHT - hb.y;
+			Color fore = new Color(0.1f, 0.6f, 1f, 0.8f);
+			Color back = new Color(0.1f, 0.1f, 0.5f, 0.8f);
+			progressbar = new Bar(pb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 0,
+											  fore, fore, back, "PROGRESS: ", "%", 100);
+		} else {
+			healthbar = new Bar(hb, FRUSTUM_WIDTH, FRUSTUM_HEIGHT, (render == null || render.hp == null) ? 1 : render.hp[vesselID],
+											Color.RED, Color.GREEN, null, "HP: ", "", Vessel.MAX_HP);
+			progressbar = null;
+		}
+		
+		
+		uiCam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+		uiCam.position.set(FRUSTUM_WIDTH/2, FRUSTUM_HEIGHT/2, 0);
+		uiCam.update();
+		uiBatch.setProjectionMatrix(uiCam.combined);
+	}
 
 	@Override
 	public void render(float deltaTime) {
@@ -201,11 +235,17 @@ public class GameScreen extends BaseScreen {
 		}
 		CamShaker.INSTANCE.update(deltaTime);
 		logTime("outside", 50);
-		
 		synchronized(connection) {
 			if (!connection.newest.handled) {
 				switch(connection.newest.info) {
+				case STATE_STARTING:
+				case STATE_READY:
+					connection.newest.copyTo(render);
+					break;
 				case STATE_PLAYING:
+					if (state == STATE_READY) {
+						state = STATE_PLAYING;
+					}
 					connection.newest.copyTo(render);
 					break;
 				case STATE_WON:
@@ -229,13 +269,16 @@ public class GameScreen extends BaseScreen {
 		switch (state) {
 		case STATE_STARTING:
 			if (timeSinceStart > START_TIME) {
-				state = STATE_PLAYING;
+				state = STATE_READY;
 				gameAlpha = 1;
 			} else {
 				gameAlpha = Interpolation.fade.apply(timeSinceStart/START_TIME);
 				timeSinceStart += deltaTime;
 			}
 			update.info = Server.STATE_WAITING_START;
+			break;
+		case STATE_READY:
+			update.info = Server.STATE_RUNNING;
 			break;
 		case STATE_PLAYING:
 			for (int i = 0; i < update.directions.length; i++) {
@@ -253,28 +296,41 @@ public class GameScreen extends BaseScreen {
 			update.info = Server.STATE_OVER;
 			break;
 		}
-		
 		connection.write(update);
 		logTime("update", 50);
 		
 		// RENDER
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		renderGraphics(deltaTime);
+	}
+	
+	private void renderGraphics(float deltaTime) {
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		renderer.render(deltaTime, gameAlpha, render, state == STATE_PLAYING);
 		
 		uiBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			controls.get(i).draw(uiBatch, gameAlpha);
 		}
-		float hpPerMax = render.hp[vesselID];
-		if (hpPerMax > 0) {
-			uiBatch.setColor(1-hpPerMax, hpPerMax, 0, 0.8f*gameAlpha);
-			uiBatch.draw(Assets.whiteRectangle, healthbarFromTopleft.x, FRUSTUM_HEIGHT-healthbarFromTopleft.y, 
-								hpPerMax * healthbarFullLength, healthbarWidth);
+		if (render.hp != null && render.hp.length > 0) {
+			healthbar.drawBar(uiBatch, render.hp[vesselID], deltaTime, gameAlpha);
+		} else {
+			healthbar.drawBar(uiBatch, 1, deltaTime, gameAlpha);
 		}
-		
-		uiBatch.setColor(1,1,1,gameAlpha);
+		if (progressbar != null) {
+			if (render != null && render.progress > -1) {
+				progressbar.drawBar(uiBatch, render.progress, deltaTime, gameAlpha);
+			} else {
+				progressbar.drawBar(uiBatch, 0, deltaTime, gameAlpha);
+			}
+		}
 		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
+		fontBatch.begin();
+		healthbar.drawText(fontBatch, gameAlpha);
+		if (progressbar != null) {
+			progressbar.drawText(fontBatch, gameAlpha);
+		}
+		fontBatch.end();
 		
 		if (state == STATE_STARTING) {
 			fontBatch.begin();
@@ -292,7 +348,6 @@ public class GameScreen extends BaseScreen {
 			break;
 		}
 		logTime("render", 50);
-		
 	}
 	
 	private void logTime(String message, long minToLog) {
@@ -316,16 +371,19 @@ public class GameScreen extends BaseScreen {
 			game.setScreen(newSinglePlayer(game, levelNum, finite));
 			update.info = Server.STATE_OVER;
 			connection.write(update);
+			connection.close();
 			break;
 		case MENU_NEXTLEVEL:
 			game.setScreen(newSinglePlayer(game, levelNum + 1, finite));
 			update.info = Server.STATE_OVER;
 			connection.write(update);
+			connection.close();
 			break;
 		case MENU_QUIT:
 			game.setScreen(new LevelSelectScreen(game, finite));
 			update.info = Server.STATE_OVER;
 			connection.write(update);
+			connection.close();
 			break;
 		}
 	}
@@ -334,5 +392,15 @@ public class GameScreen extends BaseScreen {
 	public void pause() {
 		if (state == STATE_PLAYING)
 			state = STATE_PAUSED;
+	}
+	
+	@Override
+	public void resume() {
+		renderer.resendShaders();
+	}
+	
+	@Override
+	public void resize(int w, int h) {
+		initFromScreenSize();
 	}
 }

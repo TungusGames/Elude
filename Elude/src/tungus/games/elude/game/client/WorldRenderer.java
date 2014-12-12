@@ -17,11 +17,13 @@ import tungus.games.elude.game.multiplayer.transfer.RenderInfo.ReducedVessel;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.pickups.FreezerPickup;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.pickups.Pickup.PickupType;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.menu.settings.Settings;
 import tungus.games.elude.util.CamShaker;
+import tungus.games.elude.util.CustomInterpolations.FadeInOut;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -39,18 +41,26 @@ public class WorldRenderer {
 	private static final RocketType[] rt = RocketType.values();
 	private static final PickupType[] pt = PickupType.values();
 	private static final EffectType[] eft = EffectType.values();
-	
+
 	private static final Vector2 tmp = new Vector2();
 
 	private SpriteBatch batch;
+
 	private List<PooledEffect> particles = new LinkedList<PooledEffect>();
 	private IntMap<PooledEffect> rockets = new IntMap<PooledEffect>(80);
 	private IntMap<ReducedRocket> rocketsInFrame = new IntMap<ReducedRocket>(80);
-	
+	private IntMap<EnemyHealthbar> enemyHps = new IntMap<EnemyHealthbar>(50);
+	private IntMap<ReducedEnemy> enemiesInFrame = new IntMap<ReducedEnemy>(50);
+	private MineRenderer mines = new MineRenderer();
+	private FreezeRenderer freeze = new FreezeRenderer();
+
 	private Vector2[] vesselPositions = null;
 	private PooledEffect[] vesselTrails = null;
 	public OrthographicCamera camera;
 	private int vesselID;
+	
+	private EnemyType highlightedEnemy = null;
+	private PickupType highlightedPickup = null;
 
 	public WorldRenderer(int myVesselID) {
 		batch = new SpriteBatch(5460);
@@ -61,20 +71,47 @@ public class WorldRenderer {
 		CamShaker.INSTANCE = new CamShaker(batch);
 		this.vesselID = myVesselID;
 	}
+	
+	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateEffects) {
+		highlightedEnemy = null;
+		highlightedPickup = null;
+		renderWithHighlightSet(deltaTime, alpha, r, updateEffects);
+	}
+	
+	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateEffects, EnemyType et) {
+		highlightedEnemy = et;
+		highlightedPickup = null;
+		renderWithHighlightSet(deltaTime, alpha, r, updateEffects);
+	}
+	
+	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateEffects, PickupType pt) {
+		highlightedEnemy = null;
+		highlightedPickup = pt;
+		renderWithHighlightSet(deltaTime, alpha, r, updateEffects);
+	}
 
-	public void render(float deltaTime, float alpha, RenderInfo r, boolean updateParticles) {
+	private void renderWithHighlightSet(float deltaTime, float alpha, RenderInfo r, boolean updateEffects) {
+		prepRockets(r, deltaTime);
+		mines.render(updateEffects ? deltaTime : 0, alpha);
+		freeze.render(updateEffects ? deltaTime : 0);
 		batch.setColor(1, 1, 1, alpha);
+		if (freeze.active) {
+			batch.setShader(freeze.enemyShader);
+		}
 		batch.begin();
 		int size = r.enemies.size();
 		for(int i = 0; i < size; i++) {
 			drawEnemy(r.enemies.get(i));
 		}
-
+		if (freeze.active) {
+			batch.setShader(Assets.defaultShader);	
+		}
+		drawEnemyHPs(r.enemies, deltaTime);
+		batch.setColor(1, 1, 1, alpha);
 		size = r.pickups.size();
 		for(int i = 0; i < size; i++) {
 			drawPickup(r.pickups.get(i));
 		}
-
 		size = r.vessels.size();
 		if (vesselPositions == null && size != 0) {
 			vesselPositions = new Vector2[size];
@@ -86,18 +123,18 @@ public class WorldRenderer {
 			}
 		}
 		for(int i = 0; i < size; i++) {
-			drawVessel(r.vessels.get(i), i, updateParticles);
+			drawVessel(r.vessels.get(i), i, updateEffects);
 		}		
 
 		drawRockets(r);
-		if (updateParticles) {
+		if (updateEffects) {
 			size = r.effects.size();
 			for (int i = 0; i < size; i++) {
 				drawEffect(r.effects.get(i));
 			}
 		}
 		r.effects.clear(); // Don't repeat them in the next frames if no new data is received
-		
+
 		size = particles.size();		
 		for (Iterator<PooledEffect> it = particles.iterator(); it.hasNext(); ) {
 			PooledEffect p = it.next();
@@ -106,12 +143,12 @@ public class WorldRenderer {
 				it.remove();
 			} else {
 				batch.setColor(1, 1, 1, alpha);
-				if (updateParticles) {
+				if (updateEffects) {
 					p.draw(batch, deltaTime);
 				} else {
 					p.draw(batch);
 				}
-				
+
 			}
 		}
 		batch.end();
@@ -142,19 +179,63 @@ public class WorldRenderer {
 			break;
 		case LASERSHOT:
 			if (Settings.INSTANCE.soundOn) {
-				Assets.laserShot.play(1);
+				Assets.laserShot.play();
 			}
+			break;
+		case FREEZE:
+			//freezeTime = FreezerPickup.FREEZE_TIME;
+			freeze.turnOn(effect.x, effect.y, FreezerPickup.FREEZE_TIME);
 			break;
 		}
 	}
 
-	private void drawRockets(RenderInfo r) {
+	private void drawEnemyHPs(List<ReducedEnemy> l, float deltaTime) {
+		// Make a map of active enemies
+		enemiesInFrame.clear();
+		int size = l.size();
+		for (int i = 0; i < size; i++) {
+			ReducedEnemy e = l.get(i);
+			enemiesInFrame.put(e.id, e);
+		}
+		// Update and draw HP bars from previous frame, remove any that finish
+		IntMap.Entries<EnemyHealthbar> h = enemyHps.entries();
+		while (h.hasNext) {
+			IntMap.Entry<EnemyHealthbar> hpEntry = h.next();
+			if (enemiesInFrame.containsKey(hpEntry.key)) {
+				// If it was in the new frame, draw and remove from the new map
+				//drawHpBar(enemiesInFrame.remove(hpEntry.key).hp, hpEntry.value);
+				ReducedEnemy e = enemiesInFrame.remove(hpEntry.key);
+				hpEntry.value.draw(batch, e.hp, deltaTime, e.x, e.y);
+			} else if (hpEntry.value.drawDead(batch, deltaTime)) {  // If not, draw and check if it should be removed
+				h.remove();
+			}
+		}
+		// Only the all-new enemies remain in the new frame's map, add their HPs - no need to draw yet
+		IntMap.Entries<ReducedEnemy> enemyEntries = enemiesInFrame.entries();
+		while (enemyEntries.hasNext) {
+			ReducedEnemy e = enemyEntries.next().value;
+			enemyHps.put(e.id, new EnemyHealthbar());
+		}
+	}
+
+	private void prepRockets(RenderInfo r, float delta) {
 		// Make a map of active rockets
 		rocketsInFrame.clear();
+		mines.clear();
 		int size = r.rockets.size();
 		for (int i = 0; i < size; i++) {
-			rocketsInFrame.put(r.rockets.get(i).id, r.rockets.get(i));
+			ReducedRocket roc = r.rockets.get(i);
+			if (roc.typeOrdinal != RocketType.MINE.ordinal()) {
+				rocketsInFrame.put(r.rockets.get(i).id, r.rockets.get(i));
+			} else {
+				mines.add(roc.id, roc.x, roc.y, delta);
+			}
+
 		}
+	}
+
+	private void drawRockets(RenderInfo r) {
+
 		// Update rocket effects from previous frame, remove any that are missing from the RenderData
 		IntMap.Entries<PooledEffect> effectEntries = rockets.entries();
 		while (effectEntries.hasNext) {
@@ -193,13 +274,23 @@ public class WorldRenderer {
 
 	private void drawEnemy(ReducedEnemy e) {
 		int o = e.typeOrdinal;
-		batch.draw(et[o].tex, e.x-et[o].halfWidth, e.y-et[o].halfHeight, et[o].halfWidth, et[o].halfHeight, et[o].width, et[o].height, 1, 1, e.rot);
+		if (et[o] == highlightedEnemy) {
+			Color c = batch.getColor();
+			batch.setColor(Color.WHITE);
+			batch.draw(et[o].tex, e.x-e.width/2, e.y-e.height/2, e.width/2, e.height/2, e.width, e.height, 1, 1, e.rot);
+			batch.setColor(c);
+		} else {
+			batch.draw(et[o].tex, e.x-e.width/2, e.y-e.height/2, e.width/2, e.height/2, e.width, e.height, 1, 1, e.rot);
+		}
+		
 	}
 
 	private void drawVessel(ReducedVessel v, int i, boolean updateParticles) {
 		TextureRegion t = (v.id == vesselID) ? Assets.vessel : Assets.vesselRed;
 		batch.draw(t, v.x-Vessel.HALF_WIDTH, v.y-Vessel.HALF_HEIGHT, 
 				Vessel.HALF_WIDTH, Vessel.HALF_HEIGHT, Vessel.DRAW_WIDTH, Vessel.DRAW_HEIGHT, 1, 1, v.angle);
+		//batch.draw(Assets.smallCircle, v.x-Vessel.COLLIDER_HALF, v.y-Vessel.COLLIDER_HALF, 
+		//		Vessel.COLLIDER_HALF, Vessel.COLLIDER_HALF, Vessel.COLLIDER_SIZE, Vessel.COLLIDER_SIZE, 1, 1, v.angle);
 		if (v.shieldAlpha > 0) {
 			batch.setColor(1, 1, 1, v.shieldAlpha);
 			batch.draw(Assets.shield, v.x-Vessel.SHIELD_HALF_SIZE, v.y-Vessel.SHIELD_HALF_SIZE, Vessel.SHIELD_SIZE, Vessel.SHIELD_SIZE);
@@ -210,7 +301,7 @@ public class WorldRenderer {
 			vesselPositions[i].set(v.x, v.y);
 		}
 	}
-	
+
 	private void modVesselTrails(Vector2 vel, int i, ReducedVessel v) {
 		PooledEffect trails = vesselTrails[i];
 		ParticleEmitter particleEmitter = trails.getEmitters().get(0);
@@ -231,9 +322,20 @@ public class WorldRenderer {
 
 	private void drawPickup(ReducedPickup p) {
 		int o = p.typeOrdinal;
-		batch.setColor(1, 1, 1, batch.getColor().a*p.alpha);
-		batch.draw(pt[o].tex, p.x-Pickup.HALF_SIZE, p.y-Pickup.HALF_SIZE, Pickup.DRAW_SIZE, Pickup.DRAW_SIZE);
-		batch.setColor(1, 1, 1, batch.getColor().a/p.alpha);
+		if (pt[o] == highlightedPickup) {
+			Color c = batch.getColor();
+			batch.setColor(1, 1, 1, p.alpha);
+			batch.draw(pt[o].tex, p.x-Pickup.HALF_SIZE, p.y-Pickup.HALF_SIZE, Pickup.DRAW_SIZE, Pickup.DRAW_SIZE);
+			batch.setColor(c);
+		} else {
+			batch.setColor(1, 1, 1, batch.getColor().a*p.alpha);
+			batch.draw(pt[o].tex, p.x-Pickup.HALF_SIZE, p.y-Pickup.HALF_SIZE, Pickup.DRAW_SIZE, Pickup.DRAW_SIZE);
+			batch.setColor(1, 1, 1, batch.getColor().a/p.alpha);
+		}
+	}
+	
+	public void resendShaders() {
+		mines.resendShader();
 	}
 
 

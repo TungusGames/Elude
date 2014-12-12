@@ -3,6 +3,7 @@ package tungus.games.elude.game.multiplayer.transfer;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import tungus.games.elude.game.multiplayer.Connection.TransferData;
 import tungus.games.elude.game.server.Vessel;
@@ -10,6 +11,7 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.pickups.Pickup;
 import tungus.games.elude.game.server.rockets.Rocket;
+import tungus.games.elude.levels.loader.FiniteLevelLoader;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,6 +21,10 @@ public class RenderInfo extends TransferData {
 		private static final long serialVersionUID = -7557852638993394399L;
 		public float x, y;
 		public float rot;
+		public float hp;
+		public float width;
+		public float height;
+		public int id;
 		public int typeOrdinal;
 	}
 	public static class ReducedPickup implements Serializable {
@@ -43,7 +49,7 @@ public class RenderInfo extends TransferData {
 	}
 	public static class Effect implements Serializable {
 		private static final long serialVersionUID = 1892821292900322357L;
-		public enum EffectType{EXPLOSION, DEBRIS, CAMSHAKE, LASERSHOT}
+		public enum EffectType{EXPLOSION, DEBRIS, CAMSHAKE, LASERSHOT, FREEZE}
 		public int typeOrdinal;
 		public float x, y;
 	}
@@ -59,47 +65,44 @@ public class RenderInfo extends TransferData {
 	public List<ReducedVessel> vessels = new ArrayList<ReducedVessel>();
 	public List<Effect> effects;
 	
-	public float[] hp;
-	
-	private final World w;
-	
-	public RenderInfo(World world) {
-		w = world;
-		if (w != null) {
-			effects = world.effects;
-		} else {
-			effects = new ArrayList<Effect>();
-		}
+	public float[] hp = null;
+	public float progress = -1;
 		
+	public RenderInfo() {
+		effects = new ArrayList<Effect>();
+	}
+	
+	public RenderInfo(List<Effect> e) {
+		effects = e;
 	}
 
-	public void setFromWorld() {
+	public void setFromWorld(World w) {
 		RenderInfoPool.freeAlmostAll(this); // Puts everything in the pool except effects
+		if (w.waveLoader instanceof FiniteLevelLoader) {
+			this.progress = ((FiniteLevelLoader)w.waveLoader).progress();
+		}
 		enemies.clear();
-		int s = w.enemies.size();
-		for (int i = 0; i < s; i++) {
-			Enemy e = w.enemies.get(i);
-			enemies.add(RenderInfoPool.newEnemy(e.pos, e.rot, e.type.ordinal()));
+		for (ListIterator<Enemy> it = w.enemies.listIterator(); it.hasNext();) {
+			Enemy e = it.next();
+			enemies.add(RenderInfoPool.newEnemy(e.pos, e.rot, e.type.ordinal(), e.hp / e.maxHp, e.id, e.width(), e.height()));
 		}
 		pickups.clear();
-		s = w.pickups.size();
-		for (int i = 0; i < s; i++) {
-			Pickup p = w.pickups.get(i);
+		for (ListIterator<Pickup> it = w.pickups.listIterator(); it.hasNext();) {
+			Pickup p = it.next();
 			pickups.add(RenderInfoPool.newPickup(new Vector2(p.collisionBounds.x+Pickup.HALF_SIZE, p.collisionBounds.y+Pickup.HALF_SIZE), p.alpha, p.type.ordinal()));
 		}
 		vessels.clear();
-		s = w.vessels.size();
-		for (int i = 0; i < s; i++) {
-			Vessel v = w.vessels.get(i);
+		int i = 0;
+		for (ListIterator<Vessel> it = w.vessels.listIterator(); it.hasNext(); i++) {
+			Vessel v = it.next();
 			vessels.add(RenderInfoPool.newVessel(v.pos, v.rot, i, v.shieldAlpha));
 		}
 		rockets.clear();
-		s = w.rockets.size();
-		for (int i = 0; i < s; i++) {
-			Rocket r = w.rockets.get(i);
+		for (ListIterator<Rocket> it = w.rockets.listIterator(); it.hasNext();) {
+			Rocket r = it.next();
 			rockets.add(RenderInfoPool.newRocket(r.pos, r.vel.angle(), r.type.ordinal(), r.id));
 		}
-		for (int i = 0; i < hp.length; i++) {
+		for (i = 0; i < hp.length; i++) {
 			hp[i] = w.vessels.get(i).hp / Vessel.MAX_HP;
 		}
 	}
@@ -110,7 +113,7 @@ public class RenderInfo extends TransferData {
 		if (otherData instanceof RenderInfo) {
 			other = (RenderInfo)otherData;
 		} else {
-			other = new RenderInfo(null);
+			other = new RenderInfo();
 		}
 		super.copyTo(other);
 		RenderInfoPool.freeAll(other);
@@ -118,7 +121,7 @@ public class RenderInfo extends TransferData {
 		int s = enemies.size();
 		for (int i = 0; i < s; i++) {
 			ReducedEnemy e = enemies.get(i);
-			other.enemies.add(RenderInfoPool.newEnemy(e.x, e.y, e.rot, e.typeOrdinal));
+			other.enemies.add(RenderInfoPool.newEnemy(e.x, e.y, e.rot, e.typeOrdinal, e.hp, e.id, e.width, e.height));
 		}
 		other.pickups.clear();
 		s = pickups.size();
@@ -138,7 +141,8 @@ public class RenderInfo extends TransferData {
 			ReducedRocket r = rockets.get(i);
 			other.rockets.add(RenderInfoPool.newRocket(r.x, r.y, r.angle, r.typeOrdinal, r.id));
 		}
-		other.effects.clear();
+		if (other.handled)
+			other.effects.clear();
 		s = effects.size();
 		for (int i = 0; i < s; i++) {
 			Effect e = effects.get(i);
@@ -151,6 +155,8 @@ public class RenderInfo extends TransferData {
 			other.hp = new float[hp.length];
 		for (int i = 0; i < s; i++)
 			other.hp[i] = hp[i];
+		
+		other.progress = this.progress;
 		return other;
 	}
 }

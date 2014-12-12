@@ -1,22 +1,19 @@
 package tungus.games.elude.game.server.enemies;
 
-import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class MovingEnemy extends Enemy {
 	
-	private static final float COLLIDER_SIZE = 0.75f;
+	private static final float COLLIDER_SIZE = 0.85f;
 	
-	private static final float MAX_HP = 4f;
-	private static final float SPEED = 3f;
+	protected static final float SPEED = 3f;
 	private static final float MAX_TURNSPEED = 100f;
-	private static final float RELOAD = 2f;
+	protected static final float RELOAD = 2f;
 	
 	private static final int STATE_ARRIVING = 0;
 	private static final int STATE_MOVING_INSIDE = 1;
@@ -27,6 +24,7 @@ public class MovingEnemy extends Enemy {
 	private int state = STATE_ARRIVING;
 	private final Vector2 arrivePos;
 	
+	private float maxTurn = MAX_TURNSPEED;
 	private float turnSpeed;
 	private float turnAccel;
 	private float turnInOneDir = 0;
@@ -39,13 +37,14 @@ public class MovingEnemy extends Enemy {
 	private float timeSinceShot = 0;
 	
 	public MovingEnemy(Vector2 pos, World w) {
-		this(pos, EnemyType.MOVING, w, Assets.movingEnemyBlue, RocketType.SLOW_TURNING, SPEED, RELOAD);
+		this(pos, EnemyType.MOVING, w, RocketType.SLOW_TURNING, SPEED, RELOAD, MAX_TURNSPEED);
 	}
 	
-	public MovingEnemy(Vector2 pos, EnemyType t, World w, TextureRegion tex, RocketType type, float speed, float reload) {
-		super(pos, t, COLLIDER_SIZE, MAX_HP, w, type);
+	public MovingEnemy(Vector2 pos, EnemyType t, World w, RocketType type, float speed, float reload, float maxTurn) {
+		super(pos, t, COLLIDER_SIZE, t.hp, w, type);
 		this.speed = speed;
 		this.reload = reload;
+		this.maxTurn = maxTurn;
 		moveBounds = new Rectangle(2*World.EDGE, 2*World.EDGE, World.WIDTH-4*World.EDGE, World.HEIGHT-4*World.EDGE);
 		arrivePos = new Vector2();
 		arrivePos.x = MathUtils.clamp(pos.x, moveBounds.x, moveBounds.width+moveBounds.x);
@@ -66,12 +65,6 @@ public class MovingEnemy extends Enemy {
 			}
 			break;
 		case STATE_MOVING_INSIDE:
-			/*float aa = MathUtils.random(-100, 100) * deltaTime;
-			turnAccel += aa;
-			if (turnSpeed > MAX_TURNSPEED)
-				turnAccel -= 2*aa;
-			else if (turnSpeed > -MAX_TURNSPEED && MathUtils.randomBoolean())
-				turnAccel -= 2*aa;*/
 			turnSpeed += turnAccel * deltaTime;
 			
 			if (turnInOneDir > 200) {
@@ -94,7 +87,7 @@ public class MovingEnemy extends Enemy {
 			}
 			break;
 		case STATE_TURNING_IN:
-			turnSpeed = turningRight ? -MAX_TURNSPEED : MAX_TURNSPEED;
+			turnSpeed = turningRight ? -maxTurn : maxTurn;
 			if (moveBounds.contains(pos)) {
 				state = STATE_MOVING_INSIDE;
 				turnSpeed = MathUtils.random(-60, 60);
@@ -103,22 +96,28 @@ public class MovingEnemy extends Enemy {
 			break;
 		}
 		if (state != STATE_ARRIVING) {
-			if (turnSpeed > MAX_TURNSPEED)
-				turnSpeed = MAX_TURNSPEED;
-			else if (turnSpeed < -MAX_TURNSPEED)
-				turnSpeed = -MAX_TURNSPEED;
+			if (turnSpeed > maxTurn)
+				turnSpeed = maxTurn;
+			else if (turnSpeed < -maxTurn)
+				turnSpeed = -maxTurn;
 			vel.rotate(turnSpeed * deltaTime);
-			turnGoal = vel.angle()-90;
 			timeSinceShot += deltaTime;
 			if (turningRight && turnSpeed > 0 || !turningRight && turnSpeed < 0) {
 				turnInOneDir = 0;
 			}
 			turningRight = (turnSpeed < 0);
 			turnInOneDir += Math.abs(turnSpeed*deltaTime);
-			if (timeSinceShot > reload) {
+			if (canShoot()) {
 				timeSinceShot -= reload;
-				shootRocket(world.vessels.get(0).pos.cpy().sub(pos));
+				shootRocket();
 			}
+		}
+		return false;
+	}
+	
+	protected boolean canShoot() {
+		if (timeSinceShot > reload) {
+			return true;
 		}
 		return false;
 	}

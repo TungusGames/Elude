@@ -8,25 +8,25 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Rocket {
 	
 	public static enum RocketType { 
 		SLOW_TURNING(Assets.flameRocket), 
-		FAST_TURNING(Assets.fastFlameRocket), 
-		LOWGRAV(Assets.matrixRocket),
-		HIGHGRAV(null),
-		STRAIGHT(Assets.straightRocket);
+		FAST_TURNING(Assets.matrixRocket), 
+		STRAIGHT(Assets.straightRocket),
+		MINE(Assets.matrixRocket);
 		public ParticleEffectPool effect;
 		RocketType(ParticleEffectPool e) {
 			effect = e;
 		}
 	};
 	
-	public static final float ROCKET_SIZE = 0.2f; // For both collision and drawing
-	public static final float DEFAULT_DMG = 3.5f;
+	public static final float ROCKET_SIZE = 0.1f; // Diameter
+	public static final float DEFAULT_DMG = 3f;
 	public static final float DEFAULT_LIFE = 6f;
 	
 	public static final Rocket fromType(RocketType t, Enemy origin, Vector2 pos, Vector2 dir, Vessel target, World w) {
@@ -38,11 +38,11 @@ public abstract class Rocket {
 		case FAST_TURNING:
 			r = new TurningRocket(origin, pos, dir, w, target, true);
 			break;
-		case LOWGRAV:
-			r = new LowGravityRocket(origin, pos, dir, w, target);
-			break;
 		case STRAIGHT:
 			r = new StraightRocket(origin, pos, dir, w, target);
+			break;
+		case MINE:
+			r = new Mine(origin, pos, dir, w, target);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown rocket type: " + t);
@@ -59,7 +59,8 @@ public abstract class Rocket {
 	
 	public Vector2 pos;
 	public Vector2 vel;
-	public Rectangle bounds;
+	public Circle boundsForEnemy;
+	public Circle boundsForVessel;
 	public final RocketType type;
 	public final int id;
 	
@@ -74,13 +75,17 @@ public abstract class Rocket {
 	}
 	
 	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life) {
+		this(origin, t, pos, dir, world, target, dmg, life, ROCKET_SIZE, ROCKET_SIZE);
+	}
+	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life, float sizeForEnemy, float sizeForVessel) {
 		super();
 		this.origin = origin;
 		this.type = t;
 		this.life = life;
 		this.pos = pos;
 		this.world = world;
-		this.bounds = new Rectangle(pos.x - ROCKET_SIZE / 2, pos.y - ROCKET_SIZE / 2, ROCKET_SIZE, ROCKET_SIZE);
+		this.boundsForEnemy = new Circle(pos, sizeForEnemy/2);
+		this.boundsForVessel = new Circle(pos, sizeForVessel/2);
 		this.dmg = dmg;
 		this.target = target;
 		this.id = nextID++;
@@ -99,9 +104,11 @@ public abstract class Rocket {
 		}
 		aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		bounds.x = pos.x - ROCKET_SIZE / 2;
-		bounds.y = pos.y - ROCKET_SIZE / 2;
-		if (!world.outerBounds.contains(pos)) {
+		boundsForEnemy.x = pos.x;
+		boundsForEnemy.y = pos.y;
+		boundsForVessel.x = pos.x;
+		boundsForVessel.y = pos.y;
+		if (!World.outerBounds.contains(pos)) {
 			if (hitWall(pos.x < 0 || pos.x > World.WIDTH)) {
 				return true;
 			}
@@ -110,18 +117,14 @@ public abstract class Rocket {
 		int size = world.enemies.size();
 		boolean stillIn = false;
 		for (int i = 0; i < size; i++) {
-			if (world.enemies.get(i).collisionBounds.overlaps(bounds)) {
-				if (outOfOrigin) {
-					if ((world.enemies.get(i).hp -= dmg) <= 0)
-						world.enemies.get(i).kill(this);
-					//world.explosion.play();
-					kill();
-					return true;
-				} else {
-					if (world.enemies.get(i).equals(origin)) {
-						stillIn = true;
-					}
-				}
+			Enemy e = world.enemies.get(i);
+			if (!outOfOrigin && e == origin) {
+				stillIn = (origin.collisionBounds.overlaps(boundsForVessel));
+				continue;
+			}
+			if (e.hitBy(this)) {
+				kill();
+				return true;
 			}
 		}
 		if (!stillIn) {
@@ -130,9 +133,9 @@ public abstract class Rocket {
 		
 		size = world.vessels.size();
 		for (int i = 0; i < size; i++) {
-			if (world.vessels.get(i).bounds.overlaps(bounds)) {
+			if (Intersector.overlaps(world.vessels.get(i).bounds, boundsForVessel)) {
 				if (!world.vessels.get(i).shielded) {
-					world.effects.add(RenderInfoPool.newEffect(0f, 0f, EffectType.CAMSHAKE.ordinal())); //TODO pool
+					world.effects.add(RenderInfoPool.newEffect(0f, 0f, EffectType.CAMSHAKE.ordinal()));
 					world.vessels.get(i).hp -= dmg;
 				}
 				kill();
@@ -143,13 +146,25 @@ public abstract class Rocket {
 	}
 	
 	public void kill() {
-		world.rockets.remove(this);
-		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal())); // TODO pool
+		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal()));
 	}
 	
 	protected boolean hitWall(boolean vertical) {
 		kill();
 		return true;
+	}
+	
+	protected Vessel targetPlayer() {
+		Vessel r = null;
+		float bestDist = 10000;
+		for (Vessel v : world.vessels) {
+			float d = v.pos.dst2(pos);
+			if (r == null || d < bestDist) {
+				r = v;
+				bestDist = d;
+			}
+		}
+		return r;
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);

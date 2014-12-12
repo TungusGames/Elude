@@ -28,6 +28,51 @@ public class CustomInterpolations {
 			}
 		}
 	};
+	public static class FadeInOut extends Interpolation {
+		/** Fades in and out linearly in the same time
+		 made for freezing
+		 intelligently detects resetting the fadeTime value.
+		 Actually, it works backwards only */
+		private float fadeInEndTime;
+		private float fadeOutStartTime;
+		
+		public FadeInOut(float fadeTime, float totalTime) {
+			fadeInEndTime = fadeTime;
+			fadeOutStartTime = totalTime - fadeTime;
+		}
+		
+		private static enum State {IN, OUT, FADING};
+		private State lastState = State.OUT;
+		
+		@Override
+		public float apply(float a) {
+			if (a <= 0f) {
+				lastState = State.OUT;
+				return 0;
+			}
+			else if (a < fadeInEndTime)
+				return a / fadeInEndTime;
+			else if (a <= fadeOutStartTime) {
+				lastState = State.IN;
+				return 1;
+			}
+			else if (a < (fadeInEndTime + fadeOutStartTime)) {
+				if (lastState == State.IN)
+					return 1;
+				else
+					lastState = State.FADING;
+					return (fadeInEndTime - (a - fadeOutStartTime)) / fadeInEndTime;
+			}
+			else switch (lastState) {
+			case OUT: return 0;
+			case IN: return 1;
+			case FADING:
+				lastState = State.IN;
+				return 1;
+			default: return 1;
+			}
+		}
+	}
 	
 	public static class FadeinFlash extends Interpolation {
 		private static final Interpolation fadeIn = Interpolation.fade;

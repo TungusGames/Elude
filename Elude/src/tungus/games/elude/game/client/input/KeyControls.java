@@ -16,16 +16,16 @@ public class KeyControls implements Controls {
 	@Override
 	public Vector2 getDir(Vector2 vessel, float deltaTime) {
 		dir.set(0,0);
-		if (Gdx.input.isKeyPressed(keys[0])) {
+		if (isKeyPressed(keys[0])) {
 			dir.add(0, 1);
 		}
-		if (Gdx.input.isKeyPressed(keys[1])) {
+		if (isKeyPressed(keys[1])) {
 			dir.add(-1, 0);
 		}
-		if (Gdx.input.isKeyPressed(keys[2])) {
+		if (isKeyPressed(keys[2])) {
 			dir.add(0, -1);
 		}
-		if (Gdx.input.isKeyPressed(keys[3])) {
+		if (isKeyPressed(keys[3])) {
 			dir.add(1, 0);
 		}
 		dir.nor();
@@ -35,6 +35,10 @@ public class KeyControls implements Controls {
 	@Override
 	public void draw(SpriteBatch batch, float alpha) {
 		// Do nothing
+	}
+	
+	synchronized private static boolean isKeyPressed(int k) {
+		return Gdx.input.isKeyPressed(k);
 	}
 
 }

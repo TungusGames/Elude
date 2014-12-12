@@ -6,8 +6,8 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Pickup {
@@ -16,7 +16,7 @@ public abstract class Pickup {
 		HEALTH(Assets.hpBonus), 
 		SPEED(Assets.speedBonus), 
 		SHIELD(Assets.shieldBonus), 
-		ROCKETWIPER(Assets.smallCircle);
+		FREEZER(Assets.freezerBonus);
 		public TextureRegion tex;
 		PickupType(TextureRegion t) {
 			tex = t;
@@ -45,8 +45,8 @@ public abstract class Pickup {
 		case SHIELD:
 			p = new ShieldPickup(w, w.randomPosInInnerRect(new Vector2()));
 			break;
-		case ROCKETWIPER:
-			p = new RocketWiperPickup(w, w.randomPosInInnerRect(new Vector2()));
+		case FREEZER:
+			p = new FreezerPickup(w, w.randomPosInInnerRect(new Vector2()));
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown PickupType " + t);
@@ -55,7 +55,7 @@ public abstract class Pickup {
 	}
 	
 	protected World world;
-	public Rectangle collisionBounds;
+	public Circle collisionBounds;
 	private float lifeTimeLeft;
 	private float fullLifeTime;
 	private boolean pickedUp = false;
@@ -65,7 +65,7 @@ public abstract class Pickup {
 	
 	public Pickup(World world, Vector2 pos, PickupType type, float lifeTime) {
 		this.world = world;
-		collisionBounds = new Rectangle(pos.x-DRAW_SIZE/2, pos.y-DRAW_SIZE/2, DRAW_SIZE, DRAW_SIZE);
+		collisionBounds = new Circle(pos, DRAW_SIZE/2);
 		fullLifeTime = lifeTimeLeft = lifeTime;
 		this.type = type;
 	}
@@ -77,7 +77,6 @@ public abstract class Pickup {
 	public boolean update(float deltaTime) {
 		lifeTimeLeft -= deltaTime;
 		if (lifeTimeLeft <= 0f) {
-			kill();
 			return true;
 		}
 		if (!pickedUp) {
@@ -101,8 +100,4 @@ public abstract class Pickup {
 	}
 	
 	protected abstract void produceEffect(Vessel vessel);
-	
-	public void kill() {
-		world.pickups.remove(this);
-	}
 }

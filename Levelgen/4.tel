@@ -1,14 +1,8 @@
 12
 45 75
 0 0 0 0
+
 wavestart 0 0
-standing standing standing
-wavestart -1 1
-moving moving
+factory
 wavestart -1 0
-wavestart 1 -1
-health
-wavestart 1 -1
-wavestart 40 0
-standing standing
-moving moving moving
+2 factory

@@ -2,6 +2,7 @@ package tungus.games.elude.menu.mainmenu;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Elude;
 import tungus.games.elude.menu.AboutScreen;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.SettingsScreen;
@@ -11,7 +12,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -54,7 +55,7 @@ public class MainMenu extends BaseScreen {
 		settingsButton.setBounds(405, 35, 105, 105);
 		multiplayerButton = new Sprite(Assets.multiplayerButton);
 		multiplayerButton.setBounds(405, 150, 220, 105);
-		multiplayerButton.setColor(1, 1, 1, 0.3f);
+		multiplayerButton.setColor(1, 1, 1, Elude.mpScreen == null ? 0.3f : 1f);
 		infoButton = new Sprite(Assets.infoButton);
 		infoButton.setBounds(520, 35, 105, 105);
 		Gdx.input.setInputProcessor(new InputAdapter(){
@@ -76,6 +77,13 @@ public class MainMenu extends BaseScreen {
 				} else if (infoButton.getBoundingRectangle().contains(touch.x, touch.y)) {
 					toScreen(new AboutScreen(game));
 					return true;
+				} else if (Elude.mpScreen != null && multiplayerButton.getBoundingRectangle().contains(touch.x, touch.y)) {
+					try {
+						toScreen((Screen)(Elude.mpScreen.getConstructors()[0].newInstance(game)));
+					} catch (Exception e) {
+						Gdx.app.log("Net(?) MP", "Reflection magic failed");
+						e.printStackTrace();
+					}
 				}
 				return false;
 			}
@@ -97,7 +105,7 @@ public class MainMenu extends BaseScreen {
 			game.setScreen(nextScreen);
 			stateTime = FADE_TIME;
 		}
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		float alpha =
 				state == STATE_FADEIN ? 	stateTime / FADE_TIME :
 				state == STATE_FADEOUT ? 	1 - stateTime / FADE_TIME :
