@@ -67,7 +67,7 @@ public class NetMPScreen extends BaseScreen {
 			//SocketHints hints = new SocketHints();
 			//hints.
 			s = Gdx.net.newClientSocket(Net.Protocol.TCP, IP, port, new SocketHints());
-			game.setScreen(new GameScreen(game, levelNum, finite, new StreamConnection(s), 1));
+			game.setScreen(new GameScreen(game, levelNum, finite, new StreamConnection(s, true), 1));
 		} else if (mode == MODE_LISTEN) {
 			Gdx.app.log("MODE", "LISTEN");
 			try {
@@ -77,7 +77,7 @@ public class NetMPScreen extends BaseScreen {
 				s = ss.accept(new SocketHints());
 				ss.dispose();
 				LocalConnectionPair c = new LocalConnectionPair();
-				new Thread(new Server(levelNum, finite, new Connection[] {c.c1, new StreamConnection(s)})).start();
+				new Thread(new Server(levelNum, finite, new Connection[] {c.c1, new StreamConnection(s, true)})).start();
 				game.setScreen(new GameScreen(game, levelNum, finite, c.c2, 0));
 			} catch (GdxRuntimeException e) {
 				Gdx.app.log("Net MP", "Socket accept timed out. Retrying...");
