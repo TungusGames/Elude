@@ -16,7 +16,7 @@ public class Shielded extends StandingBase {
 	private static final float OUTER_R = EnemyType.SHIELDED.halfWidth * 12/13f;
 	private static final float INNER_R = EnemyType.SHIELDED.height - OUTER_R;
 	private static final float POS_FROM_CIRCLE_MIDDLE = OUTER_R / 4;
-	private static final float TURNSPEED = 35; // Degrees per second
+	private static final float TURNSPEED = 25; // Degrees per second, maybe 25??
 	private static final float ARRIVE_DIST_FROM_EDGE = 4;
 	
 	private static final Vector2 t = new Vector2();
