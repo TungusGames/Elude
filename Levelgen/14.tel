@@ -1,13 +1,15 @@
-18
-35 65
-0.08 0.08 0 0
+37
+40 60
+0.1 0.1 0 0
 wavestart 0 0
-sharpshooter
-standing
-moving
-wavestart 2 0
-sharpshooter
-moving
-wavestart -1 1
-sharpshooter sharpshooter
-moving
+3 moving
+wavestart -1 2
+miner
+wavestart 15 0
+moving moving
+wavestart 5 0
+miner miner health
+wavestart 10 1
+kamikaze
+wavestart 0.5 0
+speed

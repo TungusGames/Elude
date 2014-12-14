@@ -1,0 +1,13 @@
+61
+35 75
+0.1 0.1 0.1 0.1
+wavestart 0 0
+2 factory
+wavestart 10 0
+2 shielded
+wavestart 10 0
+shield
+3 moving
+factory
+wavestart 15 1
+5 kamikaze

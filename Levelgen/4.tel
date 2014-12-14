@@ -1,8 +1,13 @@
-12
-45 75
-0 0 0 0
-
-wavestart 0 0
-factory
+68
+35 55
+0.08 0 0 0
 wavestart -1 0
-2 factory
+standing 
+moving
+kamikaze
+wavestart -1 0
+wavestart 1 -1
+speed
+wavestart 1 -1
+moving
+kamikaze kamikaze

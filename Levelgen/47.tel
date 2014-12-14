@@ -1,0 +1,21 @@
+63 
+100 30
+0.2 0.2 0.2 0.2
+wavestart 0 0
+10 standing
+wavestart -1 0
+10 moving
+wavestart -1 0
+10 shielded
+wavestart -1 0
+10 splitter
+wavestart -1 0
+10 machinegunner
+wavestart -1 0
+10 factory
+wavestart -1 0
+10 miner
+wavestart -1 0
+10 sharpshooter
+wavestart -1 0
+10 kamikaze

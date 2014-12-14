@@ -1,0 +1,14 @@
+58
+45 57
+0.15 0.15 0.15 0.15
+wavestart 0 0
+8 kamikaze
+wavestart -1 0
+wavestart 2 -1
+8 kamikaze
+wavestart -1 0
+health
+wavestart 2 -1
+health
+8 kamikaze
+5 sharpshooter

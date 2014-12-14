@@ -1,14 +1,5 @@
-3
-40 80
-0 0 0 0
+41
+40 60
+0.6 0.4 0 0
 wavestart 0 0
-moving moving moving moving moving moving moving moving 
-wavestart -1 3
-moving moving moving moving moving moving moving moving 
-wavestart 5 3
-health
-wavestart 3 3
-health
-wavestart 1 3
-standing standing
-moving moving moving
+10 miner

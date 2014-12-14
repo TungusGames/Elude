@@ -1,29 +1,19 @@
-17
-35 80
+70
+32 85
 0.08 0.08 0 0
 wavestart 0 0
-standing moving
-wavestart 1.5 0
-standing moving
-wavestart 1.5 0
-standing moving
-wavestart 1.5 0
-standing moving
-wavestart 1.5 0
-standing moving
-wavestart 0.5 0
-standing moving
-wavestart 0.5 0
-standing moving
-wavestart 0.5 0
-standing moving
-wavestart 0.5 0
-standing moving
-wavestart 1.5 0
-standing moving
-wavestart 1.5 0
-standing moving
-wavestart 1.5 0
-standing moving
-wavestart 1.5 0
-standing moving
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving

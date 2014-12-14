@@ -1,0 +1,11 @@
+47
+35 85
+0.1 0.1 0.1 0
+wavestart 0 0
+splitter
+wavestart -1 0
+2 splitter
+wavestart -1 0
+2 splitter
+2 moving
+2 kamikaze

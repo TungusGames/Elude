@@ -1,21 +1,11 @@
-16
-35 80
+69
+45 70
 0.08 0.08 0 0
-wavestart 0 0
-standing standing standing standing
-wavestart 1 0
+wavestart -1 0
+standing standing standing 
+standing standing standing 
 standing standing standing
-wavestart 1 0
+wavestart -1 1
 standing standing standing
-wavestart 1 0
 standing standing standing
-wavestart 1 0
-standing
-wavestart 1 0
-standing standing standing
-wavestart 1 0
-standing
-wavestart 1 0
-standing standing standing
-wavestart 1 0
 standing standing standing

@@ -1,28 +1,8 @@
-29
+0
 50 75
-0 0 0 1
+0 0 0 0
 wavestart 0 0
-shielded
-1 miner
+standing
 wavestart -1 0
-shielded
-2 miner
-wavestart -1 0
-shielded
-wavestart -1 0
-shielded
-wavestart -1 0
-shielded
-wavestart -1 0
-shielded
-wavestart -1 0
-shielded
-wavestart -1 0
-shielded
-wavestart -1 0
-shielded
-wavestart -1 0
-shielded
-wavestart -1 0
-shielded
+standing standing
 end

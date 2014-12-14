@@ -1,11 +1,11 @@
-14
-40 75
-0.08 0.08 0 0
+34
+52 60
+0.2 0.1 0 0
+wavestart 0 0
+shielded
 wavestart -1 0
-standing standing standing 
-standing standing standing 
-standing standing standing
-wavestart -1 1
-standing standing standing
-standing standing standing
-standing standing standing
+moving moving
+shielded
+wavestart -1 0
+kamikaze kamikaze
+shielded shielded

@@ -1,15 +1,15 @@
-23
-55 45
-0.1 0.1 0.03 0
+43
+35 75
+0.2 0.1 0.35 0 
 wavestart 0 0
-moving_matrix moving_matrix
-standing_fast standing_fast
-wavestart -1 1
-moving_matrix moving_matrix
-standing_fast standing_fast
-wavestart -1 1
-moving_matrix moving_matrix
-standing_fast standing_fast
-wavestart -1 1
-standing_fast standing_fast
-moving
+miner
+shield
+wavestart 1 0
+miner
+wavestart 1 0
+3 standing
+wavestart 5 1
+shield
+wavestart 1 0
+2 moving
+2 miner

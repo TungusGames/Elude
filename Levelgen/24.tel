@@ -1,18 +1,20 @@
-26
-100 40
-0.18 0.08 0.07 0
+46
+40 60
+0.2 0.2 0.2 0
 wavestart 0 0
-sharpshooter sharpshooter sharpshooter sharpshooter sharpshooter
-wavestart -1 2
-sharpshooter sharpshooter sharpshooter sharpshooter sharpshooter
-wavestart -1 2
-sharpshooter sharpshooter sharpshooter sharpshooter sharpshooter
-wavestart -1 2
-sharpshooter sharpshooter sharpshooter sharpshooter sharpshooter
-wavestart -1 2
-sharpshooter sharpshooter sharpshooter sharpshooter sharpshooter
-wavestart -1 2
-standing_fast kamikaze standing_fast kamikaze standing_fast kamikaze standing_fast kamikaze standing_fast kamikaze
+3 moving
+2 standing
+miner
+shielded
+wavestart -1 1
+7 kamikaze
 wavestart -1 0
-standing_fast kamikaze standing_fast kamikaze standing_fast kamikaze standing_fast kamikaze standing_fast kamikaze
-sharpshooter sharpshooter sharpshooter sharpshooter sharpshooter
+wavestart 2 -1
+health speed shield
+wavestart 1 -1
+2 miner
+2 shielded
+wavestart 2 0
+5 moving
+5 kamikaze
+health shield speed

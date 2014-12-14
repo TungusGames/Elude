@@ -1,7 +1,10 @@
-11
+31
 35 65
-0 0 0 1
+0 0 0 0
 wavestart 0 0
-splitter
+standing standing standing
 wavestart -1 0
-2 splitter
+wavestart 0.5 -1
+health
+wavestart 2 0
+standing moving moving moving

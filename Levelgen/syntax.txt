@@ -1,0 +1,6 @@
+ID (= ++last_UID.txt)
+time_limit(sec) health_limit(left)
+hpDrop speedDrop shieldDrop freezerDrop (0-1, sum <=1)
+wavestart time(sec, -1 if never) enemies_left
+shielded
+132 standing

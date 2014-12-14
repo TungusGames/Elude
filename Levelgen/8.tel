@@ -1,19 +1,11 @@
-15
-35 80
-0.08 0.08 0 0
+35
+60 60
+0.1 0.1 0 0
 wavestart 0 0
-moving
-wavestart 1 0
-moving
-wavestart 1 0
-moving
-wavestart 1 0
-moving
-wavestart 1 0
-moving
-wavestart 1 0
-moving
-wavestart 1 0
-moving
-wavestart 1 0
-moving
+shielded shielded
+wavestart 30 0
+moving moving kamikaze
+wavestart -1 0
+shielded shielded
+standing standing moving
+health

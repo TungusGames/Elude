@@ -1,29 +1,19 @@
-21
-35 65
-0.1 0.1 0.03 0
+6
+27.5 80
+0.1 0.1 0 0
 wavestart 0 0
-kamikaze moving
+kamikaze kamikaze kamikaze kamikaze
+wavestart 1 0
+shield
+wavestart -1 0
+moving moving moving moving
+standing standing standing
+kamikaze kamikaze kamikaze
 wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
-wavestart 2 0
-kamikaze moving
+shield
+wavestart 1 0
+
+wavestart 5 3
+moving moving moving moving
+standing standing standing
+kamikaze kamikaze kamikaze

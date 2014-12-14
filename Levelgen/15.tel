@@ -1,19 +1,20 @@
-6
-27.5 80
-0.1 0.1 0 0
+38
+40 60
+0.2 0.1 0 0
 wavestart 0 0
-kamikaze kamikaze kamikaze kamikaze
-wavestart 1 0
-shield
-wavestart -1 0
-moving moving moving moving
-standing standing standing
-kamikaze kamikaze kamikaze
-wavestart 2 0
-shield
-wavestart 1 0
-
-wavestart 5 3
-moving moving moving moving
-standing standing standing
-kamikaze kamikaze kamikaze
+4 standing
+2 miner
+wavestart -1 1
+health
+wavestart 1 -1
+2 moving
+3 standing
+3 miner
+wavestart -1 1
+health health
+wavestart 1 -1
+miner
+wavestart 1 -1
+miner
+wavestart 5 0
+2 kamikaze

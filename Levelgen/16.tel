@@ -1,15 +1,21 @@
-9
-45 55
-0.1 0.1 0.03 0
+39
+60 55
+0.15 0.15 0 0
 wavestart 0 0
-moving_matrix
-wavestart 3 0
-shield speed
-wavestart  5 0
-moving_matrix moving_matrix moving_matrix
 standing
 moving
-wavestart -1 1
-kamikaze kamikaze
-wavestart 4 1
-kamikaze kamikaze
+kamikaze
+shielded
+miner
+wavestart 20 0
+2 standing
+2 moving
+2 kamikaze
+2 shielded
+2 miner
+wavestart 25 0
+3 standing
+3 moving
+3 kamikaze
+3 shielded
+3 miner

@@ -1,0 +1,18 @@
+65
+50 75
+0.1 0.1 0.1 0.1
+wavestart 0 0
+3 standing
+3 shielded
+5 miner
+wavestart 20 3
+3 sharpshooter
+5 miner
+wavestart 20 3
+splitter
+2 miner
+wavestart 10 1
+5 moving
+2 miner
+wavestart -1 3
+7 kamikaze

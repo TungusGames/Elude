@@ -1,0 +1,15 @@
+55
+40 75
+0.1 0.1 0.1 0.5
+wavestart 0 0
+6 machinegunner
+wavestart 4 4
+freeze
+wavestart -1 2
+freeze
+wavestart 10 0
+2 moving
+6 machinegunner
+wavestart 4 4
+freeze
+2 machinegunner

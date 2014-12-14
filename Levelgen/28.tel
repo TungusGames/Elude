@@ -1,0 +1,19 @@
+49
+45 56
+0.1 0.1 0.1 0
+wavestart 0 0
+2 miner
+2 splitter
+2 shielded
+wavestart 2 0
+standing moving
+wavestart 2 0
+health
+2 moving
+2 splitter
+wavestart 2 0
+shield speed
+3 kamikaze
+3 moving
+wavestart 20 1
+5 kamikaze

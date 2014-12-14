@@ -1,0 +1,18 @@
+50
+60 65
+0.3 0.1 0.1 0
+wavestart 0 0
+2 splitter
+3 moving
+wavestart -1 0
+splitter
+5 moving
+5 standing
+wavestart -1 0
+splitter
+miner
+wavestart -1 0
+splitter
+2 shielded
+wavestart -1 1
+5 splitter

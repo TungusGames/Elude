@@ -1,0 +1,19 @@
+52
+60 55
+0.1 0.1 0.1 0
+wavestart 0 0
+3 sharpshooter
+3 moving
+wavestart 15 1
+3 sharpshooter
+2 shielded
+2 standing
+wavestart 20 2
+3 sharpshooter
+miner
+wavestart 15 2
+3 sharpshooter
+splitter
+wavestart 15 1
+3 sharpshooter
+3 kamikaze

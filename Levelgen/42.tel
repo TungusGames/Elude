@@ -1,0 +1,18 @@
+62
+35 65
+0.1 0.1 0.1 0.1
+wavestart 0 0
+2 factory
+wavestart 10 -1
+6 machinegunner
+wavestart -1 2
+factory
+6 machinegunner
+wavestart 1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving kamikaze
+wavestart 1 0
+5 sharpshooter
