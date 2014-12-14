@@ -141,7 +141,7 @@ public class RenderInfo extends TransferData {
 			ReducedRocket r = rockets.get(i);
 			other.rockets.add(RenderInfoPool.newRocket(r.x, r.y, r.angle, r.typeOrdinal, r.id));
 		}
-		if (other.handled)
+		//if (other.handled)
 			other.effects.clear();
 		s = effects.size();
 		for (int i = 0; i < s; i++) {
