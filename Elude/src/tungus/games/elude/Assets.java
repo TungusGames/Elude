@@ -1,6 +1,6 @@
 package tungus.games.elude;
 
-import tungus.games.elude.game.client.worldrender.RenderPhase;
+import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;

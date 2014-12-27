@@ -1,7 +1,7 @@
 package tungus.games.elude.debug;
 
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.game.client.worldrender.MineRenderer;
+import tungus.games.elude.game.client.worldrender.phases.MineRenderer;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

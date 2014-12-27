@@ -1,9 +1,9 @@
 package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.client.worldrender.Renderable;
-import tungus.games.elude.game.client.worldrender.SoundEffect;
-import tungus.games.elude.game.client.worldrender.StraightRocketRenderable;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.SoundEffect;
+import tungus.games.elude.game.client.worldrender.renderable.StraightRocketRenderable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;

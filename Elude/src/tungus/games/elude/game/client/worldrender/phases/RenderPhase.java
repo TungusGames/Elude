@@ -1,4 +1,4 @@
-package tungus.games.elude.game.client.worldrender;
+package tungus.games.elude.game.client.worldrender.phases;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
@@ -16,5 +16,5 @@ public enum RenderPhase {
 	}
 	
 	public ShaderProgram shader = null;
-	final PhaseRenderer renderer;
+	public final PhaseRenderer renderer;
 }

@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import tungus.games.elude.game.client.worldrender.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;

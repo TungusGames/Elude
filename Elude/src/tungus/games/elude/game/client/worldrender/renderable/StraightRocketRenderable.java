@@ -1,4 +1,4 @@
-package tungus.games.elude.game.client.worldrender;
+package tungus.games.elude.game.client.worldrender.renderable;
 
 import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.util.LinkedPool;

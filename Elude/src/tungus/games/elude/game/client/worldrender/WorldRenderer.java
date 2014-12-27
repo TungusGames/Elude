@@ -4,6 +4,8 @@ package tungus.games.elude.game.client.worldrender;
 import java.util.Iterator;
 import java.util.List;
 
+import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CamShaker;
@@ -20,11 +22,11 @@ public class WorldRenderer {
 	
 	public OrthographicCamera camera;
 	
-	int vesselID;
-	boolean updateParticles;
-	SpriteBatch batch;
-	CamShaker camShaker;
-	IntMap<PooledEffect> lastingEffects;
+	public int vesselID;
+	public boolean updateParticles;
+	public SpriteBatch batch;
+	public CamShaker camShaker;
+	public IntMap<PooledEffect> lastingEffects;
 	
 	public WorldRenderer(int myVesselID) {
 		batch = new SpriteBatch(5460);
@@ -52,14 +54,15 @@ public class WorldRenderer {
 			p.renderer.end();
 		}
 		//while (effects.hasNext) {
-		for (Iterator<Entry<PooledEffect>> it = lastingEffects.iterator(); it.hasNext();) {
-			PooledEffect effect = it.next().value;
-			effect.draw(batch, deltaTime);
-			if (effect.isComplete()) {
-				it.remove();
+		if (updateEffects) {
+			for (Iterator<Entry<PooledEffect>> it = lastingEffects.iterator(); it.hasNext();) {
+				PooledEffect effect = it.next().value;
+				effect.draw(batch, deltaTime);
+				if (effect.isComplete()) {
+					it.remove();
+				}
 			}
 		}
-		
 		batch.end();
 	}
 	

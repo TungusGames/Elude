@@ -1,7 +1,7 @@
 package tungus.games.elude.game.server;
 
-import tungus.games.elude.game.client.worldrender.Renderable;
-import tungus.games.elude.game.client.worldrender.VesselRenderable;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.VesselRenderable;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
 import com.badlogic.gdx.math.Circle;

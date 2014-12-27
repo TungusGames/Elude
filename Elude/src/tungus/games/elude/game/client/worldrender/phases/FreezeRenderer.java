@@ -1,6 +1,7 @@
-package tungus.games.elude.game.client.worldrender;
+package tungus.games.elude.game.client.worldrender.phases;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.worldrender.WorldRenderer;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;

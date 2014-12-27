@@ -1,6 +1,6 @@
 package tungus.games.elude.game.server.pickups;
 
-import tungus.games.elude.game.client.worldrender.FreezeEffect;
+import tungus.games.elude.game.client.worldrender.renderable.FreezeEffect;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 

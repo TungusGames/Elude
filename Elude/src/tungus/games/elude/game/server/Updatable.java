@@ -1,6 +1,6 @@
 package tungus.games.elude.game.server;
 
-import tungus.games.elude.game.client.worldrender.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 
 public abstract class Updatable {
 	

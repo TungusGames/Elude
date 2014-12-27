@@ -1,6 +1,9 @@
-package tungus.games.elude.game.client.worldrender;
+package tungus.games.elude.game.client.worldrender.renderable;
 
-import tungus.games.elude.game.client.worldrender.Renderable.Effect;
+import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.phases.FreezeRenderer;
+import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
 
 public class FreezeEffect extends Effect {

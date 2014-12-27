@@ -2,11 +2,11 @@ package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
-import tungus.games.elude.game.client.worldrender.CamShake;
-import tungus.games.elude.game.client.worldrender.ParticleAdder;
-import tungus.games.elude.game.client.worldrender.ParticleRemover;
-import tungus.games.elude.game.client.worldrender.Renderable;
-import tungus.games.elude.game.client.worldrender.RocketRenderable;
+import tungus.games.elude.game.client.worldrender.renderable.CamShake;
+import tungus.games.elude.game.client.worldrender.renderable.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.ParticleRemover;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.RocketRenderable;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;

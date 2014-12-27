@@ -1,7 +1,8 @@
-package tungus.games.elude.game.client.worldrender;
+package tungus.games.elude.game.client.worldrender.renderable;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
+import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.util.LinkedPool;
 

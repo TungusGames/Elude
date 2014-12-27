@@ -1,6 +1,9 @@
-package tungus.games.elude.game.client.worldrender;
+package tungus.games.elude.game.client.worldrender.phases;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.RocketRenderable;
 import tungus.games.elude.game.server.rockets.Mine;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;

@@ -1,8 +1,9 @@
-package tungus.games.elude.game.client.worldrender;
+package tungus.games.elude.game.client.worldrender.renderable;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
-import tungus.games.elude.game.client.worldrender.Renderable.Effect;
+import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
