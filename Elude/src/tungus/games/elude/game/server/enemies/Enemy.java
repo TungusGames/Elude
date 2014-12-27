@@ -5,7 +5,6 @@ import java.util.List;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
-import tungus.games.elude.game.client.worldrender.DebrisAdder;
 import tungus.games.elude.game.client.worldrender.RenderPhase;
 import tungus.games.elude.game.client.worldrender.Renderable;
 import tungus.games.elude.game.client.worldrender.Sprite;
@@ -122,10 +121,8 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 	
 	public boolean update(float deltaTime) {
 		timeSinceShot += deltaTime;
-		boolean b = aiUpdate(deltaTime);
+		boolean subclassWantsDeath = aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		//collisionBounds.x = pos.x - collisionBounds.width/2;
-		//collisionBounds.y = pos.y - collisionBounds.height/2;
 		collisionBounds.x = pos.x;
 		collisionBounds.y = pos.y;
 		turnGoal = calcTurnGoal();
@@ -138,7 +135,7 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 			rot = turnGoal;
 		else
 			rot += Math.signum(diff) * turnSpeed * deltaTime;
-		return b || hp <= 0;
+		return subclassWantsDeath || hp <= 0;
 	}
 	
 	protected float calcTurnGoal() {
@@ -154,7 +151,7 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 	private boolean died = false;
 	public void killByRocket(Rocket r) {
 		if (!died) {
-			world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN));
+			//world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN));
 			world.waveLoader.onEnemyDead(this);
 			died = true;
 		}
