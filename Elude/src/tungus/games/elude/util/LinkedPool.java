@@ -36,7 +36,7 @@ public class LinkedPool<T extends Poolable> extends SyncPool<T>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void free(Poolable p) {
+	public synchronized void free(Poolable p) {
 		try {
 			super.free((T)p);
 		} catch (ClassCastException e) {

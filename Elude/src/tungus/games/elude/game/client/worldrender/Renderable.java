@@ -21,7 +21,7 @@ public abstract class Renderable extends Poolable {
 	public static abstract class Effect extends Renderable {
 		public Effect(LinkedPool<?> p) {
 			super(p);
-			//phase = RenderPhase.EFFECT;
+			phase = RenderPhase.EFFECT;
 		}
 	}
 }

@@ -40,6 +40,7 @@ public class WorldRenderer {
 	public void render(float deltaTime, float alpha, RenderInfo renderInfo, boolean updateEffects) {
 		this.updateParticles = updateEffects;
 		camShaker.update(deltaTime);
+		batch.setColor(1, 1, 1, alpha);
 		batch.begin();
 		for (int i = 0; i < phases.length; i++) {
 			RenderPhase p = phases[i];

@@ -50,18 +50,22 @@ public class VesselRenderable extends Sprite {
 				return;
 			} else {
 				trails = (id == wr.vesselID) ? Assets.Particles.VESSEL_TRAILS.p.obtain() : Assets.Particles.VESSEL_TRAILS_RED.p.obtain();
+				ParticleEmitter particleEmitter = trails.getEmitters().get(0);
+				particleEmitter = trails.getEmitters().get(0);
+				particleEmitter.getEmission().setHigh(150);
+				wr.lastingEffects.put(id, trails);
 			}
 		}
 		ParticleEmitter particleEmitter = trails.getEmitters().get(0);
 		if (vel.equals(Vector2.Zero)) {
 			particleEmitter.getEmission().setHigh(0);
 		} else {
-			if (particleEmitter.getEmission().getHighMax() == 0) {
+			/*if (particleEmitter.getEmission().getHighMax() == 0) {
 				trails = (id == wr.vesselID) ? Assets.Particles.VESSEL_TRAILS.p.obtain() : Assets.Particles.VESSEL_TRAILS_RED.p.obtain();
 				particleEmitter = trails.getEmitters().get(0);
 				particleEmitter.getEmission().setHigh(150);
 				wr.lastingEffects.put(id, trails);
-			}
+			}*/
 			particleEmitter.getAngle().setLow(rot-90);
 			particleEmitter.getRotation().setLow(rot);
 		}

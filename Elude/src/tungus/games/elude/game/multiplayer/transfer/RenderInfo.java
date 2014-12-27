@@ -78,14 +78,14 @@ public class RenderInfo extends TransferData {
 		int size = phases.size();
 		for (int i = 0; i < size; i++) {
 			List<Renderable> otherPhaseList = other.phases.get(i);
-			if (i != RenderPhase.EFFECT.ordinal() || other.handled) {
+			//if (i != RenderPhase.EFFECT.ordinal() || other.handled) {
 				while (!otherPhaseList.isEmpty()) {
 					((Poolable)otherPhaseList.remove(0)).free();
-				}
-				List<Renderable> myPhaseList = this.phases.get(i);
-				for (Renderable r : myPhaseList) {
-					otherPhaseList.add(r.clone());
-				}
+				}				
+			//}
+			List<Renderable> myPhaseList = this.phases.get(i);
+			for (Renderable r : myPhaseList) {
+				otherPhaseList.add(r.clone());
 			}
 		}
 		size = hp.length;

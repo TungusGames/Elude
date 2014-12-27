@@ -6,10 +6,10 @@ public enum RenderPhase {
 	FREEZE(new FreezeRenderer()),
 	MINE(new MineRenderer()),
 	PICKUP(new PhaseRenderer()),
-	ENEMY(PICKUP.renderer),
-	ROCKET(PICKUP.renderer),
-	VESSEL(PICKUP.renderer),
-	EFFECT(PICKUP.renderer);
+	ENEMY(new PhaseRenderer()),
+	ROCKET(new PhaseRenderer()),
+	VESSEL(new PhaseRenderer()),
+	EFFECT(new PhaseRenderer());
 	
 	private RenderPhase(PhaseRenderer r) {
 		renderer = r;

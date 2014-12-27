@@ -15,4 +15,8 @@ public abstract class Updatable {
 	public abstract boolean update(float deltaTime);
 	public abstract Renderable getRenderable();
 	
+	public static void reset() {
+		nextID = 0;
+	}
+	
 }

@@ -20,7 +20,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public abstract class Enemy extends Updatable {
+public abstract class Enemy extends Updatable implements Rocket.Hittable {
 	
 	public static enum EnemyType {
 		STANDING	 (Assets.Tex.STANDINGENEMY,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true, StandingEnemy.class, 	2), 
@@ -160,7 +160,8 @@ public abstract class Enemy extends Updatable {
 		}
 	}
 	
-	public boolean hitBy(Rocket r) {
+	@Override
+	public boolean isHitBy(Rocket r) {
 		if (!died && collisionBounds.overlaps(r.boundsForEnemy)) {
 			takeDamage(r.dmg);
 			if (hp <= 0) {

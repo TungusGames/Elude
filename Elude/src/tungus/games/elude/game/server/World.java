@@ -52,6 +52,7 @@ public class World {
 	public float freezeTime = 0f;
 	
 	public World(int levelNum, boolean finite) {
+		Updatable.reset();
 		vessels = new ArrayList<Vessel>();
 		updatables = new LinkedList<Updatable>();
 		addNextFrame = new LinkedList<Updatable>();

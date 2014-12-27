@@ -32,8 +32,8 @@ public class StraightRocket extends Rocket {
 				vel.x = -vel.x;
 			else
 				vel.y = -vel.y;
-			pos.x = MathUtils.clamp(pos.x, boundsForVessel.x, World.WIDTH-boundsForVessel.x);
-			pos.y = MathUtils.clamp(pos.y, boundsForVessel.y, World.HEIGHT-boundsForVessel.y);
+			pos.x = MathUtils.clamp(pos.x, boundsForVessel.radius, World.WIDTH-boundsForVessel.radius);
+			pos.y = MathUtils.clamp(pos.y, boundsForVessel.radius, World.HEIGHT-boundsForVessel.radius);
 			bounced = true;
 			return false;
 		}
