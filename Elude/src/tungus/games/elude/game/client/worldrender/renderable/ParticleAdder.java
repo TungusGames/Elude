@@ -15,6 +15,9 @@ public class ParticleAdder extends Effect {
 		p.adderID = a; p.typeID = t.ordinal(); p.x = x; p.y = y;
 		return p;
 	}
+	public static Effect create(Particles type, float x, float y) {
+		return create(type, x, y, -1);
+	}
 	protected int adderID;
 	protected int typeID;
 	

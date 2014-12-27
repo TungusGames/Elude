@@ -54,15 +54,19 @@ public class WorldRenderer {
 			p.renderer.end();
 		}
 		//while (effects.hasNext) {
-		if (updateEffects) {
 			for (Iterator<Entry<PooledEffect>> it = lastingEffects.iterator(); it.hasNext();) {
 				PooledEffect effect = it.next().value;
-				effect.draw(batch, deltaTime);
+				
+				if (updateEffects) {
+					effect.draw(batch, deltaTime);					
+				} else {
+					effect.draw(batch);
+				}
+				
 				if (effect.isComplete()) {
 					it.remove();
 				}
 			}
-		}
 		batch.end();
 	}
 	
