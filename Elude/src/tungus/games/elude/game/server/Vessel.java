@@ -1,14 +1,16 @@
 package tungus.games.elude.game.server;
 
+import tungus.games.elude.game.client.worldrender.renderable.CamShake;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.client.worldrender.renderable.VesselRenderable;
+import tungus.games.elude.game.server.enemies.Hittable;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-public class Vessel extends Updatable {
+public class Vessel extends Updatable implements Hittable {
 
 	public static final float DRAW_WIDTH = 0.75f;		//Dimensions of the sprite drawn
 	public static final float HALF_WIDTH = DRAW_WIDTH / 2;
@@ -24,7 +26,7 @@ public class Vessel extends Updatable {
 	
 	private static final Interpolation shieldOpacity = new FadeinFlash(0.08f, 0.6f);
 	
-	//private final World world;
+	private final World world;
 	
 	public Vector2 pos;
 	public Vector2 vel;
@@ -42,7 +44,7 @@ public class Vessel extends Updatable {
 	public float speedBonusTime = 0f;
 	
 	public Vessel(World world) {
-		//this.world = world;
+		this.world = world;
 		pos = new Vector2(World.WIDTH / 2, World.HEIGHT / 2);
 		vel = new Vector2(0, 0);
 		bounds = new Circle(pos, COLLIDER_SIZE/2);
@@ -113,5 +115,18 @@ public class Vessel extends Updatable {
 	@Override
 	public Renderable getRenderable() {
 		return VesselRenderable.create(pos.x, pos.y, vel.x, vel.y, rot, shieldAlpha, id);
+	}
+
+	@Override
+	public boolean isHitBy(Circle c, float damage) {
+		if (c.overlaps(bounds)) {
+			if (!shielded) {
+				world.effects.add(CamShake.create());
+				hp -= damage;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

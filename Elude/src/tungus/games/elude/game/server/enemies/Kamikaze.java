@@ -35,7 +35,7 @@ public class Kamikaze extends StandingBase {
 
 	private void explode() {
 		world.waveLoader.onEnemyHurt(this, hp);
-		killByRocket(null);
+		killBy(null);
 		
 		world.effects.add(ParticleAdder.create(Particles.EXPLOSION, pos.x, pos.y, id));
 		

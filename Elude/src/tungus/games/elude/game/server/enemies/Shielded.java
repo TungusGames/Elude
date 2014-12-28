@@ -49,21 +49,21 @@ public class Shielded extends StandingBase {
 	}
 	
 	@Override
-	public boolean isHitBy(Rocket r) {
-		if (!out.overlaps(r.boundsForEnemy))
+	public boolean isHitBy(Circle c, float damage) {
+		if (!out.overlaps(c))
 			return false;
-		if (in.overlaps(r.boundsForEnemy)) {
-			takeDamage(r.dmg);
+		if (in.overlaps(c)) {
+			takeDamage(damage);
 			if (hp <= 0) {
-				killByRocket(r);
+				killBy(c);
 			}
 			return true;
 		}
 		t.set(in.x, in.y).add(MathUtils.cosDeg(rot/*+90*/), MathUtils.sinDeg(rot/*+90*/));
-		if (Intersector.pointLineSide(in.x, in.y, t.x, t.y, r.pos.x, r.pos.y) != -1) {
+		if (Intersector.pointLineSide(in.x, in.y, t.x, t.y, c.x, c.y) != -1) {
 			return true;
 		}
-		if (Intersector.distanceLinePoint(in.x, in.y, t.x, t.y, r.pos.x, r.pos.y) <= r.boundsForEnemy.radius) {
+		if (Intersector.distanceLinePoint(in.x, in.y, t.x, t.y, c.x, c.y) <= c.radius) {
 			return true;
 		}
 		return false;

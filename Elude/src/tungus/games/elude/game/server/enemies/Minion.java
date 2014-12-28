@@ -45,7 +45,7 @@ public class Minion extends Enemy {
 		}
 		
 		if (parent.hp <= 0) {
-			killByRocket(null);
+			killBy(null);
 			world.effects.add(ParticleAdder.create(Particles.EXPLOSION, pos.x, pos.y, id));
 			return true;
 		}

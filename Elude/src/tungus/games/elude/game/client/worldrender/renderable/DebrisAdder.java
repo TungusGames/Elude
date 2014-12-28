@@ -6,6 +6,8 @@ import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.util.LinkedPool;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+
 public class DebrisAdder extends ParticleAdder {
 	private static LinkedPool<ParticleAdder> pool = new LinkedPool<ParticleAdder>(DebrisAdder.class, 15);
 	public static Effect create(EnemyType e, int a, float x, float y, float angle) {
@@ -23,7 +25,9 @@ public class DebrisAdder extends ParticleAdder {
 	
 	@Override
 	public void render(WorldRenderer wr) {
-		wr.lastingEffects.put(adderID, Assets.Particles.debris(EnemyType.values()[enemyType].debrisColor, angle));
+		PooledEffect debris = Assets.Particles.debris(EnemyType.values()[enemyType].debrisColor, angle);
+		debris.setPosition(x, y);
+		wr.lastingEffects.put(adderID, debris);
 	}
 	
 	@Override

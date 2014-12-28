@@ -21,7 +21,6 @@ import com.badlogic.gdx.files.FileHandle;
 public class SerializeTestScreen extends BaseScreen {
 	public SerializeTestScreen(Game game) {
 		super(game);
-		// TODO Auto-generated constructor stub
 	}
 	
 	private static class SimpleData implements Serializable {
@@ -90,10 +89,8 @@ public class SerializeTestScreen extends BaseScreen {
 				in.close();
 				Gdx.app.log("SERIALIZETEST", "Deque read - " + q2.x + q2.q.getFirst());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

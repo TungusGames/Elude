@@ -1,9 +1,9 @@
 package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.game.server.World;
-import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -50,8 +50,8 @@ public class Splitter extends Enemy {
 	}
 	
 	@Override
-	public void killByRocket(Rocket r) {
-		super.killByRocket(r);
+	public void killBy(Circle hitter) {
+		super.killBy(hitter);
 		if (splitsLeft > 0) {
 			for (int i = 0; i < SPLIT_INTO; i++) {
 				world.addEnemy(new Splitter(pos.cpy(), world, splitsLeft-1, false));

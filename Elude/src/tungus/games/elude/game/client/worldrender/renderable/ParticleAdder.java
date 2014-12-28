@@ -30,12 +30,8 @@ public class ParticleAdder extends Effect {
 	@Override
 	public void render(WorldRenderer wr) {
 		PooledEffect e = Assets.Particles.values()[typeID].p.obtain();
-		setPos(e);
+		e.setPosition(x, y);
 		wr.lastingEffects.put(adderID, e);
-	}
-	
-	protected void setPos(PooledEffect p) {
-		p.setPosition(x, y);
 	}
 	
 	@Override

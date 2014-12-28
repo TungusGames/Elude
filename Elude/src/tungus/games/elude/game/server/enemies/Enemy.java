@@ -20,7 +20,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public abstract class Enemy extends Updatable implements Rocket.Hittable {
+public abstract class Enemy extends Updatable implements Hittable {
 	
 	public static enum EnemyType {
 		STANDING	 (Assets.Tex.STANDINGENEMY,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true, StandingEnemy.class, 	2), 
@@ -69,19 +69,18 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 		}
 	}
 	
-	protected final Rocket shootRocket() {
-		return shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
+	protected void shootRocket() {
+		shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
 	}
 	
-	protected final Rocket shootRocket(Vector2 dir) {
-		return shootRocket(rocketType, dir);
+	protected void shootRocket(Vector2 dir) {
+		shootRocket(rocketType, dir);
 	}
 	
-	protected final Rocket shootRocket(RocketType t, Vector2 dir) {
+	protected void shootRocket(RocketType t, Vector2 dir) {
 		timeSinceShot = 0;
 		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, targetPlayer(), world);
 		world.addNextFrame.add(r);
-		return r;
 	}
 	
 	public static final float DEFAULT_TURNSPEED = 540;
@@ -150,21 +149,21 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 	protected abstract boolean aiUpdate(float deltaTime);
 	
 	private boolean died = false;
-	public void killByRocket(Rocket r) {
+	public void killBy(Circle hitter) {
 		if (!died) {
-			world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN));
 			world.waveLoader.onEnemyDead(this);
+			world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, pos.sub(hitter.x, hitter.y).angle()));			
 			died = true;
 			world.enemyCount--;
 		}
 	}
 	
 	@Override
-	public boolean isHitBy(Rocket r) {
-		if (!died && collisionBounds.overlaps(r.boundsForEnemy)) {
-			takeDamage(r.dmg);
+	public boolean isHitBy(Circle c, float damage) {
+		if (!died && collisionBounds.overlaps(c)) {
+			takeDamage(damage);
 			if (hp <= 0) {
-				killByRocket(r);
+				killBy(c);
 			}
 			return true;
 		}

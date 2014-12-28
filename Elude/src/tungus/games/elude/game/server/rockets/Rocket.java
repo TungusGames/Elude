@@ -2,7 +2,6 @@ package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
-import tungus.games.elude.game.client.worldrender.renderable.CamShake;
 import tungus.games.elude.game.client.worldrender.renderable.ParticleAdder;
 import tungus.games.elude.game.client.worldrender.renderable.ParticleRemover;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
@@ -11,22 +10,17 @@ import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
+import tungus.games.elude.game.server.enemies.Hittable;
 
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Rocket extends Updatable {
-	
-	public interface Hittable {
-		public boolean isHitBy(Rocket r);
-	}
-	
+		
 	public static enum RocketType { 
 		SLOW_TURNING(Assets.Particles.FLAME_ROCKET), 
 		FAST_TURNING(Assets.Particles.MATRIX_ROCKET), 
-		STRAIGHT(Assets.Particles.STRAIGHT_ROCKET),
-		MINE(Assets.Particles.FLAME_ROCKET/*null*/);
+		STRAIGHT(Assets.Particles.STRAIGHT_ROCKET);
 		public Particles effect;
 		RocketType(Particles e) {
 			effect = e;
@@ -49,9 +43,6 @@ public abstract class Rocket extends Updatable {
 		case STRAIGHT:
 			r = new StraightRocket(origin, pos, dir, w, target);
 			break;
-		case MINE:
-			r = new Mine(origin, pos, dir, w, target);
-			break;
 		default:
 			throw new IllegalArgumentException("Unknown rocket type: " + t);
 		}
@@ -67,8 +58,7 @@ public abstract class Rocket extends Updatable {
 	
 	public Vector2 pos;
 	public Vector2 vel;
-	public Circle boundsForEnemy;
-	public Circle boundsForVessel;
+	public Circle bounds;
 	public final RocketType type;
 	public final int id;
 	
@@ -83,17 +73,13 @@ public abstract class Rocket extends Updatable {
 	}
 	
 	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life) {
-		this(origin, t, pos, dir, world, target, dmg, life, ROCKET_SIZE, ROCKET_SIZE);
-	}
-	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life, float sizeForEnemy, float sizeForVessel) {
 		super();
 		this.origin = origin;
 		this.type = t;
 		this.life = life;
 		this.pos = pos;
 		this.world = world;
-		this.boundsForEnemy = new Circle(pos, sizeForEnemy/2);
-		this.boundsForVessel = new Circle(pos, sizeForVessel/2);
+		this.bounds = new Circle(pos, ROCKET_SIZE/2);
 		this.dmg = dmg;
 		this.target = target;
 		this.id = nextID++;
@@ -113,10 +99,8 @@ public abstract class Rocket extends Updatable {
 		}
 		aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		boundsForEnemy.x = pos.x;
-		boundsForEnemy.y = pos.y;
-		boundsForVessel.x = pos.x;
-		boundsForVessel.y = pos.y;
+		bounds.x = pos.x;
+		bounds.y = pos.y;
 		if (!World.outerBounds.contains(pos)) {
 			if (hitWall(pos.x < 0 || pos.x > World.WIDTH)) {
 				return true;
@@ -126,10 +110,10 @@ public abstract class Rocket extends Updatable {
 		boolean stillIn = false;
 		for (Updatable u : world.updatables) {
 			if (!outOfOrigin && u == origin) {
-				stillIn = (origin.collisionBounds.overlaps(boundsForVessel));
+				stillIn = (origin.collisionBounds.overlaps(bounds));
 				continue;
 			}
-			if (u instanceof Hittable && ((Hittable)u).isHitBy(this)) {
+			if (u instanceof Hittable && ((Hittable)u).isHitBy(bounds, dmg)) {
 				kill();
 				return true;
 			}
@@ -139,11 +123,7 @@ public abstract class Rocket extends Updatable {
 		}
 		
 		for (Vessel v : world.vessels) {
-			if (Intersector.overlaps(v.bounds, boundsForVessel)) {
-				if (!v.shielded) {
-					world.effects.add(CamShake.create());
-					v.hp -= dmg;
-				}
+			if (v.isHitBy(bounds, dmg)) {
 				kill();
 				return true;
 			}

@@ -2,8 +2,8 @@ package tungus.games.elude.game.client.worldrender.phases;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.renderable.MineRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
-import tungus.games.elude.game.client.worldrender.renderable.RocketRenderable;
 import tungus.games.elude.game.server.rockets.Mine;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -21,7 +21,7 @@ public class MineRenderer extends PhaseRenderer {
 		}
 	}
 	
-	private static final float DRAW_R = Mine.SIZE / 2 * 1.35f;
+	private static final float DRAW_R = Mine.RADIUS * 1.35f;
 	private static final float FADE_TIME = 0.4f;
 	
 	private float time = 0;
@@ -42,13 +42,13 @@ public class MineRenderer extends PhaseRenderer {
 	
 	@Override
 	public void render(Renderable r) {
-		RocketRenderable roc = (RocketRenderable)r;
-		MineEffect e = mines.get(roc.rocketID);
+		MineRenderable mine = (MineRenderable)r;
+		MineEffect e = mines.get(mine.adderID);
 		if (e != null) {
 			e.handled = true;
 			e.a = Math.min(1, e.a + 1/FADE_TIME * delta);
 		} else {
-			mines.put(roc.rocketID, new MineEffect(roc.x, roc.y));
+			mines.put(mine.adderID, new MineEffect(mine.x, mine.y));
 		}
 	}
 	
