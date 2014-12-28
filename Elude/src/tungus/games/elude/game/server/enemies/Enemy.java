@@ -6,6 +6,7 @@ import java.util.List;
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.game.client.worldrender.renderable.DebrisAdder;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.client.worldrender.renderable.Sprite;
 import tungus.games.elude.game.server.Updatable;
@@ -151,9 +152,10 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 	private boolean died = false;
 	public void killByRocket(Rocket r) {
 		if (!died) {
-			//world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN));
+			world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN));
 			world.waveLoader.onEnemyDead(this);
 			died = true;
+			world.enemyCount--;
 		}
 	}
 	
@@ -198,6 +200,6 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 	
 	@Override
 	public Renderable getRenderable() {
-		return Sprite.create(RenderPhase.ENEMY, type.tex, pos.x, pos.y, type.width, type.height, rot, 1);
+		return Sprite.create(RenderPhase.ENEMY, type.tex, pos.x, pos.y, width(), height(), rot, 1);
 	}
 }

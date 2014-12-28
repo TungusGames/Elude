@@ -89,6 +89,8 @@ public class Server implements Runnable {
 			lastTime = newTime;
 			
 			if (state == Server.STATE_RUNNING) {
+				if (render != sendData)
+					sendData = render;
 				if (deltaTime > 0.05f) {
 					Gdx.app.log("LagWarn", "Server deltaTime: " + deltaTime);
 					deltaTime = 0.05f;
@@ -119,8 +121,10 @@ public class Server implements Runnable {
 				}
 			} else if (state == STATE_WAITING_START) {
 				sendData.info = GameScreen.STATE_STARTING;
+			} else if (state == STATE_PAUSED) {
+				if (sendData instanceof RenderInfo)
+					sendData = new TransferData(GameScreen.STATE_PAUSED);		
 			}
-			
 			long sendStart = TimeUtils.millis();
 			/*for (Connection c : connections)
 				c.write(sendData);*/

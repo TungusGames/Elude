@@ -249,6 +249,8 @@ public class GameScreen extends BaseScreen {
 					}
 					connection.newest.copyTo(render);
 					break;
+				case STATE_PAUSED:
+					break;
 				case STATE_WON:
 					state = STATE_WON;
 					if (connection.newest instanceof FiniteScoreInfo) {
