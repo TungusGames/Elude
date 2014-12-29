@@ -46,7 +46,7 @@ public class VesselRenderable extends Sprite {
 	}
 
 	private void modVesselTrails(WorldRenderer wr, Vector2 vel) {
-		PooledEffect trails = wr.lastingEffects.get(id);
+		PooledEffect trails = wr.lastingEffects.getFirst(id);
 		if (trails == null) {
 			if (vel.equals(Vector2.Zero)) {
 				return;

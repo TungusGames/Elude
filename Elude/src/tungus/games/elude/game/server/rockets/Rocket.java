@@ -2,9 +2,9 @@ package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
-import tungus.games.elude.game.client.worldrender.renderable.ParticleAdder;
 import tungus.games.elude.game.client.worldrender.renderable.ParticleRemover;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable.Effect;
 import tungus.games.elude.game.client.worldrender.renderable.RocketRenderable;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
@@ -133,7 +133,7 @@ public abstract class Rocket extends Updatable {
 	
 	public void kill() {
 		world.effects.add(ParticleRemover.create(id));
-		world.effects.add(ParticleAdder.create(Particles.EXPLOSION, pos.x, pos.y, id));
+		Effect.addExplosion(world.effects, pos);
 	}
 	
 	protected boolean hitWall(boolean vertical) {

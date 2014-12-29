@@ -1,9 +1,15 @@
 package tungus.games.elude.game.client.worldrender.renderable;
 
+import java.util.List;
+
+import tungus.games.elude.Assets.Particles;
+import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 import tungus.games.elude.util.LinkedPool;
 import tungus.games.elude.util.LinkedPool.Poolable;
+
+import com.badlogic.gdx.math.Vector2;
 
 
 public abstract class Renderable extends Poolable {
@@ -24,6 +30,10 @@ public abstract class Renderable extends Poolable {
 		public Effect(LinkedPool<?> p) {
 			super(p);
 			phase = RenderPhase.EFFECT;
+		}
+		public static void addExplosion(List<Renderable> effects, Vector2 pos) {
+			effects.add(SoundEffect.create(Sounds.EXPLOSION));
+			effects.add(ParticleAdder.create(Particles.EXPLOSION, pos.x, pos.y));
 		}
 	}
 }

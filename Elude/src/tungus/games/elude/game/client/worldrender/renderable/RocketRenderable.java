@@ -38,7 +38,7 @@ public class RocketRenderable extends Renderable {
 	
 	@Override
 	public void render(WorldRenderer wr) {
-		PooledEffect particles = wr.lastingEffects.get(rocketID);
+		PooledEffect particles = wr.lastingEffects.getFirst(rocketID);
 		if (particles == null) {
 			particles = Assets.Particles.values()[particleTypeID].p.obtain();
 			wr.lastingEffects.put(rocketID, particles);

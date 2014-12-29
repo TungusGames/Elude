@@ -152,7 +152,12 @@ public abstract class Enemy extends Updatable implements Hittable {
 	public void killBy(Circle hitter) {
 		if (!died) {
 			world.waveLoader.onEnemyDead(this);
-			world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, pos.sub(hitter.x, hitter.y).angle()));			
+			if (hitter != null) {
+				world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, pos.angle(new Vector2(hitter.x, hitter.y))));
+			} else {
+				world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, Float.NaN));
+			}
+						
 			died = true;
 			world.enemyCount--;
 		}

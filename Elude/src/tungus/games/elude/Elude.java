@@ -7,7 +7,6 @@ import tungus.games.elude.util.log.FPSLogger;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Elude extends Game {
@@ -19,7 +18,6 @@ public class Elude extends Game {
 		
 	@Override
 	public void create () {
-		Gdx.app.log("Nullvector angle", "" + Vector2.Zero.angle());
 		long oldTime = TimeUtils.millis();
 		Assets.load();
 		ScoreData.load();
