@@ -3,10 +3,9 @@ package tungus.games.elude.game.client.worldrender.renderable;
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 import tungus.games.elude.util.LinkedPool;
-
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 
 public class RocketRenderable extends Renderable {
 	
@@ -38,7 +37,7 @@ public class RocketRenderable extends Renderable {
 	
 	@Override
 	public void render(WorldRenderer wr) {
-		PooledEffect particles = wr.lastingEffects.getFirst(rocketID);
+		PooledEffect particles = (PooledEffect)(wr.lastingEffects.getFirst(rocketID));
 		if (particles == null) {
 			particles = Assets.Particles.values()[particleTypeID].p.obtain();
 			wr.lastingEffects.put(rocketID, particles);

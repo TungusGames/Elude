@@ -2,11 +2,11 @@ package tungus.games.elude.game.client.worldrender.renderable;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.util.LinkedPool;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.math.Vector2;
 
@@ -46,7 +46,7 @@ public class VesselRenderable extends Sprite {
 	}
 
 	private void modVesselTrails(WorldRenderer wr, Vector2 vel) {
-		PooledEffect trails = wr.lastingEffects.getFirst(id);
+		PooledEffect trails = (PooledEffect)(wr.lastingEffects.getFirst(id));
 		if (trails == null) {
 			if (vel.equals(Vector2.Zero)) {
 				return;
@@ -62,12 +62,6 @@ public class VesselRenderable extends Sprite {
 		if (vel.equals(Vector2.Zero)) {
 			particleEmitter.getEmission().setHigh(0);
 		} else {
-			/*if (particleEmitter.getEmission().getHighMax() == 0) {
-				trails = (id == wr.vesselID) ? Assets.Particles.VESSEL_TRAILS.p.obtain() : Assets.Particles.VESSEL_TRAILS_RED.p.obtain();
-				particleEmitter = trails.getEmitters().get(0);
-				particleEmitter.getEmission().setHigh(150);
-				wr.lastingEffects.put(id, trails);
-			}*/
 			particleEmitter.getAngle().setLow(rot-90);
 			particleEmitter.getRotation().setLow(rot);
 		}

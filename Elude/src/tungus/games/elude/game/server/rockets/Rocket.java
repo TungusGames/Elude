@@ -48,9 +48,7 @@ public abstract class Rocket extends Updatable {
 		}
 		return r;
 	}
-	
-	private static int nextID = 0;
-	
+		
 	private World world;
 	private Enemy origin;
 	
@@ -60,7 +58,6 @@ public abstract class Rocket extends Updatable {
 	public Vector2 vel;
 	public Circle bounds;
 	public final RocketType type;
-	public final int id;
 	
 	private boolean outOfOrigin = false;
 	
@@ -82,7 +79,6 @@ public abstract class Rocket extends Updatable {
 		this.bounds = new Circle(pos, ROCKET_SIZE/2);
 		this.dmg = dmg;
 		this.target = target;
-		this.id = nextID++;
 		this.keepsWorldGoing = true;
 		vel = dir;
 	}

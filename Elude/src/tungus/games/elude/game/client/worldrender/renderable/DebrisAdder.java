@@ -3,10 +3,10 @@ package tungus.games.elude.game.client.worldrender.renderable;
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.util.LinkedPool;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 
 public class DebrisAdder extends ParticleAdder {
 	private static LinkedPool<ParticleAdder> pool = new LinkedPool<ParticleAdder>(DebrisAdder.class, 15);

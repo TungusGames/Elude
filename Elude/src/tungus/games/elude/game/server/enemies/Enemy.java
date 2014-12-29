@@ -5,10 +5,9 @@ import java.util.List;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
-import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 import tungus.games.elude.game.client.worldrender.renderable.DebrisAdder;
+import tungus.games.elude.game.client.worldrender.renderable.EnemyRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
-import tungus.games.elude.game.client.worldrender.renderable.Sprite;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
@@ -85,9 +84,6 @@ public abstract class Enemy extends Updatable implements Hittable {
 	
 	public static final float DEFAULT_TURNSPEED = 540;
 	protected float turnSpeed = DEFAULT_TURNSPEED;
-	
-	private static int nextID = 0;
-	public int id = nextID++;
 	
 	protected final World world;
 	protected RocketType rocketType;
@@ -204,6 +200,6 @@ public abstract class Enemy extends Updatable implements Hittable {
 	
 	@Override
 	public Renderable getRenderable() {
-		return Sprite.create(RenderPhase.ENEMY, type.tex, pos.x, pos.y, width(), height(), rot, 1);
+		return EnemyRenderable.create(id, hp / maxHp, type.tex, pos.x, pos.y, width(), height(), rot);
 	}
 }

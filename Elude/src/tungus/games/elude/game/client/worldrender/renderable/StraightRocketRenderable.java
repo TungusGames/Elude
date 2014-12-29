@@ -1,9 +1,8 @@
 package tungus.games.elude.game.client.worldrender.renderable;
 
 import tungus.games.elude.Assets.Particles;
+import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.util.LinkedPool;
-
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 
 public class StraightRocketRenderable extends RocketRenderable {
 	

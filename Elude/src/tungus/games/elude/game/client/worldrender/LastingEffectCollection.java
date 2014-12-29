@@ -5,47 +5,48 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import tungus.games.elude.game.client.worldrender.lastingeffects.LastingEffect;
+
 import com.badlogic.gdx.utils.IntMap;
 
-public class LastingEffectCollection implements Iterable<PooledEffect> {
+public class LastingEffectCollection implements Iterable<LastingEffect> {
 	
-	private IntMap<List<PooledEffect>> lastingEffects = new IntMap<List<PooledEffect>>(300);
+	private IntMap<List<LastingEffect>> lastingEffects = new IntMap<List<LastingEffect>>(300);
 	
-	public void put(int id, PooledEffect effect) {
-		List<PooledEffect> list = lastingEffects.get(id);
+	public void put(int id, LastingEffect effect) {
+		List<LastingEffect> list = lastingEffects.get(id);
 		if (list == null) {
-			list = new LinkedList<PooledEffect>();
+			list = new LinkedList<LastingEffect>();
 			lastingEffects.put(id, list);
 		}
 		list.add(effect);
 	}
 	
-	public PooledEffect getFirst(int id) {
-		List<PooledEffect> list = lastingEffects.get(id);
+	public LastingEffect getFirst(int id) {
+		List<LastingEffect> list = lastingEffects.get(id);
 		if (list == null) 
 			return null;
 		return list.get(0);
 	}
 	
-	public List<PooledEffect> getAll(int id) {
-		List<PooledEffect> list = lastingEffects.get(id);
+	public List<LastingEffect> getAll(int id) {
+		List<LastingEffect> list = lastingEffects.get(id);
 		if (list == null) {
-			list = new LinkedList<PooledEffect>();
+			list = new LinkedList<LastingEffect>();
 			lastingEffects.put(id, list);
 		}
 		return list;
 	}
 	
 	@Override
-	public Iterator<PooledEffect> iterator() {
+	public Iterator<LastingEffect> iterator() {
 		return new LastingEffectIterator();
 	}
 	
-	private class LastingEffectIterator implements Iterator<PooledEffect> {
+	private class LastingEffectIterator implements Iterator<LastingEffect> {
 		
-		private Iterator<List<PooledEffect>> mapIterator;
-		private ListIterator<PooledEffect> listIterator;
+		private Iterator<List<LastingEffect>> mapIterator;
+		private ListIterator<LastingEffect> listIterator;
 		
 		public LastingEffectIterator() {
 			mapIterator = lastingEffects.values();
@@ -62,7 +63,7 @@ public class LastingEffectCollection implements Iterable<PooledEffect> {
 		}
 
 		@Override
-		public PooledEffect next() {
+		public LastingEffect next() {
 			if (!listIterator.hasNext()) {
 				listIterator = mapIterator.next().listIterator();				
 			}
