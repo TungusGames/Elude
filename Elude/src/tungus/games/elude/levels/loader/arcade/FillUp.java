@@ -27,7 +27,7 @@ public class FillUp extends ArcadeLoaderBase {
 	}
 	
 	@Override
-	public void update(float deltaTime) {
+	public boolean update(float deltaTime) {
 		super.update(deltaTime);
 		timeSinceIncrement += deltaTime;
 		if (timeSinceIncrement > incrementTime && currentFill < fillTo) {
@@ -38,6 +38,7 @@ public class FillUp extends ArcadeLoaderBase {
 		if (world.enemyCount < currentFill) {
 			addEnemy();
 		}
+		return false;
 	}
 	
 	private void addEnemy() {

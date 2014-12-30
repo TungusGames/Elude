@@ -73,19 +73,16 @@ public class FiniteLevelLoader extends EnemyLoader {
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
 		super(world, level.hpChance, level.speedChance, level.freezerChance, level.shieldChance, levelNum);
 		this.level = level;
-		/*Wave w = level.waves.removeFirst();
-		int size = w.enemies.size();
-		for (int i = 0; i < size; i++) {
-			world.enemies.add(Enemy.fromType(world, w.enemies.get(i)));
-		}*/
+		keepsWorldGoing = true;
+		
 	}
 	
 	@Override
-	public void update(float deltaTime) {
+	public boolean update(float deltaTime) {
 		super.update(deltaTime);
 		timeSinceLastWave += deltaTime;
 		if (nextWave >= level.waves.length) {
-			return;
+			return true;
 		}
 		Wave w = level.waves[nextWave];
 		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemyCount)) {
@@ -100,6 +97,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 			}
 			nextWave++;
 		}
+		return false;
 	}
 	
 	@Override
@@ -125,11 +123,6 @@ public class FiniteLevelLoader extends EnemyLoader {
 	
 	public float progress() {
 		return (float)enemiesHpTaken / level.totalEnemyHP;
-	}
-	
-	@Override
-	public boolean isOver() {
-		return nextWave >= level.waves.length;
 	}
 	
 	@Override

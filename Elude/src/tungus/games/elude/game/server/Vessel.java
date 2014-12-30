@@ -32,6 +32,9 @@ public class Vessel extends Updatable implements Hittable {
 	public Vector2 vel;
 	public float rot = 0;
 	
+	private static int nextVesselNumber = 0;
+	private final int vesselNumber = nextVesselNumber++;
+	
 	public Circle bounds;
 		
 	public float hp = MAX_HP;
@@ -114,7 +117,7 @@ public class Vessel extends Updatable implements Hittable {
 	
 	@Override
 	public Renderable getRenderable() {
-		return VesselRenderable.create(pos.x, pos.y, vel.x, vel.y, rot, shieldAlpha, id);
+		return VesselRenderable.create(pos.x, pos.y, vel.x, vel.y, rot, shieldAlpha, id, vesselNumber);
 	}
 
 	@Override
