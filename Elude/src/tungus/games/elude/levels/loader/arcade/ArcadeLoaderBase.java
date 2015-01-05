@@ -26,9 +26,10 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 	}
 	
 	@Override
-	public void update(float deltaTime) {
+	public boolean update(float deltaTime) {
 		super.update(deltaTime);
 		timeSurvived += deltaTime;
+		return false;
 	}
 
 	@Override
@@ -49,10 +50,5 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 		int medalsAfter = ((ScoreData.hasMedal(false, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(false, false, levelNum) ? 1 : 0));
 		ScoreData.starsEarned += (medalsAfter-medalsBefore);
 		return s;
-	}
-	
-	@Override
-	public boolean isOver() {
-		return false;
 	}
 }

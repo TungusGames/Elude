@@ -5,10 +5,9 @@ import java.util.List;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
-import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 import tungus.games.elude.game.client.worldrender.renderable.DebrisAdder;
+import tungus.games.elude.game.client.worldrender.renderable.EnemyRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
-import tungus.games.elude.game.client.worldrender.renderable.Sprite;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
@@ -20,7 +19,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public abstract class Enemy extends Updatable implements Rocket.Hittable {
+public abstract class Enemy extends Updatable implements Hittable {
 	
 	public static enum EnemyType {
 		STANDING	 (Assets.Tex.STANDINGENEMY,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true, StandingEnemy.class, 	2), 
@@ -69,26 +68,22 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 		}
 	}
 	
-	protected final Rocket shootRocket() {
-		return shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
+	protected void shootRocket() {
+		shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
 	}
 	
-	protected final Rocket shootRocket(Vector2 dir) {
-		return shootRocket(rocketType, dir);
+	protected void shootRocket(Vector2 dir) {
+		shootRocket(rocketType, dir);
 	}
 	
-	protected final Rocket shootRocket(RocketType t, Vector2 dir) {
+	protected void shootRocket(RocketType t, Vector2 dir) {
 		timeSinceShot = 0;
 		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, targetPlayer(), world);
 		world.addNextFrame.add(r);
-		return r;
 	}
 	
 	public static final float DEFAULT_TURNSPEED = 540;
 	protected float turnSpeed = DEFAULT_TURNSPEED;
-	
-	private static int nextID = 0;
-	public int id = nextID++;
 	
 	protected final World world;
 	protected RocketType rocketType;
@@ -150,21 +145,26 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 	protected abstract boolean aiUpdate(float deltaTime);
 	
 	private boolean died = false;
-	public void killByRocket(Rocket r) {
+	public void killBy(Circle hitter) {
 		if (!died) {
-			world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, r != null ? r.vel.angle() : Float.NaN));
 			world.waveLoader.onEnemyDead(this);
+			if (hitter != null) {
+				world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, pos.angle(new Vector2(hitter.x, hitter.y))));
+			} else {
+				world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, Float.NaN));
+			}
+						
 			died = true;
 			world.enemyCount--;
 		}
 	}
 	
 	@Override
-	public boolean isHitBy(Rocket r) {
-		if (!died && collisionBounds.overlaps(r.boundsForEnemy)) {
-			takeDamage(r.dmg);
+	public boolean isHitBy(Circle c, float damage) {
+		if (!died && collisionBounds.overlaps(c)) {
+			takeDamage(damage);
 			if (hp <= 0) {
-				killByRocket(r);
+				killBy(c);
 			}
 			return true;
 		}
@@ -200,6 +200,6 @@ public abstract class Enemy extends Updatable implements Rocket.Hittable {
 	
 	@Override
 	public Renderable getRenderable() {
-		return Sprite.create(RenderPhase.ENEMY, type.tex, pos.x, pos.y, width(), height(), rot, 1);
+		return EnemyRenderable.create(id, hp / maxHp, type.tex, pos.x, pos.y, width(), height(), rot);
 	}
 }

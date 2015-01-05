@@ -1,5 +1,7 @@
 package tungus.games.elude;
 
+import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool;
+import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 
 import com.badlogic.gdx.Application;
@@ -10,8 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;

@@ -1,8 +1,8 @@
 package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.game.server.World;
-import tungus.games.elude.game.server.rockets.Rocket;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Factory extends StandingBase {
@@ -28,21 +28,16 @@ public class Factory extends StandingBase {
 	}
 	
 	@Override
-	public void killByRocket(Rocket r) {
-		super.killByRocket(r);
-	}
-	
-	@Override
 	protected float calcTurnGoal() {
 		return t.set(targetPlayer().pos).sub(pos).angle()-90;
 	}
 	
 	@Override
-	public boolean isHitBy(Rocket r) {
-		if (pos.dst2(r.pos) < (RADIUS+r.boundsForEnemy.radius)*(RADIUS+r.boundsForEnemy.radius)) {
-			takeDamage(r.dmg);
+	public boolean isHitBy(Circle c, float damage) {
+		if (pos.dst2(c.x, c.y) < (RADIUS+c.radius)*(RADIUS+c.radius)) {
+			takeDamage(damage);
 			if (hp <= 0) {
-				killByRocket(r);
+				killBy(c);
 			}
 			return true;
 		}

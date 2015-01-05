@@ -58,12 +58,11 @@ public class World {
 		effects = new LinkedList<Renderable>();		
 		this.levelNum = levelNum;
 		this.isFinite = finite;
-		//vessels.add(new Vessel(this));
-		//for (int i = 0; i < 10; i++)
-		//	enemies.add(new MovingEnemy(new Vector2(MathUtils.random()*20, -1)));
-		//	enemies.add(new StandingEnemy(new Vector2(MathUtils.random()*20, -1)));
+
 		waveLoader = EnemyLoader.loaderFromLevelNum(this, levelNum, finite);
 		freezeTimer = new FreezeTimer();
+		updatables.add(waveLoader);
+		updatables.add(freezeTimer);
 	}
 	
 	public static void calcBounds() {
@@ -100,9 +99,8 @@ public class World {
 		while (!addNextFrame.isEmpty()) {
 			((Deque<Updatable>)updatables).addFirst(addNextFrame.remove(0));
 		}
-		waveLoader.update(deltaTime);
-		freezeTimer.update(deltaTime);
-		if (!isVesselAlive || (!gameContinuing && waveLoader.isOver())) {
+		
+		if (!isVesselAlive || !gameContinuing) {
 			state = vessels.get(0).hp <= 0 && isFinite ? STATE_LOST : STATE_WON;
 			if (waveLoader instanceof ArcadeLoaderBase || vessels.get(0).hp > 0)
 				waveLoader.saveScore();

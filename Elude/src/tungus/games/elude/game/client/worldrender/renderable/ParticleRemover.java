@@ -20,7 +20,7 @@ public class ParticleRemover extends Effect {
 
 	@Override
 	public void render(WorldRenderer wr) {
-		wr.lastingEffects.get(adderID).allowCompletion();
+		wr.lastingEffects.getFirst(adderID).allowCompletion();
 	}
 	
 	@Override

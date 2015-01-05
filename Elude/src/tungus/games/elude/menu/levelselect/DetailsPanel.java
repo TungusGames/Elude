@@ -59,6 +59,7 @@ public class DetailsPanel {
 				stateTime = 0;
 				prevLevel = null;
 				playLoaded = true;
+				playButton.setX(PLAY_X);
 			}
 		}
 		if (!text) {

@@ -1,6 +1,8 @@
 package tungus.games.elude.levels.loader;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
@@ -14,7 +16,7 @@ import tungus.games.elude.levels.loader.arcade.PlusPlus;
 
 import com.badlogic.gdx.math.MathUtils;
 
-public abstract class EnemyLoader {
+public abstract class EnemyLoader extends Updatable {
 	protected final World world;
 	protected final float hpChance;
 	protected final float speedChance;
@@ -60,8 +62,9 @@ public abstract class EnemyLoader {
 		this.shieldChance = shieldChance;
 	}
 	
-	public void update(float deltaTime) { 
-		timeSinceStart += deltaTime; 
+	public boolean update(float deltaTime) { 
+		timeSinceStart += deltaTime;
+		return false;
 	}
 	
 	public void onEnemyDead(Enemy e) {
@@ -78,6 +81,10 @@ public abstract class EnemyLoader {
 	
 	public void onEnemyHurt(Enemy e, float dmg) {}
 	
+	@Override
+	public Renderable getRenderable() {
+		return null;
+	}
+	
 	public abstract void saveScore();
-	public abstract boolean isOver();
 }
