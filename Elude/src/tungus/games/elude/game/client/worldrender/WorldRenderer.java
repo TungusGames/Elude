@@ -11,6 +11,7 @@ import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CamShaker;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -36,7 +37,7 @@ public class WorldRenderer {
 		lastingEffects = new LastingEffectCollection();
 		this.vesselID = myVesselID;
 	}
-
+	
 	public void render(float deltaTime, float alpha, RenderInfo renderInfo, boolean updateEffects) {
 		this.updateParticles = updateEffects;
 		camShaker.update(deltaTime);
@@ -47,6 +48,7 @@ public class WorldRenderer {
 			List<Renderable> phaseList = renderInfo.phases.get(i);
 			p.renderer.begin(p, this, deltaTime);
 			for (Renderable r : phaseList) {
+				batch.setColor(1, 1, 1, alpha);
 				p.renderer.render(r);
 			}
 			p.renderer.end();

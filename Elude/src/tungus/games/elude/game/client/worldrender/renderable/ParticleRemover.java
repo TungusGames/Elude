@@ -1,6 +1,10 @@
 package tungus.games.elude.game.client.worldrender.renderable;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.lastingeffects.LastingEffect;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
 
@@ -20,9 +24,16 @@ public class ParticleRemover extends Effect {
 
 	@Override
 	public void render(WorldRenderer wr) {
-		wr.lastingEffects.getFirst(adderID).allowCompletion();
+		LastingEffect boundEffect = wr.lastingEffects.getFirst(adderID);
+		if (boundEffect != null) {
+			boundEffect.allowCompletion();
+		} else {
+			Gdx.app.setLogLevel(Application.LOG_ERROR);
+			Gdx.app.log("ERROR", "No lastingeffect for ID " + adderID + " found to remove");
+			Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		}
+		
 	}
-	
 	@Override
 	public Renderable clone() {
 		return create(adderID);

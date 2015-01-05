@@ -28,7 +28,6 @@ public class Sprite extends Renderable {
 	public void render(WorldRenderer wr) {
 		wr.batch.setColor(1, 1, 1, wr.batch.getColor().a * alpha);
 		wr.batch.draw(Assets.Tex.values()[texID].t, x-width/2, y-height/2, width/2, height/2, width, height, 1, 1, rot);
-		wr.batch.setColor(1, 1, 1, wr.batch.getColor().a / alpha);
 	}
 	
 	@Override

@@ -17,6 +17,7 @@ public abstract class Updatable {
 	
 	public static void reset() {
 		nextID = 0;
+		Vessel.nextVesselNumber = 0;
 	}
 	
 }

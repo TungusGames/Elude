@@ -32,7 +32,7 @@ public class Vessel extends Updatable implements Hittable {
 	public Vector2 vel;
 	public float rot = 0;
 	
-	private static int nextVesselNumber = 0;
+	static int nextVesselNumber = 0;
 	private final int vesselNumber = nextVesselNumber++;
 	
 	public Circle bounds;
