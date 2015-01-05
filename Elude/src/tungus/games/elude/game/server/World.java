@@ -41,6 +41,7 @@ public class World {
 	public static final Rectangle innerBounds = new Rectangle(EDGE, EDGE, WIDTH-2*EDGE, HEIGHT-2*EDGE);
 	
 	public final EnemyLoader waveLoader;
+	public final FreezeTimer freezeTimer;
 	public FiniteLevelScore fScore = null;
 	public ArcadeLevelScore aScore = null;
 	
@@ -48,8 +49,6 @@ public class World {
 	
 	public int levelNum;
 	public boolean isFinite;
-	
-	public float freezeTime = 0f;
 	
 	public World(int levelNum, boolean finite) {
 		Updatable.reset();
@@ -61,7 +60,9 @@ public class World {
 		this.isFinite = finite;
 
 		waveLoader = EnemyLoader.loaderFromLevelNum(this, levelNum, finite);
+		freezeTimer = new FreezeTimer();
 		updatables.add(waveLoader);
+		updatables.add(freezeTimer);
 	}
 	
 	public static void calcBounds() {
