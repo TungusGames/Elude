@@ -16,7 +16,7 @@ public class FreezerPickup extends Pickup {
 	
 	@Override
 	protected void produceEffect(Vessel vessel) {
-		world.freezeTime = FREEZE_TIME;
+		world.freezeTimer.freeze(FREEZE_TIME);
 		world.effects.add(FreezeEffect.create(collisionBounds.x, collisionBounds.y, FREEZE_TIME));
 	}
 
