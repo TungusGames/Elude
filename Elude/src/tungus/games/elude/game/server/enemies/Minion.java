@@ -1,7 +1,7 @@
 package tungus.games.elude.game.server.enemies;
 
 import tungus.games.elude.Assets.Particles;
-import tungus.games.elude.game.client.worldrender.renderable.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 

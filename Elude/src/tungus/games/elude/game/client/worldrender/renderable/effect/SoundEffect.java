@@ -1,8 +1,9 @@
-package tungus.games.elude.game.client.worldrender.renderable;
+package tungus.games.elude.game.client.worldrender.renderable.effect;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable.Effect;
 import tungus.games.elude.util.LinkedPool;
 

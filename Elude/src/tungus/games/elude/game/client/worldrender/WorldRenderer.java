@@ -11,7 +11,6 @@ import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CamShaker;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -41,7 +40,7 @@ public class WorldRenderer {
 	public void render(float deltaTime, float alpha, RenderInfo renderInfo, boolean updateEffects) {
 		this.updateParticles = updateEffects;
 		camShaker.update(deltaTime);
-		batch.setColor(1, 1, 1, alpha);
+
 		batch.begin();
 		for (int i = 0; i < phases.length; i++) {
 			RenderPhase p = phases[i];
@@ -53,6 +52,7 @@ public class WorldRenderer {
 			}
 			p.renderer.end();
 		}
+		batch.setColor(1, 1, 1, alpha);
 		Iterator<LastingEffect> it = lastingEffects.iterator();
 		while (it.hasNext()) {
 			LastingEffect effect = it.next();

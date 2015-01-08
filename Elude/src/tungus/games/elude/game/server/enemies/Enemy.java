@@ -5,9 +5,9 @@ import java.util.List;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
-import tungus.games.elude.game.client.worldrender.renderable.DebrisAdder;
 import tungus.games.elude.game.client.worldrender.renderable.EnemyRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;

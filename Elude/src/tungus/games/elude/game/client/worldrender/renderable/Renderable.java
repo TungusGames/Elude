@@ -6,6 +6,8 @@ import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 import tungus.games.elude.util.LinkedPool;
 import tungus.games.elude.util.LinkedPool.Poolable;
 

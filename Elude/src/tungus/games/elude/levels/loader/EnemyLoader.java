@@ -57,11 +57,9 @@ public abstract class EnemyLoader extends Updatable {
 		this.world = w;
 		this.hpChance = hpChance;
 		this.speedChance = speedChance;
-		this.freezerChance = //wipeChance;
-                        0;
+		this.freezerChance = wipeChance;
 		this.levelNum = levelNum;
-		this.shieldChance = //shieldChance;
-                        1; // DEBUG! DON'T KEEP!
+		this.shieldChance = shieldChance;
 	}
 	
 	public boolean update(float deltaTime) { 

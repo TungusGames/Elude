@@ -1,8 +1,8 @@
 package tungus.games.elude.game.server;
 
-import tungus.games.elude.game.client.worldrender.renderable.CamShake;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.client.worldrender.renderable.VesselRenderable;
+import tungus.games.elude.game.client.worldrender.renderable.effect.CamShake;
 import tungus.games.elude.game.server.enemies.Hittable;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 

@@ -34,9 +34,9 @@ public class FreezeRenderer extends PhaseRenderer {
 	@Override
 	public void begin(RenderPhase p, WorldRenderer r, float delta) {
 		super.begin(p, r, delta);
-                if (r.updateParticles) {
-                    timeLeft -= delta;
-                }		
+        if (r.updateParticles) {
+        	timeLeft -= delta;
+        }		
 		if (timeLeft < 0) {
 			alpha = size = 0;
 			active = false;
@@ -58,7 +58,7 @@ public class FreezeRenderer extends PhaseRenderer {
 		enemyShader.setUniformf("a", alpha/MAX_ALPHA);
 		enemyShader.end();
 		r.batch.begin();
-                RenderPhase.ENEMY.shader = enemyShader;
+        RenderPhase.ENEMY.shader = enemyShader;
 	}
 	
 	@Override
