@@ -24,7 +24,7 @@ public class StaticDPad extends Sprite implements Controls {
 	private boolean pressed = false; // Has been pressed inside the circle
 	
 	public StaticDPad(OrthographicCamera cam, float frustumWidth, float frustumHeight) {
-		super(Assets.virtualDPadPerimeter);
+		super(Assets.Tex.VIRTUALDPAD.t);
 		circle = new Circle(frustumWidth - SIZE/2 - DISTANCE_FROM_EDGE, DISTANCE_FROM_EDGE + SIZE/2, SIZE/2);
 		setBounds(frustumWidth - SIZE - DISTANCE_FROM_EDGE, DISTANCE_FROM_EDGE, SIZE, SIZE);
 		this.interfaceCamera = cam;

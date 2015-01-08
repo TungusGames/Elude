@@ -10,6 +10,9 @@ import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.client.input.mobile.DynamicDPad;
 import tungus.games.elude.game.client.input.mobile.StaticDPad;
 import tungus.games.elude.game.client.input.mobile.TapToTargetControls;
+import tungus.games.elude.game.client.worldrender.WorldRenderer;
+import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.game.client.worldrender.renderable.VesselRenderable;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;
 import tungus.games.elude.game.multiplayer.transfer.ArcadeScoreInfo;
@@ -24,7 +27,6 @@ import tungus.games.elude.menu.ingame.LevelCompleteMenu;
 import tungus.games.elude.menu.ingame.PauseMenu;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.Settings;
-import tungus.games.elude.util.CamShaker;
 import tungus.games.elude.util.CustomInterpolations;
 import tungus.games.elude.util.ViewportHelper;
 
@@ -233,7 +235,6 @@ public class GameScreen extends BaseScreen {
 			Gdx.app.log("LagWarn", "DeltaTime: " + deltaTime);
 			deltaTime = 0.05f;
 		}
-		CamShaker.INSTANCE.update(deltaTime);
 		logTime("outside", 50);
 		synchronized(connection) {
 			if (!connection.newest.handled) {
@@ -247,6 +248,9 @@ public class GameScreen extends BaseScreen {
 						state = STATE_PLAYING;
 					}
 					connection.newest.copyTo(render);
+					break;
+				case STATE_PAUSED:
+					render.phases.get(RenderPhase.EFFECT.ordinal()).clear();
 					break;
 				case STATE_WON:
 					state = STATE_WON;
@@ -282,7 +286,8 @@ public class GameScreen extends BaseScreen {
 			break;
 		case STATE_PLAYING:
 			for (int i = 0; i < update.directions.length; i++) {
-				update.directions[i] = controls.get(i).getDir(tmp.set(render.vessels.get(i).x, render.vessels.get(i).y), deltaTime);
+				VesselRenderable v = (VesselRenderable)(render.phases.get(RenderPhase.VESSEL.ordinal()).get(i));
+				update.directions[i] = controls.get(i).getDir(tmp.set(v.x, v.y), deltaTime);
 			}
 			update.info = Server.STATE_RUNNING;
 			break;
@@ -323,7 +328,7 @@ public class GameScreen extends BaseScreen {
 				progressbar.drawBar(uiBatch, 0, deltaTime, gameAlpha);
 			}
 		}
-		uiBatch.draw(Assets.pause, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
+		uiBatch.draw(Assets.Tex.PAUSE.t, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
 		uiBatch.end();
 		fontBatch.begin();
 		healthbar.drawText(fontBatch, gameAlpha);
@@ -396,7 +401,7 @@ public class GameScreen extends BaseScreen {
 	
 	@Override
 	public void resume() {
-		renderer.resendShaders();
+		renderer.resetContext();
 	}
 	
 	@Override

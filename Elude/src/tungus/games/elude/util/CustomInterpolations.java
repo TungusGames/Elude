@@ -10,7 +10,7 @@ public class CustomInterpolations {
 			float rad = (a*5-0.5f)*MathUtils.PI;
 			float sin0to1 = (MathUtils.sin(rad)+1)/2;
 			if (a < 0.8f) {
-				return sin0to1/2;
+				return sin0to1*0.75f;
 			} else {
 				return sin0to1;
 			}

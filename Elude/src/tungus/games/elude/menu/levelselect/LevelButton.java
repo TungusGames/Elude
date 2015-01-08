@@ -20,20 +20,20 @@ public class LevelButton extends Sprite {
 	
 	private static TextureRegion getFrame(int n, boolean isFinite, boolean open) {
 		if (!open)
-			return Assets.frameRed;
+			return Assets.Tex.FRAME_RED.t;
 		if (!(isFinite ? ScoreData.playerFiniteScore.get(n).completed : ScoreData.playerArcadeScore.get(n).tried))
-			return Assets.frameBlue;
+			return Assets.Tex.FRAME_BLUE.t;
 		//if (ScoreData.hasMedal(isFinite, false, n) && ScoreData.hasMedal(isFinite, true, n))
 		//	return Assets.frameYellow;
-		return Assets.frameGreen;
+		return Assets.Tex.FRAME_GREEN.t;
 	}
 	
 	void setupColor(TextureRegion tex) {
-		if (tex == Assets.frameRed)
+		if (tex == Assets.Tex.FRAME_RED.t)
 			col = new Color(1f, 0.3f, 0.1f, 1);
-		else if (tex == Assets.frameBlue)
+		else if (tex == Assets.Tex.FRAME_BLUE.t)
 			col = new Color(0.2f, 0.7f, 1f, 1);
-		else if (tex == Assets.frameGreen)
+		else if (tex == Assets.Tex.FRAME_GREEN.t)
 			col = new Color(0.3f, 1f, 0.1f, 1);
 		else
 			col = new Color(1f, 1f, 0.1f, 1);
@@ -55,16 +55,16 @@ public class LevelButton extends Sprite {
 			stars = new Sprite[finite ? 3 : 2];
 			for (int i = 0; i < stars.length; i++) {
 				if (finite && i == 0)
-					stars[i] = new Sprite(ScoreData.playerFiniteScore.get(n).completed ? Assets.stars[3] : Assets.stars[0]);
+					stars[i] = new Sprite(ScoreData.playerFiniteScore.get(n).completed ? Assets.Tex.STAR_ON.t : Assets.Tex.STAR_OFF.t);
 				else
-					stars[i] = new Sprite(ScoreData.hasMedal(finite, ((finite ? i-1 : i) % 2 == 0), n) ? Assets.stars[3] : Assets.stars[0]);
+					stars[i] = new Sprite(ScoreData.hasMedal(finite, ((finite ? i-1 : i) % 2 == 0), n) ? Assets.Tex.STAR_ON.t : Assets.Tex.STAR_OFF.t);
 				stars[i].setSize(0.36f, 0.342f);
 				stars[i].setOrigin(stars[i].getWidth()/2, stars[i].getHeight()/2+0.43f);
 			}
 			lock = null;
 		} else {
 			stars = null;
-			lock = new Sprite(Assets.lock);
+			lock = new Sprite(Assets.Tex.LOCK.t);
 			lock.setSize(LOCK_WIDTH, LOCK_HEIGHT);
 			lock.setOrigin(LOCK_WIDTH/2, LOCK_HEIGHT/2);
 			lock.setColor(col);

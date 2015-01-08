@@ -1,107 +1,66 @@
 package tungus.games.elude.game.multiplayer.transfer;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
+import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.multiplayer.Connection.TransferData;
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
-import tungus.games.elude.game.server.enemies.Enemy;
-import tungus.games.elude.game.server.pickups.Pickup;
-import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
-
-import com.badlogic.gdx.math.Vector2;
+import tungus.games.elude.util.LinkedPool.Poolable;
 
 public class RenderInfo extends TransferData {
 	private static final long serialVersionUID = -4315239911779247372L;
-	public static class ReducedEnemy implements Serializable {
-		private static final long serialVersionUID = -7557852638993394399L;
-		public float x, y;
-		public float rot;
-		public float hp;
-		public float width;
-		public float height;
-		public int id;
-		public int typeOrdinal;
-	}
-	public static class ReducedPickup implements Serializable {
-		private static final long serialVersionUID = 9072429402777178805L;
-		public float x, y;
-		public float alpha;
-		public int typeOrdinal;
-	}
-	public static class ReducedRocket implements Serializable {
-		private static final long serialVersionUID = 4227518796828753878L;
-		public float x, y;
-		public float angle;
-		public int typeOrdinal;
-		public int id;
-	}
-	public static class ReducedVessel implements Serializable {
-		private static final long serialVersionUID = 4956172612818466522L;
-		public float x, y;
-		public float angle;
-		public int id;
-		public float shieldAlpha;
-	}
-	public static class Effect implements Serializable {
-		private static final long serialVersionUID = 1892821292900322357L;
-		public enum EffectType{EXPLOSION, DEBRIS, CAMSHAKE, LASERSHOT, FREEZE}
-		public int typeOrdinal;
-		public float x, y;
-	}
-	public static class DebrisEffect extends Effect {
-		private static final long serialVersionUID = -5099330118557050914L;
-		public float direction;
-		public int enemy;
-	}
-	
-	public List<ReducedEnemy> enemies = new ArrayList<ReducedEnemy>();
-	public List<ReducedPickup> pickups = new ArrayList<ReducedPickup>();
-	public List<ReducedRocket> rockets = new ArrayList<ReducedRocket>();
-	public List<ReducedVessel> vessels = new ArrayList<ReducedVessel>();
-	public List<Effect> effects;
 	
 	public float[] hp = null;
 	public float progress = -1;
+	
+	public List<List<Renderable>> phases = new ArrayList<List<Renderable>>();
 		
 	public RenderInfo() {
-		effects = new ArrayList<Effect>();
+		for (int i = 0; i < RenderPhase.values().length; i++) {
+			phases.add(new LinkedList<Renderable>());
+		}
 	}
 	
-	public RenderInfo(List<Effect> e) {
-		effects = e;
+	public RenderInfo(List<Renderable> e) {
+		this();
+		phases.set(RenderPhase.EFFECT.ordinal(), e);
 	}
 
 	public void setFromWorld(World w) {
-		RenderInfoPool.freeAlmostAll(this); // Puts everything in the pool except effects
+		int i = 0;
+		for (List<Renderable> phaseList : phases) {
+			if (i != RenderPhase.EFFECT.ordinal()) {
+				while (!phaseList.isEmpty()) {
+					((Poolable)phaseList.remove(0)).free();
+				}
+			}
+			i++;
+		}
 		if (w.waveLoader instanceof FiniteLevelLoader) {
 			this.progress = ((FiniteLevelLoader)w.waveLoader).progress();
 		}
-		enemies.clear();
-		for (ListIterator<Enemy> it = w.enemies.listIterator(); it.hasNext();) {
-			Enemy e = it.next();
-			enemies.add(RenderInfoPool.newEnemy(e.pos, e.rot, e.type.ordinal(), e.hp / e.maxHp, e.id, e.width(), e.height()));
+		
+		for (Vessel vessel : w.vessels) {
+			Renderable r = vessel.getRenderable();
+			RenderPhase ph = r.phase;
+			int ord = ph.ordinal();
+			List<Renderable> list = phases.get(ord);
+			list.add(r);
+		}	
+		
+		for (Updatable element : w.updatables) {
+			Renderable r = element.getRenderable();
+			if (r != null) {
+				phases.get(r.phase.ordinal()).add(r);
+			}			
 		}
-		pickups.clear();
-		for (ListIterator<Pickup> it = w.pickups.listIterator(); it.hasNext();) {
-			Pickup p = it.next();
-			pickups.add(RenderInfoPool.newPickup(new Vector2(p.collisionBounds.x+Pickup.HALF_SIZE, p.collisionBounds.y+Pickup.HALF_SIZE), p.alpha, p.type.ordinal()));
-		}
-		vessels.clear();
-		int i = 0;
-		for (ListIterator<Vessel> it = w.vessels.listIterator(); it.hasNext(); i++) {
-			Vessel v = it.next();
-			vessels.add(RenderInfoPool.newVessel(v.pos, v.rot, i, v.shieldAlpha));
-		}
-		rockets.clear();
-		for (ListIterator<Rocket> it = w.rockets.listIterator(); it.hasNext();) {
-			Rocket r = it.next();
-			rockets.add(RenderInfoPool.newRocket(r.pos, r.vel.angle(), r.type.ordinal(), r.id));
-		}
+		
 		for (i = 0; i < hp.length; i++) {
 			hp[i] = w.vessels.get(i).hp / Vessel.MAX_HP;
 		}
@@ -115,48 +74,27 @@ public class RenderInfo extends TransferData {
 		} else {
 			other = new RenderInfo();
 		}
-		super.copyTo(other);
-		RenderInfoPool.freeAll(other);
-		other.enemies.clear();
-		int s = enemies.size();
-		for (int i = 0; i < s; i++) {
-			ReducedEnemy e = enemies.get(i);
-			other.enemies.add(RenderInfoPool.newEnemy(e.x, e.y, e.rot, e.typeOrdinal, e.hp, e.id, e.width, e.height));
+		int size = phases.size();
+		for (int i = 0; i < size; i++) {
+			List<Renderable> otherPhaseList = other.phases.get(i);
+			if (i != RenderPhase.EFFECT.ordinal() || other.handled) {
+				while (!otherPhaseList.isEmpty()) {
+					((Poolable)otherPhaseList.remove(0)).free();
+				}				
+			}
+			List<Renderable> myPhaseList = this.phases.get(i);
+			for (Renderable r : myPhaseList) {
+				otherPhaseList.add(r.clone());
+			}
 		}
-		other.pickups.clear();
-		s = pickups.size();
-		for (int i = 0; i < s; i++) {
-			ReducedPickup p = pickups.get(i);
-			other.pickups.add(RenderInfoPool.newPickup(p.x, p.y, p.alpha, p.typeOrdinal));
-		}
-		other.vessels.clear();
-		s = vessels.size();
-		for (int i = 0; i < s; i++) {
-			ReducedVessel v = vessels.get(i);
-			other.vessels.add(RenderInfoPool.newVessel(v.x, v.y, v.angle, i, v.shieldAlpha));
-		}
-		other.rockets.clear();
-		s = rockets.size();
-		for (int i = 0; i < s; i++) {
-			ReducedRocket r = rockets.get(i);
-			other.rockets.add(RenderInfoPool.newRocket(r.x, r.y, r.angle, r.typeOrdinal, r.id));
-		}
-		//if (other.handled)
-			other.effects.clear();
-		s = effects.size();
-		for (int i = 0; i < s; i++) {
-			Effect e = effects.get(i);
-			other.effects.add(e.typeOrdinal == Effect.EffectType.DEBRIS.ordinal() ? 
-					RenderInfoPool.newDebris(e.x, e.y, ((DebrisEffect)e).direction, ((DebrisEffect)e).enemy) : 
-						RenderInfoPool.newEffect(e.x, e.y, e.typeOrdinal));
-		}
-		s = hp.length;
+		size = hp.length;
 		if (other.hp == null || other.hp.length < hp.length)
 			other.hp = new float[hp.length];
-		for (int i = 0; i < s; i++)
+		for (int i = 0; i < size; i++)
 			other.hp[i] = hp[i];
-		
 		other.progress = this.progress;
+		other.info = info;
+		other.handled = false;
 		return other;
 	}
 }

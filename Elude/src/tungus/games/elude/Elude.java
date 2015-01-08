@@ -1,6 +1,5 @@
 package tungus.games.elude;
 
-import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.mainmenu.MainMenu;
 import tungus.games.elude.util.log.FPSLogger;
@@ -22,7 +21,6 @@ public class Elude extends Game {
 		long oldTime = TimeUtils.millis();
 		Assets.load();
 		ScoreData.load();
-		RenderInfoPool.init();
 		setScreen(new MainMenu(this));
 		long newTime = TimeUtils.millis();
 		float deltaTime = (newTime-oldTime) / 1000f;

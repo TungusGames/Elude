@@ -3,7 +3,6 @@ package tungus.games.elude.levels.loader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.Deque;
 import java.util.List;
 
 import tungus.games.elude.game.server.World;
@@ -74,33 +73,31 @@ public class FiniteLevelLoader extends EnemyLoader {
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
 		super(world, level.hpChance, level.speedChance, level.freezerChance, level.shieldChance, levelNum);
 		this.level = level;
-		/*Wave w = level.waves.removeFirst();
-		int size = w.enemies.size();
-		for (int i = 0; i < size; i++) {
-			world.enemies.add(Enemy.fromType(world, w.enemies.get(i)));
-		}*/
+		keepsWorldGoing = true;
+		
 	}
 	
 	@Override
-	public void update(float deltaTime) {
+	public boolean update(float deltaTime) {
 		super.update(deltaTime);
 		timeSinceLastWave += deltaTime;
 		if (nextWave >= level.waves.length) {
-			return;
+			return true;
 		}
 		Wave w = level.waves[nextWave];
-		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemies.size())) {
+		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemyCount)) {
 			timeSinceLastWave = 0;
 			int size = w.enemies.size();
 			for (int i = 0; i < size; i++) {
-				world.enemies.add(Enemy.fromType(world, w.enemies.get(i)));
+				world.addEnemy(Enemy.fromType(world, w.enemies.get(i)));
 			}
 			size = w.pickups.size();
 			for (int i = 0; i < size; i++) {
-				world.pickups.add(Pickup.fromType(world, w.pickups.get(i)));
+				world.updatables.add(Pickup.fromType(world, w.pickups.get(i)));
 			}
 			nextWave++;
 		}
+		return false;
 	}
 	
 	@Override
@@ -126,11 +123,6 @@ public class FiniteLevelLoader extends EnemyLoader {
 	
 	public float progress() {
 		return (float)enemiesHpTaken / level.totalEnemyHP;
-	}
-	
-	@Override
-	public boolean isOver() {
-		return nextWave >= level.waves.length;
 	}
 	
 	@Override

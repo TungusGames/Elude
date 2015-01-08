@@ -1,7 +1,6 @@
 package tungus.games.elude.game.server.pickups;
 
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
+import tungus.games.elude.game.client.worldrender.renderable.effect.FreezeEffect;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 
@@ -17,8 +16,8 @@ public class FreezerPickup extends Pickup {
 	
 	@Override
 	protected void produceEffect(Vessel vessel) {
-		world.freezeTime = FREEZE_TIME;
-		world.effects.add(RenderInfoPool.newEffect(collisionBounds.x, collisionBounds.y, EffectType.FREEZE.ordinal()));
+		world.freezeTimer.freeze(FREEZE_TIME);
+		world.effects.add(FreezeEffect.create(collisionBounds.x, collisionBounds.y, FREEZE_TIME));
 	}
 
 }

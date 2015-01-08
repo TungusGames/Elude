@@ -54,12 +54,12 @@ public class Bar {
 		
 		if (displayedValue > 0) {
 			batch.setColor(lerp(empty, full, displayedValue, 0.8f*gameAlpha));
-			batch.draw(Assets.whiteRectangle, r.x, r.y, displayedValue * r.width, r.height);
+			batch.draw(Assets.Tex.WHITE_RECTANGLE.t, r.x, r.y, displayedValue * r.width, r.height);
 		}
 		if (displayedValue < 1 && bg != null) {
 			bg.a = 0.8f * gameAlpha;
 			batch.setColor(bg);
-			batch.draw(Assets.whiteRectangle, r.x + displayedValue * r.width, r.y, (1-displayedValue) * r.width, r.height);
+			batch.draw(Assets.Tex.WHITE_RECTANGLE.t, r.x + displayedValue * r.width, r.y, (1-displayedValue) * r.width, r.height);
 		}
 		batch.setColor(1, 1, 1, gameAlpha);
 	}

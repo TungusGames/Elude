@@ -6,9 +6,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 public class CamShaker {
-	
-	public static CamShaker INSTANCE;
-	
+		
 	private static final float MAX_OFFSET = 0.5f;
 	
 	private final SpriteBatch batch;

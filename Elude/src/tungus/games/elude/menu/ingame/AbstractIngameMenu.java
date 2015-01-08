@@ -108,7 +108,7 @@ public abstract class AbstractIngameMenu {
 		batch.begin();
 		float shadow = 1-getGameAlpha();
 		batch.setColor(1, 1, 1, shadow);
-		batch.draw(Assets.shadower, -10*cam.viewportWidth, -10*cam.viewportHeight, 21*cam.viewportWidth, 21*cam.viewportHeight);
+		batch.draw(Assets.Tex.SHADOWER.t, -10*cam.viewportWidth, -10*cam.viewportHeight, 21*cam.viewportWidth, 21*cam.viewportHeight);
 		batch.setColor(1, 1, 1, 1);
 		float alpha = state == STATE_DISAPPEAR ? SHADOW.apply(1-stateTime/DISAPPEAR_TIME) : 1;
 		int s = buttonSprites.length;

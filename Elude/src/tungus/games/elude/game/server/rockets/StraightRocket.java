@@ -1,7 +1,9 @@
 package tungus.games.elude.game.server.rockets;
 
-import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
+import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.StraightRocketRenderable;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
@@ -17,7 +19,7 @@ public class StraightRocket extends Rocket {
 	public StraightRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		super(origin, RocketType.STRAIGHT, pos, dir, world, target);
 		vel.nor().scl(SPEED);
-		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.LASERSHOT.ordinal()));
+		world.effects.add(SoundEffect.create(Assets.Sounds.LASERSHOT));
 	}
 
 	@Override
@@ -30,13 +32,18 @@ public class StraightRocket extends Rocket {
 				vel.x = -vel.x;
 			else
 				vel.y = -vel.y;
-			pos.x = MathUtils.clamp(pos.x, boundsForVessel.radius, World.WIDTH-boundsForVessel.radius);
-			pos.y = MathUtils.clamp(pos.y, boundsForVessel.radius, World.HEIGHT-boundsForVessel.radius);
+			pos.x = MathUtils.clamp(pos.x, bounds.radius, World.WIDTH-bounds.radius);
+			pos.y = MathUtils.clamp(pos.y, bounds.radius, World.HEIGHT-bounds.radius);
 			bounced = true;
 			return false;
 		}
 		kill();
 		return true;
+	}
+	
+	@Override
+	public Renderable getRenderable() {
+		return StraightRocketRenderable.create(pos.x, pos.y, vel.angle(), id, type.effect);
 	}
 
 }

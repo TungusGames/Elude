@@ -27,7 +27,7 @@ public class MainMenu extends BaseScreen {
 	private int state = STATE_FADEIN;
 	float stateTime = 0;
 	
-	private Sprite eludeOn = new Sprite(Assets.eludeTitleOn);
+	private Sprite eludeOn = new Sprite(Assets.Tex.ELUDE_TITLE_ON.t);
 	private final float FRUSTUM_WIDTH = 800;
 	private final float FRUSTUM_HEIGHT = 480;
 	private OrthographicCamera camera;
@@ -51,12 +51,12 @@ public class MainMenu extends BaseScreen {
 		eludeOn.setBounds(0, y, FRUSTUM_WIDTH, height);
 		playButton = new PlayButton();
 		playButton.setBounds(175, 35, 220, 220);
-		settingsButton = new Sprite(Assets.settingsButton);
+		settingsButton = new Sprite(Assets.Tex.SETTINGS_BUTTON.t);
 		settingsButton.setBounds(405, 35, 105, 105);
-		multiplayerButton = new Sprite(Assets.multiplayerButton);
+		multiplayerButton = new Sprite(Assets.Tex.MULTIPLAYER_BUTTON.t);
 		multiplayerButton.setBounds(405, 150, 220, 105);
 		multiplayerButton.setColor(1, 1, 1, Elude.mpScreen == null ? 0.3f : 1f);
-		infoButton = new Sprite(Assets.infoButton);
+		infoButton = new Sprite(Assets.Tex.INFO_BUTTON.t);
 		infoButton.setBounds(520, 35, 105, 105);
 		Gdx.input.setInputProcessor(new InputAdapter(){
 			private Vector3 touch = new Vector3();

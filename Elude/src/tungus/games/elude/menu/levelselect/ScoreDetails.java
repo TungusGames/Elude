@@ -72,25 +72,25 @@ public class ScoreDetails {
 				false; // Always displaying the medal limits might be better
 		hasHitMedal = //ScoreData.hasMedal(finite, false, levelNum);
 				false; // Always displaying the medal limits might be better
-		playerTime = new Sprite(Assets.stars[(finite ? fScore.timeTaken <= ScoreData.finiteMedals.get(levelNum).timeTaken :
-													   aScore.timeSurvived >= ScoreData.arcadeMedals.get(levelNum).timeSurvived) ? 3 : 0]);
+		playerTime = new Sprite((finite ? fScore.timeTaken <= ScoreData.finiteMedals.get(levelNum).timeTaken :
+										aScore.timeSurvived >= ScoreData.arcadeMedals.get(levelNum).timeSurvived) ? Assets.Tex.STAR_ON.t : Assets.Tex.STAR_OFF.t);
 		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.85f+(!finite?1:0))*scale, starWidth, starHeight);
-		playerHit =  new Sprite(Assets.stars[(finite ? fScore.hpLeft >= ScoreData.finiteMedals.get(levelNum).hpLeft : 
-		                                               aScore.enemiesKilled >= ScoreData.arcadeMedals.get(levelNum).enemiesKilled) ? 3 : 0]);
+		playerHit =  new Sprite((finite ? fScore.hpLeft >= ScoreData.finiteMedals.get(levelNum).hpLeft : 
+		                              aScore.enemiesKilled >= ScoreData.arcadeMedals.get(levelNum).enemiesKilled) ? Assets.Tex.STAR_ON.t : Assets.Tex.STAR_OFF.t);
 		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.85f+(!finite?1:0))*scale, starWidth, starHeight);
 		if (finite && complete()) {
-			completition = new Sprite(Assets.stars[3]);
+			completition = new Sprite(Assets.Tex.STAR_ON.t);
 			completition.setBounds(STAR_X, (yTop*scale/40f-10.75f+8.85f)*scale, starWidth, starHeight);
 		} else if (!finite && !open) {
-			completition = new Sprite(Assets.stars[3]);
+			completition = new Sprite(Assets.Tex.STAR_ON.t);
 			completition.setBounds(textX+25, (yTop*scale/40f-10.75f+6.8f)*scale, starWidth, starHeight);
 		} else {
 			completition = null;
 		}
 		
 		
-		medalTime = hasTimeMedal ? null : new Sprite(Assets.stars[3]);
-		medalHit  = hasHitMedal  ? null : new Sprite(Assets.stars[3]);
+		medalTime = hasTimeMedal ? null : new Sprite(Assets.Tex.STAR_ON.t);
+		medalHit  = hasHitMedal  ? null : new Sprite(Assets.Tex.STAR_ON.t);
 		if (medalTime != null) {
 			medalTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+5.6f+(!finite?1:0))*scale, starWidth, starHeight);
 			medalTime.setColor(1,1,1,NEXTMEDAL_OPACITY);

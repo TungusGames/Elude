@@ -1,26 +1,28 @@
 package tungus.games.elude.game.server.rockets;
 
 import tungus.games.elude.Assets;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfo.Effect.EffectType;
-import tungus.games.elude.game.multiplayer.transfer.RenderInfoPool;
+import tungus.games.elude.Assets.Particles;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.Renderable.Effect;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleRemover;
+import tungus.games.elude.game.client.worldrender.renderable.RocketRenderable;
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
+import tungus.games.elude.game.server.enemies.Hittable;
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class Rocket {
-	
+public abstract class Rocket extends Updatable {
+		
 	public static enum RocketType { 
-		SLOW_TURNING(Assets.flameRocket), 
-		FAST_TURNING(Assets.matrixRocket), 
-		STRAIGHT(Assets.straightRocket),
-		MINE(Assets.matrixRocket);
-		public ParticleEffectPool effect;
-		RocketType(ParticleEffectPool e) {
+		SLOW_TURNING(Assets.Particles.FLAME_ROCKET), 
+		FAST_TURNING(Assets.Particles.MATRIX_ROCKET), 
+		STRAIGHT(Assets.Particles.STRAIGHT_ROCKET);
+		public Particles effect;
+		RocketType(Particles e) {
 			effect = e;
 		}
 	};
@@ -41,17 +43,12 @@ public abstract class Rocket {
 		case STRAIGHT:
 			r = new StraightRocket(origin, pos, dir, w, target);
 			break;
-		case MINE:
-			r = new Mine(origin, pos, dir, w, target);
-			break;
 		default:
 			throw new IllegalArgumentException("Unknown rocket type: " + t);
 		}
 		return r;
 	}
-	
-	private static int nextID = 0;
-	
+		
 	private World world;
 	private Enemy origin;
 	
@@ -59,10 +56,8 @@ public abstract class Rocket {
 	
 	public Vector2 pos;
 	public Vector2 vel;
-	public Circle boundsForEnemy;
-	public Circle boundsForVessel;
+	public Circle bounds;
 	public final RocketType type;
-	public final int id;
 	
 	private boolean outOfOrigin = false;
 	
@@ -75,27 +70,23 @@ public abstract class Rocket {
 	}
 	
 	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life) {
-		this(origin, t, pos, dir, world, target, dmg, life, ROCKET_SIZE, ROCKET_SIZE);
-	}
-	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target, float dmg, float life, float sizeForEnemy, float sizeForVessel) {
 		super();
 		this.origin = origin;
 		this.type = t;
 		this.life = life;
 		this.pos = pos;
 		this.world = world;
-		this.boundsForEnemy = new Circle(pos, sizeForEnemy/2);
-		this.boundsForVessel = new Circle(pos, sizeForVessel/2);
+		this.bounds = new Circle(pos, ROCKET_SIZE/2);
 		this.dmg = dmg;
 		this.target = target;
-		this.id = nextID++;
+		this.keepsWorldGoing = true;
 		vel = dir;
 	}
 	
 	public final boolean update(float deltaTime) {
 		life -= deltaTime;
 		// If there are no enemies alive, speed up the pace by dying twice as fast
-		if (world.enemies.size() == 0) { 
+		if (world.enemyCount == 0) { 
 			life -= deltaTime;
 		}
 		if (life <= 0) {
@@ -104,25 +95,21 @@ public abstract class Rocket {
 		}
 		aiUpdate(deltaTime);
 		pos.add(vel.x * deltaTime, vel.y * deltaTime);
-		boundsForEnemy.x = pos.x;
-		boundsForEnemy.y = pos.y;
-		boundsForVessel.x = pos.x;
-		boundsForVessel.y = pos.y;
+		bounds.x = pos.x;
+		bounds.y = pos.y;
 		if (!World.outerBounds.contains(pos)) {
 			if (hitWall(pos.x < 0 || pos.x > World.WIDTH)) {
 				return true;
 			}
 		}
 		
-		int size = world.enemies.size();
 		boolean stillIn = false;
-		for (int i = 0; i < size; i++) {
-			Enemy e = world.enemies.get(i);
-			if (!outOfOrigin && e == origin) {
-				stillIn = (origin.collisionBounds.overlaps(boundsForVessel));
+		for (Updatable u : world.updatables) {
+			if (!outOfOrigin && u == origin) {
+				stillIn = (origin.collisionBounds.overlaps(bounds));
 				continue;
 			}
-			if (e.hitBy(this)) {
+			if (u instanceof Hittable && ((Hittable)u).isHitBy(bounds, dmg)) {
 				kill();
 				return true;
 			}
@@ -131,13 +118,8 @@ public abstract class Rocket {
 			outOfOrigin = true;
 		}
 		
-		size = world.vessels.size();
-		for (int i = 0; i < size; i++) {
-			if (Intersector.overlaps(world.vessels.get(i).bounds, boundsForVessel)) {
-				if (!world.vessels.get(i).shielded) {
-					world.effects.add(RenderInfoPool.newEffect(0f, 0f, EffectType.CAMSHAKE.ordinal()));
-					world.vessels.get(i).hp -= dmg;
-				}
+		for (Vessel v : world.vessels) {
+			if (v.isHitBy(bounds, dmg)) {
 				kill();
 				return true;
 			}
@@ -146,7 +128,8 @@ public abstract class Rocket {
 	}
 	
 	public void kill() {
-		world.effects.add(RenderInfoPool.newEffect(pos.x, pos.y, EffectType.EXPLOSION.ordinal()));
+		world.effects.add(ParticleRemover.create(id));
+		Effect.addExplosion(world.effects, pos);
 	}
 	
 	protected boolean hitWall(boolean vertical) {
@@ -168,5 +151,10 @@ public abstract class Rocket {
 	}
 	
 	protected abstract void aiUpdate(float deltaTime);
+	
+	@Override
+	public Renderable getRenderable() {
+		return RocketRenderable.create(pos.x, pos.y, vel.angle(), id, type.effect);
+	}
 	
 }

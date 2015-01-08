@@ -33,9 +33,7 @@ public class MovingEnemy extends Enemy {
 	private final float reload;
 	
 	private boolean turningRight;
-	
-	private float timeSinceShot = 0;
-	
+		
 	public MovingEnemy(Vector2 pos, World w) {
 		this(pos, EnemyType.MOVING, w, RocketType.SLOW_TURNING, SPEED, RELOAD, MAX_TURNSPEED);
 	}
