@@ -89,7 +89,7 @@ public class World {
 		boolean gameContinuing = false;
 		for (ListIterator<Updatable> it = updatables.listIterator(); it.hasNext();) {
 			Updatable u = it.next();
-                        float deltaForThis = (freezeTimer.isFrozen() && u instanceof Enemy) ? 0 : deltaTime;
+			float deltaForThis = (freezeTimer.isFrozen() && u instanceof Enemy) ? 0 : deltaTime;
 			if (u.update(deltaForThis)) {
 				it.remove();
 			} else if (u.keepsWorldGoing) {

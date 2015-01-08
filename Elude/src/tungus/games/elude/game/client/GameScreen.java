@@ -250,6 +250,7 @@ public class GameScreen extends BaseScreen {
 					connection.newest.copyTo(render);
 					break;
 				case STATE_PAUSED:
+					render.phases.get(RenderPhase.EFFECT.ordinal()).clear();
 					break;
 				case STATE_WON:
 					state = STATE_WON;
