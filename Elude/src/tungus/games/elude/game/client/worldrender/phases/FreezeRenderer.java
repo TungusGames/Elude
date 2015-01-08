@@ -6,6 +6,7 @@ import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import tungus.games.elude.Assets.Shaders;
 
 public class FreezeRenderer extends PhaseRenderer {
 	
@@ -33,10 +34,13 @@ public class FreezeRenderer extends PhaseRenderer {
 	@Override
 	public void begin(RenderPhase p, WorldRenderer r, float delta) {
 		super.begin(p, r, delta);
-		timeLeft -= delta;
+                if (r.updateParticles) {
+                    timeLeft -= delta;
+                }		
 		if (timeLeft < 0) {
 			alpha = size = 0;
 			active = false;
+                        RenderPhase.ENEMY.shader = Shaders.DEFAULT.s;
 			return;
 		}
 		
@@ -54,6 +58,7 @@ public class FreezeRenderer extends PhaseRenderer {
 		enemyShader.setUniformf("a", alpha/MAX_ALPHA);
 		enemyShader.end();
 		r.batch.begin();
+                RenderPhase.ENEMY.shader = enemyShader;
 	}
 	
 	@Override

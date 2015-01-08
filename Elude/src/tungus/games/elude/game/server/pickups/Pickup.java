@@ -12,6 +12,7 @@ import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Pickup extends Updatable {
@@ -27,13 +28,15 @@ public abstract class Pickup extends Updatable {
 		}
 	}
 	
-	public static final float DRAW_SIZE = 0.9f;
-	public static final float HALF_SIZE = DRAW_SIZE/2;
+	public static final float START_DRAW_SIZE = 0.9f;
+	public static final float HALF_SIZE = START_DRAW_SIZE/2;
 	protected static final float DEFAULT_LIFETIME = 3f;
 	
 	private static final float APPEAR_PORTION = 0.1f;
-	private static final float TAKE_TIME = 0.2f;
+	private static final float TAKE_TIME = 1f;
 	private static final float FLASH_PORTION = 0.35f;
+        private static final float ENLARGE_TO = 3f;
+        private static final float OFFSET_SPEED = 1.6f;
 	private static final Interpolation PICKED_UP = Interpolation.fade;
 	private static final Interpolation NOT_PICKED = new FadeinFlash(APPEAR_PORTION, 1-FLASH_PORTION);
 	
@@ -63,13 +66,15 @@ public abstract class Pickup extends Updatable {
 	private float lifeTimeLeft;
 	private float fullLifeTime;
 	private boolean pickedUp = false;
+        private Vector2 vel = new Vector2(0,0);
+        private float currentDrawSize = START_DRAW_SIZE;
 	
 	public float alpha = 0;
 	public PickupType type;
 	
 	public Pickup(World world, Vector2 pos, PickupType type, float lifeTime) {
 		this.world = world;
-		collisionBounds = new Circle(pos, DRAW_SIZE/2);
+		collisionBounds = new Circle(pos, START_DRAW_SIZE/2);
 		fullLifeTime = lifeTimeLeft = lifeTime;
 		this.type = type;
 	}
@@ -93,21 +98,30 @@ public abstract class Pickup extends Updatable {
 			for (int i = 0; i < size; i++) {
 				Vessel vessel = world.vessels.get(i);
 				if (collisionBounds.overlaps(vessel.bounds)) {
-					produceEffect(vessel);
+					getPickedUp(vessel);
 					pickedUp = true;
 					lifeTimeLeft = TAKE_TIME;
 				}
 			}
 		} else {
 			alpha = PICKED_UP.apply(1, 0, 1-lifeTimeLeft/TAKE_TIME);
+                        collisionBounds.x += deltaTime * vel.x;
+                        collisionBounds.y += deltaTime * vel.y;
+                        currentDrawSize += (ENLARGE_TO-START_DRAW_SIZE)*(deltaTime/TAKE_TIME);
 		}
 		return false;
 	}
 	
 	@Override
 	public Renderable getRenderable() {
-		return Sprite.create(RenderPhase.PICKUP, type.tex, collisionBounds.x, collisionBounds.y, DRAW_SIZE, DRAW_SIZE, 0, alpha);
+		return Sprite.create(RenderPhase.PICKUP, type.tex, collisionBounds.x, collisionBounds.y, currentDrawSize, currentDrawSize, 0, alpha);
 	}
 	
+        private void getPickedUp(Vessel vessel) {
+            vel.set(1, 0);
+            vel.rotate(MathUtils.random.nextFloat()*360f);
+            vel.scl(OFFSET_SPEED);
+            produceEffect(vessel);
+        }
 	protected abstract void produceEffect(Vessel vessel);
 }
