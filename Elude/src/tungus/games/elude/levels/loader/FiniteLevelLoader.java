@@ -93,7 +93,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 			}
 			size = w.pickups.size();
 			for (int i = 0; i < size; i++) {
-				world.updatables.add(Pickup.fromType(world, w.pickups.get(i)));
+				world.addNextFrame.add(Pickup.fromType(world, w.pickups.get(i)));
 			}
 			nextWave++;
 		}
