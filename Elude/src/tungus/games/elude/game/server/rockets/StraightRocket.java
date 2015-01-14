@@ -14,7 +14,10 @@ import com.badlogic.gdx.math.Vector2;
 public class StraightRocket extends Rocket {
 	
 	public static final float SPEED = 17.5f;
+	private static final float MAX_CORNER_BOUNCE_TIME = 0.05f; 
+	
 	private boolean bounced = false;
+	private float timeSinceBounce = 0;
 	
 	public StraightRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		super(origin, RocketType.STRAIGHT, pos, dir, world, target);
@@ -23,11 +26,15 @@ public class StraightRocket extends Rocket {
 	}
 
 	@Override
-	protected void aiUpdate(float deltaTime) {} // No need to do *anything*!
+	protected void aiUpdate(float deltaTime) {
+		if (bounced) {
+			timeSinceBounce += deltaTime;
+		}
+	}
 	
 	@Override
 	protected boolean hitWall(boolean vert) {
-		if (!bounced) {
+		if (timeSinceBounce < MAX_CORNER_BOUNCE_TIME) {
 			if (vert)
 				vel.x = -vel.x;
 			else
@@ -43,7 +50,7 @@ public class StraightRocket extends Rocket {
 	
 	@Override
 	public Renderable getRenderable() {
-		return StraightRocketRenderable.create(pos.x, pos.y, vel.angle(), id, type.effect);
+		return StraightRocketRenderable.create(pos.x, pos.y, vel.angle(), id);
 	}
 
 }

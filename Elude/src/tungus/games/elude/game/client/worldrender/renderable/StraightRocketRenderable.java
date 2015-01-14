@@ -25,6 +25,6 @@ public class StraightRocketRenderable extends RocketRenderable {
 	
 	@Override
 	public Renderable clone() {
-		return create(x, y, angle, rocketID, Particles.values()[particleTypeID]);
+		return create(x, y, angle, rocketID);
 	}
 }
