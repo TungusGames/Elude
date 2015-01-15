@@ -119,14 +119,18 @@ public class Vessel extends Updatable implements Hittable {
 	public Renderable getRenderable() {
 		return VesselRenderable.create(pos.x, pos.y, vel.x, vel.y, rot, shieldAlpha, id, vesselNumber);
 	}
+        
+        public void tryDamage(float damage) {
+            if (!shielded) {
+		world.effects.add(CamShake.create());
+		hp -= damage;
+            }
+        }
 
 	@Override
 	public boolean isHitBy(Circle c, float damage) {
 		if (c.overlaps(bounds)) {
-			if (!shielded) {
-				world.effects.add(CamShake.create());
-				hp -= damage;
-			}
+			tryDamage(damage);
 			return true;
 		} else {
 			return false;

@@ -103,14 +103,25 @@ public class FiniteLevelLoader extends EnemyLoader {
 	@Override
 	public void saveScore() {
 		FiniteLevelScore score = ScoreData.playerFiniteScore.get(levelNum);
-		int medalsBefore = ((score.completed ? 1 : 0) + (ScoreData.hasMedal(true, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(true, false, levelNum) ? 1 : 0));
-		score.hpLeft = score.completed ? Math.max(score.hpLeft, world.vessels.get(0).hp) : world.vessels.get(0).hp;
-		score.timeTaken = score.completed ? Math.min(score.timeTaken, timeSinceStart) : timeSinceStart;
+                float newHP = world.vessels.get(0).hp;
+                boolean save = false;
+                
+                int medalsBefore = ((score.completed ? 1 : 0) + (ScoreData.hasMedal(true, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(true, false, levelNum) ? 1 : 0));
+                if (!score.completed || score.hpLeft < newHP) {
+                    score.hpLeft = newHP;
+                    save = true;
+                }
+                if (!score.completed || score.timeTaken > timeSinceStart) {
+                    score.timeTaken = timeSinceStart;
+                    save = true;
+                }
 		score.completed = true;
 		this.completed = true;
-		ScoreData.save(true);
-		int medalsAfter = ((score.completed ? 1 : 0) + (ScoreData.hasMedal(true, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(true, false, levelNum) ? 1 : 0));
-		ScoreData.starsEarned += (medalsAfter-medalsBefore);
+                if (save) {
+                    ScoreData.save(true);
+                    int medalsAfter = ((score.completed ? 1 : 0) + (ScoreData.hasMedal(true, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(true, false, levelNum) ? 1 : 0));
+                    ScoreData.starsEarned += (medalsAfter-medalsBefore);
+                }		
 	}
 	
 	public FiniteLevelScore getScore() {

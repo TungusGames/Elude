@@ -117,7 +117,7 @@ public class LevelSelectScreen extends BaseScreen {
 		public boolean scrolled(int amount) {
 			if (state == STATE_WORKING) {
 				grid.panStop(3, 5);
-				grid.fling(amount*20);
+				grid.fling(amount*30);
 			}
 			return true;
 		}
