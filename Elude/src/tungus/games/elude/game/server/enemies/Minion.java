@@ -12,7 +12,7 @@ public class Minion extends Enemy {
 	
 	private static final float COLL = 0.65f;
 	private static final float SPEED = 2.5f;
-	private static final float RELOAD = 1.75f;
+	private static final float RELOAD = 1.3f;
 	
 	private static final float TIME_OUT = 1f;
 	
@@ -25,7 +25,15 @@ public class Minion extends Enemy {
 		super(pos, EnemyType.MINION, COLL, EnemyType.MINION.hp, w, RocketType.FAST_TURNING);
 		vel.set(1, 0).rotate(dir).scl(SPEED);
 		this.parent = parent;
-		goal = new Vector2(MathUtils.random(World.innerBounds.width) + World.EDGE, MathUtils.random(World.innerBounds.height) + World.EDGE);
+		goal = new Vector2(parent.pos);
+		goal.add((float)MathUtils.random.nextGaussian() * 5, (float)MathUtils.random.nextGaussian() * 5);
+		goal.x = MathUtils.clamp(goal.x, World.EDGE, World.WIDTH - World.EDGE);
+		goal.y = MathUtils.clamp(goal.y, World.EDGE, World.HEIGHT - World.EDGE);
+		float mindist = (parent.collisionBounds.radius + collisionBounds.radius);
+		if (goal.dst2(parent.pos) < mindist * mindist) {
+			goal.sub(parent.pos).nor().scl(mindist + MathUtils.random() * 2);
+		}
+		//goal = new Vector2(MathUtils.random(World.innerBounds.width) + World.EDGE, MathUtils.random(World.innerBounds.height) + World.EDGE);
 	}
 	
 	@Override
