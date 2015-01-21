@@ -39,6 +39,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
@@ -98,7 +99,7 @@ public class GameScreen extends BaseScreen {
 	private final int vesselID;
 	private RenderInfo render;
 	private UpdateInfo update;
-	
+		
 	private InputAdapter inputListener = new InputAdapter() {
 		@Override
 		public boolean keyDown(int keycode) {
@@ -340,8 +341,8 @@ public class GameScreen extends BaseScreen {
 		if (state == STATE_STARTING) {
 			fontBatch.begin();
 			Assets.font.setColor(1, 1, 1, 1);
-			Assets.font.draw(fontBatch, ((finite ? "STAGE" : Assets.Strings.endless) + " ") + (levelNum + 1), 
-					890-1100*CustomInterpolations.FLOAT_THROUGH.apply(timeSinceStart/START_TIME), 480/2);
+			Assets.font.drawMultiLine(fontBatch, render.levelName, -700 + 1400 * CustomInterpolations.FLOAT_THROUGH.apply(timeSinceStart/START_TIME), 
+										480/2 + 20 * (render.levelName.split("\n").length), 800, HAlignment.CENTER);			
 			fontBatch.end();
 		}
 		

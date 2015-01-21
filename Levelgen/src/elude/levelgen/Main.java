@@ -45,6 +45,7 @@ public class Main {
 	public static void readAndOutputLevels() {
 		List<FiniteLevelScore> scores = new ArrayList<>();
 		List<Integer> ntoidList = new ArrayList<>();
+		String name = null;
 		while (running) {
 			float totalEnemyHP = 0;
 			try {
@@ -52,7 +53,11 @@ public class Main {
 				sc = new Scanner(new File((levelNum) + ".tel"));
 				sc.useLocale(Locale.US);
 				ntoidList.add(sc.nextInt());
-				scores.add(new FiniteLevelScore(sc.nextFloat(), sc.nextFloat()));
+				sc.nextLine();
+				name = sc.nextLine();
+				System.out.print("(" + name + ") ");
+				
+				scores.add(new FiniteLevelScore(sc.nextFloat(), sc.nextFloat()));				
 				
 				hpDrop = sc.nextFloat();
 				speedDrop = sc.nextFloat();
@@ -110,6 +115,7 @@ public class Main {
 			
 			FileOutputStream fileOut = null;
 			Level lvl = new Level();
+			lvl.name = name.toUpperCase();
 			lvl.waves = new Wave[waves.size()];
 			lvl.waves = waves.toArray(lvl.waves);
 			lvl.hpChance = hpDrop;

@@ -40,7 +40,7 @@ public class FreezeRenderer extends PhaseRenderer {
 		if (timeLeft < 0) {
 			alpha = size = 0;
 			active = false;
-                        RenderPhase.ENEMY.shader = Shaders.DEFAULT.s;
+            RenderPhase.ENEMY.shader = Shaders.DEFAULT.s;
 			return;
 		}
 		

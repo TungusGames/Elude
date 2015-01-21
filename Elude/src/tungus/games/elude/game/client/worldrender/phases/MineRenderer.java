@@ -64,8 +64,9 @@ public class MineRenderer extends PhaseRenderer {
 	
 	@Override
 	public void end() {
-	
-		time += delta;
+		if (wr.updateParticles) {
+			time += delta;
+		}		
 		
 		shader.setUniformf("time", time);
 		Entries<MineEffect> e = mines.entries();

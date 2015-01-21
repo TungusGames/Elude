@@ -87,4 +87,5 @@ public abstract class EnemyLoader extends Updatable {
 	}
 	
 	public abstract void saveScore();
+	public abstract String levelName();
 }

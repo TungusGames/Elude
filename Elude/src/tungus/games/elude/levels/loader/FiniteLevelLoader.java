@@ -37,6 +37,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 
 		private static final long serialVersionUID = 3972235095607047708L;
 		public Wave[] waves;
+		public String name;
 		public float hpChance;
 		public float speedChance;
 		public float freezerChance;
@@ -75,6 +76,10 @@ public class FiniteLevelLoader extends EnemyLoader {
 		this.level = level;
 		keepsWorldGoing = true;
 		
+	}
+	
+	public String levelName() {
+		return "STAGE " + (levelNum+1) + "\n" + level.name;		
 	}
 	
 	@Override

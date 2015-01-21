@@ -18,13 +18,14 @@ public class CustomInterpolations {
 	};
 	
 	public static final Interpolation FLOAT_THROUGH = new Interpolation() {
-		private final Interpolation interp = Interpolation.exp10;
+		private final Interpolation in = Interpolation.pow4In;
+		private final Interpolation out = Interpolation.pow4Out;
 		@Override
 		public float apply(float a) {
 			if (a < 0.5f) {
-				return interp.apply(2*a)/2;
+				return out.apply(2*a)/2;
 			} else {
-				return 0.5f + interp.apply(2*(a-0.5f))/2;
+				return 0.5f + in.apply(2*(a-0.5f))/2;
 			}
 		}
 	};

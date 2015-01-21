@@ -1,5 +1,6 @@
 package tungus.games.elude.levels.loader.arcade;
 
+import tungus.games.elude.Assets;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.levels.loader.EnemyLoader;
@@ -50,5 +51,10 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 		int medalsAfter = ((ScoreData.hasMedal(false, true, levelNum) ? 1 : 0) + (ScoreData.hasMedal(false, false, levelNum) ? 1 : 0));
 		ScoreData.starsEarned += (medalsAfter-medalsBefore);
 		return s;
+	}
+	
+	@Override
+	public String levelName() {
+		return Assets.Strings.endless + " " + (levelNum+1);
 	}
 }

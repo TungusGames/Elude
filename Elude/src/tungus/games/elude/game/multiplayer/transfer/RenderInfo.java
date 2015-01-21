@@ -18,6 +18,7 @@ public class RenderInfo extends TransferData {
 	
 	public float[] hp = null;
 	public float progress = -1;
+	public String levelName = "";
 	
 	public List<List<Renderable>> phases = new ArrayList<List<Renderable>>();
 		
@@ -64,6 +65,7 @@ public class RenderInfo extends TransferData {
 		for (i = 0; i < hp.length; i++) {
 			hp[i] = w.vessels.get(i).hp / Vessel.MAX_HP;
 		}
+		levelName = w.waveLoader.levelName();
 	}
 	
 	@Override
@@ -95,6 +97,7 @@ public class RenderInfo extends TransferData {
 		other.progress = this.progress;
 		other.info = info;
 		other.handled = false;
+		other.levelName = levelName;
 		return other;
 	}
 }
