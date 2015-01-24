@@ -1,10 +1,14 @@
 package tungus.games.elude.game.server;
 
+import tungus.games.elude.game.client.worldrender.renderable.FreezeRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class FreezeTimer extends Updatable {
 
 	private float remainingTime = 0f;
+	private Vector2 center = new Vector2();
 	
 	@Override
 	public boolean update(float deltaTime) {
@@ -13,7 +17,10 @@ public class FreezeTimer extends Updatable {
 			return false;
 	}
 
-	public void freeze(float time) {
+	public void freeze(float x, float y, float time) {
+		if (!isFrozen()) {
+			center.set(x, y);
+		}		
 		remainingTime = time;
 	}
 	
@@ -23,7 +30,7 @@ public class FreezeTimer extends Updatable {
 	
 	@Override
 	public Renderable getRenderable() {
-		return null;
+		return FreezeRenderable.create(remainingTime, center.x, center.y);
 	}
 
 }

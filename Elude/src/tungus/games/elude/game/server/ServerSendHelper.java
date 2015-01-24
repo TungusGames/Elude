@@ -1,8 +1,5 @@
 package tungus.games.elude.game.server;
 
-import com.badlogic.gdx.Gdx;
-
-import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.Connection.TransferData;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
