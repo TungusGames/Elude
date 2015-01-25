@@ -103,7 +103,9 @@ public class Assets {
 		MATRIX_ROCKET(20, 40),
 		STRAIGHT_ROCKET,
 		EXPLOSION(20, 40),
+		EXPLOSION_BIG(5, 10),
 		DEBRIS(20, 40),
+		DEBRIS_BIG(1, 1),
 		VESSEL_TRAILS(1, 1),
 		VESSEL_TRAILS_RED(1, 1);
 		
@@ -130,8 +132,8 @@ public class Assets {
 			p = new ParticleEffectPool(particle, initialCapacity, max);
 		}
 		
-		public static PooledEffect debris(float[] color, float dir) {
-			PooledEffect p = DEBRIS.p.obtain();
+		public static PooledEffect debris(float[] color, float dir, boolean big) {
+			PooledEffect p = (big ? DEBRIS_BIG : DEBRIS).p.obtain();
 			Array<ParticleEmitter> emitters = p.getEmitters();
 			for (int i = 0; i < emitters.size; i++) {
 				// Mod color

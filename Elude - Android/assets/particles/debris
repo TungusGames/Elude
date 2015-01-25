@@ -132,7 +132,7 @@ aligned: false
 additive: true
 behind: false
 - Image Path -
-C:\Users\Peti\git\dodge\img\done\sq2.png
+C:\Users\Peti\git\elude\img\done\sq2.png
 
 
 Rects
@@ -269,7 +269,7 @@ aligned: false
 additive: true
 behind: false
 - Image Path -
-C:\Users\Peti\git\dodge\img\done\rect.png
+C:\Users\Peti\git\elude\img\done\rect.png
 
 
 Triangles
@@ -406,4 +406,4 @@ aligned: false
 additive: true
 behind: false
 - Image Path -
-C:\Users\Peti\git\dodge\img\done\triangle.png
+C:\Users\Peti\git\elude\img\done\triangle.png

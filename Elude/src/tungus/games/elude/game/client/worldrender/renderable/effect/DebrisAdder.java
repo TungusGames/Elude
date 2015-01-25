@@ -5,20 +5,22 @@ import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
-import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.util.LinkedPool;
-
 
 public class DebrisAdder extends ParticleAdder {
 	private static LinkedPool<ParticleAdder> pool = new LinkedPool<ParticleAdder>(DebrisAdder.class, 15);
-	public static Effect create(EnemyType e, int a, float x, float y, float angle) {
+	public static Effect create(float[] color, int a, float x, float y, float angle, boolean big) {
 		DebrisAdder p = (DebrisAdder)pool.obtain();
-		p.adderID = a; p.typeID = Particles.DEBRIS.ordinal(); p.angle = angle; p.enemyType = e.ordinal(); p.x = x; p.y = y;
+		p.adderID = a; p.typeID = Particles.DEBRIS.ordinal(); p.angle = angle; p.color = color; p.x = x; p.y = y; p.big = big;
 		return p;
+	}
+	public static Effect create(float[] color, int a, float x, float y, float angle) {
+		return create(color, a, x, y, angle, false);
 	}
 	
 	private float angle;
-	private int enemyType;
+	private float[] color;
+	private boolean big;
 	
 	public DebrisAdder(LinkedPool<ParticleAdder> p) {
 		super(p);
@@ -26,13 +28,13 @@ public class DebrisAdder extends ParticleAdder {
 	
 	@Override
 	public void render(WorldRenderer wr) {
-		PooledEffect debris = Assets.Particles.debris(EnemyType.values()[enemyType].debrisColor, angle);
+		PooledEffect debris = Assets.Particles.debris(color, angle, big);
 		debris.setPosition(x, y);
 		wr.lastingEffects.put(adderID, debris);
 	}
 	
 	@Override
 	public Renderable clone() {
-		return create(EnemyType.values()[enemyType], adderID, x, y, angle);
+		return create(color, adderID, x, y, angle, big);
 	}
 }

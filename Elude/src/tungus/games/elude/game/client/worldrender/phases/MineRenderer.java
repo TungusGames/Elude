@@ -4,7 +4,7 @@ import tungus.games.elude.Assets;
 import tungus.games.elude.game.client.worldrender.WorldRenderer;
 import tungus.games.elude.game.client.worldrender.renderable.MineRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
-import tungus.games.elude.game.server.rockets.Mine;
+import tungus.games.elude.game.server.Mine;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.IntMap;

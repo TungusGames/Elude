@@ -1,8 +1,13 @@
 package tungus.games.elude.game.server;
 
+import tungus.games.elude.Assets.Particles;
+import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.client.worldrender.renderable.VesselRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.effect.CamShake;
+import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 import tungus.games.elude.game.server.enemies.Hittable;
 import tungus.games.elude.util.CustomInterpolations.FadeinFlash;
 
@@ -23,6 +28,8 @@ public class Vessel extends Updatable implements Hittable {
 	public static final float MAX_GRAPHIC_TURNSPEED = 540;
 	public static final float MAX_SPEED = 8f;
 	public static final float MAX_HP = 100f;
+	
+	private static final float[] debrisColors = new float[]{0.1f, 0.75f, 1f};
 	
 	private static final Interpolation shieldOpacity = new FadeinFlash(0.08f, 0.6f);
 	
@@ -45,6 +52,8 @@ public class Vessel extends Updatable implements Hittable {
 	private float fullShieldTime = 0f;
 	public float speedBonus = 1f;
 	public float speedBonusTime = 0f;
+	
+	private boolean died = false;
 	
 	public Vessel(World world) {
 		this.world = world;
@@ -119,13 +128,6 @@ public class Vessel extends Updatable implements Hittable {
 	public Renderable getRenderable() {
 		return VesselRenderable.create(pos.x, pos.y, vel.x, vel.y, rot, shieldAlpha, id, vesselNumber);
 	}
-        
-        public void tryDamage(float damage) {
-            if (!shielded) {
-		world.effects.add(CamShake.create());
-		hp -= damage;
-            }
-        }
 
 	@Override
 	public boolean isHitBy(Circle c, float damage) {
@@ -135,5 +137,22 @@ public class Vessel extends Updatable implements Hittable {
 		} else {
 			return false;
 		}
+	}
+	
+	public void tryDamage(float damage) {
+        if (!shielded) {
+			world.effects.add(CamShake.create());
+			hp -= damage;
+			if (hp <= 0 && !died) {
+				die();
+			}
+        }
+    }
+
+	private void die() {
+		died = true;
+		world.effects.add(ParticleAdder.create(Particles.EXPLOSION_BIG, pos.x, pos.y));
+		world.effects.add(DebrisAdder.create(debrisColors, id, pos.x, pos.y, Float.NaN, true));
+		world.effects.add(SoundEffect.create(Sounds.EXPLOSION));
 	}
 }

@@ -150,9 +150,9 @@ public abstract class Enemy extends Updatable implements Hittable {
 		if (!died) {
 			world.waveLoader.onEnemyDead(this);
 			if (hitter != null) {
-				world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, pos.angle(new Vector2(hitter.x, hitter.y))));
+				world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, pos.angle(new Vector2(hitter.x, hitter.y))));
 			} else {
-				world.effects.add(DebrisAdder.create(type, id, pos.x, pos.y, Float.NaN));
+				world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN));
 			}
 						
 			died = true;

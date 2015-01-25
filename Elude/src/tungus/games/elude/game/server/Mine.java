@@ -1,10 +1,11 @@
-package tungus.games.elude.game.server.rockets;
+package tungus.games.elude.game.server;
 
+import tungus.games.elude.Assets.Particles;
+import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.game.client.worldrender.renderable.MineRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
-import tungus.games.elude.game.server.Updatable;
-import tungus.games.elude.game.server.Vessel;
-import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 import tungus.games.elude.game.server.enemies.Hittable;
 
 import com.badlogic.gdx.math.Circle;
@@ -49,6 +50,9 @@ public class Mine extends Updatable {
 				((Hittable)entity).isHitBy(bounds, DAMAGE);
 			}
 		}
+		
+		world.effects.add(ParticleAdder.create(Particles.EXPLOSION_BIG, bounds.x, bounds.y));
+		world.effects.add(SoundEffect.create(Sounds.EXPLOSION));
 	}
 
 	@Override

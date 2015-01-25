@@ -1,8 +1,8 @@
 package tungus.games.elude.game.server.enemies;
 
+import tungus.games.elude.game.server.Mine;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
-import tungus.games.elude.game.server.rockets.Mine;
 
 import com.badlogic.gdx.math.Vector2;
 

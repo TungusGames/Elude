@@ -23,7 +23,7 @@ public class Server implements Runnable {
 	public static final int STATE_OVER = 3;
 	private int state = STATE_WAITING_START;
 	
-	private static final float END_DELAY = 2f;
+	private static final float END_DELAY = 0.3f;
 	
 	private final FPSLogger fps = new FPSLogger("FPSLogger", "Server thread FPS: ");
 	private final AverageLogger sendTime = new AverageLogger("SendLogger", "Server to client time (ms): ");

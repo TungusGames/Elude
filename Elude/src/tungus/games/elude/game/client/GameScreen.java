@@ -313,6 +313,7 @@ public class GameScreen extends BaseScreen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		renderer.render(deltaTime, gameAlpha, render, state == STATE_PLAYING);
 		render.handled = true;
+		render.phases.get(RenderPhase.EFFECT.ordinal()).clear();
 		uiBatch.begin();
 		for (int i = 0; i < controls.size(); i++) {
 			controls.get(i).draw(uiBatch, gameAlpha);
