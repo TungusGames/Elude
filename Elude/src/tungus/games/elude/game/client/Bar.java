@@ -46,10 +46,11 @@ public class Bar {
 	}
 	
 	public void drawBar(SpriteBatch batch, float value, float delta, float gameAlpha) {
+		float speedNow = Math.max(SPEED, (float)Math.abs(displayedValue - value) * 20); // Speed up when receiving lots of damage
 		if (value < displayedValue) {
-			displayedValue = Math.max(displayedValue - SPEED * delta, value);
+			displayedValue = Math.max(displayedValue - speedNow * delta, value);
 		} else if (value > displayedValue) {
-			displayedValue = Math.min(displayedValue + SPEED * delta, value);
+			displayedValue = Math.min(displayedValue + speedNow * delta, value);
 		}
 		
 		if (displayedValue > 0) {

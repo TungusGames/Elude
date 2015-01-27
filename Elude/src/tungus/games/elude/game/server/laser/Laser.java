@@ -14,7 +14,10 @@ public class Laser extends Updatable {
     
     private static final float WIDTH = 0.5f;
     private static final float LENGTH = World.WIDTH + World.HEIGHT;
-    private static final float DAMAGE_PER_SECOND = 150;
+    private static final float DAMAGE_PER_SECOND = 0.00150f;
+    
+    private static final Vector2 temp = new Vector2();
+    
     protected final World world;
     protected Vector2 source;    
     protected Vector2 end;
@@ -34,7 +37,8 @@ public class Laser extends Updatable {
         Vessel closestVessel = closestVesselHit();
         if (closestVessel != null) {
             closestVessel.tryDamage(DAMAGE_PER_SECOND * deltaTime);
-            CustomMathUtils.lineCircleIntersectionPoint(source, end, closestVessel.bounds, end);
+            CustomMathUtils.lineCircleIntersectionPoint(source, end, closestVessel.bounds.x, closestVessel.bounds.y, closestVessel.bounds.radius + WIDTH / 2, end);
+            end.add(temp.set(end).sub(source).nor().scl(closestVessel.bounds.radius*0.5f));
         } else {
             end.set(farPoint);
         }
@@ -59,7 +63,8 @@ public class Laser extends Updatable {
         end.set(farPoint);
         Vessel v = closestVesselHit();
         if (v != null) {
-            CustomMathUtils.lineCircleIntersectionPoint(source, end, v.bounds, end);
+        	CustomMathUtils.lineCircleIntersectionPoint(source, end, v.bounds.x, v.bounds.y, v.bounds.radius + WIDTH / 2, end);
+            end.add(temp.set(end).sub(source).nor().scl(v.bounds.radius*0.5f));
         }
     }
     
