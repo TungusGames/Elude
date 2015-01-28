@@ -14,9 +14,9 @@ public class LaserRenderable extends Renderable {
 	public static Renderable create(Vector2 start, Vector2 end) {
 		//LaserRenderable laser = pool.obtain();
 		//return laser;
-		return Sprite.create(RenderPhase.ROCKET, Tex.WHITE_RECTANGLE, 
+		return Sprite.create(RenderPhase.ROCKET, Tex.LASER, 
 							 (start.x + end.x) / 2, (start.y + end.y) / 2, 
-							 start.dst(end), 0.5f, 
+							 start.dst(end)+0.5f, 0.5f, 
 							 (float)Math.atan2(end.y - start.y, end.x - start.x) * MathUtils.radiansToDegrees, 
 							 1);
 	}

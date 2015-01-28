@@ -59,6 +59,7 @@ public class Assets {
 		
 		MINEHELP,
 		LINEAR_GRADIENT_SPOT,
+		LASER,
 		
 		WHITE_RECTANGLE,
 		SMALL_CIRCLE,
@@ -160,20 +161,37 @@ public class Assets {
 	
 	public static enum Sounds {
 		EXPLOSION,
-		LASERSHOT;
-		
+		LASERSHOT,
+		LASERBEAM(true);
 		private static final String prefix = "sounds/";
 		private final String filename;
 		
 		public Sound s;
 		
+		private boolean looping = false;
+		
 		Sounds() {
 			filename = name().replace("_", "").toLowerCase() + ".wav";
+		}
+		
+		Sounds(boolean looping) {
+			this();
+			this.looping = looping;
 		}
 		
 		private void load() {
 			s = Gdx.audio.newSound(Gdx.files.internal(prefix + filename));
 		}
+		
+		public long play() {
+			if (looping) {
+				return s.loop();
+			} else {
+				return s.play();
+			}
+		}
+		
+		
 	}
 	
 	public static enum Shaders {

@@ -65,7 +65,7 @@ public class World {
 		freezeTimer = new FreezeTimer();
 		updatables.add(waveLoader);
 		updatables.add(freezeTimer);
-		updatables.add(new Laser(this, new Vector2(15, 3), new Vector2(1,1).nor()));
+	//	updatables.add(new Laser(this, new Vector2(15, 3), new Vector2(1,1).nor()));
 		updatables.add(new RotatingLaser(this, new Vector2(10, 6), new Vector2(1, 0), 1, 60));		
 	}
 	

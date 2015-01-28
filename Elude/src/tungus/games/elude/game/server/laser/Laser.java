@@ -1,7 +1,9 @@
 package tungus.games.elude.game.server.laser;
 
+import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.game.client.worldrender.renderable.LaserRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
@@ -12,9 +14,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Laser extends Updatable {
     
-    private static final float WIDTH = 0.5f;
+    private static final float WIDTH = 0.2f;
     private static final float LENGTH = World.WIDTH + World.HEIGHT;
-    private static final float DAMAGE_PER_SECOND = 0.00150f;
+    private static final float DAMAGE_PER_SECOND = 80f;
     
     private static final Vector2 temp = new Vector2();
     
@@ -30,6 +32,7 @@ public class Laser extends Updatable {
         this.source = source;
         this.farPoint = source.cpy().add(dir.x * LENGTH, dir.y * LENGTH);
         this.end = farPoint.cpy();
+        world.effects.add(SoundEffect.create(Sounds.LASERBEAM));
     }
     
     @Override
