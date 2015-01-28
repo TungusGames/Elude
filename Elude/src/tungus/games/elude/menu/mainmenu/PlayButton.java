@@ -9,6 +9,7 @@ public class PlayButton extends Sprite {
 	
 	public static final int RETURN_FINITE_LEVELS = 1;
 	public static final int RETURN_ARCADE_LEVELS = 2;
+	public static final int RETURN_DIVIDED = 3;
 	
 	private final float SPLIT_TIME = 0.3f;
 	private float stateTime = 0;
@@ -54,6 +55,7 @@ public class PlayButton extends Sprite {
 		if (!split) {
 			switching = true;
 			stateTime = 0;
+			return RETURN_DIVIDED;
 		} else {
 			if (upper.getBoundingRectangle().contains(x, y))
 				return RETURN_FINITE_LEVELS;

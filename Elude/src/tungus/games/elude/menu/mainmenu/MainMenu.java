@@ -66,19 +66,26 @@ public class MainMenu extends BaseScreen {
 				if (playButton.getBoundingRectangle().contains(touch.x, touch.y)) {
 					int r = playButton.touchAt(touch.x, touch.y);
 					if (r == PlayButton.RETURN_FINITE_LEVELS) {
+						Assets.Sounds.MENU_BUTTON.s.play();
 						toScreen(new LevelSelectScreen(game, true));
 					} else if (r == PlayButton.RETURN_ARCADE_LEVELS) {
+						Assets.Sounds.MENU_BUTTON.s.play();
 						toScreen(new LevelSelectScreen(game, false));
+					} else if (r == PlayButton.RETURN_DIVIDED) {
+						Assets.Sounds.MENU_BUTTON.s.play();
 					}
 					return true;
 				} else if (settingsButton.getBoundingRectangle().contains(touch.x, touch.y)) {
+					Assets.Sounds.MENU_BUTTON.s.play();
 					toScreen(new SettingsScreen(game));
 					return true;
 				} else if (infoButton.getBoundingRectangle().contains(touch.x, touch.y)) {
+					Assets.Sounds.MENU_BUTTON.s.play();
 					toScreen(new AboutScreen(game));
 					return true;
 				} else if (Elude.mpScreen != null && multiplayerButton.getBoundingRectangle().contains(touch.x, touch.y)) {
 					try {
+						Assets.Sounds.MENU_BUTTON.s.play();
 						toScreen((Screen)(Elude.mpScreen.getConstructors()[0].newInstance(game)));
 					} catch (Exception e) {
 						Gdx.app.log("Net(?) MP", "Reflection magic failed");

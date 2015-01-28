@@ -160,6 +160,7 @@ public class Assets {
 	
 	public static enum Sounds {
 		EXPLOSION,
+		MENU_BUTTON,
 		LASERSHOT;
 		
 		private static final String prefix = "sounds/";
