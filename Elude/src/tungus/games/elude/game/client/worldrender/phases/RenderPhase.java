@@ -5,14 +5,18 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 public enum RenderPhase {
 	FREEZE(new FreezeRenderer()),
 	MINE(new MineRenderer()),
-	PICKUP(new PhaseRenderer()),
-	ENEMY(new PhaseRenderer()),
-	ROCKET(new PhaseRenderer()),
-	VESSEL(new PhaseRenderer()),
-	EFFECT(new PhaseRenderer());
+	PICKUP,
+	ENEMY,
+	ROCKET,
+	VESSEL,
+	EFFECT;
 	
 	private RenderPhase(PhaseRenderer r) {
 		renderer = r;
+	}
+	
+	private RenderPhase() {
+		this(new PhaseRenderer());
 	}
 	
 	public ShaderProgram shader = null;
