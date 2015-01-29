@@ -7,7 +7,7 @@ public class RotatingLaser extends Laser {
     private static Vector2 dirTemp = new Vector2();
     private static Vector2 sourceTemp = new Vector2();
     
-    private final Vector2 center;
+    private Vector2 center;
     private float angularVelocity;
     
     public RotatingLaser(World w, Vector2 center, Vector2 startDir, 
@@ -19,11 +19,19 @@ public class RotatingLaser extends Laser {
     
     @Override
     public boolean update(float deltaTime) {
-        dirTemp.set(source).sub(center);
-        dirTemp.rotate(deltaTime * angularVelocity);
+    	dirTemp.set(source).sub(center);
+        dirTemp.rotate(deltaTime/10 * angularVelocity);
         sourceTemp.set(dirTemp).add(center);
         dirTemp.nor();
         set(sourceTemp, dirTemp);
         return super.update(deltaTime);
+    }
+    
+    public void setCenter(Vector2 center) {
+        dirTemp.set(source).sub(center);
+        this.center = center;
+        sourceTemp.set(dirTemp).add(center);
+        set(sourceTemp, dirTemp);
+        
     }
 }

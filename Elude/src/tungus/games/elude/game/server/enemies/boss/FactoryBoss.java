@@ -1,5 +1,6 @@
 package tungus.games.elude.game.server.enemies.boss;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
@@ -24,8 +25,6 @@ public class FactoryBoss extends Enemy {
               RADIUS,
               w,
               RocketType.FAST_TURNING);
-        laser = new RotatingLaser(w, pos, new Vector2(1, 0), RADIUS, 90);
-        w.addNextFrame.add(laser);
         vel.set(3, 0);
     }
     
@@ -35,9 +34,13 @@ public class FactoryBoss extends Enemy {
             state = STATE_IN;
             vel.set(0, 0);
             time = 0;
+            laser = new RotatingLaser(world, pos, new Vector2(1, 0), RADIUS, 90);
+            world.addNextFrame.add(laser);
         } else if (state == STATE_IN) {
             time += deltaTime;
-            pos.set(World.WIDTH/2, World.HEIGHT/2).add((float)Math.sin(time) * 7, 0);
+            pos.set(World.WIDTH/2, World.HEIGHT/2);
+            laser.setCenter(pos);
+            //Gdx.app.log("boss", pos.x + ";" + pos.y);
         }
         return false;
     }
