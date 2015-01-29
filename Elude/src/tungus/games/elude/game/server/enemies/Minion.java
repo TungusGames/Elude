@@ -22,7 +22,7 @@ public class Minion extends Enemy {
 	private final Vector2 goal;
 	
 	public Minion(Vector2 pos, float dir, Factory parent, World w) {
-		super(pos, EnemyType.MINION, COLL, EnemyType.MINION.hp, w, RocketType.FAST_TURNING);
+		super(pos, EnemyType.MINION, COLL, w, RocketType.FAST_TURNING);
 		vel.set(1, 0).rotate(dir).scl(SPEED);
 		this.parent = parent;
 		goal = new Vector2(parent.pos);

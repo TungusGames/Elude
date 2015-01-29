@@ -18,6 +18,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import tungus.games.elude.game.server.enemies.boss.FactoryBoss;
 
 public abstract class Enemy extends Updatable implements Hittable {
 	
@@ -30,9 +31,10 @@ public abstract class Enemy extends Updatable implements Hittable {
 		MACHINEGUNNER(Assets.Tex.MACHINEGUNNER,1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}, true, MachineGunner.class,	2),
 		SHIELDED	 (Assets.Tex.SHIELDED,	1.3f,1.016f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class,		2),
 		SPLITTER	 (Assets.Tex.SPLITTER,	1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Splitter.class,		2),
-		MINION		 (Assets.Tex.MINION,		0.65f,0.65f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class,		1),
+		MINION		 (Assets.Tex.MINION,		0.65f,0.65f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class,	1),
 		FACTORY		 (Assets.Tex.FACTORY,     2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class,		12),
-		MINER		 (Assets.Tex.MINER,		0.9f, 0.9f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,			2);
+		MINER		 (Assets.Tex.MINER,		0.9f, 0.9f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,	2),
+                BOSS_FACTORY     (Assets.Tex.FACTORY,   3.0f, 3.0f, new float[]{1f, 1f, 1f, 1f}, true, FactoryBoss.class, 100);
 		public Tex tex;
 		public float width;
 		public float halfWidth;
@@ -98,15 +100,21 @@ public abstract class Enemy extends Updatable implements Hittable {
 	
 	public final float maxHp;
 	public float hp;
+        
+        public boolean countsForProgress;
 	
 	protected float turnGoal;
 	protected float timeSinceShot = 0f;
 	
 	protected static final Vector2 t = new Vector2();
-		
-	public Enemy(Vector2 pos, EnemyType t, float boundSize, float hp, World w,
-				 RocketType type) {
-		this.rocketType = type;
+	
+        protected Enemy(Vector2 pos, EnemyType t, float boundSize, World w, RocketType type) {
+            this(pos, t, boundSize, t.hp, w, type);
+        }
+        
+	protected Enemy(Vector2 pos, EnemyType t, float boundSize, float hp, World w,
+				 RocketType rType) {
+		this.rocketType = rType;
 		this.type = t;
 		this.pos = pos;
 		this.world = w;
@@ -114,6 +122,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 		this.hp = maxHp = hp;
 		this.collisionBounds = new Circle(pos, boundSize/2);
 		this.keepsWorldGoing = true;
+                this.countsForProgress = type.spawns;
 	}
 	
 	public boolean update(float deltaTime) {

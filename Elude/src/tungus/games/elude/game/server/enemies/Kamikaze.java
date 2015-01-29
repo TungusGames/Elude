@@ -18,7 +18,7 @@ public class Kamikaze extends StandingBase {
 	private float timeStood = 0;
 	
 	public Kamikaze(Vector2 pos, World w) {
-		super(pos, EnemyType.KAMIKAZE, RocketType.FAST_TURNING, w, EnemyType.KAMIKAZE.hp, SPEED, COLLIDER_SIZE);
+		super(pos, EnemyType.KAMIKAZE, RocketType.FAST_TURNING, w, SPEED, COLLIDER_SIZE);
 		turnSpeed = 0;
 	}
 	

@@ -32,7 +32,7 @@ public class Laser extends Updatable {
         this.source = source;
         this.farPoint = source.cpy().add(dir.x * LENGTH, dir.y * LENGTH);
         this.end = farPoint.cpy();
-        world.effects.add(SoundEffect.create(Sounds.LASERBEAM));
+        //world.effects.add(SoundEffect.create(Sounds.LASERBEAM));
     }
     
     @Override

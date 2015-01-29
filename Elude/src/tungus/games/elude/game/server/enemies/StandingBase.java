@@ -20,8 +20,8 @@ public abstract class StandingBase extends Enemy {
 		this(pos, t, r, w, t.hp, DEFAULT_SPEED, DEFAULT_COLLIDER_SIZE, World.EDGE);
 	}
 	
-	protected StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float hp, float s, float collSize) {
-		this(pos, t, r, w, hp, s, collSize, World.EDGE);
+	protected StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float s, float collSize) {
+		this(pos, t, r, w, t.hp, s, collSize, World.EDGE);
 	}
 	
 	protected StandingBase(Vector2 pos, EnemyType t, RocketType r, World w, float hp, float s, float collSize, float edge) {

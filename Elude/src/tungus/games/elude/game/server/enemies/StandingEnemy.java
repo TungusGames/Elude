@@ -16,7 +16,7 @@ public class StandingEnemy extends StandingBase {
 	}
 	
 	public StandingEnemy(Vector2 pos, EnemyType t, World w, RocketType type, float speed, float reload) {
-		super(pos, EnemyType.STANDING, RocketType.SLOW_TURNING, w, t.hp, speed, StandingBase.DEFAULT_COLLIDER_SIZE);
+		super(pos, EnemyType.STANDING, RocketType.SLOW_TURNING, w, speed, StandingBase.DEFAULT_COLLIDER_SIZE);
 		this.reload = reload;
 	}
 

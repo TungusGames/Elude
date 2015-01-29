@@ -144,7 +144,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	@Override
 	public void onEnemyHurt(Enemy e, float dmg) {
 		super.onEnemyHurt(e, dmg);
-		if (e.type.spawns) {
+		if (e.countsForProgress) {
 			enemiesHpTaken += dmg;
 		}
 	}

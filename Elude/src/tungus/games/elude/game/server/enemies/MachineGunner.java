@@ -25,7 +25,7 @@ public class MachineGunner extends Enemy {
 	private int shots = 0;
 	
 	public MachineGunner(Vector2 pos, World w) {
-		super(pos, EnemyType.MACHINEGUNNER, COLL, EnemyType.MACHINEGUNNER.hp, w, RocketType.FAST_TURNING);
+		super(pos, EnemyType.MACHINEGUNNER, COLL, w, RocketType.FAST_TURNING);
 		moveBounds = new Rectangle(World.EDGE, World.EDGE, World.WIDTH-2*World.EDGE, World.HEIGHT-2*World.EDGE);
 		vel.set(MathUtils.random(moveBounds.width)+moveBounds.x, MathUtils.random(moveBounds.height)+moveBounds.y).sub(pos).nor().scl(SPEED);
 	}

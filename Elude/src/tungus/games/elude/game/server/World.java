@@ -20,6 +20,7 @@ import tungus.games.elude.util.LinkedPool.Poolable;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import tungus.games.elude.game.server.enemies.boss.FactoryBoss;
 
 public class World {
 
@@ -65,8 +66,9 @@ public class World {
 		freezeTimer = new FreezeTimer();
 		updatables.add(waveLoader);
 		updatables.add(freezeTimer);
+                updatables.add(new FactoryBoss(this));
 	//	updatables.add(new Laser(this, new Vector2(15, 3), new Vector2(1,1).nor()));
-		updatables.add(new RotatingLaser(this, new Vector2(10, 6), new Vector2(1, 0), 1, 60));		
+	//	updatables.add(new RotatingLaser(this, new Vector2(10, 6), new Vector2(1, 0), 1, 60));		
 	}
 	
 	public static void calcBounds() {
