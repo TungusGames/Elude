@@ -1,49 +1,57 @@
 package tungus.games.elude.game.server.laser;
 
-import tungus.games.elude.game.client.worldrender.renderable.LaserRenderable;
+import tungus.games.elude.Assets.Tex;
+import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
+import tungus.games.elude.game.client.worldrender.renderable.Sprite;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.util.CustomMathUtils;
 
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Laser extends Updatable {
     
-    private static final float WIDTH = 0.2f;
-    private static final float LENGTH = World.WIDTH + World.HEIGHT;
-    private static final float DAMAGE_PER_SECOND = 1f;
+	protected static final float WIDTH = 0.2f;
+    protected static final float LENGTH = World.WIDTH + World.HEIGHT;
+    protected static final float DAMAGE_PER_SECOND = 25f;
     
     private static final Vector2 temp = new Vector2();
     
     protected final World world;
     protected Vector2 source;    
     protected Vector2 end;
-    private Vector2 farPoint;
     
     private boolean over = false;
     
     public Laser(World w, Vector2 source, Vector2 dir) {
         this.world = w;
         this.source = source;
-        this.farPoint = source.cpy().add(dir.x * LENGTH, dir.y * LENGTH);
-        this.end = farPoint.cpy();
+        this.end = source.cpy().add(dir.x * LENGTH, dir.y * LENGTH);
         //world.effects.add(SoundEffect.create(Sounds.LASERBEAM));
     }
     
     @Override
     public boolean update(float deltaTime) {
-        Vessel closestVessel = closestVesselHit();
-        if (closestVessel != null) {
-            closestVessel.tryDamage(DAMAGE_PER_SECOND * deltaTime);
-            CustomMathUtils.lineCircleIntersectionPoint(source, end, closestVessel.bounds.x, closestVessel.bounds.y, closestVessel.bounds.radius + WIDTH / 2, end);
-            end.add(temp.set(end).sub(source).nor().scl(closestVessel.bounds.radius*0.5f));
-        } else {
-            end.set(farPoint);
+        Vessel hit = updateEnd();
+        if (hit != null) {
+        	hit.tryDamage(DAMAGE_PER_SECOND * deltaTime);            
         }
         return over;
+    }
+    
+    private Vessel updateEnd() {
+    	Vessel v = closestVesselHit();
+        if (v != null) {
+        	CustomMathUtils.lineCircleIntersectionPoint(source, end, v.bounds.x, v.bounds.y, v.bounds.radius + WIDTH / 2, end);
+            end.add(temp.set(end).sub(source).nor().scl(v.bounds.radius*1.25f));
+        } else {
+            end.sub(source).nor().scl(LENGTH).add(source);
+        }
+        return v;
     }
     
     private Vessel closestVesselHit() {
@@ -60,13 +68,8 @@ public class Laser extends Updatable {
     
     public void set(Vector2 source, Vector2 dir) {
         this.source.set(source);
-        farPoint.set(source).add(dir.x * LENGTH, dir.y * LENGTH);
-        end.set(farPoint);
-        Vessel v = closestVesselHit();
-        if (v != null) {
-        	CustomMathUtils.lineCircleIntersectionPoint(source, end, v.bounds.x, v.bounds.y, v.bounds.radius + WIDTH / 2, end);
-            end.add(temp.set(end).sub(source).nor().scl(v.bounds.radius*0.5f));
-        }
+        end.set(source).add(dir.x * LENGTH, dir.y * LENGTH);
+        updateEnd();
     }
     
     public void stop() {
@@ -75,6 +78,10 @@ public class Laser extends Updatable {
     
     @Override
     public Renderable getRenderable() {
-        return LaserRenderable.create(source, end);
+    	return Sprite.create(RenderPhase.ROCKET, Tex.LASER, 
+				 (source.x + end.x) / 2, (source.y + end.y) / 2, 
+				 source.dst(end), 0.5f,
+				 (float)Math.atan2(end.y - source.y, end.x - source.x) * MathUtils.radiansToDegrees, 
+				 1);
     }
 }
