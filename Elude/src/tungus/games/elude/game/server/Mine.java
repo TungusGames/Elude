@@ -13,9 +13,10 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Mine extends Updatable {
 
-	private static final float DAMAGE = 15f;
+	private static final float DAMAGE = 10f;
 	public static final float RADIUS = 1.5f;
 	public static final float LIFETIME = 10f;
+	private static final float PROTECTED_TIME = 1f;
 	
 	private final World world;
 	
@@ -29,10 +30,12 @@ public class Mine extends Updatable {
 
 	@Override
 	public boolean update(float deltaTime) {
-		for (Vessel vessel : world.vessels) {
-			if (vessel.isHitBy(bounds, DAMAGE)) {
-				explodeBy(vessel);
-				return true;
+		if (lifeLeft <= LIFETIME - PROTECTED_TIME) {
+			for (Vessel vessel : world.vessels) {
+				if (vessel.isHitBy(bounds, DAMAGE)) {
+					explodeBy(vessel);
+					return true;
+				}
 			}
 		}
 		lifeLeft -= deltaTime;
