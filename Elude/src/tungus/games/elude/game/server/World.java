@@ -8,8 +8,7 @@ import java.util.ListIterator;
 
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.server.enemies.Enemy;
-import tungus.games.elude.game.server.laser.Laser;
-import tungus.games.elude.game.server.laser.RotatingLaser;
+import tungus.games.elude.game.server.enemies.boss.FactoryBoss;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
@@ -20,7 +19,6 @@ import tungus.games.elude.util.LinkedPool.Poolable;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import tungus.games.elude.game.server.enemies.boss.FactoryBoss;
 
 public class World {
 
@@ -66,9 +64,9 @@ public class World {
 		freezeTimer = new FreezeTimer();
 		updatables.add(waveLoader);
 		updatables.add(freezeTimer);
-         //       updatables.add(new FactoryBoss(this));
+        updatables.add(new FactoryBoss(this));
 	//	updatables.add(new Laser(this, new Vector2(15, 3), new Vector2(1,1).nor()));
-		updatables.add(new RotatingLaser(this, new Vector2(0, 6), new Vector2(1, 0), 1, 60));		
+	//	updatables.add(new RotatingLaser(this, new Vector2(0, 6), new Vector2(1, 0), 1, 60));		
 	}
 	
 	public static void calcBounds() {

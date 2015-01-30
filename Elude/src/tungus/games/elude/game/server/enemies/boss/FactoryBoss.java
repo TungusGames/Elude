@@ -1,11 +1,11 @@
 package tungus.games.elude.game.server.enemies.boss;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.laser.RotatingLaser;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class FactoryBoss extends Enemy {
     
@@ -38,9 +38,7 @@ public class FactoryBoss extends Enemy {
             world.addNextFrame.add(laser);
         } else if (state == STATE_IN) {
             time += deltaTime;
-            pos.set(World.WIDTH/2, World.HEIGHT/2);
-            laser.setCenter(pos);
-            //Gdx.app.log("boss", pos.x + ";" + pos.y);
+            pos.set(World.WIDTH/2, World.HEIGHT/2).add((float)Math.sin(time) * 7, 0);
         }
         return false;
     }
