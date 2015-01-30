@@ -14,7 +14,7 @@ public class Laser extends Updatable {
     
     private static final float WIDTH = 0.2f;
     private static final float LENGTH = World.WIDTH + World.HEIGHT;
-    private static final float DAMAGE_PER_SECOND = 1f;
+    private static final float DAMAGE_PER_SECOND = 25f;
     
     private static final Vector2 temp = new Vector2();
     
