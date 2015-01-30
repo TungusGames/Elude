@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import tungus.games.elude.game.server.enemies.boss.FactoryBoss;
 
 public abstract class Enemy extends Updatable implements Hittable {
-	
+
 	public static enum EnemyType {
 
 		STANDING	 (Assets.Tex.STANDINGENEMY,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true, StandingEnemy.class, 	2), 
@@ -34,7 +34,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 		MINION		 (Assets.Tex.MINION,		0.65f,0.65f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class,	1),
 		FACTORY		 (Assets.Tex.FACTORY,     2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class,		12),
 		MINER		 (Assets.Tex.MINER,		0.9f, 0.9f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,	2),
-                BOSS_FACTORY     (Assets.Tex.FACTORY,   3.0f, 3.0f, new float[]{1f, 1f, 1f, 1f}, true, FactoryBoss.class, 100);
+		BOSS_FACTORY     (Assets.Tex.FACTORY,   3.0f, 3.0f, new float[]{1f, 1f, 1f, 1f}, true, FactoryBoss.class, 100);
 		public Tex tex;
 		public float width;
 		public float halfWidth;
@@ -48,7 +48,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 			tex = t; width = w; height = h; debrisColor = c; halfWidth = w/2; halfHeight = h/2; 
 			spawns = spawnsNormally; mClass = cl; hp = hits*Rocket.DEFAULT_DMG;
 		}
-		
+
 		public static EnemyType[] normalSpawners() {
 			EnemyType[] all = EnemyType.values();
 			List<EnemyType> s = new LinkedList<EnemyType>();
@@ -61,7 +61,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 			return s.toArray(spawners);
 		}
 	} 
-	
+
 	public static final Enemy fromType(World w, EnemyType t) {
 		try {
 			return (Enemy)(t.mClass.getConstructor(Vector2.class, World.class).newInstance(w.randomPosOnOuterRect(new Vector2(), 1), w));
@@ -70,50 +70,50 @@ public abstract class Enemy extends Updatable implements Hittable {
 			throw new GdxRuntimeException(ex);
 		}
 	}
-	
+
 	protected void shootRocket() {
 		shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
 	}
-	
+
 	protected void shootRocket(Vector2 dir) {
 		shootRocket(rocketType, dir);
 	}
-	
+
 	protected void shootRocket(RocketType t, Vector2 dir) {
 		timeSinceShot = 0;
 		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, targetPlayer(), world);
 		world.addNextFrame.add(r);
 	}
-	
+
 	public static final float DEFAULT_TURNSPEED = 540;
 	protected float turnSpeed = DEFAULT_TURNSPEED;
-	
+
 	protected final World world;
 	protected RocketType rocketType;
-	
+
 	public Vector2 pos;
 	public Vector2 vel;
 	public float rot = 0;
 	public final EnemyType type;
-	
+
 	public final Circle collisionBounds;
-	
+
 	public final float maxHp;
 	public float hp;
-        
-        public boolean countsForProgress;
-	
+
+	public boolean countsForProgress;
+
 	protected float turnGoal;
 	protected float timeSinceShot = 0f;
-	
+
 	protected static final Vector2 t = new Vector2();
-	
-        protected Enemy(Vector2 pos, EnemyType t, float boundSize, World w, RocketType type) {
-            this(pos, t, boundSize, t.hp, w, type);
-        }
-        
+
+	protected Enemy(Vector2 pos, EnemyType t, float boundSize, World w, RocketType type) {
+		this(pos, t, boundSize, t.hp, w, type);
+	}
+
 	protected Enemy(Vector2 pos, EnemyType t, float boundSize, float hp, World w,
-				 RocketType rType) {
+			RocketType rType) {
 		this.rocketType = rType;
 		this.type = t;
 		this.pos = pos;
@@ -122,9 +122,9 @@ public abstract class Enemy extends Updatable implements Hittable {
 		this.hp = maxHp = hp;
 		this.collisionBounds = new Circle(pos, boundSize/2);
 		this.keepsWorldGoing = true;
-                this.countsForProgress = type.spawns;
+		this.countsForProgress = type.spawns;
 	}
-	
+
 	public boolean update(float deltaTime) {
 		timeSinceShot += deltaTime;
 		boolean subclassWantsDeath = aiUpdate(deltaTime);
@@ -143,7 +143,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 			rot += Math.signum(diff) * turnSpeed * deltaTime;
 		return subclassWantsDeath || hp <= 0;
 	}
-	
+
 	protected float calcTurnGoal() {
 		if (!vel.equals(Vector2.Zero)) {
 			return vel.angle()-90;
@@ -151,9 +151,9 @@ public abstract class Enemy extends Updatable implements Hittable {
 			return t.set(targetPlayer().pos).sub(pos).angle()-90;
 		}
 	}
-	
+
 	protected abstract boolean aiUpdate(float deltaTime);
-	
+
 	private boolean died = false;
 	public void killBy(Circle hitter) {
 		if (!died) {
@@ -163,12 +163,12 @@ public abstract class Enemy extends Updatable implements Hittable {
 			} else {
 				world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN));
 			}
-						
+
 			died = true;
 			world.enemyCount--;
 		}
 	}
-	
+
 	@Override
 	public boolean isHitBy(Circle c, float damage) {
 		if (!died && collisionBounds.overlaps(c)) {
@@ -180,13 +180,13 @@ public abstract class Enemy extends Updatable implements Hittable {
 		}
 		return false;
 	}
-	
+
 	protected void takeDamage(float d) {
 		float diff = (float)Math.min(hp, d);
 		world.waveLoader.onEnemyHurt(this, diff);
 		hp -= diff;
 	}
-	
+
 	public float width() {
 		return type.width;
 	}
@@ -194,7 +194,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 	public float height() {
 		return type.height;
 	}
-	
+
 	protected Vessel targetPlayer() {
 		Vessel r = null;
 		float bestDist = 10000;
@@ -207,7 +207,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 		}
 		return r;
 	}
-	
+
 	@Override
 	public Renderable getRenderable() {
 		return EnemyRenderable.create(id, hp / maxHp, type.tex, pos.x, pos.y, width(), height(), rot);
