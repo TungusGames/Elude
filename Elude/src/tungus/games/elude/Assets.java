@@ -1,5 +1,7 @@
 package tungus.games.elude;
 
+import java.util.Scanner;
+
 import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool;
 import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
@@ -51,6 +53,7 @@ public class Assets {
 		MINION,
 		MINER,
 		SHIELDED,
+		BOSS1,
 		
 		HPBONUS,
 		SPEEDBONUS,
@@ -256,12 +259,22 @@ public class Assets {
 		}
 		Shaders.bindPhases();
 		
+		loadFont();
+		loadBossBehavior();
+	}
+	
+	private static void loadBossBehavior() {
+		Scanner sc = new Scanner(Gdx.files.internal("levels/boss1behavior.txt").read());
+		// To be continued..
+	}
+
+	private static void loadFont() {
 		Texture fontTex = new Texture(Gdx.files.internal("font/bulletproof.png"));
 		fontTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		TextureRegion fontRegion = new TextureRegion(fontTex);
 		font = new BitmapFont(Gdx.files.internal("font/bulletproof.fnt"), fontRegion);
 	}
-	
+
 	public static FileHandle levelFile(int levelNum) {
 		return Gdx.files.internal("levels/" + levelNum + ".lvl");
 	}

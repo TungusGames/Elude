@@ -24,17 +24,17 @@ public abstract class Enemy extends Updatable implements Hittable {
 
 	public static enum EnemyType {
 
-		STANDING	 (Assets.Tex.STANDINGENEMY,0.6f, 1, 	 new float[]{0.1f,    1, 0.1f,  1}, true, StandingEnemy.class, 	2), 
-		MOVING		 (Assets.Tex.MOVINGENEMY, 0.8f, 1.05f, new float[]{   1,    1, 0.2f,  1}, true, MovingEnemy.class,	2), 
-		KAMIKAZE	 (Assets.Tex.KAMIKAZE,	0.9f, 0.85f, new float[]{0.25f,0.25f,0.8f,1  }, true, Kamikaze.class,		2), 
-		SHARPSHOOTER (Assets.Tex.SHARPSHOOTER,1.05f,0.95f, new float[]{0.9f, 0.8f, 0.2f, 1f}, true, Sharpshooter.class,	2),
-		MACHINEGUNNER(Assets.Tex.MACHINEGUNNER,1.05f,0.8f,  new float[]{0.8f, 0.3f, 0.7f, 1f}, true, MachineGunner.class,	2),
-		SHIELDED	 (Assets.Tex.SHIELDED,	1.3f,1.016f, new float[]{0.7f, 0.5f, 0.4f, 1f}, true, Shielded.class,		2),
-		SPLITTER	 (Assets.Tex.SPLITTER,	1.00f,0.8f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Splitter.class,		2),
-		MINION		 (Assets.Tex.MINION,		0.65f,0.65f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, false,Minion.class,	1),
-		FACTORY		 (Assets.Tex.FACTORY,     2.0f, 2.0f,  new float[]{0.5f, 0.5f, 0.5f, 1f}, true, Factory.class,		12),
-		MINER		 (Assets.Tex.MINER,		0.9f, 0.9f,  new float[]{ 1f,    1f,   1f, 1f}, true, Miner.class,	2),
-		BOSS_FACTORY     (Assets.Tex.FACTORY,   3.0f, 3.0f, new float[]{1f, 1f, 1f, 1f}, true, FactoryBoss.class, 100);
+		STANDING	 (Assets.Tex.STANDINGENEMY,	0.6f, 1, 	new float[]{0.1f,    1, 0.1f, 1f}, 	true, 	StandingEnemy.class, 	2), 
+		MOVING		 (Assets.Tex.MOVINGENEMY, 	0.8f,1.05f,	new float[]{   1,    1, 0.2f, 1f}, 	true, 	MovingEnemy.class,		2), 
+		KAMIKAZE	 (Assets.Tex.KAMIKAZE,		0.9f,0.85f,	new float[]{0.25f,0.25f,0.8f, 1f}, 	true,	Kamikaze.class,			2), 
+		SHARPSHOOTER (Assets.Tex.SHARPSHOOTER,	1.05f,0.95f,new float[]{0.9f, 0.8f, 0.2f, 1f}, 	true, 	Sharpshooter.class,		2),
+		MACHINEGUNNER(Assets.Tex.MACHINEGUNNER, 1.05f,0.8f,	new float[]{0.8f, 0.3f, 0.7f, 1f}, 	true, 	MachineGunner.class,	2),
+		SHIELDED	 (Assets.Tex.SHIELDED,		1.3f,1.016f,new float[]{0.7f, 0.5f, 0.4f, 1f}, 	true, 	Shielded.class,			2),
+		SPLITTER	 (Assets.Tex.SPLITTER,		1.00f,0.8f,	new float[]{0.5f, 0.5f, 0.5f, 1f}, 	true,	Splitter.class,			2),
+		MINION		 (Assets.Tex.MINION,		0.65f,0.65f,new float[]{0.5f, 0.5f, 0.5f, 1f},	false,	Minion.class,			1),
+		FACTORY		 (Assets.Tex.FACTORY,     	2.0f, 2.0f,	new float[]{0.5f, 0.5f, 0.5f, 1f}, 	true, 	Factory.class,			12),
+		MINER		 (Assets.Tex.MINER,			0.9f, 0.9f, new float[]{1f,   1f,   1f,   1f},	true,	Miner.class,			2),
+		BOSS_FACTORY (Assets.Tex.BOSS1,   		4.0f, 4.0f,	new float[]{1f,   1f,   1f,   1f}, 	true, 	FactoryBoss.class, 		100);
 		public Tex tex;
 		public float width;
 		public float halfWidth;
@@ -71,20 +71,6 @@ public abstract class Enemy extends Updatable implements Hittable {
 		}
 	}
 
-	protected void shootRocket() {
-		shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
-	}
-
-	protected void shootRocket(Vector2 dir) {
-		shootRocket(rocketType, dir);
-	}
-
-	protected void shootRocket(RocketType t, Vector2 dir) {
-		timeSinceShot = 0;
-		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, targetPlayer(), world);
-		world.addNextFrame.add(r);
-	}
-
 	public static final float DEFAULT_TURNSPEED = 540;
 	protected float turnSpeed = DEFAULT_TURNSPEED;
 
@@ -102,6 +88,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 	public float hp;
 
 	public boolean countsForProgress;
+	public boolean solid;
 
 	protected float turnGoal;
 	protected float timeSinceShot = 0f;
@@ -123,6 +110,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 		this.collisionBounds = new Circle(pos, boundSize/2);
 		this.keepsWorldGoing = true;
 		this.countsForProgress = type.spawns;
+		this.solid = true;
 	}
 
 	public boolean update(float deltaTime) {
@@ -141,7 +129,32 @@ public abstract class Enemy extends Updatable implements Hittable {
 			rot = turnGoal;
 		else
 			rot += Math.signum(diff) * turnSpeed * deltaTime;
+		if (solid) {
+			pushCollidingVessels();
+		}
 		return subclassWantsDeath || hp <= 0;
+	}
+	
+	public void shootRocket() {
+		shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
+	}
+
+	public void shootRocket(Vector2 dir) {
+		shootRocket(rocketType, dir);
+	}
+
+	public void shootRocket(RocketType t, Vector2 dir) {
+		timeSinceShot = 0;
+		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, targetPlayer(), world);
+		world.addNextFrame.add(r);
+	}
+	
+	private void pushCollidingVessels() {
+		for (Vessel v : world.vessels) {
+			if (v.bounds.overlaps(collisionBounds)) {
+				v.pos.sub(pos).nor().scl(collisionBounds.radius + v.bounds.radius).add(pos);
+			}
+		}
 	}
 
 	protected float calcTurnGoal() {

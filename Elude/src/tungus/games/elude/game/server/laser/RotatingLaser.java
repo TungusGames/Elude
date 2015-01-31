@@ -9,7 +9,7 @@ public class RotatingLaser extends Laser {
     
     private Vector2 center;
     private Vector2 posFromCenter;
-    private float angularVelocity;
+    public float angularVelocity;
     
     public RotatingLaser(World w, Vector2 center, Vector2 startDir, 
                   float radiusFromCenter, float angularVelocity) {

@@ -1,0 +1,6 @@
+3 difficulties by health
+11 actions in each
+3 enemies spawned every action
+Splitter		None			Shoot	Shoot	MovingEnemy	MovingEnemy	Shoot	Shoot	Kamikaze	Shoot	Shoot
+Shielded		MachineGunner	Shoot	Shoot	MovingEnemy	Shielded	Shoot	Shoot	Splitter	Shoot	Shoot
+MachineGunner	MachineGunner	Shoot	Shoot	Kamikaze	Kamikaze	Shoot	Shoot	Miner		Shoot	Shoot
