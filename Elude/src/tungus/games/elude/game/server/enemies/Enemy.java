@@ -61,10 +61,14 @@ public abstract class Enemy extends Updatable implements Hittable {
 			return s.toArray(spawners);
 		}
 	} 
-
+	
 	public static final Enemy fromType(World w, EnemyType t) {
+		return fromType(w, t, w.randomPosOnOuterRect(new Vector2(), 1));
+	}
+
+	public static final Enemy fromType(World w, EnemyType t, Vector2 v) {
 		try {
-			return (Enemy)(t.mClass.getConstructor(Vector2.class, World.class).newInstance(w.randomPosOnOuterRect(new Vector2(), 1), w));
+			return (Enemy)(t.mClass.getConstructor(Vector2.class, World.class).newInstance(v, w));
 		} catch (Exception ex) {
 			Gdx.app.log("ERROR", "Enemy instantiation reflection magic failed.");
 			throw new GdxRuntimeException(ex);

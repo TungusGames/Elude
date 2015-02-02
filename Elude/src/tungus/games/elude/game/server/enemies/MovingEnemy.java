@@ -48,6 +48,9 @@ public class MovingEnemy extends Enemy {
 		arrivePos.x = MathUtils.clamp(pos.x, moveBounds.x, moveBounds.width+moveBounds.x);
 		arrivePos.y = MathUtils.clamp(pos.y, moveBounds.y, moveBounds.height+moveBounds.y);
 		vel.set(arrivePos).sub(pos).nor().scl(speed);
+		if (vel.equals(Vector2.Zero)) {
+			vel.set(speed, 0).rotate(MathUtils.random() * 360);
+		}
 		turnGoal = vel.angle()-90;
 		rot = turnGoal;
 	}

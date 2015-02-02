@@ -5,6 +5,12 @@ import java.util.Scanner;
 import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool;
 import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
+import tungus.games.elude.game.server.enemies.boss.FactoryBoss;
+import tungus.games.elude.game.server.enemies.boss.FactoryBossBehavior;
+import tungus.games.elude.game.server.enemies.boss.NullBehavior;
+import tungus.games.elude.game.server.enemies.boss.ShootBehavior;
+import tungus.games.elude.game.server.enemies.boss.SpawnBehavior;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -265,7 +271,29 @@ public class Assets {
 	
 	private static void loadBossBehavior() {
 		Scanner sc = new Scanner(Gdx.files.internal("levels/boss1behavior.txt").read());
-		// To be continued..
+		int diffCount = sc.nextInt();
+		sc.nextLine();
+		int actionCount = sc.nextInt();
+		sc.nextLine();
+		FactoryBoss.BEHAVIOR = new FactoryBossBehavior[diffCount][actionCount];
+		for (int i = 0; i < diffCount; i++) {
+			for (int j = 0; j < actionCount; j++) {
+				int prefixParam = -1;
+				if (sc.hasNextInt()) {
+					prefixParam = sc.nextInt();
+				}
+				String command = sc.next().toUpperCase();
+				if (command.equals("NONE")) {
+					FactoryBoss.BEHAVIOR[i][j] = new NullBehavior();
+				} else if (command.equals("SHOOT")) {
+					FactoryBoss.BEHAVIOR[i][j] = new ShootBehavior();
+				} else {
+					FactoryBoss.BEHAVIOR[i][j] = prefixParam == -1 ? 
+							new SpawnBehavior(EnemyType.valueOf(command)) : 
+							new SpawnBehavior(EnemyType.valueOf(command), prefixParam);
+				}
+			}
+		}
 	}
 
 	private static void loadFont() {

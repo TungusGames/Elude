@@ -5,6 +5,7 @@ import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.laser.RotatingLaser;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
 public class FactoryBoss extends Enemy {
@@ -28,8 +29,7 @@ public class FactoryBoss extends Enemy {
      * 
      * Each behavior lasts for one "half wave" as the boss goes from one side of the map to the other.
      */
-    public static FactoryBossBehavior BEHAVIOR[][] = //null;
-    			new FactoryBossBehavior[][]{{ new ShootBehavior(), new NullBehavior() }};
+    public static FactoryBossBehavior BEHAVIOR[][] = null;
     
     private int state = STATE_ENTER;
     private float timeSinceArrival = 0;
@@ -79,9 +79,9 @@ public class FactoryBoss extends Enemy {
             	if (behaviorIndex == currentLoop.length) {
             		behaviorIndex = 0;
             	}
-            	currentLoop[behaviorIndex].startPeriod(this);
+            	currentLoop[behaviorIndex].startPeriod(world, this);
             }
-            currentLoop[behaviorIndex].update(this, deltaTime);
+            currentLoop[behaviorIndex].update(world, this, deltaTime);
         }
         return false;
     }
@@ -93,8 +93,14 @@ public class FactoryBoss extends Enemy {
     		// Interpolate angular velocity from START to END as hp goes from maxHp to 0
     		laser.angularVelocity = LASER_END_SPEED - (LASER_END_SPEED - LASER_START_SPEED) * (hp / maxHp);
     	}
-    	// Interpolate index from 0 to length-1 as hp goes from maxHp to 0. HP is never on max here, so it won't get out of bounds.
-    	currentLoop = BEHAVIOR[(int)(BEHAVIOR.length * (1 - hp/maxHp))];
+    	// Interpolate index from 0 to length-1 as hp goes from maxHp to 0.
+    	currentLoop = BEHAVIOR[Math.min((int)(BEHAVIOR.length * (1 - hp/maxHp)), BEHAVIOR.length - 1)];
+    }
+    
+    @Override
+	public void killBy(Circle hitter) {
+    	super.killBy(hitter);
+    	laser.stop();
     }
     
 }
