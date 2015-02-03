@@ -37,6 +37,7 @@ public class FactoryBoss extends Enemy {
     private float timeOnBehavior = 0;
     private FactoryBossBehavior[] currentLoop;
     private int behaviorIndex;
+    private int difficultyIndex;
     
     private RotatingLaser laser;
     
@@ -50,9 +51,9 @@ public class FactoryBoss extends Enemy {
         vel.set(AMPLITUDE * ANGULAR_FREQ, 0);
         super.turnSpeed = 0;
         super.solid = true;
-        currentLoop = BEHAVIOR[0];
-        // 	Start by switching to index 0, so the behavior's start() is called at the right time
-        behaviorIndex = -1;	
+        // 	Start by switching to index [0][0] from [0][-1], so the behavior's start() is called at the right time
+        difficultyIndex = 0;
+        behaviorIndex = -1;	        
         timeOnBehavior = TIME_PER_BEHAVIOR;
         
     }
@@ -79,6 +80,7 @@ public class FactoryBoss extends Enemy {
             	if (behaviorIndex == currentLoop.length) {
             		behaviorIndex = 0;
             	}
+            	currentLoop = BEHAVIOR[difficultyIndex];
             	currentLoop[behaviorIndex].startPeriod(world, this);
             }
             currentLoop[behaviorIndex].update(world, this, deltaTime);
@@ -94,7 +96,7 @@ public class FactoryBoss extends Enemy {
     		laser.angularVelocity = LASER_END_SPEED - (LASER_END_SPEED - LASER_START_SPEED) * (hp / maxHp);
     	}
     	// Interpolate index from 0 to length-1 as hp goes from maxHp to 0.
-    	currentLoop = BEHAVIOR[Math.min((int)(BEHAVIOR.length * (1 - hp/maxHp)), BEHAVIOR.length - 1)];
+    	difficultyIndex = Math.min((int)(BEHAVIOR.length * (1 - hp/maxHp)), BEHAVIOR.length - 1);
     }
     
     @Override
