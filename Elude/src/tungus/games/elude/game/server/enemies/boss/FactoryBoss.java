@@ -16,7 +16,7 @@ public class FactoryBoss extends Enemy {
     private static final int STATE_IN = 1;
     private static final float MOVEMENT_PERIOD = 25;
     public static final float TIME_PER_BEHAVIOR = MOVEMENT_PERIOD / 2;
-    private static final float ANGULAR_FREQ = 2*(float)Math.PI / MOVEMENT_PERIOD; // Körfrekvencia
+    private static final float ANGULAR_FREQ = 2*(float)Math.PI / MOVEMENT_PERIOD; // Kï¿½rfrekvencia
     private static final float AMPLITUDE = 7;
     
     private static final float LASER_START_SPEED = 20; // Degrees per sec
@@ -68,7 +68,8 @@ public class FactoryBoss extends Enemy {
             world.addNextFrame.add(laser);
         } else if (state == STATE_IN) {
             timeSinceArrival += deltaTime;
-            pos.set(World.WIDTH/2, World.HEIGHT/2).add((float)Math.sin(timeSinceArrival * ANGULAR_FREQ) * AMPLITUDE, 0);
+            pos.add(new Vector2(world.vessels.get(0).pos).sub(pos).nor().scl(deltaTime));
+            //pos.set(World.WIDTH/2, World.HEIGHT/2).add((float)Math.sin(timeSinceArrival * ANGULAR_FREQ) * AMPLITUDE, 0);
             if (timeSinceArrival < TIME_PER_BEHAVIOR / 2) {
             	// Start the behavior list coming from the end of the map, not before that
             	return false;
@@ -77,10 +78,10 @@ public class FactoryBoss extends Enemy {
             if (timeOnBehavior >= TIME_PER_BEHAVIOR) {
             	timeOnBehavior -= TIME_PER_BEHAVIOR;
             	behaviorIndex++;
+            	currentLoop = BEHAVIOR[difficultyIndex];
             	if (behaviorIndex == currentLoop.length) {
             		behaviorIndex = 0;
             	}
-            	currentLoop = BEHAVIOR[difficultyIndex];
             	currentLoop[behaviorIndex].startPeriod(world, this);
             }
             currentLoop[behaviorIndex].update(world, this, deltaTime);
