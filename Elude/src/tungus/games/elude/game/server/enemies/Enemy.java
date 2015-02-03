@@ -114,7 +114,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 		this.collisionBounds = new Circle(pos, boundSize/2);
 		this.keepsWorldGoing = true;
 		this.countsForProgress = type.spawns;
-		this.solid = true;
+		this.solid = false;
 	}
 
 	public boolean update(float deltaTime) {

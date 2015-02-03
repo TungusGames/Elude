@@ -16,7 +16,7 @@ public class FactoryBoss extends Enemy {
     private static final int STATE_IN = 1;
     private static final float MOVEMENT_PERIOD = 25;
     public static final float TIME_PER_BEHAVIOR = MOVEMENT_PERIOD / 2;
-    private static final float ANGULAR_FREQ = 2*(float)Math.PI / MOVEMENT_PERIOD; // Kï¿½rfrekvencia
+    private static final float ANGULAR_FREQ = 2*(float)Math.PI / MOVEMENT_PERIOD; // Körfrekvencia
     private static final float AMPLITUDE = 7;
     
     private static final float LASER_START_SPEED = 20; // Degrees per sec
