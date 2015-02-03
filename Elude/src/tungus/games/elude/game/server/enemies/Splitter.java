@@ -21,7 +21,7 @@ public class Splitter extends Enemy {
 	private boolean arrived = false;
 	
 	public Splitter(Vector2 pos, World w) {
-		this(pos, w, DEFAULT_SPLITS, true);
+		this(pos, w, DEFAULT_SPLITS, !World.outerBounds.contains(pos));
 	}
 	
 	public Splitter(Vector2 pos, World w, int splits, boolean edge) {

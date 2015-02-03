@@ -22,7 +22,7 @@ public class Miner extends MovingEnemy {
 	}
 	
 	@Override
-	protected void shootRocket() {
+	public void shootRocket() {
 		timeSinceShot = 0;
 		Mine mine = new Mine(world, pos.cpy());
 		world.addNextFrame.add(mine);
