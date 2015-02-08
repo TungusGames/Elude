@@ -25,4 +25,29 @@ public class CustomMathUtils {
 		out.y = m * out.x + c;
 		return out;
 	}
+	
+	public static double clamp0_360(double a) {
+		if (a < 0) {
+			while (a <= -360) {
+				a += 360;
+			}
+			return 360 - Math.abs(a);
+		} else {
+			while (a >= 360) {
+				a -= 360;
+			}
+			return a;
+		}
+	}
+	
+	public static double convexSub(double a, double b) {
+		a = clamp0_360(a);
+		b = clamp0_360(b);
+		
+		double result = Math.abs(a - b);
+		if (result > 180) {
+			result = 360 - result;
+		}
+		return result;
+	}
 }

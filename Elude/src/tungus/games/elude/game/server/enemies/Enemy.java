@@ -86,7 +86,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 	public float rot = 0;
 	public final EnemyType type;
 
-	public final Circle collisionBounds;
+	public Circle collisionBounds;
 
 	public final float maxHp;
 	public float hp;

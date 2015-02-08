@@ -4,6 +4,7 @@ import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
+import tungus.games.elude.util.CustomMathUtils;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
@@ -29,7 +30,7 @@ public class TeleportingBoss extends StandingBase {
 	private float sizeScalar = 1f;
 	
 	public TeleportingBoss(Vector2 pos, World w) {
-		super(pos, EnemyType.BOSS_TELEPORT, RocketType.FAST_TURNING, w, DEFAULT_SPEED, RADIUS);
+		super(pos, EnemyType.BOSS_TELEPORT, RocketType.SLOW_TURNING, w, DEFAULT_SPEED, RADIUS * 2);
 	}
 	@Override
 	protected boolean standingUpdate(float deltaTime) {
@@ -38,7 +39,7 @@ public class TeleportingBoss extends StandingBase {
 		case STATE_SHOOT:
 		case STATE_SPAWN:
 		case STATE_LASER:
-			if (rocketsComing()) {
+			if (rocketsComing2()) {
 				setState(STATE_TELEPORT_FADE_OUT);
 				return false;
 			} else if (waiting) {
@@ -71,6 +72,8 @@ public class TeleportingBoss extends StandingBase {
 				setState(STATE_TELEPORT_FADE_IN);
 				pos.x = MathUtils.random() * World.WIDTH;
 				pos.y = MathUtils.random() * World.HEIGHT;
+				pos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
+				pos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
 				break;
 			case STATE_TELEPORT_FADE_IN:
 				sizeScalar = 1f;
@@ -78,6 +81,7 @@ public class TeleportingBoss extends StandingBase {
 				break;
 			}
 		}
+		collisionBounds.setRadius(RADIUS * sizeScalar);
 		return false;
 	}
 	
@@ -97,9 +101,26 @@ public class TeleportingBoss extends StandingBase {
 		for (Updatable u : world.updatables) {
 			if (u instanceof Rocket) {
 				Rocket r = (Rocket)u;
-				Vector2 p2 = r.pos.cpy().add(r.vel.scl(STATE_TIME[STATE_TELEPORT_FADE_OUT])); //The point the rocket would reach in the time we could fade out
-				if (Intersector.distanceSegmentPoint(r.pos, p2, pos) < RADIUS / 2) //If it would hit us in that time
+				Vector2 p2 = r.pos.cpy().add(r.vel.cpy().scl(STATE_TIME[STATE_TELEPORT_FADE_OUT])); //The point the rocket would reach in the time we could fade out
+				if (pos.dst2(r.pos) > RADIUS * RADIUS && Intersector.distanceSegmentPoint(r.pos, p2, pos) < RADIUS) //If it would hit us in that time
 					return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean rocketsComing2() {
+		for (Updatable u : world.updatables) {
+			if (u instanceof Rocket) {
+				Rocket r = (Rocket)u;
+				Vector2 rToCenter = pos.cpy().sub(r.pos);
+				float dist = rToCenter.len();
+				if (dist <= r.vel.cpy().scl(STATE_TIME[STATE_TELEPORT_FADE_OUT]).len() + RADIUS + Rocket.ROCKET_SIZE) {
+					double tangentAngle = Math.asin(RADIUS / rToCenter.len()) * MathUtils.radiansToDegrees;// Angle of tangent line (erinto)
+					double a = CustomMathUtils.convexSub(r.vel.angle(), rToCenter.angle());
+					if (a <= tangentAngle + 5)
+						return true;
+				}
 			}
 		}
 		return false;
