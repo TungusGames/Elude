@@ -1,5 +1,6 @@
 package tungus.games.elude.game.server.enemies.boss;
 
+import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.game.server.laser.RotatingLaser;
@@ -22,10 +23,15 @@ public class ClosingBoss extends Enemy {
 	private static final float SPEED = 3f;
 
 	private static final int SHOTS_START = 3;
-	private static final int SHOTS_END = 10;
-	private static final float RELOAD_START = 5f;
-	private static final float RELOAD_END = 2.5f;
-	private static final float SHORT_RELOAD = 0.25f;
+	private static final int SHOTS_END = 7;
+	private static final float RELOAD_START = 7.5f;
+	private static final float RELOAD_END = 3.5f;
+	private static final float SHORT_RELOAD = 0.35f;
+	
+	private static final EnemyType[][] SPAWN = new EnemyType[][]{{EnemyType.MOVING, EnemyType.KAMIKAZE}, 
+																 {EnemyType.MACHINEGUNNER, EnemyType.SHARPSHOOTER},
+																 {EnemyType.MINER, EnemyType.SHARPSHOOTER}};
+	private final Spawner spawner;
 
 	private int shotsAtOnce = SHOTS_START;
 	private float shortReload = SHORT_RELOAD;
@@ -45,7 +51,8 @@ public class ClosingBoss extends Enemy {
 				w,
 				RocketType.FAST_TURNING);
 		vel.set(3, 0);
-		super.solid = true;
+		spawner = new Spawner(w, SPAWN);
+		super.solid = true;		
 	}
 
 	@Override
@@ -66,6 +73,7 @@ public class ClosingBoss extends Enemy {
 					shotsFiredInVolley = 0;
 				}
 			}
+			spawner.update(deltaTime, 1 - hp / maxHp);
 		}
 		return false;
 	}
@@ -85,6 +93,11 @@ public class ClosingBoss extends Enemy {
 	public void killBy(Circle hitter) {
 		super.killBy(hitter);
 		laser.stop();
+		for (Updatable u : world.updatables) {
+			if (u instanceof Enemy) {
+				((Enemy)u).killBy(null);
+			}
+		}
 	}
 
 }

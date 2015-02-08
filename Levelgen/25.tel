@@ -1,6 +1,9 @@
 71
 You shall not pass
 0 100
-0 0 0 0
+0.15 0 0 0
 wavestart 0 0
 closing_boss
+
+wavestart 15 -1
+health
