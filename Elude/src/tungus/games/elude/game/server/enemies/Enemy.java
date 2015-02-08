@@ -11,6 +11,7 @@ import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
+import tungus.games.elude.game.server.enemies.boss.ClosingBoss;
 import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
@@ -18,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import tungus.games.elude.game.server.enemies.boss.FactoryBoss;
 
 public abstract class Enemy extends Updatable implements Hittable {
 
@@ -34,7 +34,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 		MINION		 (Assets.Tex.MINION,		0.65f,0.65f,new float[]{0.5f, 0.5f, 0.5f, 1f},	false,	Minion.class,			1),
 		FACTORY		 (Assets.Tex.FACTORY,     	2.0f, 2.0f,	new float[]{0.5f, 0.5f, 0.5f, 1f}, 	true, 	Factory.class,			12),
 		MINER		 (Assets.Tex.MINER,			0.9f, 0.9f, new float[]{1f,   1f,   1f,   1f},	true,	Miner.class,			2),
-		BOSS_FACTORY (Assets.Tex.BOSS1,   		4.0f, 4.0f,	new float[]{1f,   1f,   1f,   1f}, 	true, 	FactoryBoss.class, 		100);
+		CLOSING_BOSS (Assets.Tex.MOVINGENEMY,	2.0f, 2.0f,	new float[]{1f,   1f,   1f,   1f}, 	true, 	ClosingBoss.class, 		100);
 		public Tex tex;
 		public float width;
 		public float halfWidth;
