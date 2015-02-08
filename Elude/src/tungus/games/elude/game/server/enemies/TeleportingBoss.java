@@ -19,7 +19,7 @@ public class TeleportingBoss extends StandingBase {
 	private static final int STATE_TELEPORT_FADE_IN = 4;
 	
 	private static final float WAIT_TIME = 5f;
-	private static final float[] STATE_TIME = {5f, 1f, 5f, 0.5f, 0.5f};
+	private static final float[] STATE_TIME = {5f, 1f, 5f, 0.25f, 0.5f};
 	
 	private static final float RADIUS = 1f;
 	
@@ -70,10 +70,7 @@ public class TeleportingBoss extends StandingBase {
 				break;
 			case STATE_TELEPORT_FADE_OUT:
 				setState(STATE_TELEPORT_FADE_IN);
-				pos.x = MathUtils.random() * World.WIDTH;
-				pos.y = MathUtils.random() * World.HEIGHT;
-				pos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
-				pos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
+				setNewPos();				
 				break;
 			case STATE_TELEPORT_FADE_IN:
 				sizeScalar = 1f;
@@ -85,6 +82,12 @@ public class TeleportingBoss extends StandingBase {
 		return false;
 	}
 	
+	private void setNewPos() {
+		do {
+			pos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
+			pos.y = MathUtils.random() * (World.HEIGHT - 2*World.EDGE) + World.EDGE;
+		} while (rocketsComing2());
+	}
 	private void setState(int state) {
 		this.state = state;
 		stateTime = 0;
