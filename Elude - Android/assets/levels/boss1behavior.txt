@@ -1,0 +1,5 @@
+3 difficulties by health
+11 actions in each
+Splitter		None			Shoot	Shoot	Moving		Moving		Shoot	Shoot	Kamikaze	Shoot	Shoot
+Shielded		MachineGunner	Shoot	Shoot	Moving		Shielded	Shoot	Shoot	Splitter	Shoot	Shoot
+MachineGunner	MachineGunner	Shoot	Shoot	Kamikaze	Kamikaze	Shoot	Shoot	Miner		Shoot	Shoot

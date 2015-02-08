@@ -1,6 +1,5 @@
 package tungus.games.elude.game.server.enemies;
 
-import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
 
 import com.badlogic.gdx.math.Vector2;
@@ -15,16 +14,7 @@ public class Factory extends StandingBase {
 	public Factory(Vector2 pos, World w) {
 		super(pos, EnemyType.FACTORY, null, w, EnemyType.FACTORY.hp, SPEED, 2*RADIUS, 4.5f);
 		turnSpeed = TURNSPEED;
-	}
-	
-	@Override
-	protected boolean aiUpdate(float delta) {
-		for (Vessel v : world.vessels) {
-			if (v.bounds.overlaps(collisionBounds)) {
-				v.pos.sub(pos).nor().scl(collisionBounds.radius + v.bounds.radius).add(pos);
-			}
-		}
-		return super.aiUpdate(delta);
+		solid = true;
 	}
 
 	@Override
