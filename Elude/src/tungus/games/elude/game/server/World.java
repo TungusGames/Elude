@@ -8,7 +8,6 @@ import java.util.ListIterator;
 
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.server.enemies.Enemy;
-import tungus.games.elude.game.server.enemies.TeleportingBoss;
 import tungus.games.elude.levels.loader.EnemyLoader;
 import tungus.games.elude.levels.loader.FiniteLevelLoader;
 import tungus.games.elude.levels.loader.arcade.ArcadeLoaderBase;
@@ -63,11 +62,7 @@ public class World {
 		waveLoader = EnemyLoader.loaderFromLevelNum(this, levelNum, finite);
 		freezeTimer = new FreezeTimer();
 		updatables.add(waveLoader);
-		updatables.add(freezeTimer);
-//        updatables.add(new FactoryBoss(this));
-//		updatables.add(new TeleportingBoss(new Vector2(), this));
-	//	updatables.add(new Laser(this, new Vector2(15, 3), new Vector2(1,1).nor()));
-	//	updatables.add(new RotatingLaser(this, new Vector2(0, 6), new Vector2(1, 0), 1, 60));		
+		updatables.add(freezeTimer);	
 	}
 	
 	public static void calcBounds() {
