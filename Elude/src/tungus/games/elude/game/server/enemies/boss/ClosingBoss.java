@@ -30,14 +30,16 @@ public class ClosingBoss extends Enemy {
 	private int shotsAtOnce = SHOTS_START;
 	private float shortReload = SHORT_RELOAD;
 	private float longReload = RELOAD_START;
-
+	
+	private int shotsFiredInVolley = 0;
+	private float timeSinceShot = 0;
 	private int state = STATE_ENTER;
 
 	private RotatingLaser laser;
 
 
-	public ClosingBoss(World w) {
-		super(new Vector2(-5, World.HEIGHT / 2),
+	public ClosingBoss(Vector2 v, World w) {
+		super(v.set(-5, World.HEIGHT / 2),
 				EnemyType.CLOSING_BOSS,
 				2 * RADIUS,
 				w,
@@ -55,6 +57,15 @@ public class ClosingBoss extends Enemy {
 		}
 		if (state == STATE_IN) {
 			vel.set(world.vessels.get(0).pos).sub(pos).nor().scl(SPEED);
+			timeSinceShot += deltaTime;
+			if ((shotsFiredInVolley == 0 && timeSinceShot >= longReload) || (shotsFiredInVolley > 0 && timeSinceShot >= shortReload)) {
+				shootRocket();
+				shotsFiredInVolley++;
+				timeSinceShot = 0;
+				if (shotsFiredInVolley == shotsAtOnce) {
+					shotsFiredInVolley = 0;
+				}
+			}
 		}
 		return false;
 	}

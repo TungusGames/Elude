@@ -33,7 +33,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 		MINION		 (Assets.Tex.MINION,		0.65f,	0.65f,	new float[]{0.5f, 0.5f, 0.5f, 1f},	false,	Minion.class,			1),
 		FACTORY		 (Assets.Tex.FACTORY,     	2.0f,	2.0f,	new float[]{0.5f, 0.5f, 0.5f, 1f}, 	true, 	Factory.class,			12),
 		MINER		 (Assets.Tex.MINER,			0.9f,	0.9f,	new float[]{1f,   1f,   1f,   1f},	true,	Miner.class,			2),
-		CLOSING_BOSS (Assets.Tex.MOVINGENEMY,	2.0f,	2.0f,	new float[]{1f,   1f,   1f,   1f}, 	true, 	ClosingBoss.class, 		100),
+		CLOSING_BOSS (Assets.Tex.MOVINGENEMY,	2.0f,	2.0f,	new float[]{1f,   1f,   1f,   1f}, 	true, 	ClosingBoss.class, 		25),
 		BOSS_TELEPORT(Assets.Tex.MACHINEGUNNER,	1.05f,	0.8f,	new float[]{0.8f, 0.3f, 0.7f, 1f}, 	true, 	TeleportingBoss.class,	100);
 		public Tex tex;
 		public float width;
