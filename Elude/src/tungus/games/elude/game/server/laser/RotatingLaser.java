@@ -27,4 +27,8 @@ public class RotatingLaser extends Laser {
     	end.set(source).add(dirTemp.x * LENGTH, dirTemp.y * LENGTH);
         return super.update(deltaTime);
     }
+    
+    public float angle() {
+    	return posFromCenter.angle();
+    }
 }

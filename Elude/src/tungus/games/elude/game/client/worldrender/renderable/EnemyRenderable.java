@@ -12,7 +12,7 @@ public class EnemyRenderable extends Sprite {
 	public static Renderable create(int id, float hp, Tex tex, float x, float y, float width, float height, float rot) {
 		EnemyRenderable e = (EnemyRenderable)pool.obtain();
 		e.x = x; e.y = y; e.height = height; e.width = width; e.rot = rot; e.texID = tex.ordinal(); 
-		e.id = id; e.hp = hp; e.alpha = 1; e.phase = RenderPhase.ENEMY;
+		e.id = id; e.hp = hp; e.alpha = 1; e.phase = RenderPhase.ENEMY; e.rotx = width/2; e.roty = height/2;
 		return e;
 	}
 

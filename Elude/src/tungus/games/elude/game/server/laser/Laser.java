@@ -78,7 +78,7 @@ public class Laser extends Updatable {
     
     @Override
     public Renderable getRenderable() {
-    	return Sprite.create(RenderPhase.ROCKET, Tex.LASER, 
+    	return Sprite.create(RenderPhase.LASER, Tex.LASER, 
 				 (source.x + end.x) / 2, (source.y + end.y) / 2, 
 				 source.dst(end), 0.5f,
 				 (float)Math.atan2(end.y - source.y, end.x - source.x) * MathUtils.radiansToDegrees, 

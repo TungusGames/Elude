@@ -6,6 +6,7 @@ public enum RenderPhase {
 	FREEZE(new FreezeRenderer()),
 	MINE(new MineRenderer()),
 	PICKUP,
+	LASER,
 	ENEMY,
 	ROCKET,
 	VESSEL,

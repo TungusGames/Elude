@@ -52,6 +52,7 @@ public class Assets {
 		MINER,
 		SHIELDED,
 		BOSS1,
+		BOSS1_BACK,
 		
 		HPBONUS,
 		SPEEDBONUS,

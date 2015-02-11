@@ -56,10 +56,7 @@ public class RenderInfo extends TransferData {
 		}	
 		
 		for (Updatable element : w.updatables) {
-			Renderable r = element.getRenderable();
-			if (r != null) {
-				phases.get(r.phase.ordinal()).add(r);
-			}			
+			element.putRenderables(phases);		
 		}
 		
 		for (i = 0; i < hp.length; i++) {
