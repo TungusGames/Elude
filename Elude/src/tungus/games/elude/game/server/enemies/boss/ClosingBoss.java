@@ -3,6 +3,7 @@ package tungus.games.elude.game.server.enemies.boss;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
+import tungus.games.elude.game.server.enemies.Enemy.EnemyType;
 import tungus.games.elude.game.server.laser.RotatingLaser;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 
@@ -18,9 +19,9 @@ public class ClosingBoss extends Enemy {
 	private static final int STATE_IN = 1;
 
 	private static final float LASER_START_SPEED = 20; // Degrees per sec
-	private static final float LASER_END_SPEED = 90;
+	private static final float LASER_END_SPEED = 60;
 
-	private static final float SPEED = 3f;
+	private static final float SPEED = 2f;
 
 	private static final int SHOTS_START = 3;
 	private static final int SHOTS_END = 7;
@@ -28,9 +29,9 @@ public class ClosingBoss extends Enemy {
 	private static final float RELOAD_END = 3.5f;
 	private static final float SHORT_RELOAD = 0.35f;
 	
-	private static final EnemyType[][] SPAWN = new EnemyType[][]{{EnemyType.MOVING, EnemyType.KAMIKAZE}, 
-																 {EnemyType.MACHINEGUNNER, EnemyType.SHARPSHOOTER},
-																 {EnemyType.MINER, EnemyType.SHARPSHOOTER}};
+	private static final EnemyType[][] SPAWN = new EnemyType[][]{{EnemyType.SHIELDED, EnemyType.MOVING, EnemyType.KAMIKAZE}, 
+																 {EnemyType.MOVING, EnemyType.MOVING, EnemyType.MOVING, EnemyType.KAMIKAZE, EnemyType.MINER},
+																 {EnemyType.MINER, EnemyType.MOVING, EnemyType.MOVING}};
 	private final Spawner spawner;
 
 	private int shotsAtOnce = SHOTS_START;
@@ -66,7 +67,7 @@ public class ClosingBoss extends Enemy {
 			vel.set(world.vessels.get(0).pos).sub(pos).nor().scl(SPEED);
 			timeSinceShot += deltaTime;
 			if ((shotsFiredInVolley == 0 && timeSinceShot >= longReload) || (shotsFiredInVolley > 0 && timeSinceShot >= shortReload)) {
-				shootRocket();
+				shootRocket(hp > maxHp / 3 ? RocketType.SLOW_TURNING : RocketType.FAST_TURNING);
 				shotsFiredInVolley++;
 				timeSinceShot = 0;
 				if (shotsFiredInVolley == shotsAtOnce) {
@@ -94,7 +95,7 @@ public class ClosingBoss extends Enemy {
 		super.killBy(hitter);
 		laser.stop();
 		for (Updatable u : world.updatables) {
-			if (u instanceof Enemy) {
+			if (u instanceof Enemy && u != this) {
 				((Enemy)u).killBy(null);
 			}
 		}

@@ -10,7 +10,7 @@ public class Spawner {
 
 	private final EnemyType[][] toSpawn;
 
-	public int maxEnemies = 4;
+	public int maxEnemies = 6;
 	public float spawnReload = 3f;
 
 	private final World world;
@@ -31,7 +31,12 @@ public class Spawner {
 			timeSinceSpawn -= spawnReload;
 			int progressIndex = Math.min(toSpawn.length-1, (int)(progress * toSpawn.length));
 			int secondIndex = MathUtils.random(toSpawn[progressIndex].length - 1);
-			world.addNextFrame.add(Enemy.fromType(world, toSpawn[progressIndex][secondIndex]));
+			EnemyType type = toSpawn[progressIndex][secondIndex];
+			if (type != null) {
+				Enemy e = Enemy.fromType(world, type);
+				e.countsForProgress = false;
+				world.addEnemy(e);
+			}			
 		}
 	}
 }

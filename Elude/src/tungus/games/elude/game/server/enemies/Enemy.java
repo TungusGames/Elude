@@ -139,15 +139,19 @@ public abstract class Enemy extends Updatable implements Hittable {
 		return subclassWantsDeath || hp <= 0;
 	}
 	
-	public void shootRocket() {
+	protected void shootRocket() {
 		shootRocket(rocketType, new Vector2(targetPlayer().pos).sub(pos));
 	}
 
-	public void shootRocket(Vector2 dir) {
+	protected void shootRocket(Vector2 dir) {
 		shootRocket(rocketType, dir);
 	}
+	
+	protected void shootRocket(RocketType t) {
+		shootRocket(t, new Vector2(targetPlayer().pos).sub(pos));
+	}
 
-	public void shootRocket(RocketType t, Vector2 dir) {
+	protected void shootRocket(RocketType t, Vector2 dir) {
 		timeSinceShot = 0;
 		Rocket r = Rocket.fromType(t, this, pos.cpy(), dir, targetPlayer(), world);
 		world.addNextFrame.add(r);
@@ -182,6 +186,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 			}
 
 			died = true;
+			hp = 0;
 			world.enemyCount--;
 		}
 	}
