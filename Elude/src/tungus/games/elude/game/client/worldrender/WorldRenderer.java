@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import tungus.games.elude.game.client.worldrender.lastingeffects.LastingEffect;
+import tungus.games.elude.game.client.worldrender.phases.MineRenderer;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.multiplayer.transfer.RenderInfo;
@@ -35,6 +36,7 @@ public class WorldRenderer {
 		camShaker = new CamShaker(batch);
 		lastingEffects = new LastingEffectCollection();
 		this.vesselID = myVesselID;
+		((MineRenderer)RenderPhase.MINE.renderer).clear();
 	}
 	
 	public void render(float deltaTime, float alpha, RenderInfo renderInfo, boolean updateEffects) {

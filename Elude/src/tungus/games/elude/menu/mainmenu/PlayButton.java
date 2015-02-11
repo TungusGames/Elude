@@ -52,7 +52,7 @@ public class PlayButton extends Sprite {
 	}
 	
 	public int touchAt(float x, float y) {
-		if (!split) {
+		if (!split && !switching) {
 			switching = true;
 			stateTime = 0;
 			return RETURN_DIVIDED;

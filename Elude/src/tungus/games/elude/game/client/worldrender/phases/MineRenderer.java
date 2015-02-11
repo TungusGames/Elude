@@ -87,7 +87,11 @@ public class MineRenderer extends PhaseRenderer {
 	public void resetContext() {
 		shader.begin();
 		shader.setUniformf("R", DRAW_R);
-		shader.setUniformf("time", 0);
+		shader.setUniformf("time", time);
 		shader.end();
+	}
+	
+	public void clear() {
+		mines.clear();
 	}
 }

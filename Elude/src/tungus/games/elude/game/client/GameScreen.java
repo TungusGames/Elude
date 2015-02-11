@@ -155,6 +155,7 @@ public class GameScreen extends BaseScreen {
 		
 		menus = new AbstractIngameMenu[]{new PauseMenu(), new GameOverMenu(), new LevelCompleteMenu(levelNum, finite)};
 		renderer = new WorldRenderer(clientID);
+		renderer.resetContext();
 		uiBatch = new SpriteBatch();
 		
 		initFromScreenSize();
