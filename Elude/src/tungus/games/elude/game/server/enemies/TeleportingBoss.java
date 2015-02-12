@@ -6,31 +6,30 @@ import tungus.games.elude.game.server.rockets.Rocket;
 import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import tungus.games.elude.util.CustomMathUtils;
 
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class TeleportingBoss extends StandingBase {
-	
+
 	private static final int STATE_SHOOT = 0;
 	private static final int STATE_SPAWN = 1;
 	private static final int STATE_LASER = 2;
 	private static final int STATE_TELEPORT_FADE_OUT = 3;
 	private static final int STATE_TELEPORT_FADE_IN = 4;
-	
+
 	private static final float WAIT_TIME = 5f;
 	private static final float[] STATE_TIME = {5f, 1f, 5f, 0.25f, 0.25f};
-	
+
 	private static final float RADIUS = 1f;
-	
+
 	private static final float RELOAD = 0.0025f;
-	
+
 	private int state = STATE_SHOOT;
 	private float stateTime = 0;
 	private boolean waiting = false;
-	
+
 	private float sizeScalar = 1f;
-	
+
 	public TeleportingBoss(Vector2 pos, World w) {
 		super(pos, EnemyType.BOSS_TELEPORT, RocketType.SWARM, w, DEFAULT_SPEED, RADIUS * 2);
 	}
@@ -83,7 +82,7 @@ public class TeleportingBoss extends StandingBase {
 		collisionBounds.setRadius(RADIUS * sizeScalar);
 		return false;
 	}
-	
+
 	private void setNewPos() {
 		do {
 			pos.x = MathUtils.random() * (World.WIDTH - 2*World.EDGE) + World.EDGE;
@@ -94,15 +93,15 @@ public class TeleportingBoss extends StandingBase {
 		this.state = state;
 		stateTime = 0;
 	}
-	
+
 	public float width() {
 		return super.width() * sizeScalar;
 	}
-	
+
 	public float height() {
 		return super.height() * sizeScalar;
 	}
-	
+
 	private boolean rocketsComing(float time) {
 		for (Updatable u : world.updatables) {
 			if (u instanceof Rocket) {
@@ -119,11 +118,11 @@ public class TeleportingBoss extends StandingBase {
 		}
 		return false;
 	}
-	
+
 	private float cosFade(float t) {
 		return Math.max(MathUtils.cos(t * MathUtils.PI / STATE_TIME[STATE_TELEPORT_FADE_OUT] / 2), 0f); //Voodo magic...
 	}
-	
+
 	private void doAction(float deltaTime) {
 		if (timeSinceShot > RELOAD)
 			shootRocket();

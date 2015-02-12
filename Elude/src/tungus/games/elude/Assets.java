@@ -103,6 +103,7 @@ public class Assets {
 	public static enum Particles {
 		FLAME_ROCKET(40, 80),
 		MATRIX_ROCKET(20, 40),
+		DIM_ROCKET(100, 200),
 		STRAIGHT_ROCKET,
 		EXPLOSION(20, 40),
 		EXPLOSION_BIG(5, 10),

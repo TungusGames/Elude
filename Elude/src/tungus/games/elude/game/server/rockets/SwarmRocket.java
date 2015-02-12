@@ -7,11 +7,11 @@ import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 
 public class SwarmRocket extends TurningRocket {
-    public SwarmRocket(Enemy origin, RocketType type, Vector2 pos, Vector2 dir, World world, Vessel target) {
-    	super(origin, type, pos, dir, world, target);
-    }
-    @Override
-    public void kill() {
-	world.effects.add(ParticleRemover.create(id));
-    }
+	public SwarmRocket(Enemy origin, RocketType type, Vector2 pos, Vector2 dir, World world, Vessel target) {
+		super(origin, type, pos, dir, world, target);
+	}
+	@Override
+	public void kill() {
+		world.effects.add(ParticleRemover.create(id));
+	}
 }
