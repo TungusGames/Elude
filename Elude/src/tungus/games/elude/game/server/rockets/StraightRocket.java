@@ -21,7 +21,6 @@ public class StraightRocket extends Rocket {
 	
 	public StraightRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		super(origin, RocketType.STRAIGHT, pos, dir, world, target);
-		vel.nor().scl(SPEED);
 		world.effects.add(SoundEffect.create(Assets.Sounds.LASERSHOT));
 	}
 
