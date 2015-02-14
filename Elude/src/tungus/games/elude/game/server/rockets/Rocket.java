@@ -68,7 +68,7 @@ public abstract class Rocket extends Updatable {
 
 	private boolean outOfOrigin = false;
 
-	private float life;
+	protected float life;
 
 	public Rocket(Enemy origin, RocketType t, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		this(origin, t, pos, dir, world, target, DEFAULT_LIFE);

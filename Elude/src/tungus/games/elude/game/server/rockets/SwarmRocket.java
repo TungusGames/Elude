@@ -12,6 +12,9 @@ import tungus.games.elude.game.server.enemies.Enemy;
 import com.badlogic.gdx.math.Vector2;
 
 public class SwarmRocket extends TurningRocket {
+	
+	private static final float FADEOUT_TIME = 0.2f;
+	
 	public SwarmRocket(Enemy origin, RocketType type, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		super(origin, type, pos, dir, world, target);
 	}
@@ -21,6 +24,10 @@ public class SwarmRocket extends TurningRocket {
 	}
 	@Override
 	public Renderable getRenderable() {
-		return Sprite.create(RenderPhase.ROCKET, Tex.SWARMROCKET_SPOT, pos.x, pos.y, 0.6f, 1.4f, vel.angle()-90, 0.8f);
+		float alpha = 0.8f;
+		if (life < FADEOUT_TIME) {
+			alpha = life / FADEOUT_TIME * 0.8f;
+		}
+		return Sprite.create(RenderPhase.ROCKET, Tex.SWARMROCKET_SPOT, pos.x, pos.y-0.8f, 0.6f, 1.8f, vel.angle()-90, 0.3f, 1.7f, alpha);
 	}
 }
