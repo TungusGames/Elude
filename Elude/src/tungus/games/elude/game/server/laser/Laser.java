@@ -17,7 +17,7 @@ public class Laser extends Updatable {
     
 	protected static final float WIDTH = 0.2f;
     protected static final float LENGTH = World.WIDTH + World.HEIGHT;
-    protected static final float DAMAGE_PER_SECOND = 25f;
+    protected static final float DAMAGE_PER_SECOND = 100f;
     
     private static final Vector2 temp = new Vector2();
     
@@ -78,7 +78,7 @@ public class Laser extends Updatable {
     
     @Override
     public Renderable getRenderable() {
-    	return Sprite.create(RenderPhase.ROCKET, Tex.LASER, 
+    	return Sprite.create(RenderPhase.LASER, Tex.LASER, 
 				 (source.x + end.x) / 2, (source.y + end.y) / 2, 
 				 source.dst(end), 0.5f,
 				 (float)Math.atan2(end.y - source.y, end.x - source.x) * MathUtils.radiansToDegrees, 

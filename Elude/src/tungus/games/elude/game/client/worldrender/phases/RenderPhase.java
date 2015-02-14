@@ -7,6 +7,7 @@ public enum RenderPhase {
 	FREEZE(new FreezeRenderer()),
 	MINE(new MineRenderer()),
 	PICKUP,
+	LASER,
 	ENEMY,
 	ROCKET(new PhaseRenderer(GL20.GL_SRC_ALPHA, GL20.GL_ONE)),
 	VESSEL,

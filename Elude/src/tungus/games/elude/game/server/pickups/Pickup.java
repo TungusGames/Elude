@@ -30,7 +30,7 @@ public abstract class Pickup extends Updatable {
 
 	public static final float START_DRAW_SIZE = 0.9f;
 	public static final float HALF_SIZE = START_DRAW_SIZE/2;
-	protected static final float DEFAULT_LIFETIME = 3f;
+	protected static final float DEFAULT_LIFETIME = 4f;
 
 	private static final float APPEAR_PORTION = 0.1f;
 	private static final float TAKE_TIME = 1f;

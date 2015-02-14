@@ -15,7 +15,7 @@ public class VesselRenderable extends Sprite {
 	public static Renderable create(float x, float y, float vx, float vy, float rot, float a, int updatableID, int vesselID) {
 		VesselRenderable v = (VesselRenderable)pool.obtain();
 		v.x = x; v.y = y; v.rot = rot; v.shieldAlpha = a; v.updatableID = updatableID; v.vesselID = vesselID; v.vx = vx; v.vy = vy;
-		v.height = Vessel.DRAW_HEIGHT; v.width = Vessel.DRAW_WIDTH; v.alpha = 1;
+		v.height = Vessel.DRAW_HEIGHT; v.width = Vessel.DRAW_WIDTH; v.alpha = 1; v.rotx = v.width / 2; v.roty = v.height / 2;
 		return v;
 	}
 	
