@@ -76,11 +76,11 @@ public class Server implements Runnable {
 		while (state != STATE_OVER) {
 			fps.log();
 			while(!allNewData()) {
-				/*try {
-					wait(5);
+				try {
+					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}*/
+				}
 			}			
 			readInput();
 			

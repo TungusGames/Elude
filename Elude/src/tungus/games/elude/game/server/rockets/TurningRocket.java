@@ -14,23 +14,9 @@ public class TurningRocket extends Rocket {
 	
 	private static final float FAST_SPEED = 9f;
 	private static final float FAST_TURNSPEED = 172;
-
-	private final float turnSpeed;
 	
-	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target, float turnSpeed, float speed) {
-		super(origin, speed > DEFAULT_SPEED ? RocketType.FAST_TURNING : RocketType.SLOW_TURNING, pos, dir, world, target);
-		this.target = target;
-		this.turnSpeed = turnSpeed;
-		vel.nor().scl(speed);
-
-	}
-	
-	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target) {
-		this(origin, pos, dir, world, target, DEFAULT_TURNSPEED, DEFAULT_SPEED);
-	}
-
-	public TurningRocket(Enemy origin, Vector2 pos, Vector2 dir, World world, Vessel target, boolean fast) {
-		this(origin, pos, dir, world, target, fast ? FAST_TURNSPEED : DEFAULT_TURNSPEED, fast ? FAST_SPEED : DEFAULT_SPEED);
+	public TurningRocket(Enemy origin, RocketType type, Vector2 pos, Vector2 dir, World world, Vessel target) {
+		super(origin, type, pos, dir, world, target);
 	}
 	
 	@Override
@@ -43,10 +29,10 @@ public class TurningRocket extends Rocket {
 		if (angleDiff > 180f)
 			angleDiff -= 360;
 		
-		if (Math.abs(angleDiff) < turnSpeed* deltaTime) {
+		if (Math.abs(angleDiff) < type.turnSpeed * deltaTime) {
 			vel.rotate(angleDiff);
 		} else {
-			vel.rotate(deltaTime * turnSpeed * Math.signum(angleDiff));
+			vel.rotate(deltaTime * type.turnSpeed * Math.signum(angleDiff));
 		}
 	}
 }

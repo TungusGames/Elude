@@ -64,6 +64,7 @@ public class Assets {
 		
 		WHITE_RECTANGLE,
 		SMALL_CIRCLE,
+		SWARMROCKET_SPOT,
 		
 		VIRTUALDPAD,
 		
@@ -164,7 +165,7 @@ public class Assets {
 		EXPLOSION,
 		MENU_BUTTON,
 		LASERSHOT,
-                LASERBEAM(true);
+        LASERBEAM(true);
 		
 		private static final String prefix = "sounds/";
 		private final String filename;
