@@ -1,5 +1,6 @@
 package tungus.games.elude.game.client.worldrender.phases;
 
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public enum RenderPhase {
@@ -7,7 +8,7 @@ public enum RenderPhase {
 	MINE(new MineRenderer()),
 	PICKUP,
 	ENEMY,
-	ROCKET,
+	ROCKET(new PhaseRenderer(GL20.GL_SRC_ALPHA, GL20.GL_ONE)),
 	VESSEL,
 	EFFECT;
 	

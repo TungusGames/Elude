@@ -64,6 +64,7 @@ public class Assets {
 		
 		WHITE_RECTANGLE,
 		SMALL_CIRCLE,
+		SWARMROCKET_SPOT,
 		
 		VIRTUALDPAD,
 		
@@ -103,7 +104,6 @@ public class Assets {
 	public static enum Particles {
 		FLAME_ROCKET(40, 80),
 		MATRIX_ROCKET(20, 40),
-		DIM_ROCKET(100, 200),
 		STRAIGHT_ROCKET,
 		EXPLOSION(20, 40),
 		EXPLOSION_BIG(5, 10),
@@ -165,7 +165,7 @@ public class Assets {
 		EXPLOSION,
 		MENU_BUTTON,
 		LASERSHOT,
-                LASERBEAM(true);
+        LASERBEAM(true);
 		
 		private static final String prefix = "sounds/";
 		private final String filename;

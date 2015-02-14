@@ -22,7 +22,7 @@ public class TeleportingBoss extends StandingBase {
 
 	private static final float RADIUS = 1f;
 
-	private static final float RELOAD = 0.0025f;
+	private static final float RELOAD = 2/60f;
 
 	private int state = STATE_SHOOT;
 	private float stateTime = 0;
@@ -124,8 +124,9 @@ public class TeleportingBoss extends StandingBase {
 	}
 
 	private void doAction(float deltaTime) {
-		if (timeSinceShot > RELOAD)
+		if (timeSinceShot > RELOAD) {
 			shootRocket();
+		}
 		//TODO Implement different states
 	}
 }
