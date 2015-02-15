@@ -2,7 +2,6 @@ package tungus.games.elude.game.client.worldrender.lastingeffects;
 
 import tungus.games.elude.Assets;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -30,7 +29,6 @@ public class EnemyHealthbar implements LastingEffect {
 			alpha = Math.min(MAX_ALPHA, alpha + deltaTime / APPEAR_TIME * MAX_ALPHA);
 		} else if (fadeOut) {
 			alpha -= deltaTime * alphaDecreaseSpeed;
-			Gdx.app.log("DEBUG", ""+alpha);
 		}
 		
 		if (!enemyInNewFrame) {

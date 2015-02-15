@@ -10,9 +10,7 @@ public class ViewportHelper {
 	public static void setWorldSizeFromArea() {
 		float screenRatio = (float)Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
 		World.HEIGHT = (float)Math.sqrt(World.AREA / screenRatio);
-		Gdx.app.log("DEBUG", "height:"+World.HEIGHT);
 		World.WIDTH = World.HEIGHT * screenRatio;
-		Gdx.app.log("WIDTH", "width:"+World.WIDTH);
 		World.calcBounds();
 	}
 	

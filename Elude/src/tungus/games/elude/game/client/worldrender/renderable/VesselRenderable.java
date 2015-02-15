@@ -37,6 +37,7 @@ public class VesselRenderable extends Sprite {
 		if (shieldAlpha > 0) {
 			texID = Assets.Tex.SHIELD.ordinal();
 			width = height = Vessel.SHIELD_SIZE;
+			rotx = roty = Vessel.SHIELD_HALF_SIZE;
 			alpha = shieldAlpha;
 			super.render(wr);
 		}

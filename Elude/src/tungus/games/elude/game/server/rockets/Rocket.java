@@ -20,7 +20,7 @@ public abstract class Rocket extends Updatable {
 	public static enum RocketType { 
 		SLOW_TURNING(Assets.Particles.FLAME_ROCKET,		3f, 5.5f, 150f), 
 		FAST_TURNING(Assets.Particles.MATRIX_ROCKET,	3f,   9f, 172f), 
-		SWARM	    (null,							  	0.5f, 6.5f, 150f),
+		SWARM	    (null,							  	0.35f, 6.5f, 150f),
 		STRAIGHT    (Assets.Particles.STRAIGHT_ROCKET,  3f,17.5f,   0f);
 		public Particles effect;
 
