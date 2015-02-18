@@ -37,6 +37,7 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
+		ChanceIncreaseCalculator.load();
 		readAndOutputLevels();
 		writeArcadeMedals();
 	}
@@ -118,10 +119,10 @@ public class Main {
 			lvl.name = name.toUpperCase();
 			lvl.waves = new Wave[waves.size()];
 			lvl.waves = waves.toArray(lvl.waves);
-			lvl.hpChance = hpDrop;
-			lvl.speedChance = speedDrop;
-			lvl.freezerChance = freezerDrop;
-			lvl.shieldChance = shieldDrop;
+			lvl.hpInc = ChanceIncreaseCalculator.incForAverage(hpDrop);
+			lvl.speedInc = ChanceIncreaseCalculator.incForAverage(speedDrop);
+			lvl.freezerInc = ChanceIncreaseCalculator.incForAverage(freezerDrop);
+			lvl.shieldInc = ChanceIncreaseCalculator.incForAverage(shieldDrop);
 			lvl.totalEnemyHP = totalEnemyHP;
 			try {
 				System.out.print("Writing file: " + (levelNum) + ".lvl ");

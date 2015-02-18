@@ -38,10 +38,10 @@ public class FiniteLevelLoader extends EnemyLoader {
 		private static final long serialVersionUID = 3972235095607047708L;
 		public Wave[] waves;
 		public String name;
-		public float hpChance;
-		public float speedChance;
-		public float freezerChance;
-		public float shieldChance;
+		public float hpInc;
+		public float speedInc;
+		public float freezerInc;
+		public float shieldInc;
 		public float totalEnemyHP;
 		
 		public static Level levelFromFile(FileHandle file) {
@@ -72,7 +72,7 @@ public class FiniteLevelLoader extends EnemyLoader {
 	private int nextWave = 0;
 
 	public FiniteLevelLoader(Level level, World world, int levelNum) {
-		super(world, level.hpChance, level.speedChance, level.freezerChance, level.shieldChance, levelNum);
+		super(world, level.hpInc, level.speedInc, level.shieldInc, level.freezerInc, levelNum);
 		this.level = level;
 		keepsWorldGoing = true;
 		

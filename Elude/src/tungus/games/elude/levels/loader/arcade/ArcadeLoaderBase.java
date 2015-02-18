@@ -17,7 +17,7 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 	}
 
 	public ArcadeLoaderBase(World w, float hpChance, float speedChance, float wipeChance, float shieldChance, int levelNum) {
-		super(w, hpChance, speedChance, wipeChance, shieldChance, levelNum);
+		super(w, hpChance, speedChance, shieldChance, wipeChance, levelNum);
 	}
 	
 	@Override

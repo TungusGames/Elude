@@ -18,10 +18,10 @@ import com.badlogic.gdx.math.MathUtils;
 
 public abstract class EnemyLoader extends Updatable {
 	protected final World world;
-	protected final float hpChance;
-	protected final float speedChance;
-	protected final float freezerChance;
-	protected final float shieldChance;
+	protected float hpChance, hpInc;
+	protected float speedChance, speedInc;
+	protected float freezerChance, freezerInc;
+	protected float shieldChance, shieldInc;
 	
 	protected final int levelNum;
 	protected float timeSinceStart;
@@ -53,13 +53,14 @@ public abstract class EnemyLoader extends Updatable {
 		this(w, 0, 0, 0, 0, levelNum);
 	}
 	
-	protected EnemyLoader(World w, float hpChance, float speedChance, float wipeChance, float shieldChance, int levelNum) {
+	protected EnemyLoader(World w, float hpInc, float speedInc, float shieldInc, float freezerInc, int levelNum) {
 		this.world = w;
-		this.hpChance = hpChance;
-		this.speedChance = speedChance;
-		this.freezerChance = wipeChance;
+		this.hpChance = this.hpInc = hpInc;
+		this.speedChance = this.speedInc = speedInc;
+		this.shieldChance = this.shieldInc = shieldInc;
+		this.freezerChance = this.freezerInc = freezerInc;
 		this.levelNum = levelNum;
-		this.shieldChance = shieldChance;
+		
 	}
 	
 	public boolean update(float deltaTime) { 
@@ -68,15 +69,51 @@ public abstract class EnemyLoader extends Updatable {
 	}
 	
 	public void onEnemyDead(Enemy e) {
-		float rand = MathUtils.random();
-		if (rand < hpChance)
+		boolean spawning = false;
+		if (MathUtils.random() < hpChance) {
 			world.addNextFrame.add(new HealthPickup(world, e.pos));
-		else if ((rand -= hpChance) < speedChance)
-			world.addNextFrame.add(new SpeedPickup(world, e.pos));
-		else if ((rand -= speedChance) < freezerChance)
-			world.addNextFrame.add(new FreezerPickup(world, e.pos));
-		else if ((rand -= freezerChance) < shieldChance)
-			world.addNextFrame.add(new ShieldPickup(world, e.pos));
+			hpChance = hpInc;
+			spawning = true;
+		} else {
+			hpChance += hpInc;
+		}
+		
+		if (MathUtils.random() < speedChance) {
+			if (!spawning) {
+				world.addNextFrame.add(new SpeedPickup(world, e.pos));
+				speedChance = speedInc;
+				spawning = true;
+			} else {
+				speedChance = 1;
+			}			
+		} else {
+			speedChance += speedInc;
+		}
+		
+		if (MathUtils.random() < shieldChance) {
+			if (!spawning) {
+				world.addNextFrame.add(new ShieldPickup(world, e.pos));
+				shieldChance = shieldInc;
+				spawning = true;
+			} else {
+				shieldChance = 1;
+			}
+		} else {
+			shieldChance += shieldInc;
+		}
+			
+		if (MathUtils.random() < freezerChance) {
+			if (!spawning) {
+				world.addNextFrame.add(new FreezerPickup(world, e.pos));
+				freezerChance = freezerInc;
+				spawning = true;
+			} else {
+				freezerChance = 1;
+			}			
+		} else {
+			freezerChance += freezerInc;
+		}
+			
 	}
 	
 	public void onEnemyHurt(Enemy e, float dmg) {}
