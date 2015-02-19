@@ -1,5 +1,6 @@
 package tungus.games.elude.game.server.enemies.boss;
 
+import com.badlogic.gdx.math.Circle;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.StandingBase;
@@ -9,6 +10,11 @@ import tungus.games.elude.util.CustomMathUtils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
+import tungus.games.elude.game.server.enemies.Enemy;
 
 public class TeleportingBoss extends StandingBase {
 
@@ -21,7 +27,7 @@ public class TeleportingBoss extends StandingBase {
 	private static final float WAIT_TIME = 2.5f;
 	private static final float[] STATE_TIME = {5f, 1f, 5f, 0.25f, 0.25f};
 
-	private static final float RADIUS = 1f;
+	private static final float RADIUS = 0.6f;
 
 	private static final float RELOAD = 1/45f;
 	
@@ -138,5 +144,18 @@ public class TeleportingBoss extends StandingBase {
 			shootRocket();
 		}
 		//TODO Implement different states
+	}
+        
+        @Override
+	public void killBy(Circle hitter) {
+		super.killBy(hitter);
+		for (Updatable u : world.updatables) {
+			if (u instanceof Enemy && u != this) {
+				((Enemy)u).killBy(null);
+			}
+		}
+                world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION_BIG, pos.x, pos.y));
+		world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN, true));
+		world.effects.add(SoundEffect.create(Assets.Sounds.EXPLOSION));
 	}
 }

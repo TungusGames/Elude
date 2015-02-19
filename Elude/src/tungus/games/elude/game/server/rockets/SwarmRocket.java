@@ -19,11 +19,12 @@ public class SwarmRocket extends TurningRocket {
 	
 	public SwarmRocket(Enemy origin, RocketType type, Vector2 pos, Vector2 dir, World world, Vessel target) {
 		super(origin, type, pos, dir, world, target);
+                bounds.radius = 0.05f;
 	}
 	@Override
 	public void kill() {
 		world.effects.add(ParticleRemover.create(id));
-		world.effects.add(ParticleAdder.create(Particles.EXPLOSION_SMALL, pos.x, pos.y));
+		//world.effects.add(ParticleAdder.create(Particles.EXPLOSION_SMALL, pos.x, pos.y));
 	}
 	@Override
 	public Renderable getRenderable() {

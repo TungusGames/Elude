@@ -20,6 +20,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
 
 public abstract class Enemy extends Updatable implements Hittable {
 
@@ -29,13 +30,13 @@ public abstract class Enemy extends Updatable implements Hittable {
 		KAMIKAZE	 (Assets.Tex.KAMIKAZE,		0.9f,	0.85f,	new float[]{0.25f,0.25f,0.8f, 1f}, 	true,	Kamikaze.class,			2), 
 		SHARPSHOOTER (Assets.Tex.SHARPSHOOTER,	1.05f,	0.95f,	new float[]{0.9f, 0.8f, 0.2f, 1f}, 	true, 	Sharpshooter.class,		2),
 		MACHINEGUNNER(Assets.Tex.MACHINEGUNNER, 1.05f,	0.8f,	new float[]{0.8f, 0.3f, 0.7f, 1f}, 	true, 	MachineGunner.class,	2),
-		SHIELDED	 (Assets.Tex.SHIELDED,		1.3f,	1.016f,	new float[]{0.7f, 0.5f, 0.4f, 1f}, 	true, 	Shielded.class,			2),
-		SPLITTER	 (Assets.Tex.SPLITTER,		1.00f,	0.8f,	new float[]{0.5f, 0.5f, 0.5f, 1f}, 	true,	Splitter.class,			2),
-		MINION		 (Assets.Tex.MINION,		0.65f,	0.65f,	new float[]{0.5f, 0.5f, 0.5f, 1f},	false,	Minion.class,			1),
-		FACTORY		 (Assets.Tex.FACTORY,     	2.0f,	2.0f,	new float[]{0.5f, 0.5f, 0.5f, 1f}, 	true, 	Factory.class,			12),
-		MINER		 (Assets.Tex.MINER,			0.9f,	0.9f,	new float[]{1f,   1f,   1f,   1f},	true,	Miner.class,			2),
-		CLOSING_BOSS (Assets.Tex.BOSS1,			2.0f,	2.45f,	new float[]{1f,   1f,   1f,   1f}, 	true, 	ClosingBoss.class, 		70),
-		BOSS_TELEPORT(Assets.Tex.MACHINEGUNNER,	1.05f,	0.8f,	new float[]{0.8f, 0.3f, 0.7f, 1f}, 	true, 	TeleportingBoss.class,	75);
+		SHIELDED	 (Assets.Tex.SHIELDED,		1.3f,	1.016f,	new float[]{0.8f, 0.8f, 0.3f, 1f}, 	true, 	Shielded.class,			2),
+		SPLITTER	 (Assets.Tex.SPLITTER,		1.00f,	0.8f,	new float[]{0.5f, 0.9f, 0.1f, 1f}, 	true,	Splitter.class,			2),
+		MINION		 (Assets.Tex.MINION,		0.65f,	0.65f,	new float[]{0.9f, 0.4f, 0.1f, 1f},	false,	Minion.class,			1),
+		FACTORY		 (Assets.Tex.FACTORY,     	2.0f,	2.0f,	new float[]{0.9f, 0.4f, 0.1f, 1f}, 	true, 	Factory.class,			12),
+		MINER		 (Assets.Tex.MINER,			0.9f,	0.9f,	new float[]{0.2f, 0.6f,0.75f,   1f},	true,	Miner.class,			2),
+		CLOSING_BOSS (Assets.Tex.BOSS1,			2.0f,	2.45f,	new float[]{0.9f, 0.4f, 0.1f, 1f}, 	true, 	ClosingBoss.class, 		70),
+		BOSS_TELEPORT(Assets.Tex.MACHINEGUNNER,	1.55f,	1.2f,	new float[]{0.8f, 0.3f, 0.7f, 1f}, 	true, 	TeleportingBoss.class,	75);
 		public Tex tex;
 		public float width;
 		public float halfWidth;
@@ -189,6 +190,7 @@ public abstract class Enemy extends Updatable implements Hittable {
 			died = true;
 			hp = 0;
 			world.enemyCount--;
+                        world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION, pos.x, pos.y));
 		}
 	}
 

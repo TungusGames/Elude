@@ -16,6 +16,10 @@ import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import tungus.games.elude.Assets;
+import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 
 
 public class ClosingBoss extends Enemy {
@@ -114,6 +118,9 @@ public class ClosingBoss extends Enemy {
 				((Enemy)u).killBy(null);
 			}
 		}
+                world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION_BIG, pos.x, pos.y));
+		world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN, true));
+		world.effects.add(SoundEffect.create(Assets.Sounds.EXPLOSION));
 	}
 	
 	@Override

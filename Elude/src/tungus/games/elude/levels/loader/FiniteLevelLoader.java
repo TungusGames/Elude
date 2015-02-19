@@ -87,7 +87,8 @@ public class FiniteLevelLoader extends EnemyLoader {
 		super.update(deltaTime);
 		timeSinceLastWave += deltaTime;
 		if (nextWave >= level.waves.length) {
-			return true;
+                    keepsWorldGoing = false;
+                    return false;
 		}
 		Wave w = level.waves[nextWave];
 		if (w != null && ((w.timeAfterLast < timeSinceLastWave && w.timeAfterLast != -1f) || w.enemiesAfterLast >= world.enemyCount)) {

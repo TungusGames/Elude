@@ -32,14 +32,29 @@ public abstract class EnemyLoader extends Updatable {
 		else {
 			switch(n) {
 			case 0:
-				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING); //Standing fast removed
+				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.STANDING);
 			case 1:
 				return new PlusPlus(world, n, EnemyType.KAMIKAZE);
 			case 2:
-				return new FillUp(world, n, 10, 50f, 0, 0.2f, 0, 0, EnemyType.KAMIKAZE); //Standing fast removed
+				return new FillUp(world, n, 10, 50f, 0, 0.2f, 0, 0, EnemyType.KAMIKAZE, EnemyType.MOVING);
 			case 3:
-				return new PlusPlus(world, n, EnemyType.MOVING); //Standing fast removed
-			case 4:
+				return new PlusPlus(world, n, EnemyType.MOVING, EnemyType.SHIELDED); 
+                        case 4:
+                                return new FillUp(world, n, 10, 30f, EnemyType.SHIELDED, EnemyType.KAMIKAZE);
+			case 5:
+                                return new FillUp(world, n, 8, 50f, EnemyType.STANDING, EnemyType.KAMIKAZE, EnemyType.MINER);
+                        case 6:
+                                EnemyLoader e = new PlusPlus(world, n, EnemyType.MINER);
+                                e.shieldInc = 0.04f;
+                                e.hpInc = 0.04f;
+                                return e;
+                        case 7:
+                                return new FillUp(world, n, 3, 30f, EnemyType.SPLITTER);
+                        case 8:
+                                return new PlusPlus(world, n, EnemyType.SPLITTER, EnemyType.MINER);
+                        case 9:
+                                return new FillUp(world, n, 5, 20, EnemyType.SHARPSHOOTER);
+                        case 13:
 				return new FillUp(world, n, 10, 50f, EnemyType.normalSpawners());
 			default:
 				throw new IllegalArgumentException("Unknown arcade level number");
