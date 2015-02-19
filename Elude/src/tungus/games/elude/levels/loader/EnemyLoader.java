@@ -22,52 +22,57 @@ public abstract class EnemyLoader extends Updatable {
 	protected float speedChance, speedInc;
 	protected float freezerChance, freezerInc;
 	protected float shieldChance, shieldInc;
-	
+
 	protected final int levelNum;
 	protected float timeSinceStart;
-	
+
 	public static EnemyLoader loaderFromLevelNum(World world, int n, boolean finite) {
 		if (finite)
 			return new FiniteLevelLoader(Level.levelFromFile(Assets.levelFile(n+1)), world, n);
 		else {
 			switch(n) {
 			case 0:
-				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.STANDING);
+				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.STANDING, EnemyType.KAMIKAZE);
 			case 1:
 				return new PlusPlus(world, n, EnemyType.KAMIKAZE);
 			case 2:
-				return new FillUp(world, n, 10, 50f, 0, 0.2f, 0, 0, EnemyType.KAMIKAZE, EnemyType.MOVING);
+				return new FillUp(world, n, 10, 30f, EnemyType.SHIELDED, EnemyType.KAMIKAZE);
 			case 3:
-				return new PlusPlus(world, n, EnemyType.MOVING, EnemyType.SHIELDED); 
-                        case 4:
-                                return new FillUp(world, n, 10, 30f, EnemyType.SHIELDED, EnemyType.KAMIKAZE);
+				return new FillUp(world, n, 8, 50f, EnemyType.STANDING, EnemyType.KAMIKAZE, EnemyType.MINER);
+			case 4:
+				EnemyLoader e = new FillUp(world, n, 8, 60f, EnemyType.MINER, EnemyType.MINER, EnemyType.MOVING);
+				e.shieldInc = 0.01f;
+				return e;
 			case 5:
-                                return new FillUp(world, n, 8, 50f, EnemyType.STANDING, EnemyType.KAMIKAZE, EnemyType.MINER);
-                        case 6:
-                                EnemyLoader e = new PlusPlus(world, n, EnemyType.MINER);
-                                e.shieldInc = 0.04f;
-                                e.hpInc = 0.04f;
-                                return e;
-                        case 7:
-                                return new FillUp(world, n, 3, 30f, EnemyType.SPLITTER);
-                        case 8:
-                                return new PlusPlus(world, n, EnemyType.SPLITTER, EnemyType.MINER);
-                        case 9:
-                                return new FillUp(world, n, 5, 20, EnemyType.SHARPSHOOTER);
-                        case 13:
+				return new FillUp(world, n, 3, 30f, EnemyType.SPLITTER, EnemyType.KAMIKAZE);
+			case 6:
+				return new PlusPlus(world, n, EnemyType.SPLITTER, EnemyType.MINER);
+			case 7:
+				return new FillUp(world, n, 5, 20, EnemyType.SHARPSHOOTER);
+			case 8:
+				return new PlusPlus(world, n, EnemyType.SHARPSHOOTER, EnemyType.SHIELDED);
+			case 9:
+				return new FillUp(world, n, 6, 40f, EnemyType.MACHINEGUNNER, EnemyType.SHARPSHOOTER);
+			case 10:
+				return new PlusPlus(world, n, EnemyType.MACHINEGUNNER, EnemyType.MINER, EnemyType.SHIELDED);
+			case 11:
+				return new PlusPlus(world, n, EnemyType.FACTORY);
+			case 12:
+				return new FillUp(world, n, 6, 100f, EnemyType.FACTORY, EnemyType.MACHINEGUNNER, EnemyType.KAMIKAZE, EnemyType.SHARPSHOOTER);
+			case 13:
 				return new FillUp(world, n, 10, 50f, EnemyType.normalSpawners());
 			default:
 				throw new IllegalArgumentException("Unknown arcade level number");
-				
+
 			}
 		}
-			
+
 	}
-	
+
 	protected EnemyLoader(World w, int levelNum) {
 		this(w, 0, 0, 0, 0, levelNum);
 	}
-	
+
 	protected EnemyLoader(World w, float hpInc, float speedInc, float shieldInc, float freezerInc, int levelNum) {
 		this.world = w;
 		this.hpChance = this.hpInc = hpInc;
@@ -75,14 +80,14 @@ public abstract class EnemyLoader extends Updatable {
 		this.shieldChance = this.shieldInc = shieldInc;
 		this.freezerChance = this.freezerInc = freezerInc;
 		this.levelNum = levelNum;
-		
+
 	}
-	
+
 	public boolean update(float deltaTime) { 
 		timeSinceStart += deltaTime;
 		return false;
 	}
-	
+
 	public void onEnemyDead(Enemy e) {
 		boolean spawning = false;
 		if (MathUtils.random() < hpChance) {
@@ -92,7 +97,7 @@ public abstract class EnemyLoader extends Updatable {
 		} else {
 			hpChance += hpInc;
 		}
-		
+
 		if (MathUtils.random() < speedChance) {
 			if (!spawning) {
 				world.addNextFrame.add(new SpeedPickup(world, e.pos));
@@ -104,7 +109,7 @@ public abstract class EnemyLoader extends Updatable {
 		} else {
 			speedChance += speedInc;
 		}
-		
+
 		if (MathUtils.random() < shieldChance) {
 			if (!spawning) {
 				world.addNextFrame.add(new ShieldPickup(world, e.pos));
@@ -116,7 +121,7 @@ public abstract class EnemyLoader extends Updatable {
 		} else {
 			shieldChance += shieldInc;
 		}
-			
+
 		if (MathUtils.random() < freezerChance) {
 			if (!spawning) {
 				world.addNextFrame.add(new FreezerPickup(world, e.pos));
@@ -128,16 +133,16 @@ public abstract class EnemyLoader extends Updatable {
 		} else {
 			freezerChance += freezerInc;
 		}
-			
+
 	}
-	
+
 	public void onEnemyHurt(Enemy e, float dmg) {}
-	
+
 	@Override
 	public Renderable getRenderable() {
 		return null;
 	}
-	
+
 	public abstract void saveScore();
 	public abstract String levelName();
 }

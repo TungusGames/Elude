@@ -14,10 +14,12 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 	
 	public ArcadeLoaderBase(World w, int levelNum) {
 		super(w, levelNum);
+		keepsWorldGoing = true;
 	}
 
 	public ArcadeLoaderBase(World w, float hpChance, float speedChance, float wipeChance, float shieldChance, int levelNum) {
 		super(w, hpChance, speedChance, shieldChance, wipeChance, levelNum);
+		keepsWorldGoing = true;
 	}
 	
 	@Override

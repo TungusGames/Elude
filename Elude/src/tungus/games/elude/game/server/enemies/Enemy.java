@@ -4,10 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Sounds;
 import tungus.games.elude.Assets.Tex;
 import tungus.games.elude.game.client.worldrender.renderable.EnemyRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.Vessel;
 import tungus.games.elude.game.server.World;
@@ -20,7 +23,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
 
 public abstract class Enemy extends Updatable implements Hittable {
 
@@ -180,17 +182,19 @@ public abstract class Enemy extends Updatable implements Hittable {
 	private boolean died = false;
 	public void killBy(Circle hitter) {
 		if (!died) {
+			died = true;
+			hp = 0;
+			world.enemyCount--;
+			
 			world.waveLoader.onEnemyDead(this);
 			if (hitter != null) {
 				world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, pos.angle(new Vector2(hitter.x, hitter.y))));
 			} else {
 				world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN));
 			}
-
-			died = true;
-			hp = 0;
-			world.enemyCount--;
-                        world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION, pos.x, pos.y));
+			
+            world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION, pos.x, pos.y));
+            world.effects.add(SoundEffect.create(Sounds.EXPLOSION));
 		}
 	}
 

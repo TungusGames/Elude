@@ -26,7 +26,7 @@ public class Elude extends Game {
 		long newTime = TimeUtils.millis();
 		float deltaTime = (newTime-oldTime) / 1000f;
 		Gdx.app.log("Elude", "Loading time: " + deltaTime);
-		setScreen(GameScreen.newSinglePlayer(this, 49, true)); // for quick debugging
+		//setScreen(GameScreen.newSinglePlayer(this, 49, true)); // for quick debugging
 		fps = new FPSLogger("FPSLogger", "Render thread FPS: ");
 	}
 	
