@@ -27,7 +27,7 @@ public class TeleportingBoss extends StandingBase {
 	private static final float WAIT_TIME = 2.5f;
 	private static final float[] STATE_TIME = {5f, 1f, 5f, 0.25f, 0.25f};
 
-	private static final float RADIUS = 0.6f;
+	private static final float RADIUS = 0.85f;
 
 	private static final float RELOAD = 1/45f;
 	

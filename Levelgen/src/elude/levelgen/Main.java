@@ -38,9 +38,6 @@ public class Main {
 	
 	public static void main(String[] args) {
 		ChanceIncreaseCalculator.load();
-		System.out.println(ChanceIncreaseCalculator.incForAverage(0.1f));
-		System.out.println(ChanceIncreaseCalculator.incForAverage(0.15f));
-		System.out.println(ChanceIncreaseCalculator.incForAverage(0.2f));
 		readAndOutputLevels();
 		writeArcadeMedals();
 	}

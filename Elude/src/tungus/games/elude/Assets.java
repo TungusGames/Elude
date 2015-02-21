@@ -53,6 +53,7 @@ public class Assets {
 		SHIELDED,
 		BOSS1,
 		BOSS1_BACK,
+		BOSS2,
 		
 		HPBONUS,
 		SPEEDBONUS,
