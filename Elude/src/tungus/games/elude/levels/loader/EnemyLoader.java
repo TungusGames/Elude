@@ -11,6 +11,8 @@ import tungus.games.elude.game.server.pickups.HealthPickup;
 import tungus.games.elude.game.server.pickups.ShieldPickup;
 import tungus.games.elude.game.server.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
+import tungus.games.elude.levels.loader.arcade.BalancedPlusPlus;
+import tungus.games.elude.levels.loader.arcade.BossFun;
 import tungus.games.elude.levels.loader.arcade.FillUp;
 import tungus.games.elude.levels.loader.arcade.PlusPlus;
 
@@ -32,9 +34,9 @@ public abstract class EnemyLoader extends Updatable {
 		else {
 			switch(n) {
 			case 0:
-				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.STANDING, EnemyType.KAMIKAZE);
+				return new FillUp(world, n, 10, 50f, EnemyType.MOVING, EnemyType.MOVING, EnemyType.STANDING, EnemyType.STANDING, EnemyType.KAMIKAZE);
 			case 1:
-				return new PlusPlus(world, n, EnemyType.KAMIKAZE);
+				return new PlusPlus(world, n, 100f, EnemyType.KAMIKAZE);
 			case 2:
 				return new FillUp(world, n, 10, 30f, EnemyType.SHIELDED, EnemyType.KAMIKAZE);
 			case 3:
@@ -44,23 +46,25 @@ public abstract class EnemyLoader extends Updatable {
 				e.shieldInc = 0.01f;
 				return e;
 			case 5:
-				return new FillUp(world, n, 3, 30f, EnemyType.SPLITTER, EnemyType.KAMIKAZE);
+				return new FillUp(world, n, 5, 30f, EnemyType.SPLITTER, EnemyType.KAMIKAZE, EnemyType.KAMIKAZE);
 			case 6:
-				return new PlusPlus(world, n, EnemyType.SPLITTER, EnemyType.MINER);
+				return new FillUp(world, n, 6, 30f, EnemyType.KAMIKAZE, EnemyType.MINER);
 			case 7:
+				return new PlusPlus(world, n, 20f, EnemyType.SHARPSHOOTER, EnemyType.SHIELDED);
+			case 8:				
 				return new FillUp(world, n, 5, 20, EnemyType.SHARPSHOOTER);
-			case 8:
-				return new PlusPlus(world, n, EnemyType.SHARPSHOOTER, EnemyType.SHIELDED);
 			case 9:
 				return new FillUp(world, n, 6, 40f, EnemyType.MACHINEGUNNER, EnemyType.SHARPSHOOTER);
 			case 10:
-				return new PlusPlus(world, n, EnemyType.MACHINEGUNNER, EnemyType.MINER, EnemyType.SHIELDED);
+				return new FillUp(world, n, 6, 30f, EnemyType.SHIELDED, EnemyType.MACHINEGUNNER, EnemyType.MINER);
 			case 11:
-				return new PlusPlus(world, n, EnemyType.FACTORY);
+				return new PlusPlus(world, n, 30f, EnemyType.FACTORY);
 			case 12:
-				return new FillUp(world, n, 6, 100f, EnemyType.FACTORY, EnemyType.MACHINEGUNNER, EnemyType.KAMIKAZE, EnemyType.SHARPSHOOTER);
+				return new FillUp(world, n, 6, 50f, EnemyType.FACTORY, EnemyType.MACHINEGUNNER, EnemyType.KAMIKAZE, EnemyType.SHARPSHOOTER);
 			case 13:
 				return new FillUp(world, n, 10, 50f, EnemyType.normalSpawners());
+			case 14:
+				return new BossFun(world, n);
 			default:
 				throw new IllegalArgumentException("Unknown arcade level number");
 

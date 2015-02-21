@@ -14,7 +14,7 @@ public class Splitter extends Enemy {
 	private static final float RELOAD = 1.5f;
 	
 	private static final int DEFAULT_SPLITS = 2;	// How many more "generations" the first spawned enemies will create  
-	private static final int SPLIT_INTO = 3;		// How many smaller enemies each dead will split into
+	private static final int SPLIT_INTO = 2;		// How many smaller enemies each dead will split into
 	private static final float MIN_SIZE = 0.75f;	// Relatively as part of full size
 	
 	private final int splitsLeft;	// How many more "generations" this enemy will spawn

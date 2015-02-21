@@ -2,10 +2,15 @@ package tungus.games.elude.game.server.enemies.boss;
 
 import java.util.List;
 
+import tungus.games.elude.Assets;
 import tungus.games.elude.Assets.Tex;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.game.client.worldrender.renderable.EnemyRenderable;
 import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.client.worldrender.renderable.Sprite;
+import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
+import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
@@ -16,10 +21,6 @@ import tungus.games.elude.game.server.rockets.Rocket.RocketType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
-import tungus.games.elude.Assets;
-import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
-import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
-import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 
 
 public class ClosingBoss extends Enemy {
@@ -66,6 +67,7 @@ public class ClosingBoss extends Enemy {
 		spawner = new Spawner(w, SPAWN);
 		super.solid = true;		
 		super.turnSpeed = 100f;
+		countsForProgress = true;
 	}
 
 	@Override
@@ -114,7 +116,7 @@ public class ClosingBoss extends Enemy {
 		super.killBy(hitter);
 		laser.stop();
 		for (Updatable u : world.updatables) {
-			if (u instanceof Enemy && u != this) {
+			if (u instanceof Enemy && !(u instanceof TeleportingBoss || u instanceof ClosingBoss)) {
 				((Enemy)u).killBy(null);
 			}
 		}
@@ -129,13 +131,13 @@ public class ClosingBoss extends Enemy {
 		if (back != null) {
 			phases.get(back.phase.ordinal()).add(back);
 		}
-		super.putRenderables(phases); // Puts front, following vessel		
+		super.putRenderables(phases); // Puts front, following vessel
 	}
 	
 	@Override
 	public Renderable getRenderable() {
-		return Sprite.create(RenderPhase.ENEMY, Tex.BOSS1, pos.x, pos.y - width()/2 + height()/2, // Y coord correction for difference between image center and rotation center 
-								width(), height(), rot, width()/2, width()/2, 1);
+		return EnemyRenderable.create(id, hp/maxHp, Tex.BOSS1, pos.x, pos.y - width()/2 + height()/2, // Y coord correction for difference between image center and rotation center 
+								width(), height(), rot, width()/2, width()/2);
 	}
 	
 	private Renderable getSpriteForLaserTurret() {

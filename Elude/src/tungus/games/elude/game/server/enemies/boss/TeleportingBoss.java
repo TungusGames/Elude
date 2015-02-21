@@ -47,6 +47,7 @@ public class TeleportingBoss extends StandingBase {
 	public TeleportingBoss(Vector2 pos, World w) {
 		super(pos, EnemyType.BOSS_TELEPORT, RocketType.SWARM, w, DEFAULT_SPEED, RADIUS * 2);
 		spawner = new Spawner(w, SPAWN);
+		countsForProgress = true;
 	}
 	@Override
 	protected boolean standingUpdate(float deltaTime) {
@@ -150,7 +151,7 @@ public class TeleportingBoss extends StandingBase {
 	public void killBy(Circle hitter) {
 		super.killBy(hitter);
 		for (Updatable u : world.updatables) {
-			if (u instanceof Enemy && u != this) {
+			if (u instanceof Enemy && !(u instanceof TeleportingBoss || u instanceof ClosingBoss)) {
 				((Enemy)u).killBy(null);
 			}
 		}
