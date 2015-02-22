@@ -5,6 +5,7 @@ import java.util.List;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Assets.EludeMusic;
 import tungus.games.elude.game.client.input.Controls;
 import tungus.games.elude.game.client.input.KeyControls;
 import tungus.games.elude.game.client.input.mobile.DynamicDPad;
@@ -147,6 +148,7 @@ public class GameScreen extends BaseScreen {
 		super(game);
 		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
+		EludeMusic.set(EludeMusic.INGAME);
 		
 		this.finite = finite;
 		this.levelNum = levelNum;

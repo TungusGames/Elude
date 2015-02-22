@@ -42,9 +42,9 @@ public class ClosingBoss extends Enemy {
 	private static final float RELOAD_END = 3.5f;
 	private static final float SHORT_RELOAD = 0.35f;
 	
-	private static final EnemyType[][] SPAWN = new EnemyType[][]{{EnemyType.SHIELDED, EnemyType.MOVING, EnemyType.KAMIKAZE}, 
-																 {EnemyType.MOVING, EnemyType.MOVING, EnemyType.MOVING, EnemyType.KAMIKAZE, EnemyType.MINER},
-																 {EnemyType.MINER, EnemyType.MOVING, EnemyType.MOVING}};
+	private static final EnemyType[][] SPAWN = new EnemyType[][]{{EnemyType.SHIELDED, EnemyType.MOVING, EnemyType.MOVING}, 
+																 {EnemyType.MOVING, EnemyType.MOVING, EnemyType.MOVING, EnemyType.MOVING, EnemyType.MINER},
+																 {EnemyType.MINER, EnemyType.MOVING, EnemyType.KAMIKAZE, EnemyType.MOVING}};
 	private final Spawner spawner;
 
 	private int shotsAtOnce = SHOTS_START;
@@ -62,7 +62,7 @@ public class ClosingBoss extends Enemy {
 				EnemyType.CLOSING_BOSS,
 				2 * COLLIDER_RADIUS,
 				w,
-				RocketType.FAST_TURNING);
+				RocketType.SLOW_TURNING);
 		vel.set(3, 0);
 		spawner = new Spawner(w, SPAWN);
 		super.solid = true;		
@@ -81,7 +81,7 @@ public class ClosingBoss extends Enemy {
 			vel.set(world.vessels.get(0).pos).sub(pos).nor().scl(SPEED);
 			timeSinceShot += deltaTime;
 			if ((shotsFiredInVolley == 0 && timeSinceShot >= longReload) || (shotsFiredInVolley > 0 && timeSinceShot >= shortReload)) {
-				shootRocket(hp > maxHp / 3 ? RocketType.SLOW_TURNING : RocketType.FAST_TURNING, new Vector2(1, 0).rotate(rot + 90));
+				shootRocket(new Vector2(1, 0).rotate(rot + 90));
 				shotsFiredInVolley++;
 				timeSinceShot = 0;
 				if (shotsFiredInVolley == shotsAtOnce) {

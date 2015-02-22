@@ -2,6 +2,7 @@ package tungus.games.elude.menu.levelselect;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Assets.EludeMusic;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.mainmenu.MainMenu;
@@ -134,6 +135,7 @@ public class LevelSelectScreen extends BaseScreen {
 	public LevelSelectScreen(Game game, boolean finiteLevels) {
 		super(game);
 		Gdx.input.setCatchBackKey(true);
+		EludeMusic.set(EludeMusic.MENU);
 		finite = finiteLevels;
 		FRUSTUM_WIDTH = 20;
 		FRUSTUM_HEIGHT = 12;

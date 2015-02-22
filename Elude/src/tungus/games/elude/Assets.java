@@ -6,6 +6,7 @@ import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -181,6 +182,10 @@ public class Assets {
 			filename = name().replace("_", "").toLowerCase() + ".wav";
 		}
 		
+		Sounds(String filename) {
+			this.filename = filename;
+		}
+		
 		Sounds(boolean looping) {
 			this();
 			this.looping = looping;
@@ -197,8 +202,49 @@ public class Assets {
 				return s.play();
 			}
 		}
+	}
+	
+	public static enum EludeMusic {
 		
+		INGAME("fireaurastart.wav", "fireauraloop.ogg", 65350),
+		MENU("aurorastart.wav", "auroraloop.ogg", 83598);
 		
+		private static final String prefix = "music/";
+		
+		private final String startFilename;
+		private final String loopFilename;
+		
+		Music start;
+		final int startLength;
+		Music loop;
+		
+		static EludeMusic currentPlaying = null;
+		static boolean loopPart = false;
+		static float volume;
+		
+		EludeMusic(String start, String loop, int length) {
+			startFilename = start;
+			loopFilename = loop;
+			startLength = length;
+		}
+		
+		public void load() {
+			if (startFilename != null) {
+				start = Gdx.audio.newMusic(Gdx.files.internal(prefix + startFilename));
+			}
+			loop = Gdx.audio.newMusic(Gdx.files.internal(prefix + loopFilename));
+		}
+		
+		public static void set(EludeMusic m) {
+			set(m, 1f);
+		}
+
+		public static void set(final EludeMusic music, float vol) {
+			if (currentPlaying == music) {
+				return;
+			}
+			new Thread(new MusicSwitcher(music, vol)).start();
+		}
 	}
 	
 	public static enum Shaders {
@@ -255,6 +301,9 @@ public class Assets {
 		}
 		for (Sounds s : Sounds.values()) {
 			s.load();
+		}
+		for (EludeMusic m : EludeMusic.values()) {
+			m.load();
 		}
 		for (Shaders s : Shaders.values()) {
 			s.load();

@@ -2,6 +2,7 @@ package tungus.games.elude.menu.settings;
 
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
+import tungus.games.elude.Assets.EludeMusic;
 import tungus.games.elude.menu.mainmenu.MainMenu;
 import tungus.games.elude.menu.settings.Settings.MobileControlType;
 import tungus.games.elude.util.ViewportHelper;
@@ -80,6 +81,7 @@ public class SettingsScreen extends BaseScreen {
 	public SettingsScreen(Game game) {
 		super(game);
 		Gdx.input.setCatchBackKey(true);
+		EludeMusic.set(EludeMusic.MENU);
 		Gdx.input.setInputProcessor(new InputMultiplexer(tapCheck, keyInput));
 		cam = ViewportHelper.newCamera(800, 480);
 		batch = new SpriteBatch(300);

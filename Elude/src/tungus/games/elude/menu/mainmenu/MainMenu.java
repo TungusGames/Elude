@@ -3,6 +3,7 @@ package tungus.games.elude.menu.mainmenu;
 import tungus.games.elude.Assets;
 import tungus.games.elude.BaseScreen;
 import tungus.games.elude.Elude;
+import tungus.games.elude.Assets.EludeMusic;
 import tungus.games.elude.menu.AboutScreen;
 import tungus.games.elude.menu.levelselect.LevelSelectScreen;
 import tungus.games.elude.menu.settings.SettingsScreen;
@@ -43,6 +44,7 @@ public class MainMenu extends BaseScreen {
 	public MainMenu(final Game game) {
 		super(game);
 		Gdx.input.setCatchBackKey(false);
+		EludeMusic.set(EludeMusic.MENU);
 		camera = ViewportHelper.newCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 		spriteBatch = new SpriteBatch();
 		spriteBatch.setProjectionMatrix(camera.combined);

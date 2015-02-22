@@ -1,6 +1,6 @@
 package tungus.games.elude;
 
-import tungus.games.elude.game.client.GameScreen;
+import tungus.games.elude.Assets.EludeMusic;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.menu.mainmenu.MainMenu;
 import tungus.games.elude.util.log.FPSLogger;
@@ -27,6 +27,7 @@ public class Elude extends Game {
 		float deltaTime = (newTime-oldTime) / 1000f;
 		Gdx.app.log("Elude", "Loading time: " + deltaTime);
 		//setScreen(GameScreen.newSinglePlayer(this, 49, true)); // for quick debugging
+		EludeMusic.currentPlaying = null;
 		fps = new FPSLogger("FPSLogger", "Render thread FPS: ");
 	}
 	
