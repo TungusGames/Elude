@@ -1,8 +1,41 @@
 70
-Delayed appearances
-32 85
+Long arrivals
+57 75
 0.08 0.08 0 0
 wavestart 0 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+wavestart 1 0
+standing
+
+wavestart -1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
+moving
+wavestart 1 0
 moving
 wavestart 1 0
 moving

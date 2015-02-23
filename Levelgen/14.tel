@@ -1,15 +1,19 @@
 37
 Unstable grounds
-40 60
+48 60
 0.1 0.1 0 0
 wavestart 0 0
 3 moving
 wavestart -1 2
 miner
+wavestart 1 0
+moving
 wavestart 15 0
 moving moving
 wavestart 5 0
 miner miner health
+wavestart 2 0
+moving
 wavestart 10 1
 kamikaze
 wavestart 0.5 0

@@ -1,0 +1,19 @@
+01 OK
+02 OK
+03: two HPickups on an easy level with recently increased healing...
+"HP left" medal requirement increased from 65 to 80
+Also, Movings can be tricky to hit at first. Time medal from 35 to 45 sec
+04 OK (Maybe could be named "Supernova"?)
+05 OK
+06 OK
+07 OK
+08 OK
+09 HP medal way too low. Increased from 70 to 85 (At least the medals should get somewhat close to challanging by here I suppose?)
+10: Way too short. Added more standing enemies as a first wave, 2x12 enemies now
+New name (again): "Long arrivals"
+11: Lengthened to make sense with prev level. Took me 1:16, but why not I guess.
+12: I don't get the title... ("This is boring"). Reference to prev 2 levels maybe? Not really obvious. Renamed "Quick strike"
+Also, both medals a bit harder (30 -> 27 sec, 80 -> 85 hp). Ought to be increasing IMO.
+13: Fine I suppose :)
+14: There should be more enemies arriving after miners to shoot them. Added and increased time medal accordingly.
+15: Time medal made easier, one HPickup removed
