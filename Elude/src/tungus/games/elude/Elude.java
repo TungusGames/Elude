@@ -20,14 +20,14 @@ public class Elude extends Game {
 	@Override
 	public void create () {
 		long oldTime = TimeUtils.millis();
+		EludeMusic.currentPlaying = null;
 		Assets.load();
 		ScoreData.load();
 		setScreen(new MainMenu(this));
 		long newTime = TimeUtils.millis();
 		float deltaTime = (newTime-oldTime) / 1000f;
 		Gdx.app.log("Elude", "Loading time: " + deltaTime);
-		//setScreen(GameScreen.newSinglePlayer(this, 49, true)); // for quick debugging
-		EludeMusic.currentPlaying = null;
+		//setScreen(GameScreen.newSinglePlayer(this, 49, true)); // for quick debugging		
 		fps = new FPSLogger("FPSLogger", "Render thread FPS: ");
 	}
 	

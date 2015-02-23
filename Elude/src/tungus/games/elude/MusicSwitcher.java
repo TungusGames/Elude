@@ -29,9 +29,9 @@ public class MusicSwitcher implements Runnable {
 			(EludeMusic.loopPart ? EludeMusic.currentPlaying.loop : EludeMusic.currentPlaying.start).stop();
 		}
 		EludeMusic.volume = volume;
-		EludeMusic.loopPart = false;
-		EludeMusic.currentPlaying = next;
+		EludeMusic.loopPart = false;		
 		if (next != null) {
+			EludeMusic.currentPlaying = next;
 			next.loop.setVolume(0);
 			next.loop.play();			
 			next.loop.pause();
