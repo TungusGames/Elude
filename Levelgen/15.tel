@@ -1,21 +1,6 @@
-38
+41
 You go kamikaze
-45 60
-0.2 0.1 0 0
+20 60
+0.6 0.4 0 0
 wavestart 0 0
-4 standing
-2 miner
-wavestart -1 1
-health
-wavestart 1 -1
-2 moving
-3 standing
-3 miner
-wavestart -1 1
-health
-wavestart 1 -1
-miner
-wavestart 1 -1
-miner
-wavestart 5 0
-2 kamikaze
+10 miner

@@ -1,7 +1,7 @@
 50
 Discrete attacks
-60 65
-0.3 0.1 0.1 0
+75 40
+0.05 0.05 0.05 0
 wavestart 0 0
 2 splitter
 3 moving
@@ -12,8 +12,5 @@ splitter
 wavestart -1 0
 splitter
 miner
-wavestart -1 0
 splitter
 2 shielded
-wavestart -1 1
-5 splitter

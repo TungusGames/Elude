@@ -1,9 +1,9 @@
 6
 Defense at hand
-27.5 80
+25 90
 0.1 0.1 0 0
 wavestart 0 0
-kamikaze kamikaze kamikaze kamikaze
+10 kamikaze
 wavestart 1 0
 shield
 wavestart -1 0

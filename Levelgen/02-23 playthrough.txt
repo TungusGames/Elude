@@ -17,3 +17,25 @@ Also, both medals a bit harder (30 -> 27 sec, 80 -> 85 hp). Ought to be increasi
 13: Fine I suppose :)
 14: There should be more enemies arriving after miners to shoot them. Added and increased time medal accordingly.
 15: Time medal made easier, one HPickup removed
+16 OK
+17: Time nowhere near enough. Set from 30 to 55 sec
+18: Time down from 40 to 20 sec.
+
+Swapped 15 with 18 because 18 teaches killing with mines. New 15 = prev 18 titled "You go kamikaze" like prev 15, new 18 = prev 15 titled "Minefield battle"
+
+19: If there's a shield, there might as well be a ridiculous amount of kamikazes. :)
+20: Enemies have no firepower, user has shield - might as well make HP medal hard (from 60 to 92 hp)
+21: Left a lot of shields lying because more appeared at the same time, so lowered shield drop rate. Also HP rate. Also, harder medals again.. (35-> 30sec, 75->85 hp)
+22: Reduced pickups, adjusted medals
+23: Adjusted medals
+24: Reduced huge amount of pickups, adjusted medals
+25: Set medals
+(HP medals turned out way lower than other levels around. Does that mean the level is too hard??)
+
+From here on, not mentioning "adjusted medals"...
+
+26: Removed first wave. Tedious.
+27: OK (just medals)
+28 and 29: Loads of enemies onscreen at once --> reduced pickup rates
+29: Shortened a lot. Still over a minute anyway.
+30: OK

@@ -40,6 +40,10 @@ public class VesselRenderable extends Sprite {
 			rotx = roty = Vessel.SHIELD_HALF_SIZE;
 			alpha = shieldAlpha;
 			super.render(wr);
+			width = Vessel.DRAW_WIDTH;
+			height = Vessel.DRAW_HEIGHT;
+			rotx = width/2; roty = height/2;
+			alpha = 1;
 		}
 		if (wr.updateParticles) {
 			modVesselTrails(wr, tmp.set(vx, vy));

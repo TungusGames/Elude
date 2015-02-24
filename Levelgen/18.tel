@@ -1,6 +1,21 @@
-41
-Numbers are increasing
-40 60
-0.6 0.4 0 0
+38
+Minefield battle
+45 60
+0.2 0.1 0 0
 wavestart 0 0
-10 miner
+4 standing
+2 miner
+wavestart -1 1
+health
+wavestart 1 -1
+2 moving
+3 standing
+3 miner
+wavestart -1 1
+health
+wavestart 1 -1
+miner
+wavestart 1 -1
+miner
+wavestart 5 0
+2 kamikaze

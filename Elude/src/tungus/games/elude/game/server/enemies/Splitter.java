@@ -11,7 +11,7 @@ public class Splitter extends Enemy {
 	
 	private static final float COLL = 0.9f;
 	private static final float SPEED = 3f;
-	private static final float RELOAD = 1.5f;
+	private static final float RELOAD = 1.25f;
 	
 	private static final int DEFAULT_SPLITS = 2;	// How many more "generations" the first spawned enemies will create  
 	private static final int SPLIT_INTO = 2;		// How many smaller enemies each dead will split into
@@ -44,7 +44,7 @@ public class Splitter extends Enemy {
 			arrived = true;
 		}
 		if (timeSinceShot > RELOAD) {
-			shootRocket();
+			shootRocket(MathUtils.random(2) == 0 ? RocketType.FAST_TURNING : RocketType.SLOW_TURNING);
 		}
 		return false;
 	}
