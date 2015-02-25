@@ -29,7 +29,7 @@ public class Splitter extends Enemy {
 		if (edge) {
 			vel.set(World.WIDTH/2, World.HEIGHT/2).sub(pos).nor().scl(SPEED);
 		} else {
-			vel.set(SPEED, 0).rotate(MathUtils.random(360));
+			vel.set(MathUtils.random(World.innerBounds.width) + World.EDGE, MathUtils.random(World.innerBounds.height) + World.EDGE).sub(pos).nor().scl(SPEED);
 		}
 		splitsLeft = splits;
 	}

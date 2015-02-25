@@ -36,7 +36,7 @@ public class MachineGunner extends Enemy {
 			if (moveBounds.contains(pos)) {
 				arrived = true;
 				timeToTurn = STRAIGHT_MIN + MathUtils.random(STRAIGHT_MAX-STRAIGHT_MIN);
-				timeSinceShot = 0;
+				timeSinceShot = LONG_RELOAD/2;
 			}
 			return false;
 		} else {

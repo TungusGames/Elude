@@ -1,7 +1,7 @@
 65
 Mines can kill everything
-50 75
-0.1 0.1 0.1 0.1
+60 75
+0.085 0.1 0.15 0.1
 wavestart 0 0
 3 standing
 3 shielded

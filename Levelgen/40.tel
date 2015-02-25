@@ -1,8 +1,13 @@
-60
-Industry is power
-45 75
-0 0 0 0
+61
+It's making more!
+48 70
+0.05 0.1 0.05 0.05
 wavestart 0 0
 factory
+wavestart 10 0
+2 shielded
 wavestart -1 0
+3 moving
 2 factory
+wavestart 15 1
+5 kamikaze

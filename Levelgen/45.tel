@@ -1,7 +1,7 @@
 66
 Laserproof
-50 75
-0.1 0.1 0.1 0.1
+80 60
+0.05 0.1 0.05 0.05
 wavestart 0 0
 2 factory
 wavestart 5 1
@@ -9,11 +9,11 @@ wavestart 5 1
 wavestart -1 1
 3 factory
 2 shielded
-8 sharpshooter
-2 splitter
-wavestart 20 2
-5 factory
-8 sharpshooter
-5 machinegunner
-wavestart 15 3
+6 sharpshooter
+1 splitter
+wavestart -1 2
+3 factory
 5 sharpshooter
+2 machinegunner
+wavestart 10 3
+3 sharpshooter

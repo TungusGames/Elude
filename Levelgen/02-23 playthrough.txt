@@ -32,10 +32,24 @@ Swapped 15 with 18 because 18 teaches killing with mines. New 15 = prev 18 title
 25: Set medals
 (HP medals turned out way lower than other levels around. Does that mean the level is too hard??)
 
-From here on, not mentioning "adjusted medals"...
+From here on, not mentioning "adjusted medals/pickups"...
 
 26: Removed first wave. Tedious.
 27: OK (just medals)
 28 and 29: Loads of enemies onscreen at once --> reduced pickup rates
 29: Shortened a lot. Still over a minute anyway.
 30: OK
+31: OK
+32: OK
+33: Hardened
+34: OK
+35: OK
+36: OK
+37: Significantly rewritten, was very easy
+38, 39: OK
+40: Hard, moved after next 2 levels
+41: Pushed to 40. Modified to be better as an introductory level
+42: Pushed to 41, mostly oK
+43: Way too easy, changed Movings to Splitter/MachineGunner
+44: OK
+45: Waaay too many enemies past where it's pointful, reduced most of the numbers without changing the enemy names / etc => Great level! :D

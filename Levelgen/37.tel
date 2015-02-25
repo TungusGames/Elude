@@ -1,12 +1,19 @@
 57
-Old but not simple
-40 60
-0.1 0.1 0.1 0.1
+Modernization
+51 60
+0.06 0.1 0.04 0.05
+
 wavestart 0 0
 10 moving
+
 wavestart -1 0
-10 moving
-wavestart -1 0
-health
 5 moving
 10 kamikaze
+
+wavestart -1 0
+4 kamikaze
+5 sharpshooter
+
+wavestart -1 0
+4 sharpshooter
+5 machinegunner
