@@ -73,7 +73,7 @@ public class SettingsScreen extends BaseScreen {
 						soundChoose.touch(t.x, t.y) ||
 						vibrateChoose.touch(t.x, t.y) ||
                                                 musicChoose.touch(t.x, t.y)) {
-					Assets.Sounds.MENU_BUTTON.s.play();
+					Assets.Sounds.MENU_BUTTON.play();
 					return true;
 				}
 			}

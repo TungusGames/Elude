@@ -126,7 +126,7 @@ public class GameScreen extends BaseScreen {
 				touch3.set(rawTap);
 				uiCam.unproject(touch3);
 				if (pauseButton.contains(touch3.x, touch3.y)) {
-					Assets.Sounds.MENU_BUTTON.s.play();
+					Assets.Sounds.MENU_BUTTON.play();
 					state = STATE_PAUSED;
 				}
 			} else {

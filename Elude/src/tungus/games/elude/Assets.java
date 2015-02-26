@@ -24,13 +24,13 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import tungus.games.elude.menu.settings.Settings;
 
 public class Assets {
-	
+
 	public static class Strings {
 		public static String endless = "SURVIVAL";
 	}
-	
+
 	public static TextureAtlas atlas;
-	
+
 	public static enum Tex {
 		ELUDE_TITLE_ON("mainmenu/EludeOn"),
 		PLAY_SINGLE_BUTTON("mainmenu/playsingle"),
@@ -38,7 +38,7 @@ public class Assets {
 		MULTIPLAYER_BUTTON("mainmenu/multi"),
 		INFO_BUTTON("mainmenu/info"),
 		HALF_PLAY_PANEL("mainmenu/halfplaypanel"),
-		
+
 		VESSEL,
 		VESSELRED,
 		SHIELD,
@@ -56,29 +56,29 @@ public class Assets {
 		BOSS1,
 		BOSS1_BACK,
 		BOSS2,
-		
+
 		HPBONUS,
 		SPEEDBONUS,
 		SHIELDBONUS,
 		FREEZERBONUS,
-		
+
 		MINEHELP,
 		LINEAR_GRADIENT_SPOT,
 		LASER,
-		
+
 		WHITE_RECTANGLE,
 		SMALL_CIRCLE,
 		SWARMROCKET_SPOT,
-		
+
 		VIRTUALDPAD,
-		
+
 		PAUSE(),
 		RESUME("ingamemenu/resume"),
 		TO_MENU("ingamemenu/tomenu"),
 		SHADOWER("ingamemenu/shadower"),
 		NEXT_LEVEL("ingamemenu/nextlevel"),
 		RESTART("ingamemenu/restart"),
-		
+
 		FRAME,
 		FRAME_RED,
 		FRAME_BLUE,
@@ -88,23 +88,23 @@ public class Assets {
 		PLAY_LEVEL,
 		STAR_OFF, STAR_ON,
 		STAR_OFF_SMALL, STAR_ON_SMALL;
-		
+
 		private String filename;
 		public TextureRegion t = null;
-		
+
 		Tex(String path) {
 			this.filename = path;
 		}
-		
+
 		Tex() {
 			filename = name().replace("_", "").toLowerCase();
 		}
-		
+
 		private void load() {
 			t = atlas.findRegion(filename);
 		}
 	}
-	
+
 	public static enum Particles {
 		FLAME_ROCKET(40, 80),
 		MATRIX_ROCKET(20, 40),
@@ -116,30 +116,30 @@ public class Assets {
 		DEBRIS_BIG(1, 1),
 		VESSEL_TRAILS(1, 1),
 		VESSEL_TRAILS_RED(1, 1);
-		
+
 		private static String prefix = "particles/";
 		private final int initialCapacity;
 		private final int max;
 		private final String filename;
-		
+
 		public ParticleEffectPool p;
-		
+
 		Particles() {
 			this(10, 50);
 		}
-		
+
 		Particles(int initial, int max) {
 			this.initialCapacity = initial;
 			this.max = max;
 			filename = name().replace("_", "").toLowerCase();
 		}
-		
+
 		private void load() {
 			ParticleEffect particle = new ParticleEffect();
 			particle.load(Gdx.files.internal(prefix + filename), Assets.atlas);
 			p = new ParticleEffectPool(particle, initialCapacity, max);
 		}
-		
+
 		public static PooledEffect debris(float[] color, float dir, boolean big) {
 			PooledEffect p = (big ? DEBRIS_BIG : DEBRIS).p.obtain();
 			Array<ParticleEmitter> emitters = p.getEmitters();
@@ -152,7 +152,7 @@ public class Assets {
 					separateColor[j] = MathUtils.clamp(color[j]*mul, 0f, 1f);
 				}
 				emitters.get(i).getTint().setColors(separateColor);
-				
+
 				// Mod angle
 				if (dir == dir) { // Dir is not NaN (NaN != NaN)
 					emitters.get(i).getAngle().setLow(dir);
@@ -165,112 +165,115 @@ public class Assets {
 			return p;
 		}
 	}
-	
+
 	public static enum Sounds {
 		EXPLOSION,
 		MENU_BUTTON,
 		LASERSHOT,
-        LASERBEAM(true);
-		
+		LASERBEAM(true);
+
 		private static final String prefix = "sounds/";
 		private final String filename;
-		
+
 		public Sound s;
-		
+
 		private boolean looping = false;
-		
+
 		Sounds() {
 			filename = name().replace("_", "").toLowerCase() + ".wav";
 		}
-		
+
 		Sounds(String filename) {
 			this.filename = filename;
 		}
-		
+
 		Sounds(boolean looping) {
 			this();
 			this.looping = looping;
 		}
-		
+
 		private void load() {
 			s = Gdx.audio.newSound(Gdx.files.internal(prefix + filename));
 		}
-		
+
 		public long play() {
-			if (looping) {
-				return s.loop();
-			} else {
-				return s.play();
+			if (Settings.INSTANCE.soundOn) {
+				if (looping) {
+					return s.loop();
+				} else {
+					return s.play();
+				}
 			}
+			else return -1;
 		}
 	}
-	
+
 	public static enum EludeMusic {
-		
+
 		INGAME("fireaurastart.wav", "fireauraloop.ogg", 65350),
 		MENU("aurorastart.wav", "auroraloop.ogg", 83598);
-		
+
 		private static final String prefix = "music/";
-		
+
 		private final String startFilename;
 		private final String loopFilename;
-		
+
 		Music start;
 		final int startLength;
 		Music loop;
-		
+
 		static EludeMusic currentPlaying = null;
 		static boolean loopPart = false;
 		static float volume;
-		
+
 		EludeMusic(String start, String loop, int length) {
 			startFilename = start;
 			loopFilename = loop;
 			startLength = length;
 		}
-		
+
 		public void load() {
 			if (startFilename != null) {
 				start = Gdx.audio.newMusic(Gdx.files.internal(prefix + startFilename));
 			}
 			loop = Gdx.audio.newMusic(Gdx.files.internal(prefix + loopFilename));
 		}
-		
+
 		public static void set(EludeMusic m) {
 			set(m, 1f);
 		}
 
 		public static void set(EludeMusic music, float vol) {
-                        if (!Settings.INSTANCE.musicOn) {
-                            music = null;
-                        }                    
+			if (!Settings.INSTANCE.musicOn) {
+				music = null;
+			}                    
 			if (currentPlaying == music) {
 				return;
 			}
 			new Thread(new MusicSwitcher(music, vol)).start();
 		}
 	}
-	
+
 	public static enum Shaders {
 		DEFAULT,
 		MINE("basicvertex", "minefragment"),
 		FREEZE_ENEMY("basicvertex", "freezefragment");
-		
+
 		private static final String prefix = "shaders/";
 		private final String vertex;
 		private final String fragment;
-		
+
 		public ShaderProgram s;
-		
+
 		Shaders(String v, String f) {
 			vertex = v;
 			fragment = f;
 		}
-		
+
 		Shaders() {
 			vertex = fragment = null;
 		}
-		
+
 		private void load() {
 			if (this != DEFAULT) {
 				s = new ShaderProgram(Gdx.files.internal(prefix + vertex), Gdx.files.internal(prefix + fragment));
@@ -283,7 +286,7 @@ public class Assets {
 				s = SpriteBatch.createDefaultShader();
 			}
 		}
-		
+
 		private static void bindPhases() {
 			for (RenderPhase r : RenderPhase.values()) {
 				r.shader = DEFAULT.s;
@@ -291,12 +294,12 @@ public class Assets {
 			RenderPhase.MINE.shader = MINE.s;
 		}
 	}
-	
+
 	public static BitmapFont font;
-	
+
 	public static void load() {
 		atlas = new TextureAtlas(Gdx.files.internal("textures/game.atlas"));
-		
+
 		for (Tex t : Tex.values()) {
 			t.load();
 		}
@@ -313,7 +316,7 @@ public class Assets {
 			s.load();
 		}
 		Shaders.bindPhases();
-		
+
 		loadFont();
 	}
 

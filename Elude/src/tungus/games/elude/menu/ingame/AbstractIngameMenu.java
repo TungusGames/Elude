@@ -83,7 +83,7 @@ public abstract class AbstractIngameMenu {
 			int s = buttonSprites.length;
 			for (int i = 0; i < s; i++) {
 				if (buttonSprites[i].getBoundingRectangle().contains(touch.x, touch.y)) {
-					Assets.Sounds.MENU_BUTTON.s.play();
+					Assets.Sounds.MENU_BUTTON.play();
 					onButtonTouch(i);
 					break;
 				}
