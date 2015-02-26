@@ -1,22 +1,19 @@
-63 
-Homogeneous armies
-100 30
-0.2 0.2 0.2 0.2
+73
+Short but hard
+45 50
+0.05 0.05 0.05 0.05
 wavestart 0 0
-10 standing
+2 splitter
+2 factory
+2 machinegunner
+2 miner
+
+wavestart -1 2
+2 miner
+5 machinegunner
+3 sharpshooter
+
 wavestart -1 0
-10 moving
-wavestart -1 0
-10 shielded
-wavestart -1 0
-10 splitter
-wavestart -1 0
-10 machinegunner
-wavestart -1 0
-10 factory
-wavestart -1 0
-10 miner
-wavestart -1 0
-10 sharpshooter
-wavestart -1 0
-10 kamikaze
+8 kamikaze
+
+

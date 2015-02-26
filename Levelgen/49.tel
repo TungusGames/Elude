@@ -1,65 +1,21 @@
 27
-Difficulty is unlimited
-60 50
-0.08 0.08 0.03 0
+When will it end?
+170 30
+0.05 0.1 0.05 0.05
 wavestart 0 0
-kamikaze
-standing
-wavestart -1 1
-2 kamikaze
-2 standing
-wavestart -1 2
-3 kamikaze
-2 standing
-1 shielded
-wavestart -1 3
-4 kamikaze
-3 standing
-1 moving
-wavestart -1 4
-4 kamikaze
-3 standing
-2 moving
+2 factory
+wavestart -1 0
+2 factory
+5 machinegunner
+wavestart -1 0
+2 factory
+2 splitter
 1 miner
-wavestart -1 5
-4 kamikaze
-3 standing
-2 moving
-1 miner
-1 machinegunner
-1 splitter
-wavestart -1 6
-5 kamikaze
-3 standing
-2 moving
-1 shielded
-1 machinegunner
-1 splitter
-1 miner
-wavestart -1 7
-6 kamikaze
-3 standing
-3 moving
-1 shielded
-1 machinegunner
-1 splitter
-1 miner
-wavestart -1 8
-7 kamikaze
-3 standing
-4 moving
-1 shielded
-1 machinegunner
-1 splitter
-1 miner
-wavestart -1 9
-8 kamikaze
-3 standing
-4 moving
-1 shielded
-1 machinegunner
-1 splitter
-1 miner
-1 factory
-wavestart -1 10
-12 sharpshooter
+wavestart -1 0
+2 factory
+5 sharpshooter
+2 miner
+wavestart -1 0
+4 factory
+wavestart -1 0
+15 kamikaze

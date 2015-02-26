@@ -1,5 +1,34 @@
 74
-Pyramid
-0 100
-0 0 0 0
+Endless reinforcements
+75 50
+0.05 0.05 0.05 0.05
 wavestart 0 0
+4 machinegunner
+
+wavestart -1 3
+machinegunner
+
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 3
+machinegunner
+wavestart -1 0
+6 machinegunner

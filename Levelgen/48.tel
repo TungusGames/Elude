@@ -1,5 +1,18 @@
-73
-The longest level
-0 100
-0 0 0 0
+63 
+Ready for a longer one?
+140 35
+0.05 0.05 0.05 0.05
 wavestart 0 0
+4 splitter
+wavestart -1 0
+4 factory
+wavestart -1 0
+3 splitter
+3 factory
+wavestart -1 0
+2 splitter
+2 factory
+2 machinegunner
+2 sharpshooter
+wavestart -1 0
+8 kamikaze
