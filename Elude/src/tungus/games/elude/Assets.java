@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import tungus.games.elude.menu.settings.Settings;
 
 public class Assets {
 	
@@ -239,7 +240,10 @@ public class Assets {
 			set(m, 1f);
 		}
 
-		public static void set(final EludeMusic music, float vol) {
+		public static void set(EludeMusic music, float vol) {
+                        if (!Settings.INSTANCE.musicOn) {
+                            music = null;
+                        }                    
 			if (currentPlaying == music) {
 				return;
 			}

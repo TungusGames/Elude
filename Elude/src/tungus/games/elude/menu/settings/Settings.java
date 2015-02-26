@@ -19,6 +19,7 @@ public class Settings implements Serializable{
 	public enum MobileControlType{TAP_TO_TARGET, STATIC_DPAD, DYNAMIC_DPAD}
 	
 	public boolean soundOn = true;
+        public boolean musicOn = true;
 	public boolean vibrateOn = true;
 	public MobileControlType mobileControl = MobileControlType.TAP_TO_TARGET;
 	

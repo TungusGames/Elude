@@ -24,10 +24,10 @@ public class SettingsScreen extends BaseScreen {
 
 	private static final float X = 225;
 	private static final float TAB = 50;
-	private static final float LINE_HEIGHT = 37.5f;
-	private static final float SMALLGAP = 10; 		// Gap between title and content beneath
-	private static final float BIGGAP = 40; 		// Gap between sections
-	private static final float EMPTY_BELOW = (480-8*LINE_HEIGHT-3*SMALLGAP-2*BIGGAP) / 2;
+	private static final float LINE_HEIGHT = 32f;
+	private static final float SMALLGAP = 5; 		// Gap between title and content beneath
+	private static final float BIGGAP = 20; 		// Gap between sections
+	private static final float EMPTY_BELOW = (480-10*LINE_HEIGHT-4*SMALLGAP-3*BIGGAP) / 2;
 	private static final float OFF_OFFSET = 150;
 
 	private static final int STATE_ACTIVE = 1;
@@ -40,6 +40,7 @@ public class SettingsScreen extends BaseScreen {
 	private final Chooser controlChoose;
 	private final Chooser soundChoose;
 	private final Chooser vibrateChoose;
+        private final Chooser musicChoose;
 
 	private final SpriteBatch batch;
 	private final OrthographicCamera cam;
@@ -53,6 +54,7 @@ public class SettingsScreen extends BaseScreen {
 				Settings.INSTANCE.mobileControl = MobileControlType.values()[controlChoose.chosen];
 				Settings.INSTANCE.soundOn = (soundChoose.chosen == 0);
 				Settings.INSTANCE.vibrateOn = (vibrateChoose.chosen == 0);
+                                Settings.INSTANCE.musicOn = (musicChoose.chosen == 0);                           
 				Settings.INSTANCE.save();
 				return true;
 			}
@@ -69,7 +71,8 @@ public class SettingsScreen extends BaseScreen {
 				cam.unproject(t);
 				if (controlChoose.touch(t.x, t.y) ||
 						soundChoose.touch(t.x, t.y) ||
-						vibrateChoose.touch(t.x, t.y)) {
+						vibrateChoose.touch(t.x, t.y) ||
+                                                musicChoose.touch(t.x, t.y)) {
 					Assets.Sounds.MENU_BUTTON.s.play();
 					return true;
 				}
@@ -88,9 +91,9 @@ public class SettingsScreen extends BaseScreen {
 		batch.setProjectionMatrix(cam.combined);
 		controlChoose = new Chooser(
 				new Rectangle[]{
-						new Rectangle(X+TAB, EMPTY_BELOW+6*LINE_HEIGHT+2*SMALLGAP+2*BIGGAP, 200, LINE_HEIGHT),
-						new Rectangle(X+TAB, EMPTY_BELOW+5*LINE_HEIGHT+2*SMALLGAP+2*BIGGAP, 200, LINE_HEIGHT),
-						new Rectangle(X+TAB, EMPTY_BELOW+4*LINE_HEIGHT+2*SMALLGAP+2*BIGGAP, 200, LINE_HEIGHT)}, 
+						new Rectangle(X+TAB, EMPTY_BELOW+8*LINE_HEIGHT+3*SMALLGAP+3*BIGGAP, 200, LINE_HEIGHT),
+						new Rectangle(X+TAB, EMPTY_BELOW+7*LINE_HEIGHT+3*SMALLGAP+3*BIGGAP, 200, LINE_HEIGHT),
+						new Rectangle(X+TAB, EMPTY_BELOW+6*LINE_HEIGHT+3*SMALLGAP+3*BIGGAP, 200, LINE_HEIGHT)}, 
 						new String[]{
 						"TAP TO TARGET",
 						"DPAD IN CORNER",
@@ -98,10 +101,16 @@ public class SettingsScreen extends BaseScreen {
 				Settings.INSTANCE.mobileControl.ordinal());
 		soundChoose = new Chooser(
 				new Rectangle[]{
+						new Rectangle(X+TAB, EMPTY_BELOW+4*LINE_HEIGHT+2*SMALLGAP+2*BIGGAP, 50, LINE_HEIGHT),
+						new Rectangle(X+TAB+OFF_OFFSET, EMPTY_BELOW+4*LINE_HEIGHT+2*SMALLGAP+2*BIGGAP, 50, LINE_HEIGHT)}, 
+						new String[]{"ON", "OFF"}, 
+						Settings.INSTANCE.soundOn ? 0 : 1);
+                musicChoose = new Chooser(
+				new Rectangle[]{
 						new Rectangle(X+TAB, EMPTY_BELOW+2*LINE_HEIGHT+SMALLGAP+BIGGAP, 50, LINE_HEIGHT),
 						new Rectangle(X+TAB+OFF_OFFSET, EMPTY_BELOW+2*LINE_HEIGHT+SMALLGAP+BIGGAP, 50, LINE_HEIGHT)}, 
 						new String[]{"ON", "OFF"}, 
-						Settings.INSTANCE.soundOn ? 0 : 1);
+						Settings.INSTANCE.musicOn ? 0 : 1);
 		vibrateChoose = new Chooser(
 				new Rectangle[]{
 						new Rectangle(X+TAB, EMPTY_BELOW, 50, LINE_HEIGHT),
@@ -113,6 +122,7 @@ public class SettingsScreen extends BaseScreen {
 	@Override
 	public void render(float deltaTime) {
 		stateTime += deltaTime;
+                Assets.font.setScale(LINE_HEIGHT / 37.5f);
 		if (state == STATE_FADEIN && stateTime > FADE_TIME) {
 			state = STATE_ACTIVE;
 		}
@@ -128,12 +138,14 @@ public class SettingsScreen extends BaseScreen {
 								: 1;
 		batch.begin();
 		Assets.font.setColor(1f, 1f, 0.35f, alpha);
-		Assets.font.draw(batch, "CONTROLS",	X, EMPTY_BELOW+8*LINE_HEIGHT+3*SMALLGAP+2*BIGGAP);
-		Assets.font.draw(batch, "SOUND",	X, EMPTY_BELOW+4*LINE_HEIGHT+2*SMALLGAP+  BIGGAP);
+		Assets.font.draw(batch, "CONTROLS",	X, EMPTY_BELOW+10*LINE_HEIGHT+4*SMALLGAP+3*BIGGAP);
+		Assets.font.draw(batch, "SOUND",	X, EMPTY_BELOW+6*LINE_HEIGHT+3*SMALLGAP+2*BIGGAP);
+                Assets.font.draw(batch, "MUSIC",	X, EMPTY_BELOW+4*LINE_HEIGHT+2*SMALLGAP+  BIGGAP);
 		Assets.font.draw(batch, "VIBRATE",	X, EMPTY_BELOW+2*LINE_HEIGHT+  SMALLGAP);
 		controlChoose.render(deltaTime, batch, alpha);
 		soundChoose.render(deltaTime, batch, alpha);
 		vibrateChoose.render(deltaTime, batch, alpha);
+                musicChoose.render(deltaTime, batch, alpha);
 
 		batch.end();
 	}
