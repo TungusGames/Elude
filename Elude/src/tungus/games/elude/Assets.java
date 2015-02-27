@@ -226,9 +226,9 @@ public class Assets {
 
 	public static enum EludeMusic {
 
-		BOSS("fireaurastart.wav", "fireauraloop.ogg", 65350),
-		INGAME("kid2willstart.wav", "kid2willloop.ogg", 27310),
-		MENU("aurorastart.wav", "auroraloop.ogg", 83598);
+		BOSS("fireaurastart.ogg", "fireauraloop.ogg", 65350),
+		INGAME("kid2willstart.ogg", "kid2willloop.ogg", 27310),
+		MENU("aurorastart.ogg", "auroraloop.ogg", 83598);
 
 		private static final String prefix = "music/";
 

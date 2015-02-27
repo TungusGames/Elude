@@ -211,7 +211,7 @@ public class ScoreDetails {
 				if (finite) {
 					Assets.font.draw(batch, "LOCKED", offsetXPos(textX+70, stateTime, 3, batchingText), 290);
 				} else {
-					Assets.font.draw(batch, (levelNum+1)*10+"", offsetXPos(textX+35-Assets.font.getBounds(""+(levelNum+1)).width, 
+					Assets.font.draw(batch, (levelNum+1)*11+"", offsetXPos(textX+35-Assets.font.getBounds(""+(levelNum+1)).width, 
 							stateTime, 3, batchingText), 290);
 					Assets.font.draw(batch, "TO UNLOCK", offsetXPos(textX+105, stateTime, 3, batchingText), 290);
 				}

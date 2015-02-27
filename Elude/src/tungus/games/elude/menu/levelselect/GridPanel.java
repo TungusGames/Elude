@@ -92,7 +92,7 @@ public class GridPanel {
 					open = true;
 				}
 			} else {
-				open = (ScoreData.starsEarned >= (i+1)*10);
+				open = (ScoreData.starsEarned >= (i+1)*11);
 			}
 			open = true; ///DEBUG
 			buttons[i] = new LevelButton(i, finite, open);
