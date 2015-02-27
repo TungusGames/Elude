@@ -5,9 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -161,6 +163,7 @@ public class Main {
 	
 	public static void writeArcadeMedals() {
 		List<ArcadeLevelScore> list = new ArrayList<>();
+		List<String> names = new LinkedList<>();
 		try {
 			sc = new Scanner(new File("arcadeinfo.tel"));
 		} catch (FileNotFoundException e) {
@@ -172,6 +175,7 @@ public class Main {
 		while(sc.hasNext()) {
 			ntoidList.add(sc.nextInt());
 			list.add(new ArcadeLevelScore(sc.nextFloat(), sc.nextInt()));
+			names.add(sc.nextLine());
 		}
 		int ntoidArray[] = new int[ntoidList.size()];
 		for (int i = 0; i < ntoidArray.length; i++) {
@@ -187,6 +191,10 @@ public class Main {
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(ntoidArray);
 			out.close();
+			fileOut = new FileOutputStream("../Elude - Android/assets/levels/arcadenames");
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(names.toArray(new String[]{}));
+			fileOut.close();
 		} catch (IOException e11) {
 			e11.printStackTrace();
 		}

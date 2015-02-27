@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 public class FillUp extends ArcadeLoaderBase {
 	private final int fillTo;
 	private final float incrementTime;
-	private final EnemyType[] types;
+	protected final EnemyType[] types;
 	
 	private float timeSinceIncrement = 0;
 	private int currentFill = 1;
@@ -41,7 +41,7 @@ public class FillUp extends ArcadeLoaderBase {
 		return false;
 	}
 	
-	private void addEnemy() {
+	protected void addEnemy() {
 		world.addEnemy(Enemy.fromType(world, types[MathUtils.random(types.length-1)]));
 	}
 }

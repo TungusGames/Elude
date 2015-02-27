@@ -18,6 +18,7 @@ public class BossFun extends ArcadeLoaderBase {
 	
 	@Override
 	public void onEnemyDead(Enemy e) {
+		super.onEnemyDead(e);
 		if (e instanceof ClosingBoss) {
 			world.addEnemy(Enemy.fromType(world, EnemyType.CLOSING_BOSS));
 		} else if (e instanceof TeleportingBoss) {

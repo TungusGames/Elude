@@ -1,8 +1,12 @@
 package tungus.games.elude;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool;
 import tungus.games.elude.game.client.worldrender.lastingeffects.ParticleEffectPool.PooledEffect;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
+import tungus.games.elude.menu.settings.Settings;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -21,12 +25,23 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import tungus.games.elude.menu.settings.Settings;
 
 public class Assets {
 
 	public static class Strings {
 		public static String endless = "SURVIVAL";
+		public static String[] arcadeNames;
+		public static void load() {
+			try {
+				ObjectInputStream in = new ObjectInputStream(Gdx.files.internal("levels/arcadenames").read());
+				arcadeNames = (String[])(in.readObject());
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+		}
 	}
 
 	public static TextureAtlas atlas;
@@ -316,7 +331,7 @@ public class Assets {
 			s.load();
 		}
 		Shaders.bindPhases();
-
+		Strings.load();
 		loadFont();
 	}
 

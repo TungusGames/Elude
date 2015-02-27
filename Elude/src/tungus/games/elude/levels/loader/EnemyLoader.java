@@ -11,9 +11,9 @@ import tungus.games.elude.game.server.pickups.HealthPickup;
 import tungus.games.elude.game.server.pickups.ShieldPickup;
 import tungus.games.elude.game.server.pickups.SpeedPickup;
 import tungus.games.elude.levels.loader.FiniteLevelLoader.Level;
-import tungus.games.elude.levels.loader.arcade.BalancedPlusPlus;
 import tungus.games.elude.levels.loader.arcade.BossFun;
 import tungus.games.elude.levels.loader.arcade.FillUp;
+import tungus.games.elude.levels.loader.arcade.GuaranteedFillup;
 import tungus.games.elude.levels.loader.arcade.PlusPlus;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -48,7 +48,7 @@ public abstract class EnemyLoader extends Updatable {
 			case 5:
 				return new FillUp(world, n, 5, 30f, EnemyType.SPLITTER, EnemyType.KAMIKAZE, EnemyType.KAMIKAZE);
 			case 6:
-				return new FillUp(world, n, 6, 30f, EnemyType.KAMIKAZE, EnemyType.MINER);
+				return new GuaranteedFillup(world, n, 6, 15f, EnemyType.KAMIKAZE, EnemyType.MINER);
 			case 7:
 				return new PlusPlus(world, n, 20f, EnemyType.SHARPSHOOTER, EnemyType.SHIELDED);
 			case 8:				
@@ -56,7 +56,7 @@ public abstract class EnemyLoader extends Updatable {
 			case 9:
 				return new FillUp(world, n, 6, 40f, EnemyType.MACHINEGUNNER, EnemyType.SHARPSHOOTER);
 			case 10:
-				return new FillUp(world, n, 6, 30f, EnemyType.SHIELDED, EnemyType.MACHINEGUNNER, EnemyType.MINER);
+				return new GuaranteedFillup(world, n, 6, 30f, EnemyType.MACHINEGUNNER, EnemyType.SHIELDED, EnemyType.MINER);
 			case 11:
 				return new PlusPlus(world, n, 30f, EnemyType.FACTORY);
 			case 12:

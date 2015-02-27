@@ -2,6 +2,9 @@ package tungus.games.elude;
 
 import tungus.games.elude.Assets.EludeMusic;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Music.OnCompletionListener;
+
 public class MusicSwitcher implements Runnable {
 
 	private static int activeID = 0;
@@ -16,7 +19,7 @@ public class MusicSwitcher implements Runnable {
 
 	@Override
 	public void run() {
-		int id = ++activeID; 
+		final int id = ++activeID; 
 		if (EludeMusic.currentPlaying != null) {
 			for (int i = 1; i <= 100; i++) {
 				try {
@@ -38,21 +41,17 @@ public class MusicSwitcher implements Runnable {
 			next.loop.setVolume(volume);
 			next.loop.setLooping(true);
 			next.start.setVolume(volume);
-
+			next.start.setOnCompletionListener(new OnCompletionListener(){
+				@Override
+				public void onCompletion(Music m) {
+					if (activeID != id) {
+						return;
+					}
+					next.loop.play();
+					EludeMusic.loopPart = true;
+				}
+			});
 			next.start.play();
-
-			try {
-				Thread.sleep(next.startLength);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (activeID != id) {
-				return;
-			}
-
-			next.loop.play();
-			EludeMusic.loopPart = true;
-
 		}					
 	}
 

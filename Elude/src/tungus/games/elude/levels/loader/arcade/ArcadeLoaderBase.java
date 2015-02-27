@@ -1,6 +1,7 @@
 package tungus.games.elude.levels.loader.arcade;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Strings;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
 import tungus.games.elude.levels.loader.EnemyLoader;
@@ -57,6 +58,6 @@ public abstract class ArcadeLoaderBase extends EnemyLoader {
 	
 	@Override
 	public String levelName() {
-		return Assets.Strings.endless + " " + (levelNum+1);
+		return Assets.Strings.endless + " " + (levelNum+1) + "\n" + Strings.arcadeNames[levelNum];
 	}
 }
