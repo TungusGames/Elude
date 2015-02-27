@@ -125,9 +125,11 @@ public class Assets {
 		MATRIX_ROCKET(20, 40),
 		STRAIGHT_ROCKET,
 		EXPLOSION(20, 40),
+		EXPLOSION_MED(5, 10),
 		EXPLOSION_BIG(5, 10),
 		EXPLOSION_SMALL(100, 200),
 		DEBRIS(20, 40),
+		DEBRIS_MED(4, 8),
 		DEBRIS_BIG(1, 1),
 		VESSEL_TRAILS(1, 1),
 		VESSEL_TRAILS_RED(1, 1);
@@ -155,8 +157,8 @@ public class Assets {
 			p = new ParticleEffectPool(particle, initialCapacity, max);
 		}
 
-		public static PooledEffect debris(float[] color, float dir, boolean big) {
-			PooledEffect p = (big ? DEBRIS_BIG : DEBRIS).p.obtain();
+		public static PooledEffect debris(float[] color, float dir, int typeID) {
+			PooledEffect p = (values()[typeID]).p.obtain();
 			Array<ParticleEmitter> emitters = p.getEmitters();
 			for (int i = 0; i < emitters.size; i++) {
 				// Mod color
@@ -184,8 +186,7 @@ public class Assets {
 	public static enum Sounds {
 		EXPLOSION,
 		MENU_BUTTON,
-		LASERSHOT,
-		LASERBEAM(true);
+		LASERSHOT;
 
 		private static final String prefix = "sounds/";
 		private final String filename;
@@ -225,7 +226,8 @@ public class Assets {
 
 	public static enum EludeMusic {
 
-		INGAME("fireaurastart.wav", "fireauraloop.ogg", 65350),
+		BOSS("fireaurastart.wav", "fireauraloop.ogg", 65350),
+		INGAME("kid2willstart.wav", "kid2willloop.ogg", 27310),
 		MENU("aurorastart.wav", "auroraloop.ogg", 83598);
 
 		private static final String prefix = "music/";

@@ -148,7 +148,11 @@ public class GameScreen extends BaseScreen {
 		super(game);
 		ViewportHelper.setWorldSizeFromArea();
 		Gdx.input.setInputProcessor(new InputMultiplexer(inputListener, new GestureDetector(gestureListener)));
-		EludeMusic.set(EludeMusic.INGAME);
+		if (levelNum == 24 || levelNum == 49) {
+			EludeMusic.set(EludeMusic.BOSS);
+		} else {
+			EludeMusic.set(EludeMusic.INGAME);
+		}		
 		
 		this.finite = finite;
 		this.levelNum = levelNum;

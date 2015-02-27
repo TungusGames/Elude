@@ -152,7 +152,7 @@ public class Vessel extends Updatable implements Hittable {
 	private void die() {
 		died = true;
 		world.effects.add(ParticleAdder.create(Particles.EXPLOSION_BIG, pos.x, pos.y));
-		world.effects.add(DebrisAdder.create(debrisColors, id, pos.x, pos.y, Float.NaN, true));
+		world.effects.add(DebrisAdder.create(debrisColors, id, pos.x, pos.y, Float.NaN, Particles.DEBRIS_BIG));
 		world.effects.add(SoundEffect.create(Sounds.EXPLOSION));
 	}
 }

@@ -3,6 +3,7 @@ package tungus.games.elude.game.server.enemies.boss;
 import java.util.List;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.Assets.Tex;
 import tungus.games.elude.game.client.worldrender.phases.RenderPhase;
 import tungus.games.elude.game.client.worldrender.renderable.EnemyRenderable;
@@ -41,16 +42,16 @@ public class ClosingBoss extends Enemy {
 	private static final float RELOAD_START = 7.5f;
 	private static final float RELOAD_END = 3.5f;
 	private static final float SHORT_RELOAD = 0.35f;
-	
+
 	private static final EnemyType[][] SPAWN = new EnemyType[][]{{EnemyType.SHIELDED, EnemyType.MOVING, EnemyType.MOVING}, 
-																 {EnemyType.MOVING, EnemyType.MOVING, EnemyType.MOVING, EnemyType.MOVING, EnemyType.MINER},
-																 {EnemyType.MINER, EnemyType.MOVING, EnemyType.KAMIKAZE, EnemyType.MOVING}};
+		{EnemyType.MOVING, EnemyType.MOVING, EnemyType.MOVING, EnemyType.MOVING, EnemyType.MINER},
+		{EnemyType.MINER, EnemyType.MOVING, EnemyType.KAMIKAZE, EnemyType.MOVING}};
 	private final Spawner spawner;
 
 	private int shotsAtOnce = SHOTS_START;
 	private float shortReload = SHORT_RELOAD;
 	private float longReload = RELOAD_START;
-	
+
 	private int shotsFiredInVolley = 0;
 	private float timeSinceShot = 0;
 	private int state = STATE_ENTER;
@@ -92,7 +93,7 @@ public class ClosingBoss extends Enemy {
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void shootRocket(RocketType t, Vector2 dir) {
 		timeSinceShot = 0;
@@ -120,11 +121,10 @@ public class ClosingBoss extends Enemy {
 				((Enemy)u).killBy(null);
 			}
 		}
-                world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION_BIG, pos.x, pos.y));
-		world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN, true));
-		world.effects.add(SoundEffect.create(Assets.Sounds.EXPLOSION));
+		world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION_BIG, pos.x, pos.y));
+		world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN, Particles.DEBRIS_BIG));
 	}
-	
+
 	@Override
 	public void putRenderables(List<List<Renderable>> phases) {
 		Renderable back = getSpriteForLaserTurret();	// Puts back, following laser
@@ -133,18 +133,18 @@ public class ClosingBoss extends Enemy {
 		}
 		super.putRenderables(phases); // Puts front, following vessel
 	}
-	
+
 	@Override
 	public Renderable getRenderable() {
 		return EnemyRenderable.create(id, hp/maxHp, Tex.BOSS1, pos.x, pos.y - width()/2 + height()/2, // Y coord correction for difference between image center and rotation center 
-								width(), height(), rot, width()/2, width()/2);
+				width(), height(), rot, width()/2, width()/2);
 	}
-	
+
 	private Renderable getSpriteForLaserTurret() {
 		if (laser == null) {
 			return null;
 		}
 		return Sprite.create(RenderPhase.ENEMY, Tex.BOSS1_BACK, pos.x, pos.y- width()/2 + height()/2, 
-					width(), height(), laser.angle() - 90, width()/2, width()/2, 1);
+				width(), height(), laser.angle() - 90, width()/2, width()/2, 1);
 	}
 }

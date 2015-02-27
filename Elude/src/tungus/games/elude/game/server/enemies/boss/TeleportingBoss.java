@@ -1,6 +1,7 @@
 package tungus.games.elude.game.server.enemies.boss;
 
 import com.badlogic.gdx.math.Circle;
+
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.StandingBase;
@@ -10,7 +11,9 @@ import tungus.games.elude.util.CustomMathUtils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Particles;
 import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
 import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
 import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
@@ -30,14 +33,14 @@ public class TeleportingBoss extends StandingBase {
 	private static final float RADIUS = 0.85f;
 
 	private static final float RELOAD = 1/45f;
-	
+
 	private static final EnemyType[][] SPAWN = 
 			new EnemyType[][]{	{EnemyType.MOVING, EnemyType.KAMIKAZE}, 
-		 					  	{EnemyType.MINER, EnemyType.MACHINEGUNNER, EnemyType.MACHINEGUNNER, EnemyType.SHIELDED, EnemyType.SHIELDED},
-		 					  	{EnemyType.MINER, EnemyType.SHARPSHOOTER, EnemyType.SHARPSHOOTER, EnemyType.MACHINEGUNNER, EnemyType.MACHINEGUNNER}};
+		{EnemyType.MINER, EnemyType.MACHINEGUNNER, EnemyType.MACHINEGUNNER, EnemyType.SHIELDED, EnemyType.SHIELDED},
+		{EnemyType.MINER, EnemyType.SHARPSHOOTER, EnemyType.SHARPSHOOTER, EnemyType.MACHINEGUNNER, EnemyType.MACHINEGUNNER}};
 
 	private final Spawner spawner;
-	
+
 	private int state = STATE_SHOOT;
 	private float stateTime = 0;
 	private boolean waiting = false;
@@ -54,8 +57,8 @@ public class TeleportingBoss extends StandingBase {
 		stateTime += deltaTime;
 		switch (state) {
 		case STATE_SHOOT:
-		//case STATE_SPAWN:
-		//case STATE_LASER:
+			//case STATE_SPAWN:
+			//case STATE_LASER:
 			if (rocketsComing(STATE_TIME[STATE_TELEPORT_FADE_OUT])) {
 				setState(STATE_TELEPORT_FADE_OUT);
 				return false;
@@ -79,7 +82,7 @@ public class TeleportingBoss extends StandingBase {
 			case STATE_SHOOT:
 				setState(/*STATE_SPAWN*/STATE_SHOOT); waiting = true;
 				break;
-			/*case STATE_SPAWN:
+				/*case STATE_SPAWN:
 				setState(STATE_LASER); waiting = true;
 				break;
 			case STATE_LASER:
@@ -146,8 +149,8 @@ public class TeleportingBoss extends StandingBase {
 		}
 		//TODO Implement different states
 	}
-        
-        @Override
+
+	@Override
 	public void killBy(Circle hitter) {
 		super.killBy(hitter);
 		for (Updatable u : world.updatables) {
@@ -155,8 +158,7 @@ public class TeleportingBoss extends StandingBase {
 				((Enemy)u).killBy(null);
 			}
 		}
-                world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION_BIG, pos.x, pos.y));
-		world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN, true));
-		world.effects.add(SoundEffect.create(Assets.Sounds.EXPLOSION));
+		world.effects.add(ParticleAdder.create(Assets.Particles.EXPLOSION_BIG, pos.x, pos.y));
+		world.effects.add(DebrisAdder.create(type.debrisColor, id, pos.x, pos.y, Float.NaN, Particles.DEBRIS_BIG));
 	}
 }
