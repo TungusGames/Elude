@@ -1,12 +1,12 @@
-package tungus.games.elude.dev;
+package tungus.games.elude;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import tungus.games.elude.BaseScreen;
-import tungus.games.elude.dev.BluetoothConnector.Client;
-import tungus.games.elude.dev.BluetoothConnector.ClientState;
-import tungus.games.elude.dev.BluetoothConnector.Server;
+import tungus.games.elude.BluetoothConnector.Client;
+import tungus.games.elude.BluetoothConnector.ClientState;
+import tungus.games.elude.BluetoothConnector.Server;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.game.multiplayer.Connection;
 import tungus.games.elude.game.multiplayer.LocalConnection.LocalConnectionPair;

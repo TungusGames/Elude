@@ -1,4 +1,4 @@
-package tungus.games.elude.dev;
+package tungus.games.elude;
 
 import java.util.List;
 import java.util.Locale;
