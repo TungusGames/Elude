@@ -18,7 +18,7 @@ public class AndroidLauncher extends AndroidApplication {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         BluetoothConnector.app = this;
         BTListUI.loc = getResources().getConfiguration().locale;
-        Elude.mpScreen = BluetoothConnectScreen.class;
+       // Elude.mpScreen = BluetoothConnectScreen.class;
         initialize(new Elude(), cfg);
     }
     

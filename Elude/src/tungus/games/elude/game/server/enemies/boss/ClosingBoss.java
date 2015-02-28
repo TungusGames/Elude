@@ -11,7 +11,6 @@ import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.client.worldrender.renderable.Sprite;
 import tungus.games.elude.game.client.worldrender.renderable.effect.DebrisAdder;
 import tungus.games.elude.game.client.worldrender.renderable.effect.ParticleAdder;
-import tungus.games.elude.game.client.worldrender.renderable.effect.SoundEffect;
 import tungus.games.elude.game.server.Updatable;
 import tungus.games.elude.game.server.World;
 import tungus.games.elude.game.server.enemies.Enemy;
@@ -26,7 +25,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class ClosingBoss extends Enemy {
 
-	private static final float COLLIDER_RADIUS = 1f;
+	private static final float COLLIDER_RADIUS = 1.15f;
 	private static final float LASER_SOURCE_DISTANCE = 1f;
 
 	private static final int STATE_ENTER = 0;
@@ -136,15 +135,15 @@ public class ClosingBoss extends Enemy {
 
 	@Override
 	public Renderable getRenderable() {
-		return EnemyRenderable.create(id, hp/maxHp, Tex.BOSS1, pos.x, pos.y - width()/2 + height()/2, // Y coord correction for difference between image center and rotation center 
-				width(), height(), rot, width()/2, width()/2);
+		return EnemyRenderable.create(id, hp/maxHp, Tex.BOSS1, pos.x, pos.y, 
+				width()*1.143f, height()*1.244f, rot);
 	}
 
 	private Renderable getSpriteForLaserTurret() {
 		if (laser == null) {
 			return null;
 		}
-		return Sprite.create(RenderPhase.ENEMY, Tex.BOSS1_BACK, pos.x, pos.y- width()/2 + height()/2, 
-				width(), height(), laser.angle() - 90, width()/2, width()/2, 1);
+		return Sprite.create(RenderPhase.ENEMY, Tex.BOSS1_BACK, pos.x, pos.y - width()/2 + height()/2, // Y coord correction for difference between image center and rotation center 
+				width(), height(), laser.angle()-90, width()/2, width()/2, 1);
 	}
 }

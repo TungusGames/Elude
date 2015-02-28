@@ -2,7 +2,6 @@ package tungus.games.elude;
 
 import tungus.games.elude.Assets.EludeMusic;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Music.OnCompletionListener;
 
