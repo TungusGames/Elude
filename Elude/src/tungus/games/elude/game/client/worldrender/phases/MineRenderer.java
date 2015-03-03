@@ -7,6 +7,7 @@ import tungus.games.elude.game.client.worldrender.renderable.Renderable;
 import tungus.games.elude.game.server.Mine;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.IntMap.Entries;
 
@@ -66,6 +67,7 @@ public class MineRenderer extends PhaseRenderer {
 	public void end() {
 		if (wr.updateParticles) {
 			time += delta;
+			time %= (2*MathUtils.PI / 6f);
 		}		
 		
 		shader.setUniformf("time", time);
