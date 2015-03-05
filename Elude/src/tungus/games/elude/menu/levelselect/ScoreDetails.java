@@ -1,5 +1,6 @@
 package tungus.games.elude.menu.levelselect;
 
+import com.badlogic.gdx.Gdx;
 import java.text.SimpleDateFormat;
 
 import tungus.games.elude.Assets;
@@ -8,6 +9,7 @@ import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -139,11 +141,14 @@ public class ScoreDetails {
 			} else {
 				float y = yTop*scale;
 				if (complete()) {
-					Assets.font.setScale(1.05f);
+					Assets.font.setScale(1f);
 					Assets.font.setColor(1f, 1f, 0.35f, Assets.font.getColor().a);
 					offsetAlpha(stateTime, 0, alpha);
-					Assets.font.draw(batch, title, offsetXPos(textX+SCORE_INDENT*0.8f, stateTime, 0, batchingText)+100-title.length()*15, y);
-					Assets.font.setScale(1);
+					float titleLength = Assets.font.getBounds(title).width;
+					Gdx.app.log("Debug", ""+titleLength);
+					Assets.font.drawWrapped(batch, title, offsetXPos(textX-40, stateTime, 0, batchingText), y, 380, BitmapFont.HAlignment.CENTER);
+					//Assets.font.draw(batch, title, offsetXPos(textX+SCORE_INDENT*0.8f, stateTime, 0, batchingText)+85-titleLength/2, y);
+					//Assets.font.setScale(1);
 					Assets.font.setColor(1, 1, 1, Assets.font.getColor().a);
 					y -= 50;
 					if (finite) {

@@ -16,7 +16,7 @@ public class GridPanel {
 	
 	private static final int ROW_LEN = 5;
 	private static final int ACTIVE_COL_LEN = 3;
-	private static final Vector2 TOP_LEFT = new Vector2(2f,8);
+	private static final Vector2 TOP_LEFT = new Vector2(1.5f,8);
 	private static final float BUTTON_TOUCH_SIZE = 2;
 	private static final float BUTTON_DIST = 2;
 	private static final float BUTTON_DRAW_SIZE = 1.7f;
