@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class Elude extends Game {
 	
-	public static final String VERSION = "V1.0 RC";
+	public static final String VERSION = "1.0 RC V2";
 	public static Class<? extends Screen> mpScreen = null;
 	public static final float VIEW_RATIO = 800f/480f;
 	private FPSLogger fps;
