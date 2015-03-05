@@ -10,7 +10,7 @@ import com.badlogic.gdx.files.FileHandle;
 
 public class Settings implements Serializable{
 	
-	private static final long serialVersionUID = 7875217165564569881L;
+	private static final long serialVersionUID = 7875743165564569881L;
 
 	private static FileHandle file = Gdx.files.local("settings/settings.set");
 	

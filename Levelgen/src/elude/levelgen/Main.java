@@ -48,6 +48,7 @@ public class Main {
 	public static void readAndOutputLevels() {
 		List<FiniteLevelScore> scores = new ArrayList<>();
 		List<Integer> ntoidList = new ArrayList<>();
+		List<String> nameList = new LinkedList<>();
 		String name = null;
 		while (running) {
 			float totalEnemyHP = 0;
@@ -59,6 +60,7 @@ public class Main {
 				sc.nextLine();
 				name = sc.nextLine();
 				System.out.print("(" + name + ") ");
+				nameList.add(name);
 				
 				scores.add(new FiniteLevelScore(sc.nextFloat(), sc.nextFloat()));				
 				
@@ -156,6 +158,10 @@ public class Main {
 			out = new ObjectOutputStream(fileOut);
 			out.writeObject(ntoidArray);
 			out.close();
+			fileOut = new FileOutputStream("../Elude - Android/assets/levels/finitenames");
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(nameList.toArray(new String[]{}));
+			fileOut.close();
 		} catch (IOException e11) {
 			e11.printStackTrace();
 		}

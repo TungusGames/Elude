@@ -31,10 +31,14 @@ public class Assets {
 	public static class Strings {
 		public static String endless = "SURVIVAL";
 		public static String[] arcadeNames;
+		public static String[] finiteNames;
 		public static void load() {
 			try {
 				ObjectInputStream in = new ObjectInputStream(Gdx.files.internal("levels/arcadenames").read());
 				arcadeNames = (String[])(in.readObject());
+				in.close();
+				in = new ObjectInputStream(Gdx.files.internal("levels/finitenames").read());
+				finiteNames = (String[])(in.readObject());
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {

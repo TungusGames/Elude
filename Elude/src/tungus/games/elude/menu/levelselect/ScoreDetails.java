@@ -8,6 +8,8 @@ import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
 import tungus.games.elude.levels.scoredata.ScoreData.FiniteLevelScore;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -30,8 +32,6 @@ public class ScoreDetails {
 	
 	private final Sprite playerTime;
 	private final Sprite playerHit;
-	private final Sprite medalTime;
-	private final Sprite medalHit;
 	private final Sprite completition;
 	
 	private final float starX, starWidth, starHeight;
@@ -43,6 +43,9 @@ public class ScoreDetails {
 	private final String title;
 	private final boolean hasTimeMedal;
 	private final boolean hasHitMedal;
+	private final boolean twoLineTitle;
+	private final int wrapWidth;
+	private final float titleWidth;
 	private boolean highScoreTime;
 	private boolean highScoreHit;
 	private final boolean open;
@@ -50,7 +53,7 @@ public class ScoreDetails {
 	private ArcadeLevelScore aScore;
 	
 	private ScoreDetails(String title, int levelNum, boolean finite, float x, float y, float scale, boolean modAlpha, float xSource, boolean open,
-						FiniteLevelScore fs, ArcadeLevelScore as) {
+						FiniteLevelScore fs, ArcadeLevelScore as, int wrapWidth) {
 		this.finite = finite;	
 		this.levelNum = levelNum;
 		this.title = title;
@@ -65,6 +68,11 @@ public class ScoreDetails {
 		starHeight = starWidth * 0.95f;
 		this.modAlpha = modAlpha;
 		this.xSource = xSource;
+		this.wrapWidth = wrapWidth;
+		
+		TextBounds bounds = Assets.font.getWrappedBounds(title, wrapWidth);
+		titleWidth = bounds.width;
+		twoLineTitle = (bounds.height > 40);
 		
 		df.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
 		
@@ -74,43 +82,32 @@ public class ScoreDetails {
 				false; // Always displaying the medal limits might be better
 		playerTime = new Sprite((finite ? fScore.timeTaken <= ScoreData.finiteMedals.get(levelNum).timeTaken :
 										aScore.timeSurvived >= ScoreData.arcadeMedals.get(levelNum).timeSurvived) ? Assets.Tex.STAR_ON.t : Assets.Tex.STAR_OFF.t);
-		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.85f+(!finite?1:0))*scale, starWidth, starHeight);
+		playerTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+6.85f-(twoLineTitle ? 0.65f : 0f)+(!finite?1:0))*scale, starWidth, starHeight);
 		playerHit =  new Sprite((finite ? fScore.hpLeft >= ScoreData.finiteMedals.get(levelNum).hpLeft : 
 		                              aScore.enemiesKilled >= ScoreData.arcadeMedals.get(levelNum).enemiesKilled) ? Assets.Tex.STAR_ON.t : Assets.Tex.STAR_OFF.t);
-		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.85f+(!finite?1:0))*scale, starWidth, starHeight);
+		playerHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+3.85f-(twoLineTitle ? 0.65f : 0f)+(!finite?1:0))*scale, starWidth, starHeight);
 		if (finite && complete()) {
 			completition = new Sprite(Assets.Tex.STAR_ON.t);
-			completition.setBounds(STAR_X, (yTop*scale/40f-10.75f+8.85f)*scale, starWidth, starHeight);
+			completition.setBounds(STAR_X, (yTop*scale/40f-10.75f+8.85f-(twoLineTitle ? 0.65f : 0f))*scale, starWidth, starHeight);
 		} else if (!finite && !open) {
 			completition = new Sprite(Assets.Tex.STAR_ON.t);
-			completition.setBounds(textX+25, (yTop*scale/40f-10.75f+6.8f)*scale, starWidth, starHeight);
+			completition.setBounds(textX+25, (yTop*scale/40f-10.75f+6.8f-(twoLineTitle ? 0.65f : 0f))*scale, starWidth, starHeight);
 		} else {
 			completition = null;
 		}
 		
-		
-		medalTime = hasTimeMedal ? null : new Sprite(Assets.Tex.STAR_ON.t);
-		medalHit  = hasHitMedal  ? null : new Sprite(Assets.Tex.STAR_ON.t);
-		if (medalTime != null) {
-			medalTime.setBounds(STAR_X, (yTop*scale/40f-10.75f+5.6f+(!finite?1:0))*scale, starWidth, starHeight);
-			medalTime.setColor(1,1,1,NEXTMEDAL_OPACITY);
-		}
-		if (medalHit != null) {
-			medalHit.setColor(1,1,1,NEXTMEDAL_OPACITY);
-			medalHit.setBounds(STAR_X, (yTop*scale/40f-10.75f+2.6f+(!finite?1:0))*scale, starWidth, starHeight);
-		}	
 	}
 	
 	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, FiniteLevelScore score, 
-			boolean allowHS, boolean open) {
-		this(title, levelNum, true, x, y, scale, modAlpha, xSource, open, score, null);
+			boolean allowHS, boolean open, int wrapWidth) {
+		this(title, levelNum, true, x, y, scale, modAlpha, xSource, open, score, null, wrapWidth);
 		highScoreTime = allowHS && (fScore.timeTaken <= ScoreData.playerFiniteScore.get(levelNum).timeTaken);
 		highScoreHit = allowHS && (fScore.hpLeft >= ScoreData.playerFiniteScore.get(levelNum).hpLeft);
 	}
 	
 	public ScoreDetails(String title, int levelNum, float x, float y, float scale, boolean modAlpha, float xSource, ArcadeLevelScore score, 
-			boolean allowHS, boolean open) {
-		this(title, levelNum, false, x, y, scale, modAlpha, xSource, open, null, score);
+			boolean allowHS, boolean open, int wrapWidth) {
+		this(title, levelNum, false, x, y, scale, modAlpha, xSource, open, null, score, wrapWidth);
 		highScoreTime = allowHS && (aScore.timeSurvived >= ScoreData.playerArcadeScore.get(levelNum).timeSurvived);
 		highScoreHit = allowHS && (aScore.enemiesKilled >= ScoreData.playerArcadeScore.get(levelNum).enemiesKilled);
 	}
@@ -139,11 +136,16 @@ public class ScoreDetails {
 			} else {
 				float y = yTop*scale;
 				if (complete()) {
-					Assets.font.setScale(1.05f);
+					Assets.font.setScale(1f);
 					Assets.font.setColor(1f, 1f, 0.35f, Assets.font.getColor().a);
 					offsetAlpha(stateTime, 0, alpha);
-					Assets.font.draw(batch, title, offsetXPos(textX+SCORE_INDENT*0.8f, stateTime, 0, batchingText)+100-title.length()*15, y);
-					Assets.font.setScale(1);
+					if (twoLineTitle) {
+						y += 10;
+						Assets.font.drawWrapped(batch, title, offsetXPos(textX+150 - wrapWidth / 2, stateTime, 0, batchingText), y, wrapWidth, BitmapFont.HAlignment.CENTER);
+						y -= 35;
+					} else {
+						Assets.font.drawWrapped(batch, title, offsetXPos(textX+150 - wrapWidth / 2, stateTime, 0, batchingText), y-5, wrapWidth, BitmapFont.HAlignment.CENTER);						
+					}			
 					Assets.font.setColor(1, 1, 1, Assets.font.getColor().a);
 					y -= 50;
 					if (finite) {
@@ -199,9 +201,19 @@ public class ScoreDetails {
 						Assets.font.setColor(1, 1, 1, alpha);
 					} 
 				} else {
-					Assets.font.setScale(1.05f);
-					Assets.font.draw(batch, (finite ? "STAGE" : Assets.Strings.endless) + " " +(levelNum+1), offsetXPos(textX+SCORE_INDENT*0.8f-(finite?0:20), stateTime, 0, batchingText), 310);
-					Assets.font.draw(batch, finite ? "NOT COMPLETED" : "NOT TRIED YET", offsetXPos(textX, stateTime, 3, batchingText), 270);
+					Assets.font.setScale(1f);
+					Assets.font.setColor(1f, 1f, 0.35f, Assets.font.getColor().a);
+					y = 315;					
+					if (twoLineTitle) {
+						y += 10;
+						Assets.font.drawWrapped(batch, title, offsetXPos(textX+150 - wrapWidth / 2, stateTime, 0, batchingText), y, wrapWidth, BitmapFont.HAlignment.CENTER);
+						y -= 35;
+					} else {
+						Assets.font.drawWrapped(batch, title, offsetXPos(textX+150 - wrapWidth / 2, stateTime, 0, batchingText), y-5, wrapWidth, BitmapFont.HAlignment.CENTER);						
+					}		
+					y -= 50;
+					Assets.font.setColor(1, 1, 1, Assets.font.getColor().a);
+					Assets.font.draw(batch, finite ? "NOT COMPLETED" : "NOT TRIED YET", offsetXPos(textX, stateTime, 3, batchingText), y);
 				}
 				Assets.font.setScale(1);
 			}
