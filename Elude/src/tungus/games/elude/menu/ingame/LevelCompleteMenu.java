@@ -1,6 +1,7 @@
 package tungus.games.elude.menu.ingame;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Strings;
 import tungus.games.elude.game.client.GameScreen;
 import tungus.games.elude.levels.scoredata.ScoreData;
 import tungus.games.elude.levels.scoredata.ScoreData.ArcadeLevelScore;
@@ -15,8 +16,6 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	private static final float BUTTON_SIZE = 90;
 	private static final float BUTTON_SPACING = 50;
 	private static final float BUTTON_Y = 30;
-	private final String FINITE_TITLE;
-	private final String ARCADE_TITLE = "GAME OVER";
 	
 	private ScoreDetails scoreDisplay;
 	private final int levelNum;
@@ -33,10 +32,9 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 								   new Rectangle(FRUSTUM_WIDTH/2+0.5f*BUTTON_SIZE+BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)} :
 				   new Rectangle[]{new Rectangle(FRUSTUM_WIDTH/2-BUTTON_SIZE-0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE),
 					   			   new Rectangle(FRUSTUM_WIDTH/2            +0.5f*BUTTON_SPACING, BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE)});
-		FINITE_TITLE = (isFinite ? "STAGE " : "SURVIVAL ") + (levelNum+1) + " COMPLETED";
 		scoreDisplay = isFinite ?
-				new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerFiniteScore.get(levelNum), false, true) :
-				new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerArcadeScore.get(levelNum), false, true);
+				new ScoreDetails(Strings.finiteNames[levelNum], levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerFiniteScore.get(levelNum), false, true, 800) :
+				new ScoreDetails(Strings.arcadeNames[levelNum], levelNum, 310f, 11.5f, 40f, true, 7.5f, ScoreData.playerArcadeScore.get(levelNum), false, true, 800);
 		this.levelNum = levelNum;
 	}
 	
@@ -68,10 +66,10 @@ public class LevelCompleteMenu extends AbstractIngameMenu {
 	}
 	
 	public void setScore(FiniteLevelScore s) {
-		scoreDisplay = new ScoreDetails(FINITE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s, true, true);
+		scoreDisplay = new ScoreDetails(Strings.finiteNames[levelNum], levelNum, 310f, 11.5f, 40f, true, 7.5f, s, true, true, 800);
 	}
 	public void setScore(ArcadeLevelScore s) {
-		scoreDisplay = new ScoreDetails(ARCADE_TITLE, levelNum, 310f, 11.5f, 40f, true, 7.5f, s, true, true);
+		scoreDisplay = new ScoreDetails(Strings.arcadeNames[levelNum], levelNum, 310f, 11.5f, 40f, true, 7.5f, s, true, true, 800);
 	}
 	
 	//Exits the game on back key

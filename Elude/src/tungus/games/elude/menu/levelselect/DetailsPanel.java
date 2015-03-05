@@ -1,6 +1,7 @@
 package tungus.games.elude.menu.levelselect;
 
 import tungus.games.elude.Assets;
+import tungus.games.elude.Assets.Strings;
 import tungus.games.elude.levels.scoredata.ScoreData;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -34,7 +35,7 @@ public class DetailsPanel {
 	public DetailsPanel(boolean finiteLevels) {
 		finite = finiteLevels;
 		playButton = new Sprite(Assets.Tex.PLAY_LEVEL.t);
-		playButton.setBounds(PLAY_X+10, 0.5f, 3f, 1.8f);
+		playButton.setBounds(PLAY_X+10, finite ? 0.25f : 0.75f, 2.5f, 1.5f);
 	}
 	
 	public void render(float deltaTime, SpriteBatch batch, boolean text, float alpha) {
@@ -78,9 +79,9 @@ public class DetailsPanel {
 	public void switchTo(int levelNum, boolean open) {
 		prevLevel = activeLevel;
 		activeLevel = finite ?
-				new ScoreDetails("STRAIGHTFORWARD KILLERS", levelNum, 12.5f, 420, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum), false, open) :
-				new ScoreDetails(Assets.Strings.endless + " " + (levelNum+1), levelNum, 12.5f, 420, 1, false, 10f, 
-								ScoreData.playerArcadeScore.get(levelNum), false, open);
+				new ScoreDetails(Strings.finiteNames[levelNum], levelNum, 12.25f, 420, 1, false, 10f, ScoreData.playerFiniteScore.get(levelNum), false, open, 380) :
+				new ScoreDetails(Strings.arcadeNames[levelNum], levelNum, 12.25f, 420, 1, false, 10f, 
+								ScoreData.playerArcadeScore.get(levelNum), false, open, 380);
 		state = STATE_SWITCH;
 		prevOpen = this.open;
 		this.open = open;

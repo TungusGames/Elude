@@ -66,7 +66,7 @@ public class GameScreen extends BaseScreen {
 	public static final int MENU_QUIT = -3;
 	public static final int MENU_RESTART = -4;
 	
-	private static final float START_TIME = 2f;
+	private static final float START_TIME = 3f;
 	
 	private static final Vector2 tmp = new Vector2();
 	
