@@ -12,6 +12,7 @@ public class AndroidLauncher extends AndroidApplication {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.maxSimultaneousSounds = 150;
         this.createWakeLock(true); //TODO check if this works
